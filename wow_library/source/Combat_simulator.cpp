@@ -52,12 +52,12 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     execute_rage_cost_ = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
 
     armor_reduction_from_spells_ = 0.0;
-    armor_reduction_from_spells_ += 450 * config.n_sunder_armor_stacks;
-    armor_reduction_from_spells_ += 640 * config.curse_of_recklessness_active;
-    armor_reduction_from_spells_ += 505 * config.faerie_fire_feral_active;
+    armor_reduction_from_spells_ += 520 * config.n_sunder_armor_stacks;
+    armor_reduction_from_spells_ += 800 * config.curse_of_recklessness_active;
+    armor_reduction_from_spells_ += 610 * config.faerie_fire_feral_active;
     if (config.exposed_armor)
     {
-        armor_reduction_delayed_ = 2550 - 450 * config.n_sunder_armor_stacks;
+        armor_reduction_delayed_ = 3075 - 520 * config.n_sunder_armor_stacks;
     }
 
     flurry_haste_factor_ = (config.talents.flurry > 0) ? 0.05 + 0.05 * config.talents.flurry : 0.0;
