@@ -4,16 +4,16 @@
 
 namespace
 {
-constexpr double rage_factor = 15.0 / 230.6 / 2.0;
+constexpr double rage_factor = 15.0 / 274.7 / 4.0;
 
 constexpr double rage_from_damage_taken(double damage)
 {
-    return damage * 5.0 / 2.0 / 230.6;
+    return damage * 5.0 / 2.0 / 274.7;
 }
 
 constexpr double rage_generation(double damage)
 {
-    return damage * rage_factor;
+    return damage * rage_factor + ;
 }
 
 constexpr double armor_mitigation(int target_armor, int target_level)
@@ -903,15 +903,27 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
             rage -= 20;
             dpr_cleave_queued_ = false;
         }
+        else if (weapon.socket == Socket::off_hand && hit_outcomes[0].hit_result == Hit_result::hit || hit_outcomes[0].hit_result == Hit_result::glancing)
+        {
+            rage += 1.75 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
+        }
         else
         {
-            rage += rage_generation(hit_outcomes[0].damage);
+            rage += 3.5 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
         }
         if (hit_outcomes[0].hit_result == Hit_result::dodge)
         {
             simulator_cout("Rage gained since the enemy dodged.");
             rage += 0.75 *
                     rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical));
+        }
+        else if (weapon.socket == Socket::main_hand && hit_outcomes[0].hit_result == Hit_result::crit)
+        {
+            rage+= 7 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage)
+        }
+        else if (weapon.socket == Socket::off_hand && hit_outcomes[0].hit_result == Hit_result::crit)
+        {
+            rage+= 3.5 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage)
         }
         if (rage > 100.0)
         {
