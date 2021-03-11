@@ -17,8 +17,7 @@ enum class Race
     orc,
     tauren,
     troll,
-    undead,
-    blood_elf
+    undead
 };
 
 enum class Talent

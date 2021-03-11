@@ -43,9 +43,6 @@ Character::Character(const Race& race, int level)
     case Race::undead:
         base_attributes = Attributes{119, 78};
         break;
-    case Race::blood_elf:
-        base_attributes = Attributes{117, 82}
-        break;
     default:
         assert(false);
     }
