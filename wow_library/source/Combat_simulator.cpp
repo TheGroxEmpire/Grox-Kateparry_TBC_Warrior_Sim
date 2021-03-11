@@ -1295,10 +1295,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 if (rage > 30.0 && time_keeper_.global_cd < 0.0 && time_keeper_.sweeping_strikes_cd < 0.0)
                 {
-                    simulator_cout("Changed stance: Battle Stance.");
                     simulator_cout("Sweeping strkes!");
-                    buff_manager_.add("battle_stance", {-3.0, 0, 0}, 1.5);
-                    sweeping_strikes_charges_ = 5;
+                    sweeping_strikes_charges_ = 10;
                     time_keeper_.sweeping_strikes_cd = 30;
                     time_keeper_.global_cd = 1.5;
                 }
