@@ -359,7 +359,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(const Weapon_sim& w
 void Combat_simulator::compute_hit_table(int weapon_skill, const Special_stats& special_stats, Socket weapon_hand,
                                          Weapon_socket weapon_socket)
 {
-    int level_difference = config.main_target_level - 60;
+    int level_difference = config.main_target_level - 70;
     int target_defence_level = config.main_target_level * 5;
     int skill_diff = target_defence_level - weapon_skill;
     int base_skill_diff = level_difference * 5;
