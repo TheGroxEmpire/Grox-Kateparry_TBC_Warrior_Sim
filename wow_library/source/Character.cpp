@@ -26,6 +26,9 @@ Character::Character(const Race& race, int level)
     case Race::gnome:
         base_attributes = Attributes{115, 83};
         break;
+    case Race::draenei:
+        base_attributes = Attributes{121, 77}
+        break;
     case Race::orc:
         base_attributes = Attributes{123, 77};
         base_special_stats.axe_expertise += 1.25;
@@ -39,6 +42,9 @@ Character::Character(const Race& race, int level)
         break;
     case Race::undead:
         base_attributes = Attributes{119, 78};
+        break;
+    case Race::blood_elf:
+        base_attributes = Attributes{117, 82}
         break;
     default:
         assert(false);

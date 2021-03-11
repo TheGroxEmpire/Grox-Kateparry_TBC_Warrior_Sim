@@ -13,10 +13,12 @@ enum class Race
     dwarf,
     night_elf,
     gnome,
+    draenei
     orc,
     tauren,
     troll,
-    undead
+    undead,
+    blood_elf
 };
 
 enum class Talent
