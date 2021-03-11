@@ -18,7 +18,7 @@ constexpr double rage_generation(double damage)
 
 constexpr double armor_mitigation(int target_armor, int target_level)
 {
-    return static_cast<double>(target_armor) / static_cast<double>(target_armor + 400 + 85 * target_level);
+    return static_cast<double>(target_armor) / static_cast<double>(target_armor + (467.5 * target_level - 22167.5);
 }
 
 std::vector<double> create_hit_table(double miss, double dodge, double glancing, double crit)
