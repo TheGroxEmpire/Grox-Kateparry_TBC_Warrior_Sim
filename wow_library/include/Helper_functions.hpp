@@ -12,9 +12,8 @@ constexpr double crit_w = 35;
 constexpr double crit_w_cap = 25;
 constexpr double hit_w = 45;
 constexpr double hit_w_cap = 10;
-constexpr double skill_w = 220.0 / 5;
-constexpr double skill_w_soft = 70.0 / 5;
-constexpr double skill_w_hard = 20.0 / 5;
+constexpr double expertise_w = 45;
+constexpr double expertise_w_cap = 0;
 constexpr double ap_per_coh = 50 / 6.2;
 
 double is_time_available(const std::vector<std::pair<double, Use_effect>>& use_effect_timers, double check_time,
@@ -41,7 +40,7 @@ double get_character_ap_equivalent(const Special_stats& special_stats, const Wea
 double get_character_ap_equivalent(const Special_stats& special_stats, const Weapon& mh_wep, double sim_time,
                                    const std::vector<Use_effect>& use_effects);
 
-double get_hit_crit_skill_ap_equivalent(const Special_stats& special_stats, int relevant_skill);
+double get_hit_crit_expertise_ap_equivalent(const Special_stats& special_stats, int relevant_skill);
 
 double get_hit_effect_ap_equivalent(const Hit_effect& hit_effect, double total_ap, double swing_speed, double factor);
 

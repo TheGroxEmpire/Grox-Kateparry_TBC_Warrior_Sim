@@ -416,7 +416,7 @@ void Combat_simulator::compute_hit_table(double expertise, const Special_stats& 
     double glancing_chance = 0.0;
     if (level_difference > 0)
     {
-        glancing_chance = 10 + level_difference * 10;
+        glancing_chance = 10 + base_skill_diff;
     }
 
     double glancing_penalty;

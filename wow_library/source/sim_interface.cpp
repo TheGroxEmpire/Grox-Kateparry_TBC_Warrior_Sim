@@ -349,38 +349,30 @@ std::string get_character_stat(const Character& character)
     {
         if (character.has_weapon_of_type(Weapon_type::sword))
         {
-            out_string += print_stat("Sword skill: ", character.total_special_stats.sword_skill);
+            out_string += print_stat("Sword expertise: ", character.total_special_stats.sword_expertise);
         }
         if (character.has_weapon_of_type(Weapon_type::axe))
         {
-            out_string += print_stat("Axe skill: ", character.total_special_stats.axe_skill);
-        }
-        if (character.has_weapon_of_type(Weapon_type::dagger))
-        {
-            out_string += print_stat("Dagger skill: ", character.total_special_stats.dagger_skill);
+            out_string += print_stat("Axe expertise: ", character.total_special_stats.axe_expertise);
         }
         if (character.has_weapon_of_type(Weapon_type::mace))
         {
-            out_string += print_stat("Mace skill: ", character.total_special_stats.mace_skill);
-        }
-        if (character.has_weapon_of_type(Weapon_type::unarmed))
-        {
-            out_string += print_stat("Unarmed skill: ", character.total_special_stats.fist_skill);
+            out_string += print_stat("Mace expertise: ", character.total_special_stats.mace_expertise);
         }
     }
     else
     {
         if (character.has_weapon_of_type(Weapon_type::sword))
         {
-            out_string += print_stat("Two Hand Sword skill: ", character.total_special_stats.two_hand_sword_skill);
+            out_string += print_stat("Two Hand Sword expertise: ", character.total_special_stats.sword_expertise);
         }
         if (character.has_weapon_of_type(Weapon_type::axe))
         {
-            out_string += print_stat("Two Hand Axe skill: ", character.total_special_stats.two_hand_axe_skill);
+            out_string += print_stat("Two Hand Axe expertise: ", character.total_special_stats.axe_expertise);
         }
         if (character.has_weapon_of_type(Weapon_type::mace))
         {
-            out_string += print_stat("Two Hand Mace skill: ", character.total_special_stats.two_hand_mace_skill);
+            out_string += print_stat("Two Hand Mace expertise: ", character.total_special_stats.mace_expertise);
         }
     }
 
@@ -530,7 +522,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
     for (const auto& wep : character.weapons)
     {
-        simulator.compute_hit_table(get_weapon_skill(character.total_special_stats, wep.type, wep.weapon_socket),
+        simulator.compute_hit_table(get_expertise(character.total_special_stats, wep.type, wep.weapon_socket),
                                     character.total_special_stats, wep.socket, wep.weapon_socket);
     }
     const bool is_two_handed = !character.is_dual_wield();
@@ -1070,88 +1062,17 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                                           std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
                                           std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
             }
-            if (stat_weight == "skill")
+            if (stat_weight == "expertise")
             {
-                int wep_id = 0;
-                auto wep_type = character.weapons[0].type;
-                for (const auto& wep : character.weapons)
-                {
-                    wep_id++;
-                    if (wep_id == 2)
-                    {
-                        if (wep.type == wep_type)
-                        {
-                            continue;
-                        }
-                    }
-                    Character char_plus = character;
-                    Character char_minus = character;
-                    std::string name{};
-                    int amount = static_cast<int>(
-                        find_value(input.float_options_string, input.float_options_val, "stat_weight_skill_dd"));
-                    if (wep.weapon_socket == Weapon_socket::two_hand)
-                    {
-                        switch (wep.type)
-                        {
-                        case Weapon_type::axe:
-                            char_plus.total_special_stats.two_hand_axe_skill += amount;
-                            char_minus.total_special_stats.two_hand_axe_skill -= amount;
-                            name = string_with_precision(amount) + "two-hand-axe-skill ";
-                            break;
-                        case Weapon_type::sword:
-                            char_plus.total_special_stats.two_hand_sword_skill += amount;
-                            char_minus.total_special_stats.two_hand_sword_skill -= amount;
-                            name = string_with_precision(amount) + "two-hand-sword-skill ";
-                            break;
-                        case Weapon_type::mace:
-                            char_plus.total_special_stats.two_hand_mace_skill += amount;
-                            char_minus.total_special_stats.two_hand_mace_skill -= amount;
-                            name = string_with_precision(amount) + "two-hand-mace-skill ";
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        switch (wep.type)
-                        {
-                        case Weapon_type::axe:
-                            char_plus.total_special_stats.axe_skill += amount;
-                            char_minus.total_special_stats.axe_skill -= amount;
-                            name = string_with_precision(amount) + "-axe-skill ";
-                            break;
-                        case Weapon_type::sword:
-                            char_plus.total_special_stats.sword_skill += amount;
-                            char_minus.total_special_stats.sword_skill -= amount;
-                            name = string_with_precision(amount) + "-sword-skill ";
-                            break;
-                        case Weapon_type::mace:
-                            char_plus.total_special_stats.mace_skill += amount;
-                            char_minus.total_special_stats.mace_skill -= amount;
-                            name = string_with_precision(amount) + "-mace-skill ";
-                            break;
-                        case Weapon_type::dagger:
-                            char_plus.total_special_stats.dagger_skill += amount;
-                            char_minus.total_special_stats.dagger_skill -= amount;
-                            name = string_with_precision(amount) + "-dagger-skill ";
-                            break;
-                        case Weapon_type::unarmed:
-                            char_plus.total_special_stats.fist_skill += amount;
-                            char_minus.total_special_stats.fist_skill -= amount;
-                            name = string_with_precision(amount) + "-unarmed-skill ";
-                            break;
-                        }
-                    }
-                    Stat_weight hit = compute_stat_weight(simulator, char_plus, char_minus, "skill", amount, 1,
-                                                          dps_mean, dps_sample_std);
-                    char_plus.total_special_stats = character.total_special_stats;
-                    char_minus.total_special_stats = character.total_special_stats;
-
-                    stat_weights.emplace_back(name + std::to_string(hit.dps_plus) + " " +
-                                              std::to_string(hit.std_dps_plus) + " " + std::to_string(hit.dps_minus) +
-                                              " " + std::to_string(hit.std_dps_minus));
-                }
+                Character char_plus = character;
+                Character char_minus = character;
+                char_plus.total_special_stats.hit += 1;
+                char_minus.total_special_stats.hit -= 1;
+                Stat_weight hit =
+                    compute_stat_weight(simulator, char_plus, char_minus, "expertise", 1, 1, dps_mean, dps_sample_std);
+                stat_weights.emplace_back("1%Expertise " + std::to_string(hit.dps_plus) + " " +
+                                          std::to_string(hit.std_dps_plus) + " " + std::to_string(hit.dps_minus) + " " +
+                                          std::to_string(hit.std_dps_minus));
             }
         }
     }
