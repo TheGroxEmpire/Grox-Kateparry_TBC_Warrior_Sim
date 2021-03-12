@@ -13,10 +13,9 @@ struct Special_stats
     Special_stats() = default;
 
     Special_stats(double critical_strike, double hit, double attack_power, double expertise = 0.0, double chance_for_extra_hit = 0.0,
-                  double haste = 0.0, int sword_skill = 0, int axe_skill = 0, int dagger_skill = 0, int mace_skill = 0,
-                  int fist_skill = 0, double damage_mod_physical = 0, double stat_multiplier = 0,
-                  double bonus_damage = 0, int two_hand_sword_skill = 0, int two_hand_axe_skill = 0,
-                  int two_hand_mace_skill = 0, double crit_multiplier = 0, double spell_crit = 0,
+                  double haste = 0.0, double sword_expertise = 0.0, double axe_expertise = 0.0, double mace_expertise = 0.0,
+                  double damage_mod_physical = 0, double stat_multiplier = 0,
+                  double bonus_damage = 0, double crit_multiplier = 0, double spell_crit = 0,
                   double damage_mod_spell = 0)
         : critical_strike{critical_strike}
         , hit{hit}
@@ -24,17 +23,12 @@ struct Special_stats
         , expertise{expertise}
         , chance_for_extra_hit(chance_for_extra_hit)
         , haste(haste)
-        , sword_skill(sword_skill)
-        , axe_skill(axe_skill)
-        , dagger_skill(dagger_skill)
-        , mace_skill(mace_skill)
-        , fist_skill(fist_skill)
+        , sword_expertise(sword_expertise)
+        , axe_expertise(axe_expertise)
+        , mace_expertise(mace_expertise)
         , damage_mod_physical(damage_mod_physical)
         , stat_multiplier(stat_multiplier)
         , bonus_damage(bonus_damage)
-        , two_hand_sword_skill(two_hand_sword_skill)
-        , two_hand_axe_skill(two_hand_axe_skill)
-        , two_hand_mace_skill(two_hand_mace_skill)
         , crit_multiplier(crit_multiplier)
         , spell_crit(spell_crit)
         , damage_mod_spell(damage_mod_spell)
@@ -50,17 +44,12 @@ struct Special_stats
             expertise + rhs.expertise,
             chance_for_extra_hit + rhs.chance_for_extra_hit,
             multiplicative_addition(haste, rhs.haste),
-            sword_skill + rhs.sword_skill,
-            axe_skill + rhs.axe_skill,
-            dagger_skill + rhs.dagger_skill,
-            mace_skill + rhs.mace_skill,
-            fist_skill + rhs.fist_skill,
+            sword_expertise + rhs.sword_expertise,
+            axe_expertise + rhs.axe_expertise,
+            mace_expertise + rhs.mace_expertise,
             multiplicative_addition(damage_mod_physical, rhs.damage_mod_physical),
             multiplicative_addition(stat_multiplier, rhs.stat_multiplier),
             bonus_damage + rhs.bonus_damage,
-            two_hand_sword_skill + rhs.two_hand_sword_skill,
-            two_hand_axe_skill + rhs.two_hand_axe_skill,
-            two_hand_mace_skill + rhs.two_hand_mace_skill,
             multiplicative_addition(crit_multiplier, rhs.crit_multiplier),
             spell_crit + rhs.spell_crit,
             multiplicative_addition(damage_mod_spell, rhs.damage_mod_spell),
@@ -76,17 +65,12 @@ struct Special_stats
             expertise - rhs.expertise,
             chance_for_extra_hit - rhs.chance_for_extra_hit,
             multiplicative_subtraction(haste, rhs.haste),
-            sword_skill - rhs.sword_skill,
-            axe_skill - rhs.axe_skill,
-            dagger_skill - rhs.dagger_skill,
-            mace_skill - rhs.mace_skill,
-            fist_skill - rhs.fist_skill,
+            sword_expertise - rhs.sword_expertise,
+            axe_expertise - rhs.axe_expertise,
+            mace_expertise - rhs.mace_expertise,
             multiplicative_subtraction(damage_mod_physical, rhs.damage_mod_physical),
             multiplicative_subtraction(stat_multiplier, rhs.stat_multiplier),
             bonus_damage - rhs.bonus_damage,
-            two_hand_sword_skill - rhs.two_hand_sword_skill,
-            two_hand_axe_skill - rhs.two_hand_axe_skill,
-            two_hand_mace_skill - rhs.two_hand_mace_skill,
             multiplicative_subtraction(crit_multiplier, rhs.crit_multiplier),
             spell_crit - rhs.spell_crit,
             multiplicative_subtraction(damage_mod_spell, rhs.damage_mod_spell),
@@ -111,17 +95,12 @@ struct Special_stats
     double expertise{};
     double chance_for_extra_hit{};
     double haste{};
-    int sword_skill{};
-    int axe_skill{};
-    int dagger_skill{};
-    int mace_skill{};
-    int fist_skill{};
+    double sword_expertise{};
+    double axe_expertise{};
+    double mace_expertise{};
     double damage_mod_physical{};
     double stat_multiplier{};
     double bonus_damage{};
-    int two_hand_sword_skill{};
-    int two_hand_axe_skill{};
-    int two_hand_mace_skill{};
     double crit_multiplier{};
     double spell_crit{};
     double damage_mod_spell{};
