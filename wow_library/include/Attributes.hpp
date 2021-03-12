@@ -12,13 +12,14 @@ struct Special_stats
 {
     Special_stats() = default;
 
-    Special_stats(double critical_strike, double hit, double attack_power, double chance_for_extra_hit = 0.0,
+    Special_stats(double critical_strike, double expertise, double hit, double attack_power, double chance_for_extra_hit = 0.0,
                   double haste = 0.0, int sword_skill = 0, int axe_skill = 0, int dagger_skill = 0, int mace_skill = 0,
                   int fist_skill = 0, double damage_mod_physical = 0, double stat_multiplier = 0,
                   double bonus_damage = 0, int two_hand_sword_skill = 0, int two_hand_axe_skill = 0,
                   int two_hand_mace_skill = 0, double crit_multiplier = 0, double spell_crit = 0,
                   double damage_mod_spell = 0)
         : critical_strike{critical_strike}
+        , expertise{expertise}
         , hit{hit}
         , attack_power{attack_power}
         , chance_for_extra_hit(chance_for_extra_hit)
@@ -44,6 +45,7 @@ struct Special_stats
     {
         return {
             critical_strike + rhs.critical_strike,
+            expertise + rhs.expertise,
             hit + rhs.hit,
             attack_power + rhs.attack_power,
             chance_for_extra_hit + rhs.chance_for_extra_hit,
@@ -69,6 +71,7 @@ struct Special_stats
     {
         return {
             critical_strike - rhs.critical_strike,
+            expertise - rhs.expertise,
             hit - rhs.hit,
             attack_power - rhs.attack_power,
             chance_for_extra_hit - rhs.chance_for_extra_hit,
@@ -103,6 +106,7 @@ struct Special_stats
     }
 
     double critical_strike{};
+    double expertise{};
     double hit{};
     double attack_power{};
     double chance_for_extra_hit{};
