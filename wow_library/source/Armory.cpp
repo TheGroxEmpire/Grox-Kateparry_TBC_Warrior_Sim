@@ -326,7 +326,7 @@ void Armory::compute_total_stats(Character& character) const
     // Effects gained from talents
     for (auto& use_effect : use_effects)
     {
-        if (use_effect.name == "battle_shout" || use_effect.name == "battle_shout_aq")
+        if (use_effect.name == "battle_shout")
         {
             if (character.talents.booming_voice_talent)
             {
@@ -860,50 +860,11 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.battle_squawk);
     }
-    if (find_string(buffs_vec, "rallying_cry"))
-    {
-        character.add_buff(buffs.rallying_cry);
-    }
-    if (find_string(buffs_vec, "dire_maul"))
-    {
-        character.add_buff(buffs.dire_maul);
-    }
-    if (find_string(buffs_vec, "slipkiks_savy"))
-    {
-        character.add_buff(buffs.slipkiks_savy);
-    }
-    if (find_string(buffs_vec, "songflower"))
-    {
-        character.add_buff(buffs.songflower);
-    }
-    if (find_string(buffs_vec, "warchiefs_blessing"))
-    {
-        character.add_buff(buffs.warchiefs_blessing);
-    }
-    if (find_string(buffs_vec, "spirit_of_zandalar"))
-    {
-        character.add_buff(buffs.spirit_of_zandalar);
-    }
-    if (find_string(buffs_vec, "sayges_fortune"))
-    {
-        character.add_buff(buffs.sayges_fortune);
-    }
-    if (find_string(buffs_vec, "traces_of_silithyst"))
-    {
-        character.add_buff(buffs.traces_of_silithyst);
-    }
 
     // Player buffs
     if (find_string(buffs_vec, "battle_shout"))
     {
-        if (find_string(buffs_vec, "battle_shout_aq"))
-        {
-            character.add_buff(buffs.battle_shout_aq);
-        }
-        else
-        {
-            character.add_buff(buffs.battle_shout);
-        }
+        character.add_buff(buffs.battle_shout);
     }
     if (find_string(buffs_vec, "blessing_of_kings"))
     {
@@ -911,14 +872,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (find_string(buffs_vec, "blessing_of_might"))
     {
-        if (find_string(buffs_vec, "blessing_of_might_aq"))
-        {
-            character.add_buff(buffs.blessing_of_might_aq);
-        }
-        else
-        {
-            character.add_buff(buffs.blessing_of_might);
-        }
+        character.add_buff(buffs.blessing_of_might);
     }
     if (find_string(buffs_vec, "windfury_totem"))
     {
@@ -931,8 +885,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (find_string(buffs_vec, "strength_of_earth_totem"))
     {
-        Buff totem = (find_string(buffs_vec, "strength_of_earth_totem_aq")) ? buffs.strength_of_earth_totem_aq :
-                                                                              buffs.strength_of_earth_totem;
+        Buff totem = buffs.strength_of_earth_totem;
         if (find_string(buffs_vec, "enhancing_totems"))
         {
             totem.attributes.strength *= 1.15;
@@ -941,8 +894,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (find_string(buffs_vec, "grace_of_air_totem"))
     {
-        Buff totem =
-            (find_string(buffs_vec, "grace_of_air_totem_aq")) ? buffs.grace_of_air_totem_aq : buffs.grace_of_air_totem;
+        Buff totem = buffs.grace_of_air_totem;
         if (find_string(buffs_vec, "enhancing_totems"))
         {
             totem.attributes.agility *= 1.15;
@@ -993,20 +945,11 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.roids);
     }
-    if (find_string(buffs_vec, "fire_toasted_bun"))
-    {
-        character.add_buff(buffs.fire_toasted_bun);
-    }
     if (find_string(buffs_vec, "mighty_rage_potion"))
     {
         character.add_buff(buffs.mighty_rage_potion);
     }
-
-    if (find_string(buffs_vec, "dense_stone_main_hand"))
-    {
-        character.add_weapon_buff(Socket::main_hand, buffs.dense_stone);
-    }
-    else if (find_string(buffs_vec, "elemental_stone_main_hand"))
+    if (find_string(buffs_vec, "elemental_stone_main_hand"))
     {
         character.add_buff(buffs.elemental_stone);
     }
@@ -1015,11 +958,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
         character.add_buff(buffs.consecrated_sharpening_stone);
     }
 
-    if (find_string(buffs_vec, "dense_stone_off_hand"))
-    {
-        character.add_weapon_buff(Socket::off_hand, buffs.dense_stone);
-    }
-    else if (find_string(buffs_vec, "elemental_stone_off_hand"))
+    if (find_string(buffs_vec, "elemental_stone_off_hand"))
     {
         character.add_buff(buffs.elemental_stone);
     }
