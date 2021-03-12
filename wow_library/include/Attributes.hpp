@@ -12,16 +12,16 @@ struct Special_stats
 {
     Special_stats() = default;
 
-    Special_stats(double critical_strike, double expertise, double hit, double attack_power, double chance_for_extra_hit = 0.0,
+    Special_stats(double critical_strike, double hit, double attack_power, double expertise = 0.0, double chance_for_extra_hit = 0.0,
                   double haste = 0.0, int sword_skill = 0, int axe_skill = 0, int dagger_skill = 0, int mace_skill = 0,
                   int fist_skill = 0, double damage_mod_physical = 0, double stat_multiplier = 0,
                   double bonus_damage = 0, int two_hand_sword_skill = 0, int two_hand_axe_skill = 0,
                   int two_hand_mace_skill = 0, double crit_multiplier = 0, double spell_crit = 0,
                   double damage_mod_spell = 0)
         : critical_strike{critical_strike}
-        , expertise{expertise}
         , hit{hit}
         , attack_power{attack_power}
+        , expertise{expertise}
         , chance_for_extra_hit(chance_for_extra_hit)
         , haste(haste)
         , sword_skill(sword_skill)
@@ -45,9 +45,9 @@ struct Special_stats
     {
         return {
             critical_strike + rhs.critical_strike,
-            expertise + rhs.expertise,
             hit + rhs.hit,
             attack_power + rhs.attack_power,
+            expertise + rhs.expertise,
             chance_for_extra_hit + rhs.chance_for_extra_hit,
             multiplicative_addition(haste, rhs.haste),
             sword_skill + rhs.sword_skill,
@@ -71,9 +71,9 @@ struct Special_stats
     {
         return {
             critical_strike - rhs.critical_strike,
-            expertise - rhs.expertise,
             hit - rhs.hit,
             attack_power - rhs.attack_power,
+            expertise - rhs.expertise,
             chance_for_extra_hit - rhs.chance_for_extra_hit,
             multiplicative_subtraction(haste, rhs.haste),
             sword_skill - rhs.sword_skill,
@@ -106,9 +106,9 @@ struct Special_stats
     }
 
     double critical_strike{};
-    double expertise{};
     double hit{};
     double attack_power{};
+    double expertise{};
     double chance_for_extra_hit{};
     double haste{};
     int sword_skill{};
@@ -149,7 +149,7 @@ public:
     Special_stats convert_to_special_stats(const Special_stats& special_stats) const
     {
         double multiplier = special_stats.stat_multiplier + 1;
-        return {agility / 20 * multiplier, 0, strength * 2 * multiplier};
+        return {agility / 33 * multiplier, 0, strength * 2 * multiplier};
     }
 
     Attributes operator+(const Attributes& rhs) { return {strength + rhs.strength, agility + rhs.agility}; }

@@ -13,7 +13,7 @@ enum class Race
     dwarf,
     night_elf,
     gnome,
-    draenei
+    draenei,
     orc,
     tauren,
     troll,

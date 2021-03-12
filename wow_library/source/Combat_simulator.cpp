@@ -13,12 +13,12 @@ constexpr double rage_from_damage_taken(double damage)
 
 constexpr double rage_generation(double damage)
 {
-    return damage * rage_factor + ;
+    return damage * rage_factor;
 }
 
 constexpr double armor_mitigation(int target_armor, int target_level)
 {
-    return static_cast<double>(target_armor) / static_cast<double>(target_armor + (467.5 * target_level - 22167.5);
+    return static_cast<double>(target_armor) / static_cast<double>(target_armor + (467.5 * target_level - 22167.5));
 }
 
 std::vector<double> create_hit_table(double miss, double dodge, double glancing, double crit)
@@ -48,7 +48,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     config = new_config;
 
     heroic_strike_rage_cost = 15 - config.talents.improved_heroic_strike;
-    p_unbridled_wrath_ = weapon.swing_speed / (3 * config.talents.unbridled_wrath) / 60;
+    p_unbridled_wrath_ = (3 * config.talents.unbridled_wrath) / 60;
     execute_rage_cost_ = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
 
     armor_reduction_from_spells_ = 0.0;
@@ -903,11 +903,11 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         }
         else if (weapon.socket == Socket::off_hand && hit_outcomes[0].hit_result == Hit_result::hit || hit_outcomes[0].hit_result == Hit_result::glancing)
         {
-            rage += 1.75 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
+            rage += 1.75 * weapon.swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
         }
         else
         {
-            rage += 3.5 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
+            rage += 3.5 * weapon.swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
         }
         if (hit_outcomes[0].hit_result == Hit_result::dodge)
         {
@@ -917,11 +917,11 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         }
         else if (weapon.socket == Socket::main_hand && hit_outcomes[0].hit_result == Hit_result::crit)
         {
-            rage+= 7 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage)
+            rage+= 7 * weapon.swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
         }
         else if (weapon.socket == Socket::off_hand && hit_outcomes[0].hit_result == Hit_result::crit)
         {
-            rage+= 3.5 * weapons[0].swing_speed / 2 + rage_generation(hit_outcomes[0].damage)
+            rage+= 3.5 * weapon.swing_speed / 2 + rage_generation(hit_outcomes[0].damage);
         }
         if (rage > 100.0)
         {
@@ -959,7 +959,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     }
 
     // Unbridled wrath
-    if (get_uniform_random(1) < p_unbridled_wrath_)
+    if (get_uniform_random(1) < (weapon.swing_speed * p_unbridled_wrath_))
     {
         rage += 1;
         if (rage > 100.0)
