@@ -48,7 +48,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     config = new_config;
 
     heroic_strike_rage_cost = 15 - config.talents.improved_heroic_strike;
-    p_unbridled_wrath_ = 0.08 * config.talents.unbridled_wrath;
+    p_unbridled_wrath_ = 3 * config.talents.unbridled_wrath  / 60;
     execute_rage_cost_ = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
 
     armor_reduction_from_spells_ = 0.0;
@@ -949,7 +949,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     }
 
     // Unbridled wrath
-    if (get_uniform_random(1) < p_unbridled_wrath_)
+    if (get_uniform_random(1) < (p_unbridled_wrath * weapon.swing_speed))
     {
         rage += 1;
         if (rage > 100.0)
