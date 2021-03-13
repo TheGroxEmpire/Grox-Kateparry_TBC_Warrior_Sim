@@ -356,7 +356,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(const Weapon_sim& w
     return hit_outcome;
 }
 
-void Combat_simulator::compute_hit_table(double expertise, const Special_stats& special_stats, Socket weapon_hand,
+void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Socket weapon_hand,
                                          Weapon_socket weapon_socket)
 {
     int level_difference = config.main_target_level - 70;
@@ -405,11 +405,11 @@ void Combat_simulator::compute_hit_table(double expertise, const Special_stats& 
     double dodge_chance;
     if (level_difference > 0)
     {
-        dodge_chance = std::max(5 + base_skill_diff * 0.1, 5.0) - expertise;
+        dodge_chance = std::max(5 + base_skill_diff * 0.1, 5.0) - (special_stats.expertise + special_stats.axe_expertise + special_stats.mace_expertise);
     }
     else
     {
-        dodge_chance = std::max(5 - base_skill_diff * 0.04, 0.0 - expertise);
+        dodge_chance = std::max(5 - base_skill_diff * 0.04, 0.0 - (special_stats.expertise + special_stats.axe_expertise + special_stats.mace_expertise));
     }
 
     // Glancing blows
@@ -1008,7 +1008,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         weapons.emplace_back(wep.swing_speed, wep.min_damage, wep.max_damage, wep.socket, wep.type, wep.weapon_socket,
                              wep.hit_effects);
         weapons.back().compute_weapon_damage(wep.buff.bonus_damage + starting_special_stats.bonus_damage);
-        compute_hit_table(get_expertise(starting_special_stats, wep.type, wep.weapon_socket), starting_special_stats,
+        compute_hit_table(starting_special_stats,
                           wep.socket, wep.weapon_socket);
     }
 
@@ -1201,8 +1201,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 for (const auto& weapon : weapons)
                 {
-                    compute_hit_table(get_expertise(special_stats, weapon.weapon_type, weapon.weapon_socket),
-                                      special_stats, weapon.socket, weapon.weapon_socket);
+                    compute_hit_table(special_stats, weapon.socket, weapon.weapon_socket);
                 }
                 buff_manager_.need_to_recompute_hittables = false;
             }

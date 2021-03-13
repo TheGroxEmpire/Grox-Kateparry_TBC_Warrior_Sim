@@ -369,7 +369,7 @@ double get_hit_crit_expertise_ap_equivalent(const Special_stats& special_stats)
     }
 
     double ap_from_expertise{};
-    if (special_stats.expertise < 6)
+    if (special_stats.expertise < 5.6)
     {
         ap_from_expertise = special_stats.expertise + special_stats.mace_expertise + special_stats.axe_expertise * expertise_w;
     }
@@ -398,7 +398,7 @@ double estimate_special_stats_high(const Special_stats& special_stats)
     double max_expertise = std::max(special_stats.expertise + special_stats.mace_expertise + special_stats.axe_expertise, 0.0);
 
     double ap_from_expertise{};
-    if (special_stats.expertise + special_stats.mace_expertise + special_stats.axe_expertise < 6)
+    if (special_stats.expertise + special_stats.mace_expertise + special_stats.axe_expertise < 5.6)
     {
         ap_from_expertise = special_stats.expertise + special_stats.mace_expertise + special_stats.axe_expertise * expertise_w;
     }
@@ -464,7 +464,7 @@ double estimate_stat_diff(Special_stats special_stats1, Special_stats special_st
     diff.bonus_damage > 0 ? res_2.bonus_damage = diff.bonus_damage : res_1.bonus_damage = -diff.bonus_damage;
     diff.damage_mod_physical > 0 ? res_2.damage_mod_physical = diff.damage_mod_physical :
                                    res_1.damage_mod_physical = -diff.damage_mod_physical;
-    diff.expertise > 0 ? res_2.expertise = diff.expertise : res_1.expertise = -diff.expertise;
+    diff.expertise > 0.0 ? res_2.expertise = diff.expertise : res_1.expertise = -diff.expertise;
     double ap_1 = estimate_special_stats_high(res_1);
     double ap_2 = estimate_special_stats_low(res_2);
     return ap_2 - ap_1;
