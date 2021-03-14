@@ -3,7 +3,7 @@ let talents_vec = [
     "deflection_talent",
     "improved_rend_talent",
     "improved_charge_talent",
-    "tactical_mastery_talent",
+    "iron_will_talent",
     "improved_thunder_clap_talent",
     "improved_overpower_talent",
     "anger_management_talent",
@@ -11,11 +11,17 @@ let talents_vec = [
     "two_handed_weapon_specialization_talent",
     "impale_talent",
     "poleaxe_specialization_talent",
-    "sweeping_strikes_talent",
+    "death_wish_talent",
     "mace_specialization_talent",
     "sword_specialization_talent",
+    "improved_intercept_talent",
     "improved_hamstring_talent",
+    "improved_disciplines_talent", 
+    "blood_frenzy_talent",
     "mortal_strike_talent",
+    "second_wind_talent",
+    "improved_mortal_strike_talent",
+    "endless_rage_talent",
     "booming_voice_talent",
     "cruelty_talent",
     "improved_demoralizing_shout_talent",
@@ -28,16 +34,20 @@ let talents_vec = [
     "improved_execute_talent",
     "enrage_talent",
     "improved_slam_talent",
-    "death_wish_talent",
-    "improved_intercept_talent",
+    "sweeping_strikes_talent",
+    "weapon_mastery_talent",
     "improved_berserker_rage_talent",
     "flurry_talent",
+    "precision_talent",
     "bloodthirst_talent",
-    "shield_specialization_talent",
-    "anticipation_talent",
+    "improved_whirlwind_talent",
+    "improved_berserker_stance_talent",
+    "rampage_talent",
     "improved_bloodrage_talent",
+    "tactical_mastery_talent",
+    "anticipation_talent",
+    "shield_specialization_talent",
     "toughness_talent",
-    "iron_will_talent",
     "last_stand_talent",
     "improved_shield_block_talent",
     "improved_revenge_talent",
@@ -48,41 +58,33 @@ let talents_vec = [
     "improved_shield_wall_talent",
     "concussion_blow_talent",
     "improved_shield_bash_talent",
-    "one_handed_weapon_specialization_talent",
-    "shield_slam_talent",
-    "improved_disciplines_talent", 
-    "blood_frenzy_talent",
-    "second_wind_talent",
-    "improved_mortal_strike_talent",
-    "endless_rage_talent",
-    "weapon_mastery_talent",
-    "precision_talent",
-    "improved_whirlwind_talent",
-    "improved_berserker_stance_talent",
-    "rampage_talent",
     "shield_mastery_talent",
+    "one_handed_weapon_specialization_talent",
     "improved_defensive_stance_talent",
+    "shield_slam_talent",
     "focused_rage_talent",
     "vitality_talent",
     "devastate_talent"];
 
 let not_implemented_talents = [
-    "improved_berserker_rage_talent",
-    "enrage_talent",
     "deflection_talent",
     "improved_rend_talent",
     "improved_charge_talent",
+    "iron_will_talent",
     "improved_thunder_clap_talent",
+    "improved_intercept_talent",
     "improved_hamstring_talent",
+    "blood_frenzy_talent",
+    "second_wind_talent",
     "improved_demoralizing_shout_talent",
     "peircing_howl_talent",
     "blood_craze_talent",
-    "improved_intercept_talent",
-    "shield_specialization_talent",
-    "anticipation_talent",
+    "enrage_talent",
+    "improved_berserker_rage_talent",
     "improved_bloodrage_talent",
+    "anticipation_talent",
+    "shield_specialization_talent",
     "toughness_talent",
-    "iron_will_talent",
     "last_stand_talent",
     "improved_shield_block_talent",
     "improved_revenge_talent",
@@ -92,10 +94,9 @@ let not_implemented_talents = [
     "improved_shield_wall_talent",
     "concussion_blow_talent",
     "improved_shield_bash_talent",
-    "shield_slam_talent",
-    "second_wind_talent",
     "shield_mastery_talent",
     "improved_defensive_stance_talent",
+    "shield_slam_talent",
     "focused_rage_talent",
     "vitality_talent",
     "devastate_talent"];
@@ -112,7 +113,7 @@ function load_talent_standard_fury() {
     load_talent_clear();
     document.getElementById("improved_heroic_strike_talent").setAttribute("data-count", "3");
     document.getElementById("improved_rend_talent").setAttribute("data-count", "3");
-    document.getElementById("tactical_mastery_talent").setAttribute("data-count", "5");
+    document.getElementById("tactical_mastery_talent").setAttribute("data-count", "3");
     document.getElementById("anger_management_talent").setAttribute("data-count", "1");
     document.getElementById("deep_wounds_talent").setAttribute("data-count", "3");
     document.getElementById("impale_talent").setAttribute("data-count", "2");
@@ -147,7 +148,7 @@ function load_talent_two_hand_fury() {
 
     document.getElementById("dual_wield_specialization_talent").setAttribute("data-count", "0");
     document.getElementById("improved_execute_talent").setAttribute("data-count", "0");
-    document.getElementById("improved_slam_talent").setAttribute("data-count", "4");
+    document.getElementById("improved_slam_talent").setAttribute("data-count", "2");
     document.getElementById("improved_overpower_talent").setAttribute("data-count", "1");
 
     displayTalentBootup();

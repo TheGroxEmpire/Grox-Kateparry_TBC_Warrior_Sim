@@ -991,7 +991,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     }
 
     // Unbridled wrath
-    if (get_uniform_random(1) < (p_unbridled_wrath * weapon.swing_speed))
+    if (get_uniform_random(1) < (p_unbridled_wrath_ * weapon.swing_speed))
     {
         rage += 1;
         if (rage > 100.0)
