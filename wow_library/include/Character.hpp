@@ -173,7 +173,7 @@ public:
     struct
     {
         bool booming_voice_talent{false};
-        int improved_battle_shout_talent{0};
+        int commanding_presence_talent{0};
         int sword_specialization{0};
         int one_handed_weapon_specialization{0};
     } talents;

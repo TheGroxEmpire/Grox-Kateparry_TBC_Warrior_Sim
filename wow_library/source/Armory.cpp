@@ -332,10 +332,10 @@ void Armory::compute_total_stats(Character& character) const
             {
                 use_effect.duration = 180.0;
             }
-            if (character.talents.improved_battle_shout_talent > 0)
+            if (character.talents.commanding_presence_talent > 0)
             {
                 use_effect.special_stats_boost.attack_power *=
-                    1.0 + 0.05 * character.talents.improved_battle_shout_talent;
+                    1.0 + 0.05 * character.talents.commanding_presence_talent;
             }
             break;
         }
@@ -1047,7 +1047,7 @@ void Armory::add_talents_to_character(Character& character, const std::vector<st
             character.talent_special_stats += Special_stats{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, amount};
         }
     }
-    val = fv.find("axe_specialization_talent");
+    val = fv.find("poleaxe_specialization_talent");
     if (val > 0)
     {
         if (character.weapons[0].type == Weapon_type::axe)
@@ -1060,10 +1060,10 @@ void Armory::add_talents_to_character(Character& character, const std::vector<st
     {
         character.talents.booming_voice_talent = true;
     }
-    val = fv.find("improved_battle_shout_talent");
+    val = fv.find("commanding_presence_talent");
     if (val > 0)
     {
-        character.talents.improved_battle_shout_talent = val;
+        character.talents.commanding_presence_talent = val;
     }
 
     val = fv.find("sword_specialization_talent");

@@ -664,7 +664,7 @@ void Combat_simulator::overpower(Weapon_sim& main_hand_weapon, Special_stats& sp
                                     damage_sources, true, true);
     if (rage > tactical_mastery_rage_)
     {
-        rage_lost_stance_swap_ += rage - tactical_mastery_rage_;
+        rage_lost_stance_swap_ += rage - (tactical_mastery_rage_ + 10);
         rage = tactical_mastery_rage_;
     }
     rage -= 5;

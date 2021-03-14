@@ -471,7 +471,7 @@ int main()
         "impale_talent",
         "cruelty_talent",
         "unbridled_wrath_talent",
-        "improved_battle_shout_talent",
+        "commanding_presence_talent",
         "dual_wield_specialization_talent",
         "improved_execute_talent",
         "enrage_talent",
