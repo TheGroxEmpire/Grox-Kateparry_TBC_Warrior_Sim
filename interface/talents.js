@@ -175,7 +175,7 @@ function calcTotalTalents() {
         title_elem.innerHTML = tree + " (" + n_talent_points[0].toString() + ")"
     }
     let total_points_elem = document.getElementById("total_points");
-    total_points_elem.innerHTML = "Total points: " + total_points.toString() + "/51";
+    total_points_elem.innerHTML = "Total points: " + total_points.toString() + "/61";
     showHideTalentDiv();
 }
 
