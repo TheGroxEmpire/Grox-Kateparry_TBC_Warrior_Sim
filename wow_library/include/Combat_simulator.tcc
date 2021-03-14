@@ -177,5 +177,13 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         talents.bloodthirst = fv.find("bloodthirst_talent");
         talents.mortal_strike = fv.find("mortal_strike_talent");
         talents.sweeping_strikes = fv.find("sweeping_strikes_talent");
+        talents.improved_disciplines = fv.find("improved_disciplines_talent"); 
+        talents.improved_mortal_strike = fv.find("improved_mortal_strike_talent");
+        talents.endless_rage = fv.find("endless_rage_talent");
+        talents.weapon_mastery = fv.find("weapon_mastery_talent");
+        talents.precision = fv.find("precision_talent");
+        talents.improved_whirlwind = fv.find("improved_whirlwind_talent");
+        talents.improved_berserker_stance = fv.find("improved_berserker_stance_talent");
+        talents.rampage = fv.find("rampage_talent");
     }
 }

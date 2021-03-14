@@ -96,6 +96,8 @@ let not_implemented_talents = [
     "second_wind_talent",
     "shield_mastery_talent",
     "improved_defensive_stance_talent",
+    "focused_rage_talent",
+    "vitality_talent",
     "devastate_talent"];
 
 function load_talent_clear() {

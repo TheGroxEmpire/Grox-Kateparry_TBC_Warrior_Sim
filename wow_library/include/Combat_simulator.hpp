@@ -157,6 +157,14 @@ struct Combat_simulator_config
         int bloodthirst = 0;
         int mortal_strike = 0;
         int sweeping_strikes = 0;
+        int improved_disciplines = 0;
+        int improved_mortal_strike = 0;
+        int endless_rage = 0;
+        int weapon_mastery = 0;
+        int precision = 0;
+        int improved_whirlwind = 0;
+        int improved_berserker_stance = 0;
+        int rampage = 0;
     } talents;
 };
 
