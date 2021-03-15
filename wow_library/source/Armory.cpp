@@ -348,7 +348,7 @@ void Armory::compute_total_stats(Character& character) const
             if (wep.type == Weapon_type::sword)
             {
                 double prob = double(character.talents.sword_specialization) / 100.0;
-                wep.hit_effects.push_back({"sword_specialization", Hit_effect::Type::extra_hit, {}, {}, 0, 0, prob});
+                wep.hit_effects.push_back({"sword_specialization", Hit_effect::Type::sword_spec, {}, {}, 0, 0, prob});
             }
         }
     }

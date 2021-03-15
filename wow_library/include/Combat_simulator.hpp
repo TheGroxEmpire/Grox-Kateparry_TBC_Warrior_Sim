@@ -271,6 +271,9 @@ public:
     void swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                       Damage_sources& damage_sources, int& flurry_charges, double attack_power_bonus = 0,
                       bool is_extra_attack = false);
+   
+    void sword_spec_hit(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
+                      Damage_sources& damage_sources, int& flurry_charges, double attack_power_bonus = 0);
 
     void hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                      Damage_sources& damage_sources, int& flurry_charges, bool is_extra_attack = false);

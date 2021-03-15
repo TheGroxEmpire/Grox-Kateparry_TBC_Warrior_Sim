@@ -91,6 +91,7 @@ public:
     {
         none,
         extra_hit,
+        sword_spec,
         stat_boost,
         damage_physical,
         damage_magic,

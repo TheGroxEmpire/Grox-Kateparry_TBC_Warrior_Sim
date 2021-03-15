@@ -800,6 +800,12 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
                                  flurry_charges, hit_effect.attack_power_boost, true);
                 }
                 break;
+            case Hit_effect::Type::sword_spec: {
+                    simulator_cout("PROC: extra hit from: ", hit_effect.name);
+                    sword_spec_hit(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
+                                        flurry_charges, hit_effect.attack_power_boost);
+                break;
+            }
             case Hit_effect::Type::damage_magic: {
                 // * 0.83 Assumes a static 17% chance to resist.
                 // (100 + special_stats.spell_crit / 2) / 100 is the average damage gained from a x1.5 spell crit
@@ -987,6 +993,56 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
         {
             hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, is_extra_attack);
+        }
+    }
+
+    // Unbridled wrath
+    if (get_uniform_random(1) < (p_unbridled_wrath_ * weapon.swing_speed))
+    {
+        rage += 1;
+        if (rage > 100.0)
+        {
+            rage_lost_capped_ += rage - 100.0;
+            rage = 100.0;
+        }
+        simulator_cout("Unbridled wrath. Current rage: ", int(rage));
+    }
+}
+
+void Combat_simulator::sword_spec_hit(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
+                                    double& rage, Damage_sources& damage_sources, int& flurry_charges,
+                                    double attack_power_bonus)
+{
+    std::vector<Hit_outcome> hit_outcomes{};
+    hit_outcomes.reserve(2);
+    double swing_damage = weapon.swing(special_stats.attack_power + attack_power_bonus);
+    // Do yellow sword spec hit
+    hit_outcomes.emplace_back(generate_hit_mh(swing_damage, Hit_type::yellow, 0));
+    
+    rage += rage_generation(hit_outcomes[0].damage, weapon.socket, weapon.swing_speed);
+
+    if (hit_outcomes[0].hit_result == Hit_result::dodge)
+    {
+        simulator_cout("Rage gained since the enemy dodged.");
+        rage += 0.75 *
+                rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed);
+    }
+    if (rage > 100.0)
+    {
+        rage_lost_capped_ += rage - 100.0;
+        rage = 100.0;
+    }
+    simulator_cout("Current rage: ", int(rage));
+    simulator_cout("PROC: sword_specialization hit for: ", int(hit_outcomes[0].damage), " damage.");
+    damage_sources.add_damage(Damage_source::white_mh, hit_outcomes[0].damage, time_keeper_.time);
+
+    Hit_result result_used_for_flurry = Hit_result::TBD;
+    for (const auto& hit_outcome : hit_outcomes)
+    {
+        if (hit_outcome.hit_result == Hit_result::crit)
+        {
+            result_used_for_flurry = Hit_result::crit;
+            break;
         }
     }
 
@@ -1322,10 +1378,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 if (rage > 30.0 && time_keeper_.global_cd < 0.0 && time_keeper_.sweeping_strikes_cd < 0.0)
                 {
-                    simulator_cout("Changed stance: Battle Stance.");
                     simulator_cout("Sweeping strkes!");
-                    buff_manager_.add("battle_stance", {-3.0, 0, 0}, 1.5);
-                    sweeping_strikes_charges_ = 5;
+                    sweeping_strikes_charges_ = 10;
                     time_keeper_.sweeping_strikes_cd = 30;
                     time_keeper_.global_cd = 1.5;
                 }
