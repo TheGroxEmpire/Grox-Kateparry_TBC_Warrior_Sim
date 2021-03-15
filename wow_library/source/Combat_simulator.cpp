@@ -91,7 +91,10 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
 
     if (config.enable_recklessness)
     {
-        use_effects_all_.emplace_back(recklessness);
+        use_effects_all_.emplace_back(Use_effect{"Recklessness", 
+                                                    Use_effect::Effect_socket::unique, 
+                                                    {}, 
+                                                    {100, 0, 0}, 0, static_cast<double>(15 + (config.talents.improved_disciplines * 2)) , 900, true});
     }
 
     if (config.enable_bloodrage)
