@@ -833,7 +833,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_slam && is_two_handed)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Improved Slam", config,
-                                  &Combat_simulator_config::talents_t::improved_slam, 5);
+                                  &Combat_simulator_config::talents_t::improved_slam, 2);
         }
 
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Execute", config,

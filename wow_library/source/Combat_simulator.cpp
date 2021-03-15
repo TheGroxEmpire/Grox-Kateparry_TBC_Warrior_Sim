@@ -72,7 +72,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     flurry_haste_factor_ = (config.talents.flurry > 0) ? 0.05 + 0.05 * config.talents.flurry : 0.0;
     dual_wield_damage_factor_ = 0.5 + 0.025 * config.talents.dual_wield_specialization;
     cleave_bonus_damage_ = 50 * (1.0 + 0.4 * config.talents.improved_cleave);
-    slam_manager.slam_cast_time_ = 1.5 - 0.1 * config.talents.improved_slam;
+    slam_manager.slam_cast_time_ = 1.5 - 0.5 * config.talents.improved_slam;
 
     tactical_mastery_rage_ = 5.0 * config.talents.tactical_mastery;
     deep_wounds_ = config.talents.deep_wounds && config.combat.deep_wounds;
