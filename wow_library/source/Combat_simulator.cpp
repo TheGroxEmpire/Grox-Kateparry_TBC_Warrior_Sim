@@ -592,7 +592,7 @@ void Combat_simulator::mortal_strike(Weapon_sim& main_hand_weapon, Special_stats
         return;
     }
     simulator_cout("Mortal Strike!");
-    double damage = main_hand_weapon.normalized_swing(special_stats.attack_power) + 210;
+    double damage = (main_hand_weapon.normalized_swing(special_stats.attack_power) + 210) * (100 + config.talents.improved_mortal_strike) / 100;
     auto hit_outcome =
         generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, damage_sources);
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
@@ -604,7 +604,7 @@ void Combat_simulator::mortal_strike(Weapon_sim& main_hand_weapon, Special_stats
         rage -= 30;
         hit_effects(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges);
     }
-    time_keeper_.mortal_strike_cd = 6.0;
+    time_keeper_.mortal_strike_cd = 6.0 - (config.talents.improved_mortal_strike * 0.2);
     time_keeper_.global_cd = 1.5;
     manage_flurry(hit_outcome.hit_result, special_stats, flurry_charges, true);
     damage_sources.add_damage(Damage_source::mortal_strike, hit_outcome.damage, time_keeper_.time);
