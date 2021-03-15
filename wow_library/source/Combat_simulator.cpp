@@ -592,7 +592,7 @@ void Combat_simulator::mortal_strike(Weapon_sim& main_hand_weapon, Special_stats
         return;
     }
     simulator_cout("Mortal Strike!");
-    double damage = main_hand_weapon.normalized_swing(special_stats.attack_power) + 160;
+    double damage = main_hand_weapon.normalized_swing(special_stats.attack_power) + 210;
     auto hit_outcome =
         generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, damage_sources);
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
