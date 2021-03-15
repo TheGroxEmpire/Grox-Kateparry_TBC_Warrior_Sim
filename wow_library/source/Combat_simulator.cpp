@@ -685,7 +685,7 @@ void Combat_simulator::whirlwind(Weapon_sim& main_hand_weapon, Special_stats& sp
     if (config.dpr_settings.compute_dpr_ww_)
     {
         rage -= 25;
-        time_keeper_.whirlwind_cd = 10;
+        time_keeper_.whirlwind_cd = 10 - config.talents.improved_whirlwind;
         time_keeper_.global_cd = 1.5;
         return;
     }
@@ -704,7 +704,7 @@ void Combat_simulator::whirlwind(Weapon_sim& main_hand_weapon, Special_stats& sp
         }
     }
     rage -= 25;
-    time_keeper_.whirlwind_cd = 10;
+    time_keeper_.whirlwind_cd = 10 - config.talents.improved_whirlwind;
     time_keeper_.global_cd = 1.5;
     Hit_result result_used_for_flurry = Hit_result::TBD;
     double total_damage = 0;
@@ -954,12 +954,20 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         else
         {
             rage += rage_generation(hit_outcomes[0].damage, weapon.socket, weapon.swing_speed);
+        if (config.talents.endless_rage)
+        {
+            rage = rage *1.25;
+        }
         }
         if (hit_outcomes[0].hit_result == Hit_result::dodge)
         {
             simulator_cout("Rage gained since the enemy dodged.");
             rage += 0.75 *
                     rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed);
+        if (config.talents.endless_rage)
+        {
+            rage = rage *1.25;
+        }
         }
         if (rage > 100.0)
         {
@@ -1020,12 +1028,20 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& weapon, Weapon_sim& main_hand_
     hit_outcomes.emplace_back(generate_hit_mh(swing_damage, Hit_type::yellow, 0));
     
     rage += rage_generation(hit_outcomes[0].damage, weapon.socket, weapon.swing_speed);
+        if (config.talents.endless_rage)
+        {
+            rage = rage *1.25;
+        }
 
     if (hit_outcomes[0].hit_result == Hit_result::dodge)
     {
         simulator_cout("Rage gained since the enemy dodged.");
         rage += 0.75 *
                 rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed);
+        if (config.talents.endless_rage)
+        {
+            rage = rage *1.25;
+        }
     }
     if (rage > 100.0)
     {
