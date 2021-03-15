@@ -292,8 +292,8 @@ public:
     void bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                      Damage_sources& damage_sources, int& flurry_charges);
 
-    void whirlwind(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                   Damage_sources& damage_sources, int& flurry_charges);
+    void whirlwind(Weapon_sim& main_hand_weapon, Weapon_sim& off_hand_weapon, Special_stats& special_stats, double& rage,
+                   Damage_sources& damage_sources, int& flurry_charges, bool is_dw = false);
 
     void execute(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                  Damage_sources& damage_sources, int& flurry_charges);
@@ -311,9 +311,9 @@ public:
     Combat_simulator::Hit_outcome generate_hit(const Weapon_sim& weapon, double damage, Hit_type hit_type,
                                                Socket weapon_hand, const Special_stats& special_stats,
                                                Damage_sources& damage_sources, bool boss_target = true,
-                                               bool is_overpower = false, bool can_sweep = true);
+                                               bool is_overpower = false, bool can_sweep = true, bool is_whirlwind = false);
 
-    Combat_simulator::Hit_outcome generate_hit_oh(double damage);
+    Combat_simulator::Hit_outcome generate_hit_oh(double damage, bool is_whirlwind = false);
 
     Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false);
 

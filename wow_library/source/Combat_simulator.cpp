@@ -71,7 +71,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
 
     flurry_haste_factor_ = (config.talents.flurry > 0) ? 0.05 + 0.05 * config.talents.flurry : 0.0;
     dual_wield_damage_factor_ = 0.5 + 0.025 * config.talents.dual_wield_specialization;
-    cleave_bonus_damage_ = 50 * (1.0 + 0.4 * config.talents.improved_cleave);
+    cleave_bonus_damage_ = 70 * (1.0 + 0.4 * config.talents.improved_cleave);
     slam_manager.slam_cast_time_ = 1.5 - 0.5 * config.talents.improved_slam;
 
     tactical_mastery_rage_ = 5.0 * config.talents.tactical_mastery;
@@ -176,7 +176,7 @@ void Combat_simulator::cout_damage_parse(Combat_simulator::Hit_type hit_type, So
                 break;
             case Hit_result::TBD:
                 // Should never happen
-                simulator_cout("BUG");
+                simulator_cout("BUUUUUUUUUUGGGGGGGGG");
                 break;
             }
         }
@@ -207,26 +207,53 @@ void Combat_simulator::cout_damage_parse(Combat_simulator::Hit_type hit_type, So
     }
     else
     {
-        switch (hit_outcome.hit_result)
+        if (hit_type == Hit_type::white)
         {
-        case Hit_result::glancing:
-            simulator_cout("Offhand glancing hit for: ", int(hit_outcome.damage), " damage.");
-            break;
-        case Hit_result::hit:
-            simulator_cout("Offhand white hit for: ", int(hit_outcome.damage), " damage.");
-            break;
-        case Hit_result::crit:
-            simulator_cout("Offhand crit for: ", int(hit_outcome.damage), " damage.");
-            break;
-        case Hit_result::dodge:
-            simulator_cout("Offhand hit dodged");
-            break;
-        case Hit_result::miss:
-            simulator_cout("Offhand hit missed");
-            break;
-        case Hit_result::TBD:
-            simulator_cout("BUUUUUUUUUUGGGGGGGGG");
-            break;
+            switch (hit_outcome.hit_result)
+            {
+            case Hit_result::glancing:
+                simulator_cout("Offhand glancing hit for: ", int(hit_outcome.damage), " damage.");
+                break;
+            case Hit_result::hit:
+                simulator_cout("Offhand white hit for: ", int(hit_outcome.damage), " damage.");
+                break;
+            case Hit_result::crit:
+                simulator_cout("Offhand crit for: ", int(hit_outcome.damage), " damage.");
+                break;
+            case Hit_result::dodge:
+                simulator_cout("Offhand hit dodged");
+                break;
+            case Hit_result::miss:
+                simulator_cout("Offhand hit missed");
+                break;
+            case Hit_result::TBD:
+                simulator_cout("BUUUUUUUUUUGGGGGGGGG");
+                break;
+            }
+        }
+        else
+        {
+            switch (hit_outcome.hit_result)
+            {
+            case Hit_result::glancing:
+                simulator_cout("BUG: Offhand ability glanced for: ", int(hit_outcome.damage), " damage.");
+                break;
+            case Hit_result::hit:
+                simulator_cout("Offhand ability hit for: ", int(hit_outcome.damage), " damage.");
+                break;
+            case Hit_result::crit:
+                simulator_cout("Offhand ability crit for: ", int(hit_outcome.damage), " damage.");
+                break;
+            case Hit_result::dodge:
+                simulator_cout("Offhand ability dodged");
+                break;
+            case Hit_result::miss:
+                simulator_cout("Offhand ability missed");
+                break;
+            case Hit_result::TBD:
+                simulator_cout("BUUUUUUUUUUGGGGGGGGG");
+                break;
+            }
         }
     }
 }
@@ -260,7 +287,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit_mh(double damage, H
     }
 }
 
-Combat_simulator::Hit_outcome Combat_simulator::generate_hit_oh(double damage)
+Combat_simulator::Hit_outcome Combat_simulator::generate_hit_oh(double damage, bool is_whirlwind)
 {
     if (ability_queue_manager.is_ability_queued())
     {
@@ -269,6 +296,14 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit_oh(double damage)
         int outcome = std::lower_bound(hit_table_two_hand_.begin(), hit_table_two_hand_.end(), random_var) -
                       hit_table_two_hand_.begin();
         return {damage * damage_multipliers_white_oh_[outcome], Hit_result(outcome)};
+    }
+    else if (is_whirlwind)
+    {
+        simulator_cout("Drawing outcome from OH yellow hit table (Whirlwind)");
+        double random_var = get_uniform_random(100);
+        int outcome = std::lower_bound(hit_table_yellow_.begin(), hit_table_yellow_.end(), random_var) -
+                          hit_table_yellow_.begin();
+            return {damage * damage_multipliers_yellow_[outcome], Hit_result(outcome)};
     }
     else
     {
@@ -284,7 +319,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(const Weapon_sim& w
                                                              Combat_simulator::Hit_type hit_type, Socket weapon_hand,
                                                              const Special_stats& special_stats,
                                                              Damage_sources& damage_sources, bool boss_target,
-                                                             bool is_overpower, bool can_sweep)
+                                                             bool is_overpower, bool can_sweep, bool is_whirlwind)
 {
     Combat_simulator::Hit_outcome hit_outcome;
     if (weapon_hand == Socket::main_hand)
@@ -302,7 +337,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(const Weapon_sim& w
     }
     else
     {
-        hit_outcome = generate_hit_oh(damage);
+        hit_outcome = generate_hit_oh(damage, is_whirlwind);
         if (boss_target)
         {
             hit_outcome.damage *= armor_reduction_factor_ * (1 + special_stats.damage_mod_physical);
@@ -569,7 +604,7 @@ void Combat_simulator::slam(Weapon_sim& main_hand_weapon, Special_stats& special
         return;
     }
     simulator_cout("Slam!");
-    double damage = main_hand_weapon.swing(special_stats.attack_power) + 87.0;
+    double damage = main_hand_weapon.swing(special_stats.attack_power) + 140.0;
     auto hit_outcome =
         generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, damage_sources);
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
@@ -682,8 +717,8 @@ void Combat_simulator::overpower(Weapon_sim& main_hand_weapon, Special_stats& sp
     simulator_cout("Current rage: ", int(rage));
 }
 
-void Combat_simulator::whirlwind(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                                 Damage_sources& damage_sources, int& flurry_charges)
+void Combat_simulator::whirlwind(Weapon_sim& main_hand_weapon, Weapon_sim& off_hand_weapon, Special_stats& special_stats, double& rage,
+                                 Damage_sources& damage_sources, int& flurry_charges, bool is_dw)
 {
     if (config.dpr_settings.compute_dpr_ww_)
     {
@@ -694,16 +729,34 @@ void Combat_simulator::whirlwind(Weapon_sim& main_hand_weapon, Special_stats& sp
     }
     simulator_cout("Whirlwind! #targets = boss + ", number_of_extra_targets_, " adds");
     simulator_cout("Whirlwind hits: ", std::min(number_of_extra_targets_ + 1, 4), " targets");
-    double damage = main_hand_weapon.normalized_swing(special_stats.attack_power);
+    double mh_damage = main_hand_weapon.normalized_swing(special_stats.attack_power);
+    double oh_damage = 0;
     std::vector<Hit_outcome> hit_outcomes{};
-    hit_outcomes.reserve(4);
+    if (is_dw)
+    {
+        oh_damage = off_hand_weapon.normalized_swing(special_stats.attack_power);
+        hit_outcomes.reserve(8);
+    }
+    else
+    {
+        hit_outcomes.reserve(4);
+    }
     for (int i = 0; i < std::min(number_of_extra_targets_ + 1, 4); i++)
     {
-        hit_outcomes.emplace_back(generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand,
+        hit_outcomes.emplace_back(generate_hit(main_hand_weapon, mh_damage, Hit_type::yellow, Socket::main_hand,
                                                special_stats, damage_sources, i == 0, false, i == 0));
         if (hit_outcomes.back().hit_result != Hit_result::dodge && hit_outcomes.back().hit_result != Hit_result::miss)
         {
             hit_effects(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges);
+        }
+        if (is_dw)
+        {
+            hit_outcomes.emplace_back(generate_hit(off_hand_weapon, oh_damage, Hit_type::yellow, Socket::off_hand,
+                                               special_stats, damage_sources, i == 0, false, i == 0, true));
+            if (hit_outcomes.back().hit_result != Hit_result::dodge && hit_outcomes.back().hit_result != Hit_result::miss)
+            {
+                hit_effects(off_hand_weapon, off_hand_weapon, special_stats, rage, damage_sources, flurry_charges);
+            }
         }
     }
     rage -= 25;
@@ -734,7 +787,7 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
         return;
     }
     simulator_cout("Execute!");
-    double damage = 600 + (rage - execute_rage_cost_) * 15;
+    double damage = 925 + (rage - execute_rage_cost_) * 21;
     auto hit_outcome =
         generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, damage_sources);
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
@@ -765,7 +818,7 @@ void Combat_simulator::hamstring(Weapon_sim& main_hand_weapon, Special_stats& sp
         return;
     }
     simulator_cout("Hamstring!");
-    double damage = 45;
+    double damage = 63;
     auto hit_outcome =
         generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, damage_sources);
     time_keeper_.global_cd = 1.5;
@@ -1514,7 +1567,15 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     if (time_keeper_.whirlwind_cd < 0.0 && rage > config.combat.whirlwind_rage_thresh && rage > 25 &&
                         time_keeper_.global_cd < 0 && use_ww)
                     {
-                        whirlwind(weapons[0], special_stats, rage, damage_sources, flurry_charges);
+                        if(weapons[0].weapon_socket == Weapon_socket::two_hand)
+                        {
+                            whirlwind(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges);
+                        }
+                        else
+                        {
+                            whirlwind(weapons[0], weapons[1], special_stats, rage, damage_sources, flurry_charges, 1);
+                        }
+                        
                     }
                 }
 
