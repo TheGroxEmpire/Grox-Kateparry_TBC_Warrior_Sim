@@ -265,6 +265,7 @@ std::vector<double> get_damage_sources(const Damage_sources& damage_sources_vect
         damage_sources_vector.slam_damage / damage_sources_vector.sum_damage_sources(),
         damage_sources_vector.mortal_strike_damage / damage_sources_vector.sum_damage_sources(),
         damage_sources_vector.sweeping_strikes_damage / damage_sources_vector.sum_damage_sources(),
+        damage_sources_vector.sword_spec_damage / damage_sources_vector.sum_damage_sources(),
     };
 }
 
@@ -563,7 +564,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     std::vector<std::string> damage_names = {"White MH",      "White OH",         "Bloodthirst", "Execute",
                                              "Heroic Strike", "Cleave",           "Whirlwind",   "Hamstring",
                                              "Deep Wounds",   "Item Hit Effects", "Overpower",   "Slam",
-                                             "Mortal Strike", "Sweeping Strikes"};
+                                             "Mortal Strike", "Sweeping Strikes", "Sword Specialization"};
     for (size_t i = 0; i < damage_time_lapse_raw.size(); i++)
     {
         double total_damage = 0;
@@ -1113,6 +1114,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         debug_topic += "DPS mortal strike: " + std::to_string(dist.mortal_strike_damage / config.sim_time) + "<br>";
         debug_topic +=
             "DPS sweeping strikes: " + std::to_string(dist.sweeping_strikes_damage / config.sim_time) + "<br>";
+        debug_topic += "DPS sword specialization: " + std::to_string(dist.sword_spec_damage / config.sim_time) + "<br>";
         debug_topic += "DPS overpower: " + std::to_string(dist.overpower_damage / config.sim_time) + "<br>";
         debug_topic += "DPS slam: " + std::to_string(dist.slam_damage / config.sim_time) + "<br>";
         debug_topic += "DPS execute: " + std::to_string(dist.execute_damage / config.sim_time) + "<br>";
@@ -1130,6 +1132,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         debug_topic += "#Hits bloodthirst: " + std::to_string(dist.bloodthirst_count) + "<br>";
         debug_topic += "#Hits mortal strike: " + std::to_string(dist.mortal_strike_count) + "<br>";
         debug_topic += "#Hits sweeping strikes: " + std::to_string(dist.sweeping_strikes_count) + "<br>";
+        debug_topic += "#Hits sword specialization: " + std::to_string(dist.sword_spec_count) + "<br>";
         debug_topic += "#Hits overpower: " + std::to_string(dist.overpower_count) + "<br>";
         debug_topic += "#Hits slam: " + std::to_string(dist.slam_count) + "<br>";
         debug_topic += "#Hits execute: " + std::to_string(dist.execute_count) + "<br>";

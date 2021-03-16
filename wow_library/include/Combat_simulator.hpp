@@ -108,6 +108,7 @@ struct Combat_simulator_config
         bool use_hamstring{false};
         bool use_slam{false};
         bool use_bloodthirst{false};
+        bool use_rampage{false};
         bool use_mortal_strike{false};
         bool use_sweeping_strikes{false};
         bool use_whirlwind{false};
@@ -155,6 +156,7 @@ struct Combat_simulator_config
         int tactical_mastery = 0;
         int deep_wounds = 0;
         int bloodthirst = 0;
+        int rampage = 0;
         int mortal_strike = 0;
         int sweeping_strikes = 0;
         int improved_disciplines = 0;
@@ -164,7 +166,6 @@ struct Combat_simulator_config
         int precision = 0;
         int improved_whirlwind = 0;
         int improved_berserker_stance = 0;
-        int rampage = 0;
     } talents;
 };
 
@@ -460,6 +461,7 @@ private:
     double tactical_mastery_rage_{0};
     bool deep_wounds_{false};
     bool use_bloodthirst_{false};
+    bool use_rampage_{false};
     bool use_mortal_strike_{false};
     bool use_sweeping_strikes_{false};
     int sweeping_strikes_charges_ = 0;
@@ -469,11 +471,11 @@ private:
     std::vector<Use_effect> use_effects_all_{};
     std::vector<Over_time_effect> over_time_effects_{};
     std::map<Damage_source, int> source_map{
-        {Damage_source::white_mh, 0},         {Damage_source::white_oh, 1},         {Damage_source::bloodthirst, 2},
-        {Damage_source::execute, 3},          {Damage_source::heroic_strike, 4},    {Damage_source::cleave, 5},
-        {Damage_source::whirlwind, 6},        {Damage_source::hamstring, 7},        {Damage_source::deep_wounds, 8},
-        {Damage_source::item_hit_effects, 9}, {Damage_source::overpower, 10},       {Damage_source::slam, 11},
-        {Damage_source::mortal_strike, 12},   {Damage_source::sweeping_strikes, 13}};
+        {Damage_source::white_mh, 0},         {Damage_source::white_oh, 1},          {Damage_source::bloodthirst, 2},
+        {Damage_source::execute, 3},          {Damage_source::heroic_strike, 4},     {Damage_source::cleave, 5},
+        {Damage_source::whirlwind, 6},        {Damage_source::hamstring, 7},         {Damage_source::deep_wounds, 8},
+        {Damage_source::item_hit_effects, 9}, {Damage_source::overpower, 10},        {Damage_source::slam, 11},
+        {Damage_source::mortal_strike, 12},   {Damage_source::sweeping_strikes, 13}, {Damage_source::sword_spec, 14}};
 };
 
 #include "Combat_simulator.tcc"
