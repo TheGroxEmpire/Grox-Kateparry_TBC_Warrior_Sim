@@ -11,7 +11,7 @@ public:
         mortal_strike_cd -= dt;
         sweeping_strikes_cd -= dt;
         blood_thirst_cd -= dt;
-        rampage_uptime -= dt;
+        rampage_cd -= dt;
         overpower_cd -= dt;
         whirlwind_cd -= dt;
         global_cd -= dt;
@@ -23,7 +23,7 @@ public:
         mortal_strike_cd = -1e-10;
         sweeping_strikes_cd = -1e-10;
         blood_thirst_cd = -1e-10;
-        rampage_uptime = -1e-10;
+        rampage_cd = -1e-10;
         overpower_cd = -1e-10;
         whirlwind_cd = -1e-10;
         global_cd = -1e-10;
@@ -49,9 +49,9 @@ public:
         {
             dt = std::min(blood_thirst_cd, dt);
         }
-        if (rampage_uptime > 0.0)
+        if (rampage_cd > 0.0)
         {
-            dt = std::min(rampage_uptime, dt);
+            dt = std::min(rampage_cd, dt);
         }
         if (whirlwind_cd > 0.0)
         {
@@ -74,7 +74,7 @@ public:
     }
 
     double blood_thirst_cd;
-    double rampage_uptime;
+    double rampage_cd;
     double mortal_strike_cd;
     double sweeping_strikes_cd;
     double overpower_cd;
