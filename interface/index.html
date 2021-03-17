@@ -2174,6 +2174,12 @@
             </div>
         </div>
 
+        <div class="hide_description" id="rampage_talent_div">
+            <input type="checkbox" id="use_rampage" checked
+                   onclick="show_div('use_rampage', 'rampage_div')">
+            <label for="use_rampage"><b> Use rampage</b></label><br>
+        </div>
+
         <div class="hide_description" id="mortal_strike_talent_div">
             <input type="checkbox" id="use_mortal_strike" checked
                    onclick="show_div('use_mortal_strike', 'mortal_strike_div')">
@@ -2571,7 +2577,7 @@
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
-        "cleave_if_adds", "use_hamstring", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
+        "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
         "item_strengths", "wep_strengths", "deep_wounds", "heroic_strike_aq", "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
         "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",

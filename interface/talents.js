@@ -198,6 +198,13 @@ function showHideTalentDiv() {
     } else {
         document.getElementById("bloodthirst_talent_div").style.display = "none";
     }
+    let rm_talent = document.getElementById("rampage_talent");
+    current_val = parseInt(rm_talent.getAttribute("data-count"));
+    if (current_val === 1) {
+        document.getElementById("rampage_talent_div").style.display = "block";
+    } else {
+        document.getElementById("rampage_talent_div").style.display = "none";
+    }
 
     let ss_talent = document.getElementById("sweeping_strikes_talent");
     current_val = parseInt(ss_talent.getAttribute("data-count"));

@@ -61,6 +61,10 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     {
         combat.use_bloodthirst = true;
     }
+    if (find_string(input.options, "use_rampage"))
+    {
+        combat.use_rampage = true;
+    }
     if (find_string(input.options, "use_mortal_strike"))
     {
         combat.use_mortal_strike = true;

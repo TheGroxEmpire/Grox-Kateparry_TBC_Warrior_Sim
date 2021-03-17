@@ -587,7 +587,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     rage_info += "Rage lost to rage cap (gaining rage when at 100): <b>" +
                  string_with_precision(simulator.get_rage_lost_capped() / double(simulator.get_n_simulations()), 3) +
                  "</b><br>";
-    rage_info += "</b>Rage lost when changing stace (cutting rage at 25): <b>" +
+    rage_info += "</b>Rage lost when changing stance (cutting rage at 25): <b>" +
                  string_with_precision(simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()), 3) +
                  "</b><br>";
 
