@@ -303,7 +303,7 @@
       onload="openTab('event', 'Simulator');open_armor();show_div('cleave_if_adds', 'cleave_div');
       show_div('use_hamstring', 'hamstring_div');show_div('multi_target_mode', 'multi_target_div');
       show_div('periodic_damage', 'periodic_damage_div');show_div('ability_queue', 'ability_queue_div');
-      show_div('dual_wield_mode', 'dual_wield_div');displayTalentBootup();calcTotalTalents();load_talent_standard_fury();">
+      show_div('dual_wield_mode', 'dual_wield_div');displayTalentBootup();calcTotalTalents();load_talent_dual_wield_fury();">
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Simulator')">Simulator</button>
@@ -1560,9 +1560,8 @@
     <button type="button" class="collapsible">Talents</button>
     <div class="content">
         <b>Presets:</b><br>
-        <button onclick="load_talent_standard_fury()">Standard Fury</button>
-        <button onclick="load_talent_cleave_fury()">Cleave Fury</button>
-        <button onclick="load_talent_two_hand_fury()">Two Hand Fury</button>
+        <button onclick="load_talent_dual_wield_fury()">Dual Wield Fury</button>
+        <button onclick="load_talent_standard_arms()">Standard Arms </button>
         <button onclick="load_talent_clear()">Clear</button>
         <br><br>
         <b id="total_points">Total points: </b>

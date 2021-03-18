@@ -1221,7 +1221,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     {
         // TODO need strength multiplier to make this more accurate
         double ap_boost =
-            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25 * (config.talents.improved_berserker_stance * 0.02);
+            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25;
         use_effects_all.emplace_back(
             Use_effect{"Blood_fury", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, 15, 120, true});
     }
@@ -1766,7 +1766,7 @@ std::vector<std::pair<double, Use_effect>> Combat_simulator::get_use_effect_orde
     if (config.enable_blood_fury)
     {
         double ap_boost =
-            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25 * (config.talents.improved_berserker_stance * 0.02);
+            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25;
         use_effects_all.emplace_back(
             Use_effect{"Blood_fury", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, 15, 120, true});
     }
