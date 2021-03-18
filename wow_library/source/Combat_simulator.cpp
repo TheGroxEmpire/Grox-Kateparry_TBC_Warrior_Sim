@@ -677,6 +677,7 @@ void Combat_simulator::bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& 
         return;
     }
     simulator_cout("Bloodthirst!");
+    simulator_cout("Total AP: ", special_stats.attack_power);
     double damage = special_stats.attack_power * 0.45;
     auto hit_outcome =
         generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, damage_sources);
@@ -1220,9 +1221,17 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     {
         // TODO need strength multiplier to make this more accurate
         double ap_boost =
-            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25;
+            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25 * (config.talents.improved_berserker_stance * 0.02);
         use_effects_all.emplace_back(
             Use_effect{"Blood_fury", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, 15, 120, true});
+    }
+
+    if (config.talents.improved_berserker_stance > 0)
+    {
+        double ap_boost = 
+            character.total_special_stats.attack_power * (config.talents.improved_berserker_stance * 0.02);
+        use_effects_all.emplace_back(
+            Use_effect{"Improved_berserker_stance", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, sim_time + 2, sim_time, false});
     }
 
     double ap_equiv{};
@@ -1757,7 +1766,7 @@ std::vector<std::pair<double, Use_effect>> Combat_simulator::get_use_effect_orde
     if (config.enable_blood_fury)
     {
         double ap_boost =
-            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25;
+            character.total_attributes.convert_to_special_stats(character.total_special_stats).attack_power * 0.25 * (config.talents.improved_berserker_stance * 0.02);
         use_effects_all.emplace_back(
             Use_effect{"Blood_fury", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, 15, 120, true});
     }
