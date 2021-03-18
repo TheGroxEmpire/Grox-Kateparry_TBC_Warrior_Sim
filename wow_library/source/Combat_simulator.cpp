@@ -567,16 +567,10 @@ void Combat_simulator::manage_flurry_rampage(Hit_result hit_result, Special_stat
         {
             if (rampage_stacks < 5)
             {
-                special_stats += {0, 0, rampage_ap};
                 rampage_stacks += 1;
+                special_stats += {0, 0, rampage_ap};
+                simulator_cout(rampage_stacks, " rampage stacks");
             }
-            simulator_cout(rampage_stacks, " rampage stacks");
-        }
-        else
-        {
-            rampage_ap = 50 * rampage_stacks;
-            special_stats -= {0, 0, rampage_ap};
-            rampage_stacks = 0;
         }
     }
 }
@@ -1553,6 +1547,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
                 if (use_rampage_)
                 {
+                    //Detecting crit for rampage
                     if (flurry_charges == 3 && !rampage_active)
                     {
                         crit_for_rampage = true;
@@ -1562,16 +1557,17 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                         time_keeper_.rampage_cd = 30.0;
                         time_keeper_.global_cd = 1.5;
                         rage -= 20;
-                        simulator_cout("Rampage!");
                         crit_for_rampage = false;
                         rampage_active = true;
+                        simulator_cout("Rampage!");
                         simulator_cout("Current rage: ", int(rage));
                     }
                     else if (time_keeper_.rampage_cd < 0.0 && rampage_active)
                     {
                         double rampage_ap = 50 * rampage_stacks;
-                        rampage_active = false;
                         special_stats -= {0, 0, rampage_ap};
+                        rampage_active = false;
+                        rampage_stacks = 0;
                         simulator_cout("Rampage fades.");
                     }
                 }
