@@ -174,6 +174,7 @@ public:
     {
         bool booming_voice_talent{false};
         int commanding_presence_talent{0};
+        int improved_berserker_stance_talent{0};
         int sword_specialization{0};
         int one_handed_weapon_specialization{0};
     } talents;
