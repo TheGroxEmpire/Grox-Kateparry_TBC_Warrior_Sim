@@ -665,6 +665,25 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 config.dpr_settings.compute_dpr_bt_ = false;
             }
         }
+        if (config.combat.use_mortal_strike)
+        {
+            double avg_ms_casts = static_cast<double>(dmg_dist.mortal_strike_count) / n_simulations_base;
+            if (avg_ms_casts > 0.0)
+            {
+                config.dpr_settings.compute_dpr_ms_ = true;
+                Combat_simulator simulator_dpr{};
+                simulator_dpr.set_config(config);
+                simulator_dpr.simulate(character, 0);
+                double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+                double dmg_tot = delta_dps * (config.sim_time - 1);
+                double dmg_per_hit = dmg_tot / avg_ms_casts;
+                double dmg_per_rage = dmg_per_hit / 30.0;
+                dpr_info += "<b>Mortal Strike</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hit, 4) +
+                            "</b><br>Average rage cost: <b>" + string_with_precision(30.0, 3) + "</b><br>DPR: <b>" +
+                            string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                config.dpr_settings.compute_dpr_ms_ = false;
+            }
+        }
         if (config.combat.use_whirlwind)
         {
             double avg_ww_casts = static_cast<double>(dmg_dist.whirlwind_count) / n_simulations_base;

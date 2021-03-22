@@ -644,6 +644,8 @@ void Combat_simulator::mortal_strike(Weapon_sim& main_hand_weapon, Special_stats
     if (config.dpr_settings.compute_dpr_ms_)
     {
         get_uniform_random(100) < hit_table_yellow_[1] ? rage -= 6 : rage -= 30;
+        time_keeper_.mortal_strike_cd = 6.0 - (config.talents.improved_mortal_strike * 0.2);
+        time_keeper_.global_cd = 1.5;
         return;
     }
     simulator_cout("Mortal Strike!");
