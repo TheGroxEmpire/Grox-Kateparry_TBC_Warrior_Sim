@@ -449,7 +449,6 @@ int main()
         "n_simulations_dd",
         "n_simulations_stat_dd",
         "n_simulations_talent_dd",
-        "slam_cd_thresh_dd",
         "slam_spam_max_time_dd",
         "slam_spam_rage_dd",
         "slam_rage_dd",

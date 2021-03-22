@@ -582,18 +582,6 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, double rage, double& swing
     {
         use_sl &= time_keeper_.rampage_cd > 3.0;
     }
-    if (use_bloodthirst_)
-    {
-        use_sl &= time_keeper_.blood_thirst_cd > config.combat.slam_cd_thresh;
-    }
-    if (use_mortal_strike_)
-    {
-        use_sl &= time_keeper_.mortal_strike_cd > config.combat.slam_cd_thresh;
-    }
-    if (config.combat.use_whirlwind)
-    {
-        use_sl &= time_keeper_.whirlwind_cd > config.combat.slam_cd_thresh;
-    }
     if (use_sl)
     {
         if (swing_time_left > config.combat.slam_spam_max_time)

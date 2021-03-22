@@ -141,7 +141,6 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         combat.overpower_rage_thresh = fv.find("overpower_rage_thresh_dd");
         combat.overpower_bt_cooldown_thresh = fv.find("overpower_bt_cooldown_thresh_dd");
         combat.overpower_ww_cooldown_thresh = fv.find("overpower_ww_cooldown_thresh_dd");
-        combat.slam_cd_thresh = fv.find("slam_cd_thresh_dd");
         combat.slam_spam_max_time = fv.find("slam_spam_max_time_dd");
         combat.slam_spam_rage = fv.find("slam_spam_rage_dd");
         combat.slam_rage_dd = fv.find("slam_rage_dd");

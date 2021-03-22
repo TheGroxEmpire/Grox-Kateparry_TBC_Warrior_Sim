@@ -159,8 +159,8 @@
         margin-left: 25px;
     }
 
-    div.hide_description {
-    }
+    /*div.hide_description {
+    }*/
 
     .left_select {
         position: relative;
@@ -218,10 +218,10 @@
         border-radius: 4px;
     }
 
-    .results_table {
+    /*.results_table {
         /*display: inline-block;*/
         /*border-right: thin solid #404040;*/
-    }
+    /*}*/
 
     .talents {
         display: inline-block;
@@ -2213,18 +2213,16 @@
         <input type="checkbox" id="use_slam" checked onclick="show_div('use_slam', 'slam_div')">
         <label for="use_slam"><b> Use slam (Two-handed weapons only)</b></label><br>
         <div class="description" id="slam_div">
-            <label for="slam_cd_thresh_dd">Cast slam when bloodthirst/whirlwind CD is above:</label>
-            <input type="number" id="slam_cd_thresh_dd" name="quantity" min="0" max="6.0" value="1.0" step="0.1"><br>
             <label for="slam_rage_dd">Cast slam after a melee hit if rage is above:</label>
             <input type="number" id="slam_rage_dd" name="quantity" min="15" max="100" value="15"><br>
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
-            <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="50"><br>
+            <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
             <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5"
                    step="0.1"><br>
         </div>
 
-        <input type="checkbox" id="use_overpower" checked onclick="show_div('use_overpower', 'overpower_div')">
+        <input type="checkbox" id="use_overpower" onclick="show_div('use_overpower', 'overpower_div')">
         <label for="use_overpower"><b> Use overpower</b></label><br>
         <div class="description" id="overpower_div">
             <label for="overpower_rage_thresh_dd">Overpower when rage is below:</label>
@@ -2242,7 +2240,7 @@
         <label for="use_heroic_strike"><b> Use Heroic Strike</b></label><br>
         <div class="description" id="heroic_strike_div">
             <label for="heroic_strike_rage_thresh_dd">Heroic strike when rage is above:</label>
-            <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="50"><br>
+            <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
             <input type="checkbox" id="use_hs_in_exec_phase">
             <label for="use_hs_in_exec_phase"> Use heroic strike in execute phase</label><br>
         </div>
@@ -2571,7 +2569,7 @@
         "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
-        "slam_spam_max_time_dd", "slam_cd_thresh_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
+        "slam_spam_max_time_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
         "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
