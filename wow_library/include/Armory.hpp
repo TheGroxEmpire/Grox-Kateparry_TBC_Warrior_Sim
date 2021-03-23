@@ -27,7 +27,7 @@ struct Buffs
     Buff blessing_of_might{"blessing_of_might", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 264}};
 //     Buff blessing_of_might_aq{"blessing_of_might_aq", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 222}};
     Buff gift_of_the_wild{"gift_of_the_wild", Attributes{18.9, 18.9}, Special_stats{0.0, 0.0, 0.0}};
-    Buff leader_of_the_pack{"leader_of_the_pack", Attributes{0.0, 0.0}, Special_stats{3.0, 0.0, 0.0}};
+    Buff leader_of_the_pack{"leader_of_the_pack", Attributes{0.0, 0.0}, Special_stats{5.0, 0.0, 0.0}};
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
     Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0}, 0,
                         {{"windfury_totem", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0.2, 315}}};
