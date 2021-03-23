@@ -1974,7 +1974,7 @@
     <button type="button" class="collapsible">Buffs and Consumables</button>
     <div class="content">
         <div class="checkbox_div">
-            <p class="select-title">World buffs:</p><br>
+            <!-- <p class="select-title">World buffs:</p><br>
             <input type="checkbox" id="rallying_cry" checked>
             <label for="rallying_cry"> Rallying Cry of the Dragon Slayer</label><br>
 
@@ -1997,7 +1997,7 @@
             <label for="sayges_fortune"> Sayges Fortune</label><br>
 
             <input type="checkbox" id="traces_of_silithyst">
-            <label for="traces_of_silithyst"> Traces of Silithyst</label><br><br>
+            <label for="traces_of_silithyst"> Traces of Silithyst</label><br><br> -->
 
             <b> Player buffs:</b><br>
             <input type="checkbox" id="battle_shout" checked>
@@ -2524,9 +2524,9 @@
         document.getElementById("armor_n_wep").click();
     }
 
-    let world_buffs = ["rallying_cry", "dire_maul", "slipkiks_savy", "songflower", "warchiefs_blessing",
-        "spirit_of_zandalar", "sayges_fortune", "traces_of_silithyst"];
-    let world_buffs_input = [];
+    // let world_buffs = ["rallying_cry", "dire_maul", "slipkiks_savy", "songflower", "warchiefs_blessing",
+    //     "spirit_of_zandalar", "sayges_fortune", "traces_of_silithyst"];
+    // let world_buffs_input = [];
 
     let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura",
         "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem"];
@@ -2637,9 +2637,9 @@
         let reader = new FileReader();
 
         //set all buff-values to unchecked before loading
-        for (let world_buff of world_buffs) {
-            document.getElementById(world_buff).checked = false;
-        }
+        // for (let world_buff of world_buffs) {
+        //     document.getElementById(world_buff).checked = false;
+        // }
         for (let buff of buffs) {
             document.getElementById(buff).checked = false;
         }
@@ -2695,9 +2695,9 @@
             let dd_string = enchants_input[i].slice(1, enchants_input[i].length);
             file_content += enchants[i] + " " + dd_string + "\n";
         }
-        for (let i = 0; i < world_buffs.length; i++) {
-            file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
-        }
+        // for (let i = 0; i < world_buffs.length; i++) {
+        //     file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
+        // }
         for (let i = 0; i < buffs.length; i++) {
             file_content += buffs[i] + " " + buffs_input[i] + "\n";
         }
@@ -2761,11 +2761,11 @@
         race = document.getElementById("race_dd");
         race_string = race.options[race.selectedIndex].value;
 
-        world_buffs_input = [];
-        for (let world_buff of world_buffs) {
-            let temp = document.getElementById(world_buff);
-            world_buffs_input.push((temp.checked) ? world_buff : "");
-        }
+        // world_buffs_input = [];
+        // for (let world_buff of world_buffs) {
+        //     let temp = document.getElementById(world_buff);
+        //     world_buffs_input.push((temp.checked) ? world_buff : "");
+        // }
         buffs_input = [];
         for (let buff of buffs) {
             let temp = document.getElementById(buff);
@@ -2906,9 +2906,9 @@
         }
 
         let buff_vec = new Module.StringList();
-        for (let buff of world_buffs_input) {
-            buff_vec.push_back(buff);
-        }
+        // for (let buff of world_buffs_input) {
+        //     buff_vec.push_back(buff);
+        // }
         for (let buff of buffs_input) {
             buff_vec.push_back(buff);
         }

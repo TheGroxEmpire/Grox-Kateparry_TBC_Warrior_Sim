@@ -367,11 +367,11 @@ int main()
 //    mult_weapons_vec.emplace_back("misplaced_servo_arm");
 
     std::vector<std::string> buff_vec;
-    buff_vec.emplace_back("rallying_cry");
-    buff_vec.emplace_back("dire_maul");
-    buff_vec.emplace_back("songflower");
-    buff_vec.emplace_back("warchiefs_blessing");
-    buff_vec.emplace_back("spirit_of_zandalar");
+    // buff_vec.emplace_back("rallying_cry");
+    // buff_vec.emplace_back("dire_maul");
+    // buff_vec.emplace_back("songflower");
+    // buff_vec.emplace_back("warchiefs_blessing");
+    // buff_vec.emplace_back("spirit_of_zandalar");
     buff_vec.emplace_back("sayges_fortune");
     buff_vec.emplace_back("windfury_totem");
     buff_vec.emplace_back("blessing_of_kings");

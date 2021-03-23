@@ -865,38 +865,38 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.battle_squawk);
     }
-    if (find_string(buffs_vec, "rallying_cry"))
-    {
-        character.add_buff(buffs.rallying_cry);
-    }
-    if (find_string(buffs_vec, "dire_maul"))
-    {
-        character.add_buff(buffs.dire_maul);
-    }
-    if (find_string(buffs_vec, "slipkiks_savy"))
-    {
-        character.add_buff(buffs.slipkiks_savy);
-    }
-    if (find_string(buffs_vec, "songflower"))
-    {
-        character.add_buff(buffs.songflower);
-    }
-    if (find_string(buffs_vec, "warchiefs_blessing"))
-    {
-        character.add_buff(buffs.warchiefs_blessing);
-    }
-    if (find_string(buffs_vec, "spirit_of_zandalar"))
-    {
-        character.add_buff(buffs.spirit_of_zandalar);
-    }
-    if (find_string(buffs_vec, "sayges_fortune"))
-    {
-        character.add_buff(buffs.sayges_fortune);
-    }
-    if (find_string(buffs_vec, "traces_of_silithyst"))
-    {
-        character.add_buff(buffs.traces_of_silithyst);
-    }
+    // if (find_string(buffs_vec, "rallying_cry"))
+    // {
+    //     character.add_buff(buffs.rallying_cry);
+    // }
+    // if (find_string(buffs_vec, "dire_maul"))
+    // {
+    //     character.add_buff(buffs.dire_maul);
+    // }
+    // if (find_string(buffs_vec, "slipkiks_savy"))
+    // {
+    //     character.add_buff(buffs.slipkiks_savy);
+    // }
+    // if (find_string(buffs_vec, "songflower"))
+    // {
+    //     character.add_buff(buffs.songflower);
+    // }
+    // if (find_string(buffs_vec, "warchiefs_blessing"))
+    // {
+    //     character.add_buff(buffs.warchiefs_blessing);
+    // }
+    // if (find_string(buffs_vec, "spirit_of_zandalar"))
+    // {
+    //     character.add_buff(buffs.spirit_of_zandalar);
+    // }
+    // if (find_string(buffs_vec, "sayges_fortune"))
+    // {
+    //     character.add_buff(buffs.sayges_fortune);
+    // }
+    // if (find_string(buffs_vec, "traces_of_silithyst"))
+    // {
+    //     character.add_buff(buffs.traces_of_silithyst);
+    // }
 
     // Player buffs
     if (find_string(buffs_vec, "battle_shout"))
