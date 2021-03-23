@@ -22,7 +22,6 @@ enum class Damage_source
     hamstring,
     deep_wounds,
     item_hit_effects,
-    sword_spec
 };
 
 struct Damage_instance
@@ -46,14 +45,14 @@ struct Damage_sources
     {
         return white_mh_damage + white_oh_damage + bloodthirst_damage + mortal_strike_damage + slam_damage +
                overpower_damage + heroic_strike_damage + cleave_damage + whirlwind_damage + hamstring_damage +
-               execute_damage + deep_wounds_damage + item_hit_effects_damage + sweeping_strikes_damage + sword_spec_damage;
+               execute_damage + deep_wounds_damage + item_hit_effects_damage + sweeping_strikes_damage;
     }
 
     constexpr double sum_counts() const
     {
         return white_mh_count + white_oh_count + bloodthirst_count + mortal_strike_count + slam_count +
                overpower_count + heroic_strike_count + cleave_count + whirlwind_count + hamstring_count +
-               execute_count + deep_wounds_count + item_hit_effects_count + sweeping_strikes_count + sword_spec_count;
+               execute_count + deep_wounds_count + item_hit_effects_count + sweeping_strikes_count;
     }
 
     void add_damage(Damage_source source, double damage, double time_stamp, bool increment_counter = true);
@@ -72,7 +71,6 @@ struct Damage_sources
     double hamstring_damage{};
     double deep_wounds_damage{};
     double item_hit_effects_damage{};
-    double sword_spec_damage{};
 
     long int white_mh_count{};
     long int white_oh_count{};
@@ -88,7 +86,6 @@ struct Damage_sources
     long int hamstring_count{};
     long int deep_wounds_count{};
     long int item_hit_effects_count{};
-    long int sword_spec_count{};
 
     std::vector<Damage_instance> damage_instances;
 };

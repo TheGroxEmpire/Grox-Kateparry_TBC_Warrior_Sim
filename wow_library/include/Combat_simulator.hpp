@@ -474,7 +474,7 @@ private:
         {Damage_source::execute, 3},          {Damage_source::heroic_strike, 4},     {Damage_source::cleave, 5},
         {Damage_source::whirlwind, 6},        {Damage_source::hamstring, 7},         {Damage_source::deep_wounds, 8},
         {Damage_source::item_hit_effects, 9}, {Damage_source::overpower, 10},        {Damage_source::slam, 11},
-        {Damage_source::mortal_strike, 12},   {Damage_source::sweeping_strikes, 13}, {Damage_source::sword_spec, 14}};
+        {Damage_source::mortal_strike, 12},   {Damage_source::sweeping_strikes, 13}};
 };
 
 #include "Combat_simulator.tcc"

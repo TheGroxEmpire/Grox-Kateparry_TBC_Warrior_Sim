@@ -1086,15 +1086,13 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& weapon, Weapon_sim& main_hand_
                                     double attack_power_bonus)
 {
     double damage = weapon.swing(special_stats.attack_power + attack_power_bonus);
-    // Do yellow sword spec hit
-    auto hit_outcome = generate_hit(weapon, damage, Hit_type::yellow, weapon.socket, special_stats, damage_sources);
-    
+    auto hit_outcome = generate_hit(weapon, damage, Hit_type::white, weapon.socket, special_stats, damage_sources);
     rage += rage_generation(hit_outcome.damage, weapon.socket, weapon.swing_speed);
-        if (config.talents.endless_rage)
-        {
-            rage = rage *1.25;
-        }
-
+    if (config.talents.endless_rage)
+    {
+        rage = rage *1.25;
+    }
+    
     if (hit_outcome.hit_result == Hit_result::dodge)
     {
         simulator_cout("Rage gained since the enemy dodged.");
@@ -1110,9 +1108,10 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& weapon, Weapon_sim& main_hand_
         rage_lost_capped_ += rage - 100.0;
         rage = 100.0;
     }
+
     simulator_cout("Current rage: ", int(rage));
     manage_flurry_rampage(hit_outcome.hit_result, special_stats, flurry_charges, rampage_stacks, rampage_active, true);
-    damage_sources.add_damage(Damage_source::sword_spec, hit_outcome.damage, time_keeper_.time);
+    damage_sources.add_damage(Damage_source::white_mh, hit_outcome.damage, time_keeper_.time);
 
     // Unbridled wrath
     if (get_uniform_random(1) < (p_unbridled_wrath_ * weapon.swing_speed))

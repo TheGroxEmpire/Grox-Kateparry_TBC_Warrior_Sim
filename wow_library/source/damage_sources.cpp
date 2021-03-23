@@ -21,7 +21,6 @@ Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
     hamstring_damage = hamstring_damage + rhs.hamstring_damage;
     deep_wounds_damage = deep_wounds_damage + rhs.deep_wounds_damage;
     item_hit_effects_damage = item_hit_effects_damage + rhs.item_hit_effects_damage;
-    sword_spec_damage = sword_spec_damage + rhs.sword_spec_damage;
 
     whirlwind_count = whirlwind_count + rhs.whirlwind_count;
     overpower_count = overpower_count + rhs.overpower_count;
@@ -37,7 +36,6 @@ Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
     hamstring_count = hamstring_count + rhs.hamstring_count;
     deep_wounds_count = deep_wounds_count + rhs.deep_wounds_count;
     item_hit_effects_count = item_hit_effects_count + rhs.item_hit_effects_count;
-    sword_spec_count = sword_spec_count + rhs.sword_spec_count;
     return *(this);
 }
 
@@ -107,10 +105,6 @@ void Damage_sources::add_damage(Damage_source source, double damage, double time
         {
             item_hit_effects_count++;
         }
-        break;
-    case Damage_source::sword_spec:
-        sword_spec_damage += damage;
-        sword_spec_count ++;
         break;
     }
 }
