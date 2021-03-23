@@ -22,19 +22,19 @@ struct Buffs
 
     // Player_buffs
     Buff battle_shout{"battle_shout", {}, {}, 0, {}, {{"battle_shout", Use_effect::Effect_socket::unique, {}, {0, 0, 193}, 0, 120, 120, true}}};
-    Buff battle_shout_aq{"battle_shout_aq", {}, {}, 0, {}, {{"battle_shout_aq", Use_effect::Effect_socket::unique, {}, {0, 0, 232}, 0, 120, 120, true}}};
+//     Buff battle_shout_aq{"battle_shout_aq", {}, {}, 0, {}, {{"battle_shout_aq", Use_effect::Effect_socket::unique, {}, {0, 0, 232}, 0, 120, 120, true}}};
     Buff blessing_of_kings{"blessing_of_kings", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1}};
-    Buff blessing_of_might{"blessing_of_might", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 186}};
-    Buff blessing_of_might_aq{"blessing_of_might_aq", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 222}};
-    Buff gift_of_the_wild{"gift_of_the_wild", Attributes{16.0, 16.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff blessing_of_might{"blessing_of_might", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 264}};
+//     Buff blessing_of_might_aq{"blessing_of_might_aq", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 222}};
+    Buff gift_of_the_wild{"gift_of_the_wild", Attributes{18.9, 18.9}, Special_stats{0.0, 0.0, 0.0}};
     Buff leader_of_the_pack{"leader_of_the_pack", Attributes{0.0, 0.0}, Special_stats{3.0, 0.0, 0.0}};
-    Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 100}};
+    Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
     Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0}, 0,
                         {{"windfury_totem", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0.2, 315}}};
-    Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{61.0, 0.0}, Special_stats{0.0, 0.0, 0}};
-    Buff strength_of_earth_totem_aq{"strength_of_earth_totem_aq", Attributes{77.0, 0.0}, Special_stats{0.0, 0.0, 0}};
-    Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 67.0}, Special_stats{0.0, 0.0, 0}};
-    Buff grace_of_air_totem_aq{"grace_of_air_totem_aq", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0}};
+    Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{86.0, 0.0}, Special_stats{0.0, 0.0, 0}};
+//     Buff strength_of_earth_totem_aq{"strength_of_earth_totem_aq", Attributes{77.0, 0.0}, Special_stats{0.0, 0.0, 0}};
+    Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0}};
+//     Buff grace_of_air_totem_aq{"grace_of_air_totem_aq", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0}};
 
     // Consumables
     Buff elixir_mongoose{"elixir_mongoose", Attributes{0.0, 25.0}, Special_stats{2.0, 0.0, 0.0}};

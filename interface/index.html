@@ -2030,7 +2030,7 @@
             <input type="checkbox" id="battle_squawk">
             <label for="battle_squawk">Battle squawk:
                 <input type="number" id="battle_squawk_dd" name="quantity" min="0" max="25" value="5" step="5">% haste.
-            </label><br><br>
+            <!--</label><br><br>
 
             <b> AQ-books:</b><br>
             <input type="checkbox" id="battle_shout_aq" checked>
@@ -2046,7 +2046,7 @@
             <label for="grace_of_air_totem_aq" style="color: #cc0000"> Grace of Air Totem</label><br>
 
             <input type="checkbox" id="heroic_strike_aq" checked>
-            <label for="heroic_strike_aq"> Heroic Strike</label><br><br>
+            <label for="heroic_strike_aq"> Heroic Strike</label><br><br> -->
         </div>
 
         <div class="checkbox_div">
@@ -2366,13 +2366,13 @@
         <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
-        <input type="checkbox" id="stat_weight_crit" checked>
+        <input type="checkbox" id="stat_weight_crit">
         <label for="stat_weight_crit"> &plusmn 1% crit.</label><br>
 
-        <input type="checkbox" id="stat_weight_expertise" checked>
+        <input type="checkbox" id="stat_weight_expertise">
         <label for="stat_weight_expertise"> &plusmn 1% hit.</label><br>
 
-        <input type="checkbox" id="stat_weight_hit" checked>
+        <input type="checkbox" id="stat_weight_hit">
         <label for="stat_weight_hit"> &plusmn 1% expertise.</label><br>
 
         <input type="checkbox" id="stat_weight_haste">
@@ -2536,8 +2536,8 @@
         "elixir_of_giants", "winterfall_firewater", "juju_might", "roids", "dense_stone_main_hand",
         "elemental_stone_main_hand", "dense_stone_off_hand", "elemental_stone_off_hand",
         "consecrated_sharpening_stone_main_hand", "consecrated_sharpening_stone_off_hand",
-        "battle_shout_aq", "blessing_of_might_aq", "fire_toasted_bun", "strength_of_earth_totem_aq",
-        "grace_of_air_totem_aq", "improved_weapon_totems", "enhancing_totems"];
+        /*"battle_shout_aq", "blessing_of_might_aq", "fire_toasted_bun", "strength_of_earth_totem_aq",
+        "grace_of_air_totem_aq",*/ "improved_weapon_totems", "enhancing_totems"];
     let consumables_input = [];
 
     let armor = ["helmet_dd", "neck_dd", "shoulder_dd", "back_dd",
@@ -2575,7 +2575,7 @@
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
         "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
-        "item_strengths", "wep_strengths", "deep_wounds", "heroic_strike_aq", "compute_dpr", "talents_stat_weights",
+        "item_strengths", "wep_strengths", "deep_wounds", /*"heroic_strike_aq",*/ "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
         "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",
         "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk"];

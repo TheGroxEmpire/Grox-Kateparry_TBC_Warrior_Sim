@@ -326,7 +326,7 @@ void Armory::compute_total_stats(Character& character) const
     // Effects gained from talents
     for (auto& use_effect : use_effects)
     {
-        if (use_effect.name == "battle_shout" || use_effect.name == "battle_shout_aq")
+        if (use_effect.name == "battle_shout" /*|| use_effect.name == "battle_shout_aq"*/)
         {
             if (character.talents.booming_voice_talent)
             {
@@ -901,14 +901,14 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     // Player buffs
     if (find_string(buffs_vec, "battle_shout"))
     {
-        if (find_string(buffs_vec, "battle_shout_aq"))
-        {
-            character.add_buff(buffs.battle_shout_aq);
-        }
-        else
-        {
-            character.add_buff(buffs.battle_shout);
-        }
+        // if (find_string(buffs_vec, "battle_shout_aq"))
+        // {
+        //     character.add_buff(buffs.battle_shout_aq);
+        // }
+        // else
+        // {
+        character.add_buff(buffs.battle_shout);
+        // }
     }
     if (find_string(buffs_vec, "blessing_of_kings"))
     {
@@ -916,14 +916,14 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (find_string(buffs_vec, "blessing_of_might"))
     {
-        if (find_string(buffs_vec, "blessing_of_might_aq"))
-        {
-            character.add_buff(buffs.blessing_of_might_aq);
-        }
-        else
-        {
-            character.add_buff(buffs.blessing_of_might);
-        }
+        // if (find_string(buffs_vec, "blessing_of_might_aq"))
+        // {
+        //     character.add_buff(buffs.blessing_of_might_aq);
+        // }
+        // else
+        // {
+        character.add_buff(buffs.blessing_of_might);
+        // }
     }
     if (find_string(buffs_vec, "windfury_totem"))
     {
@@ -941,7 +941,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (find_string(buffs_vec, "strength_of_earth_totem"))
     {
-        Buff totem = (find_string(buffs_vec, "strength_of_earth_totem_aq")) ? buffs.strength_of_earth_totem_aq :
+        Buff totem = /*(find_string(buffs_vec, "strength_of_earth_totem_aq")) ? buffs.strength_of_earth_totem_aq :*/
                                                                               buffs.strength_of_earth_totem;
         if (find_string(buffs_vec, "enhancing_totems"))
         {
@@ -952,7 +952,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     if (find_string(buffs_vec, "grace_of_air_totem"))
     {
         Buff totem =
-            (find_string(buffs_vec, "grace_of_air_totem_aq")) ? buffs.grace_of_air_totem_aq : buffs.grace_of_air_totem;
+            /*(find_string(buffs_vec, "grace_of_air_totem_aq")) ? buffs.grace_of_air_totem_aq : */buffs.grace_of_air_totem;
         if (find_string(buffs_vec, "enhancing_totems"))
         {
             totem.attributes.agility *= 1.15;

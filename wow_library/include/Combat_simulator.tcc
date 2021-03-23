@@ -89,14 +89,14 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     {
         combat.deep_wounds = true;
     }
-    if (find_string(input.options, "heroic_strike_aq"))
-    {
-        combat.heroic_strike_damage = 157;
-    }
-    else
-    {
-        combat.heroic_strike_damage = 208;
-    }
+    // if (find_string(input.options, "heroic_strike_aq"))
+    // {
+    //     combat.heroic_strike_damage = 157;
+    // }
+    // else
+    // {
+    combat.heroic_strike_damage = 208;
+    // }
     if (find_string(input.options, "first_hit_heroic_strike"))
     {
         combat.first_hit_heroic_strike = true;
