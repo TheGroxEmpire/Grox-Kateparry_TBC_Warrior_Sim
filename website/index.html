@@ -159,8 +159,8 @@
         margin-left: 25px;
     }
 
-    /*div.hide_description {
-    }*/
+    div.hide_description {
+    }
 
     .left_select {
         position: relative;
@@ -218,10 +218,10 @@
         border-radius: 4px;
     }
 
-    /*.results_table {
+    .results_table {
         /*display: inline-block;*/
         /*border-right: thin solid #404040;*/
-    /*}*/
+    }
 
     .talents {
         display: inline-block;
@@ -287,39 +287,40 @@
 </style>
 
 <head>
-    <title>TBC Warrior DPS Sim</title>
+    <title>TBC DPS Warrior Sim</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="emscripten/wow_interface.js"></script>
-    <script src="talents.js"></script>
-    <script src="load_presets.js"></script>
-    <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
+    <script src="js/talents.js"></script>
+    <script src="js/load_presets.js"></script>
+    <meta name="site_description" content="WoW TBC DPS simulator for Warriors">
 </head>
 
-<h1>TBC Warrior DPS Sim</h1>
-<h3>Ported by GroxEmpire / Grahand - BloodsailBuccaneers</h3>
+<h1>TBC Warrior Sim</h1>
 
 <body style="background-color:#bfbfbf;"
       onload="openTab('event', 'Simulator');open_armor();show_div('cleave_if_adds', 'cleave_div');
       show_div('use_hamstring', 'hamstring_div');show_div('multi_target_mode', 'multi_target_div');
       show_div('periodic_damage', 'periodic_damage_div');show_div('ability_queue', 'ability_queue_div');
-      show_div('dual_wield_mode', 'dual_wield_div');displayTalentBootup();calcTotalTalents();load_talent_dual_wield_fury();">
+      show_div('dual_wield_mode', 'dual_wield_div');displayTalentBootup();calcTotalTalents();load_talent_standard_fury();">
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Simulator')">Simulator</button>
-    <button class="tablinks" onclick="openTab(event, 'Discord')">Discord</button>
+    <button class="tablinks" onclick="openTab(event, 'Discord')">Discord/Patch-notes</button>
     <button class="tablinks" onclick="openTab(event, 'About')">About</button>
 </div>
 
 <div id="Discord" class="tabcontent">
-    <h2>Welcome to TBC Warrior DPS Sim!</h2>
-    If you like this simulator feel free to join wow-fury-sim <b>Discord</b> and check out the original sim behind this:
+    <h2>Welcome to TBC DPS Warrior Sim!</h2>
+    If you like this simulator feel free to join Fury Sim <b>Discord</b>:
     <h3><a href="https://discord.gg/xTuKsRz">Discord link</a></h3>
-    You can also contact me directly to my discord <b>GroxEmpire#5392</b> for any feedback / bug report.<br>
+    There you can discuss your results, get notifications when a <b>new patch</b> goes live, read the <b>patch-notes</b>,
+    <br>
+    or, if you have some good ideas, you can contribute to the <b>wish-list</b>.<br>
 </div>
 
 <div id="About" class="tabcontent">
-    <h2>Welcome to TBC Warrior DPS Sim!</h2>
+    <h2>Welcome to TBC Warrior Sim!</h2>
     <h3><a href="https://github.com/TheGroxEmpire/Grox-Kateparry_TBC_Warrior_Sim">Github link</a></h3>
     This project is a TBC port from the wow classic fury sim. Link to the original project below: <br>
     <h3><a href="https://wow-fury-sim.herokuapp.com/">WoW Classic Fury Sim</a></h3>
@@ -373,7 +374,7 @@
         The reason why this page looks to have a target audience in their 50's is that I have very limited<br>
         experience with any web based programming languages. I found something that I understood and stuck to that.<br>
         And it works, hey! However, the C++ based simulator and the derivation/interpretation of the results should<br>
-        be of higher quality, since they are close to my field of expertise<br>
+        be of higher quality, since they are closed to my field of expertise<br>
     </p>
 </div>
 
@@ -1560,8 +1561,9 @@
     <button type="button" class="collapsible">Talents</button>
     <div class="content">
         <b>Presets:</b><br>
-        <button onclick="load_talent_dual_wield_fury()">Dual Wield Fury</button>
-        <button onclick="load_talent_standard_arms()">Standard Arms </button>
+        <button onclick="load_talent_standard_fury()">Standard Fury</button>
+        <button onclick="load_talent_cleave_fury()">Cleave Fury</button>
+        <button onclick="load_talent_two_hand_fury()">Two Hand Fury</button>
         <button onclick="load_talent_clear()">Clear</button>
         <br><br>
         <b id="total_points">Total points: </b>
@@ -1595,12 +1597,13 @@
                         <img src="images/ability_warrior_charge.jpg" alt="Improved Charge"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="1" id="iron_will_talent" data-max="5">
-                        <img src="images/spell_magic_magearmor.jpg" alt="Iron Will"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="1" id="tactical_mastery_talent" data-max="5">
+                        <img
+                                src="images/spell_nature_enchantarmor.jpg" alt="Tactical Mastery"></div>
                 </td>
                 <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="2" data-y="1" id="improved_thunder_clap_talent"
+                    <div class="icon" data-count="0" data-x="3" data-y="1" id="improved_thunder_clap_talent"
                          data-max="3">
                         <img src="images/ability_thunderclap.jpg" alt="Improved Thunder Clap"></div>
                 </td>
@@ -1635,12 +1638,12 @@
             </tr>
             <tr>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="4" id="poleaxe_specialization_talent" data-max="5">
-                        <img src="images/inv_axe_06.jpg" alt="Poleaxe Specialization"></div>
+                    <div class="icon" data-count="0" data-x="0" data-y="4" id="axe_specialization_talent" data-max="5">
+                        <img src="images/inv_axe_06.jpg" alt="Axe Specialization"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="4" id="death_wish_talent" data-max="1">
-                        <img src="images/spell_shadow_deathpact.jpg" alt="Death Wish"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="4" id="sweeping_strikes_talent" data-max="1">
+                        <img src="images/ability_rogue_slicedice.jpg" alt="Sweeping Strikes"></div>
                 </td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="4" id="mace_specialization_talent" data-max="5">
@@ -1654,48 +1657,22 @@
             </tr>
             <tr>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="5" id="improved_intercept_talent" data-max="2">
-                        <img src="images/ability_rogue_sprint.jpg" alt="Improved Intercept"></div>
+                    <div class="icon" data-count="0" data-x="0" data-y="5" id="polearm_specialization_talent"
+                         data-max="5">
+                        <img src="images/inv_weapon_halbard_01.jpg" alt="Polearm Specialization"></div>
                 </td>
                 <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="5" id="improved_hamstring_talent" data-max="3">
                         <img src="images/ability_shockwave.jpg" alt="Improved Hamstring"></div>
                 </td>
-                <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="5" id="improved_disciplines_talent" data-max="3">
-                        <img src="images/ability_warrior_improveddisciplines.jpg" alt="Improved Disciplines"></div>
-                </td>
+                <td></td>
             </tr>
             <tr>
-                <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="6" id="blood_frenzy_talent" data-max="2">
-                        <img src="images/ability_warrior_bloodfrenzy.jpg" alt="Blood Frenzy"></div>
-                </td>
+                <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="1" data-y="6" id="mortal_strike_talent" data-max="1">
                         <img src="images/ability_warrior_savageblow.jpg" alt="Mortal Strike"></div>
-                </td>
-                <td>
-                    <div class="icon" data-count="0" data-x="2" data-y="6" id="second_wind_talent" data-max="2">
-                        <img src="images/ability_hunter_harass.jpg" alt="Second Wind"></div>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="7" id="improved_mortal_strike_talent" data-max="5">
-                        <img src="images/ability_warrior_savageblow.jpg" alt="Improved Mortal Strike"></div>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="8" id="endless_rage_talent" data-max="1">
-                        <img src="images/ability_warrior_endlessrage.jpg" alt="Endless Rage"></div>
                 </td>
                 <td></td>
                 <td></td>
@@ -1746,9 +1723,9 @@
                         <img src="images/spell_shadow_summonimp.jpg" alt="Blood Craze"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="2" id="commanding_presence_talent"
+                    <div class="icon" data-count="0" data-x="3" data-y="2" id="improved_battle_shout_talent"
                          data-max="5">
-                        <img src="images/spell_nature_focusedmind.jpg" alt="Commanding Pressence"></div>
+                        <img src="images/ability_warrior_battleshout.jpg" alt="Improved Battle Shout"></div>
                 </td>
             </tr>
             <tr>
@@ -1769,17 +1746,17 @@
             </tr>
             <tr>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="4" id="improved_slam_talent" data-max="2">
+                    <div class="icon" data-count="0" data-x="0" data-y="4" id="improved_slam_talent" data-max="5">
                         <img src="images/ability_warrior_decisivestrike.jpg" alt="Improved Slam"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="4" id="sweeping_strikes_talent" data-max="1">
-                        <img src="images/ability_rogue_slicedice.jpg" alt="Sweeping Strikes"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="4" id="death_wish_talent" data-max="1">
+                        <img src="images/spell_shadow_deathpact.jpg" alt="Death Wish"></div>
                 </td>
                 <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="4" id="weapon_mastery_talent" data-max="2">
-                        <img src="images/ability_warrior_weaponmastery.jpg" alt="Weapon Mastery"></div>
+                    <div class="icon" data-count="0" data-x="3" data-y="4" id="improved_intercept_talent" data-max="2">
+                        <img src="images/ability_rogue_sprint.jpg" alt="Improved Intercept"></div>
                 </td>
             </tr>
             <tr>
@@ -1797,34 +1774,10 @@
                 <td></td>
             </tr>
             <tr>
-                <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="6" id="precision_talent" data-max="3">
-                        <img src="images/ability_marksmanship.jpg" alt="Precision"></div>
-                </td>
+                <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="1" data-y="6" id="bloodthirst_talent" data-max="1">
                         <img src="images/spell_nature_bloodlust.jpg" alt="Bloodthirst"></div>
-                </td>
-                <td>
-                    <div class="icon" data-count="0" data-x="2" data-y="6" id="improved_whirlwind_talent" data-max="2">
-                        <img src="images/ability_whirlwind.jpg" alt="Improved Whirlwind"></div>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="7" id="improved_berserker_stance_talent" data-max="5">
-                        <img src="images/ability_racial_avatar.jpg" alt="Improved Berserker Stance"></div>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="8" id="rampage_talent" data-max="1">
-                        <img src="images/ability_warrior_rampage.jpg" alt="Rampage"></div>
                 </td>
                 <td></td>
                 <td></td>
@@ -1837,14 +1790,11 @@
                 <th id="prot_title" colspan="4">Protection</th>
             </tr>
             <tr>
+                <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="1" id="improved_bloodrage_talent" data-max="2">
-                        <img src="images/ability_racial_bloodrage.jpg" alt="Improved Bloodrage"></div>
-                </td>
-                <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="1" id="tactical_mastery_talent" data-max="3">
-                        <img
-                                src="images/spell_nature_enchantarmor.jpg" alt="Tactical Mastery"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="0" id="shield_specialization_talent"
+                         data-max="5">
+                        <img src="images/inv_shield_06.jpg" alt="Shield Specialization"></div>
                 </td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="0" id="anticipation_talent" data-max="5">
@@ -1853,18 +1803,18 @@
                 <td></td>
             </tr>
             <tr>
-                <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="2" id="shield_specialization_talent"
-                    data-max="5">
-                   <img src="images/inv_shield_06.jpg" alt="Shield Specialization"></div>
+                    <div class="icon" data-count="0" data-x="0" data-y="1" id="improved_bloodrage_talent" data-max="2">
+                        <img src="images/ability_racial_bloodrage.jpg" alt="Improved Bloodrage"></div>
                 </td>
+                <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="1" id="toughness_talent" data-max="5">
                         <img src="images/spell_holy_devotion.jpg" alt="Toughness"></div>
                 </td>
                 <td>
-
+                    <div class="icon" data-count="0" data-x="3" data-y="1" id="iron_will_talent" data-max="5">
+                        <img src="images/spell_magic_magearmor.jpg" alt="Iron Will"></div>
                 </td>
             </tr>
             <tr>
@@ -1882,7 +1832,7 @@
                         <img src="images/ability_warrior_revenge.jpg" alt="Improved Revenge"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="2" id="defiance_talent" data-max="3">
+                    <div class="icon" data-count="0" data-x="3" data-y="2" id="defiance_talent" data-max="5">
                         <img src="images/ability_warrior_innerrage.jpg" alt="Defiance"></div>
                 </td>
             </tr>
@@ -1920,11 +1870,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="5" id="shield_mastery_talent"
-                         data-max="5">
-                        <img src="images/ability_warrior_shieldmastery.jpg" alt="Shield Mastery"></div>     
-                </td>
+                <td></td>
                 <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="5" id="one_handed_weapon_specialization_talent"
@@ -1934,34 +1880,10 @@
                 <td></td>
             </tr>
             <tr>
-                <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="6" id="improved_defensive_stance_talent" data-max="3">
-                        <img src="images/ability_warrior_defensivestance.jpg" alt="Improved Defensive Stance"></div>
-                </td>
+                <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="1" data-y="6" id="shield_slam_talent" data-max="1">
                         <img src="images/inv_shield_05.jpg" alt="Shield Slam"></div>
-                </td>
-                <td>
-                    <div class="icon" data-count="0" data-x="2" data-y="6" id="focused_rage_talent" data-max="3">
-                        <img src="images/ability_warrior_focusedrage.jpg" alt="Focused Rage"></div>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="7" id="vitality_talent" data-max="5">
-                        <img src="images/inv_helmet_21.jpg" alt="Vitality"></div>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="8" id="devastate_talent" data-max="1">
-                        <img src="images/inv_sword_11.jpg" alt="Devastate"></div>
                 </td>
                 <td></td>
                 <td></td>
@@ -1974,7 +1896,7 @@
     <button type="button" class="collapsible">Buffs and Consumables</button>
     <div class="content">
         <div class="checkbox_div">
-            <!-- <p class="select-title">World buffs:</p><br>
+            <p class="select-title">World buffs:</p><br>
             <input type="checkbox" id="rallying_cry" checked>
             <label for="rallying_cry"> Rallying Cry of the Dragon Slayer</label><br>
 
@@ -1997,7 +1919,7 @@
             <label for="sayges_fortune"> Sayges Fortune</label><br>
 
             <input type="checkbox" id="traces_of_silithyst">
-            <label for="traces_of_silithyst"> Traces of Silithyst</label><br><br> -->
+            <label for="traces_of_silithyst"> Traces of Silithyst</label><br><br>
 
             <b> Player buffs:</b><br>
             <input type="checkbox" id="battle_shout" checked>
@@ -2030,7 +1952,7 @@
             <input type="checkbox" id="battle_squawk">
             <label for="battle_squawk">Battle squawk:
                 <input type="number" id="battle_squawk_dd" name="quantity" min="0" max="25" value="5" step="5">% haste.
-            <!--</label><br><br>
+            </label><br><br>
 
             <b> AQ-books:</b><br>
             <input type="checkbox" id="battle_shout_aq" checked>
@@ -2046,7 +1968,7 @@
             <label for="grace_of_air_totem_aq" style="color: #cc0000"> Grace of Air Totem</label><br>
 
             <input type="checkbox" id="heroic_strike_aq" checked>
-            <label for="heroic_strike_aq"> Heroic Strike</label><br><br> -->
+            <label for="heroic_strike_aq"> Heroic Strike</label><br><br>
         </div>
 
         <div class="checkbox_div">
@@ -2173,12 +2095,6 @@
             </div>
         </div>
 
-        <div class="hide_description" id="rampage_talent_div">
-            <input type="checkbox" id="use_rampage" checked
-                   onclick="show_div('use_rampage', 'rampage_div')">
-            <label for="use_rampage"><b> Use rampage</b></label><br>
-        </div>
-
         <div class="hide_description" id="mortal_strike_talent_div">
             <input type="checkbox" id="use_mortal_strike" checked
                    onclick="show_div('use_mortal_strike', 'mortal_strike_div')">
@@ -2213,16 +2129,18 @@
         <input type="checkbox" id="use_slam" checked onclick="show_div('use_slam', 'slam_div')">
         <label for="use_slam"><b> Use slam (Two-handed weapons only)</b></label><br>
         <div class="description" id="slam_div">
+            <label for="slam_cd_thresh_dd">Cast slam when bloodthirst/whirlwind CD is above:</label>
+            <input type="number" id="slam_cd_thresh_dd" name="quantity" min="0" max="6.0" value="1.0" step="0.1"><br>
             <label for="slam_rage_dd">Cast slam after a melee hit if rage is above:</label>
             <input type="number" id="slam_rage_dd" name="quantity" min="15" max="100" value="15"><br>
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
-            <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
+            <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="50"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
             <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5"
                    step="0.1"><br>
         </div>
 
-        <input type="checkbox" id="use_overpower" onclick="show_div('use_overpower', 'overpower_div')">
+        <input type="checkbox" id="use_overpower" checked onclick="show_div('use_overpower', 'overpower_div')">
         <label for="use_overpower"><b> Use overpower</b></label><br>
         <div class="description" id="overpower_div">
             <label for="overpower_rage_thresh_dd">Overpower when rage is below:</label>
@@ -2240,7 +2158,7 @@
         <label for="use_heroic_strike"><b> Use Heroic Strike</b></label><br>
         <div class="description" id="heroic_strike_div">
             <label for="heroic_strike_rage_thresh_dd">Heroic strike when rage is above:</label>
-            <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
+            <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="50"><br>
             <input type="checkbox" id="use_hs_in_exec_phase">
             <label for="use_hs_in_exec_phase"> Use heroic strike in execute phase</label><br>
         </div>
@@ -2366,13 +2284,13 @@
         <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
-        <input type="checkbox" id="stat_weight_crit">
+        <input type="checkbox" id="stat_weight_crit" checked>
         <label for="stat_weight_crit"> &plusmn 1% crit.</label><br>
 
-        <input type="checkbox" id="stat_weight_expertise">
+        <input type="checkbox" id="stat_weight_expertise" checked>
         <label for="stat_weight_expertise"> &plusmn 1% hit.</label><br>
 
-        <input type="checkbox" id="stat_weight_hit">
+        <input type="checkbox" id="stat_weight_hit" checked>
         <label for="stat_weight_hit"> &plusmn 1% expertise.</label><br>
 
         <input type="checkbox" id="stat_weight_haste">
@@ -2524,9 +2442,9 @@
         document.getElementById("armor_n_wep").click();
     }
 
-    // let world_buffs = ["rallying_cry", "dire_maul", "slipkiks_savy", "songflower", "warchiefs_blessing",
-    //     "spirit_of_zandalar", "sayges_fortune", "traces_of_silithyst"];
-    // let world_buffs_input = [];
+    let world_buffs = ["rallying_cry", "dire_maul", "slipkiks_savy", "songflower", "warchiefs_blessing",
+        "spirit_of_zandalar", "sayges_fortune", "traces_of_silithyst"];
+    let world_buffs_input = [];
 
     let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura",
         "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem"];
@@ -2536,8 +2454,8 @@
         "elixir_of_giants", "winterfall_firewater", "juju_might", "roids", "dense_stone_main_hand",
         "elemental_stone_main_hand", "dense_stone_off_hand", "elemental_stone_off_hand",
         "consecrated_sharpening_stone_main_hand", "consecrated_sharpening_stone_off_hand",
-        /*"battle_shout_aq", "blessing_of_might_aq", "fire_toasted_bun", "strength_of_earth_totem_aq",
-        "grace_of_air_totem_aq",*/ "improved_weapon_totems", "enhancing_totems"];
+        "battle_shout_aq", "blessing_of_might_aq", "fire_toasted_bun", "strength_of_earth_totem_aq",
+        "grace_of_air_totem_aq", "improved_weapon_totems", "enhancing_totems"];
     let consumables_input = [];
 
     let armor = ["helmet_dd", "neck_dd", "shoulder_dd", "back_dd",
@@ -2569,13 +2487,13 @@
         "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
-        "slam_spam_max_time_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
+        "slam_spam_max_time_dd", "slam_cd_thresh_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
         "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
-        "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
-        "item_strengths", "wep_strengths", "deep_wounds", /*"heroic_strike_aq",*/ "compute_dpr", "talents_stat_weights",
+        "cleave_if_adds", "use_hamstring", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
+        "item_strengths", "wep_strengths", "deep_wounds", "heroic_strike_aq", "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
         "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",
         "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk"];
@@ -2637,9 +2555,9 @@
         let reader = new FileReader();
 
         //set all buff-values to unchecked before loading
-        // for (let world_buff of world_buffs) {
-        //     document.getElementById(world_buff).checked = false;
-        // }
+        for (let world_buff of world_buffs) {
+            document.getElementById(world_buff).checked = false;
+        }
         for (let buff of buffs) {
             document.getElementById(buff).checked = false;
         }
@@ -2695,9 +2613,9 @@
             let dd_string = enchants_input[i].slice(1, enchants_input[i].length);
             file_content += enchants[i] + " " + dd_string + "\n";
         }
-        // for (let i = 0; i < world_buffs.length; i++) {
-        //     file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
-        // }
+        for (let i = 0; i < world_buffs.length; i++) {
+            file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
+        }
         for (let i = 0; i < buffs.length; i++) {
             file_content += buffs[i] + " " + buffs_input[i] + "\n";
         }
@@ -2761,11 +2679,11 @@
         race = document.getElementById("race_dd");
         race_string = race.options[race.selectedIndex].value;
 
-        // world_buffs_input = [];
-        // for (let world_buff of world_buffs) {
-        //     let temp = document.getElementById(world_buff);
-        //     world_buffs_input.push((temp.checked) ? world_buff : "");
-        // }
+        world_buffs_input = [];
+        for (let world_buff of world_buffs) {
+            let temp = document.getElementById(world_buff);
+            world_buffs_input.push((temp.checked) ? world_buff : "");
+        }
         buffs_input = [];
         for (let buff of buffs) {
             let temp = document.getElementById(buff);
@@ -2906,9 +2824,9 @@
         }
 
         let buff_vec = new Module.StringList();
-        // for (let buff of world_buffs_input) {
-        //     buff_vec.push_back(buff);
-        // }
+        for (let buff of world_buffs_input) {
+            buff_vec.push_back(buff);
+        }
         for (let buff of buffs_input) {
             buff_vec.push_back(buff);
         }
