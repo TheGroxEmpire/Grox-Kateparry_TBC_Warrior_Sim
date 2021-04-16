@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<style>
-    body {
-        font-family: Arial;
-    }
+
 
     /* Style the tab */
     .tab {
@@ -159,8 +154,8 @@
         margin-left: 25px;
     }
 
-    div.hide_description {
-    }
+    /*div.hide_description {
+    }*/
 
     .left_select {
         position: relative;
@@ -218,10 +213,10 @@
         border-radius: 4px;
     }
 
-    .results_table {
+    /*.results_table {
         /*display: inline-block;*/
         /*border-right: thin solid #404040;*/
-    }
+    /*}*/
 
     .talents {
         display: inline-block;
@@ -287,16 +282,16 @@
 </style>
 
 <head>
-    <title>TBC DPS Warrior Sim</title>
+    <title>TBC Warrior DPS Sim</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="emscripten/wow_interface.js"></script>
-    <script src="js/talents.js"></script>
-    <script src="js/load_presets.js"></script>
+    <script src="talents.js"></script>
+    <script src="load_presets.js"></script>
     <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
 </head>
 
-<h1>TBC DPS Warrior Sim</h1>
+<h1>TBC Warrior DPS Sim</h1>
 <h3>Ported by GroxEmpire / Grahand - BloodsailBuccaneers</h3>
 
 <body style="background-color:#bfbfbf;"
@@ -312,7 +307,7 @@
 </div>
 
 <div id="Discord" class="tabcontent">
-    <h2>Welcome to TBC DPS Warrior Sim!</h2>
+    <h2>Welcome to TBC Warrior DPS Sim!</h2>
     If you like this simulator feel free to join wow-fury-sim <b>Discord</b> and check out the original sim behind this:
     <h3><a href="https://discord.gg/xTuKsRz">Discord link</a></h3>
     You can also contact me directly to my discord <b>GroxEmpire#5392</b> for any feedback / bug report.<br>
@@ -1974,30 +1969,23 @@
     <button type="button" class="collapsible">Buffs and Consumables</button>
     <div class="content">
         <div class="checkbox_div">
-            <p class="select-title">World buffs:</p><br>
+            <!-- <p class="select-title">World buffs:</p><br>
             <input type="checkbox" id="rallying_cry" checked>
             <label for="rallying_cry"> Rallying Cry of the Dragon Slayer</label><br>
-
             <input type="checkbox" id="dire_maul" checked>
             <label for="dire_maul"> Fengus' Ferocity</label><br>
-
             <input type="checkbox" id="slipkiks_savy">
             <label for="slipkiks_savy"> Slip'kik's Savvy</label><br>
-
             <input type="checkbox" id="songflower">
             <label for="songflower"> Songflower Serenade</label><br>
-
             <input type="checkbox" id="warchiefs_blessing">
             <label for="warchiefs_blessing"> Warchiefs Blessing</label><br>
-
             <input type="checkbox" id="spirit_of_zandalar" checked>
             <label for="spirit_of_zandalar"> Spirit of Zandalar</label><br>
-
             <input type="checkbox" id="sayges_fortune">
             <label for="sayges_fortune"> Sayges Fortune</label><br>
-
             <input type="checkbox" id="traces_of_silithyst">
-            <label for="traces_of_silithyst"> Traces of Silithyst</label><br><br>
+            <label for="traces_of_silithyst"> Traces of Silithyst</label><br><br> -->
 
             <b> Player buffs:</b><br>
             <input type="checkbox" id="battle_shout" checked>
@@ -2030,23 +2018,18 @@
             <input type="checkbox" id="battle_squawk">
             <label for="battle_squawk">Battle squawk:
                 <input type="number" id="battle_squawk_dd" name="quantity" min="0" max="25" value="5" step="5">% haste.
-            </label><br><br>
-
+            <!--</label><br><br>
             <b> AQ-books:</b><br>
             <input type="checkbox" id="battle_shout_aq" checked>
             <label for="battle_shout_aq"> Battle shout</label><br>
-
             <input type="checkbox" id="blessing_of_might_aq" checked>
             <label for="blessing_of_might_aq" style="color: #003d99"> Blessing of Might</label><br>
-
             <input type="checkbox" id="strength_of_earth_totem_aq">
             <label for="strength_of_earth_totem_aq" style="color: #cc0000"> Strength of earth Totem</label><br>
-
             <input type="checkbox" id="grace_of_air_totem_aq">
             <label for="grace_of_air_totem_aq" style="color: #cc0000"> Grace of Air Totem</label><br>
-
             <input type="checkbox" id="heroic_strike_aq" checked>
-            <label for="heroic_strike_aq"> Heroic Strike</label><br><br>
+            <label for="heroic_strike_aq"> Heroic Strike</label><br><br> -->
         </div>
 
         <div class="checkbox_div">
@@ -2213,18 +2196,16 @@
         <input type="checkbox" id="use_slam" checked onclick="show_div('use_slam', 'slam_div')">
         <label for="use_slam"><b> Use slam (Two-handed weapons only)</b></label><br>
         <div class="description" id="slam_div">
-            <label for="slam_cd_thresh_dd">Cast slam when bloodthirst/whirlwind CD is above:</label>
-            <input type="number" id="slam_cd_thresh_dd" name="quantity" min="0" max="6.0" value="1.0" step="0.1"><br>
             <label for="slam_rage_dd">Cast slam after a melee hit if rage is above:</label>
             <input type="number" id="slam_rage_dd" name="quantity" min="15" max="100" value="15"><br>
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
-            <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="50"><br>
+            <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
             <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5"
                    step="0.1"><br>
         </div>
 
-        <input type="checkbox" id="use_overpower" checked onclick="show_div('use_overpower', 'overpower_div')">
+        <input type="checkbox" id="use_overpower" onclick="show_div('use_overpower', 'overpower_div')">
         <label for="use_overpower"><b> Use overpower</b></label><br>
         <div class="description" id="overpower_div">
             <label for="overpower_rage_thresh_dd">Overpower when rage is below:</label>
@@ -2242,7 +2223,7 @@
         <label for="use_heroic_strike"><b> Use Heroic Strike</b></label><br>
         <div class="description" id="heroic_strike_div">
             <label for="heroic_strike_rage_thresh_dd">Heroic strike when rage is above:</label>
-            <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="50"><br>
+            <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
             <input type="checkbox" id="use_hs_in_exec_phase">
             <label for="use_hs_in_exec_phase"> Use heroic strike in execute phase</label><br>
         </div>
@@ -2368,13 +2349,13 @@
         <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
-        <input type="checkbox" id="stat_weight_crit" checked>
+        <input type="checkbox" id="stat_weight_crit">
         <label for="stat_weight_crit"> &plusmn 1% crit.</label><br>
 
-        <input type="checkbox" id="stat_weight_expertise" checked>
+        <input type="checkbox" id="stat_weight_expertise">
         <label for="stat_weight_expertise"> &plusmn 1% hit.</label><br>
 
-        <input type="checkbox" id="stat_weight_hit" checked>
+        <input type="checkbox" id="stat_weight_hit">
         <label for="stat_weight_hit"> &plusmn 1% expertise.</label><br>
 
         <input type="checkbox" id="stat_weight_haste">
@@ -2526,9 +2507,9 @@
         document.getElementById("armor_n_wep").click();
     }
 
-    let world_buffs = ["rallying_cry", "dire_maul", "slipkiks_savy", "songflower", "warchiefs_blessing",
-        "spirit_of_zandalar", "sayges_fortune", "traces_of_silithyst"];
-    let world_buffs_input = [];
+    // let world_buffs = ["rallying_cry", "dire_maul", "slipkiks_savy", "songflower", "warchiefs_blessing",
+    //     "spirit_of_zandalar", "sayges_fortune", "traces_of_silithyst"];
+    // let world_buffs_input = [];
 
     let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura",
         "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem"];
@@ -2538,8 +2519,8 @@
         "elixir_of_giants", "winterfall_firewater", "juju_might", "roids", "dense_stone_main_hand",
         "elemental_stone_main_hand", "dense_stone_off_hand", "elemental_stone_off_hand",
         "consecrated_sharpening_stone_main_hand", "consecrated_sharpening_stone_off_hand",
-        "battle_shout_aq", "blessing_of_might_aq", "fire_toasted_bun", "strength_of_earth_totem_aq",
-        "grace_of_air_totem_aq", "improved_weapon_totems", "enhancing_totems"];
+        /*"battle_shout_aq", "blessing_of_might_aq", "fire_toasted_bun", "strength_of_earth_totem_aq",
+        "grace_of_air_totem_aq",*/ "improved_weapon_totems", "enhancing_totems"];
     let consumables_input = [];
 
     let armor = ["helmet_dd", "neck_dd", "shoulder_dd", "back_dd",
@@ -2571,13 +2552,13 @@
         "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
-        "slam_spam_max_time_dd", "slam_cd_thresh_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
+        "slam_spam_max_time_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
         "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
         "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
-        "item_strengths", "wep_strengths", "deep_wounds", "heroic_strike_aq", "compute_dpr", "talents_stat_weights",
+        "item_strengths", "wep_strengths", "deep_wounds", /*"heroic_strike_aq",*/ "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
         "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",
         "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk"];
@@ -2639,9 +2620,9 @@
         let reader = new FileReader();
 
         //set all buff-values to unchecked before loading
-        for (let world_buff of world_buffs) {
-            document.getElementById(world_buff).checked = false;
-        }
+        // for (let world_buff of world_buffs) {
+        //     document.getElementById(world_buff).checked = false;
+        // }
         for (let buff of buffs) {
             document.getElementById(buff).checked = false;
         }
@@ -2697,9 +2678,9 @@
             let dd_string = enchants_input[i].slice(1, enchants_input[i].length);
             file_content += enchants[i] + " " + dd_string + "\n";
         }
-        for (let i = 0; i < world_buffs.length; i++) {
-            file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
-        }
+        // for (let i = 0; i < world_buffs.length; i++) {
+        //     file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
+        // }
         for (let i = 0; i < buffs.length; i++) {
             file_content += buffs[i] + " " + buffs_input[i] + "\n";
         }
@@ -2763,11 +2744,11 @@
         race = document.getElementById("race_dd");
         race_string = race.options[race.selectedIndex].value;
 
-        world_buffs_input = [];
-        for (let world_buff of world_buffs) {
-            let temp = document.getElementById(world_buff);
-            world_buffs_input.push((temp.checked) ? world_buff : "");
-        }
+        // world_buffs_input = [];
+        // for (let world_buff of world_buffs) {
+        //     let temp = document.getElementById(world_buff);
+        //     world_buffs_input.push((temp.checked) ? world_buff : "");
+        // }
         buffs_input = [];
         for (let buff of buffs) {
             let temp = document.getElementById(buff);
@@ -2908,9 +2889,9 @@
         }
 
         let buff_vec = new Module.StringList();
-        for (let buff of world_buffs_input) {
-            buff_vec.push_back(buff);
-        }
+        // for (let buff of world_buffs_input) {
+        //     buff_vec.push_back(buff);
+        // }
         for (let buff of buffs_input) {
             buff_vec.push_back(buff);
         }
