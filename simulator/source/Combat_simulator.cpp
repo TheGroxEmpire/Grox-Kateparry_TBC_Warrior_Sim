@@ -1099,7 +1099,7 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stat
     {
         simulator_cout("Rage gained since the enemy dodged.");
         rage += 0.75 *
-                rage_generation(damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed);
+                rage_generation(damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), main_hand_weapon.socket, main_hand_weapon.swing_speed);
         if (config.talents.endless_rage)
         {
             rage = rage *1.25;
