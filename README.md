@@ -1,5 +1,5 @@
 # Welcome to wow fury sim GitHub
-[![wow-fury-sim Actions Status](https://github.com/albinoyoda/wow_classic_simulator/workflows/Pipeline/badge.svg)](https://github.com/albinoyoda/wow_classic_simulator/actions)
+[![wow-fury-sim Actions Status](https://github.com/TheGroxEmpire/Grox-Kateparry_TBC_Warrior_Sim/workflows/Pipeline/badge.svg)](https://github.com/TheGroxEmpire/Grox-Kateparry_TBC_Warrior_Sim/actions)
 
 This is classic warrior fury sim that is ported to TBC,
 the mechanics used in the simulator can be found in:
