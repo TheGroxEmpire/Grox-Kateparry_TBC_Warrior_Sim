@@ -868,7 +868,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
                 break;
             case Hit_effect::Type::sword_spec: {
                     simulator_cout("PROC: extra hit from: ", hit_effect.name);
-                    sword_spec_hit(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
+                    sword_spec_hit(main_hand_weapon, special_stats, rage, damage_sources,
                                         flurry_charges, rampage_stacks, rampage_active, hit_effect.attack_power_boost);
                 break;
             }
@@ -1083,12 +1083,12 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     }
 }
 
-void Combat_simulator::sword_spec_hit(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
+void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
                                     double& rage, Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active,
                                     double attack_power_bonus)
 {
     double damage = weapon.swing(special_stats.attack_power + attack_power_bonus);
-    auto hit_outcome = generate_hit(weapon, damage, Hit_type::white, weapon.socket, special_stats, damage_sources);
+    auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::white, weapon.socket, special_stats, damage_sources);
     rage += rage_generation(hit_outcome.damage, weapon.socket, weapon.swing_speed);
     if (config.talents.endless_rage)
     {
@@ -1547,11 +1547,11 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 if (use_rampage_)
                 {
                     //Detecting crit for rampage
-                    if (flurry_charges == 3 && !rampage_active)
+                    if (flurry_charges == 3)
                     {
                         crit_for_rampage = true;
                     }
-                    if (time_keeper_.rampage_cd < 0.0 && time_keeper_.global_cd < 0 && rage > 20 && crit_for_rampage)
+                    if (time_keeper_.rampage_cd < 5.0 && time_keeper_.global_cd < 0 && rage > 20 && crit_for_rampage)
                     {
                         time_keeper_.rampage_cd = 30.0;
                         time_keeper_.global_cd = 1.5;
