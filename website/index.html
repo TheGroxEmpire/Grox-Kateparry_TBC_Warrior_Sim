@@ -293,7 +293,7 @@
     <script src="emscripten/wow_interface.js"></script>
     <script src="js/talents.js"></script>
     <script src="js/load_presets.js"></script>
-    <meta name="site_description" content="WoW TBC DPS simulator for Warriors">
+    <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
 </head>
 
 <h1>TBC DPS Warrior Sim</h1>
@@ -303,7 +303,7 @@
       onload="openTab('event', 'Simulator');open_armor();show_div('cleave_if_adds', 'cleave_div');
       show_div('use_hamstring', 'hamstring_div');show_div('multi_target_mode', 'multi_target_div');
       show_div('periodic_damage', 'periodic_damage_div');show_div('ability_queue', 'ability_queue_div');
-      show_div('dual_wield_mode', 'dual_wield_div');displayTalentBootup();calcTotalTalents();load_talent_standard_fury();">
+      show_div('dual_wield_mode', 'dual_wield_div');displayTalentBootup();calcTotalTalents();load_talent_dual_wield_fury();">
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Simulator')">Simulator</button>
@@ -313,13 +313,13 @@
 
 <div id="Discord" class="tabcontent">
     <h2>Welcome to TBC DPS Warrior Sim!</h2>
-    If you like this simulator feel free to join Fury Sim <b>Discord</b> and check out the original sim behind this:
+    If you like this simulator feel free to join wow-fury-sim <b>Discord</b> and check out the original sim behind this:
     <h3><a href="https://discord.gg/xTuKsRz">Discord link</a></h3>
     You can also contact me directly to my discord <b>GroxEmpire#5392</b> for any feedback / bug report.<br>
 </div>
 
 <div id="About" class="tabcontent">
-    <h2>Welcome to TBC Warrior Sim!</h2>
+    <h2>Welcome to TBC Warrior DPS Sim!</h2>
     <h3><a href="https://github.com/TheGroxEmpire/Grox-Kateparry_TBC_Warrior_Sim">Github link</a></h3>
     This project is a TBC port from the wow classic fury sim. Link to the original project below: <br>
     <h3><a href="https://wow-fury-sim.herokuapp.com/">WoW Classic Fury Sim</a></h3>
@@ -1560,9 +1560,8 @@
     <button type="button" class="collapsible">Talents</button>
     <div class="content">
         <b>Presets:</b><br>
-        <button onclick="load_talent_standard_fury()">Standard Fury</button>
-        <button onclick="load_talent_cleave_fury()">Cleave Fury</button>
-        <button onclick="load_talent_two_hand_fury()">Two Hand Fury</button>
+        <button onclick="load_talent_dual_wield_fury()">Dual Wield Fury</button>
+        <button onclick="load_talent_standard_arms()">Standard Arms </button>
         <button onclick="load_talent_clear()">Clear</button>
         <br><br>
         <b id="total_points">Total points: </b>
@@ -1596,13 +1595,12 @@
                         <img src="images/ability_warrior_charge.jpg" alt="Improved Charge"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="1" id="tactical_mastery_talent" data-max="5">
-                        <img
-                                src="images/spell_nature_enchantarmor.jpg" alt="Tactical Mastery"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="1" id="iron_will_talent" data-max="5">
+                        <img src="images/spell_magic_magearmor.jpg" alt="Iron Will"></div>
                 </td>
                 <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="1" id="improved_thunder_clap_talent"
+                    <div class="icon" data-count="0" data-x="2" data-y="1" id="improved_thunder_clap_talent"
                          data-max="3">
                         <img src="images/ability_thunderclap.jpg" alt="Improved Thunder Clap"></div>
                 </td>
@@ -1637,12 +1635,12 @@
             </tr>
             <tr>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="4" id="axe_specialization_talent" data-max="5">
-                        <img src="images/inv_axe_06.jpg" alt="Axe Specialization"></div>
+                    <div class="icon" data-count="0" data-x="0" data-y="4" id="poleaxe_specialization_talent" data-max="5">
+                        <img src="images/inv_axe_06.jpg" alt="Poleaxe Specialization"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="4" id="sweeping_strikes_talent" data-max="1">
-                        <img src="images/ability_rogue_slicedice.jpg" alt="Sweeping Strikes"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="4" id="death_wish_talent" data-max="1">
+                        <img src="images/spell_shadow_deathpact.jpg" alt="Death Wish"></div>
                 </td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="4" id="mace_specialization_talent" data-max="5">
@@ -1656,22 +1654,48 @@
             </tr>
             <tr>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="5" id="polearm_specialization_talent"
-                         data-max="5">
-                        <img src="images/inv_weapon_halbard_01.jpg" alt="Polearm Specialization"></div>
+                    <div class="icon" data-count="0" data-x="0" data-y="5" id="improved_intercept_talent" data-max="2">
+                        <img src="images/ability_rogue_sprint.jpg" alt="Improved Intercept"></div>
                 </td>
                 <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="5" id="improved_hamstring_talent" data-max="3">
                         <img src="images/ability_shockwave.jpg" alt="Improved Hamstring"></div>
                 </td>
+                <td>
+                    <div class="icon" data-count="0" data-x="3" data-y="5" id="improved_disciplines_talent" data-max="3">
+                        <img src="images/ability_warrior_improveddisciplines.jpg" alt="Improved Disciplines"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="icon" data-count="0" data-x="0" data-y="6" id="blood_frenzy_talent" data-max="2">
+                        <img src="images/ability_warrior_bloodfrenzy.jpg" alt="Blood Frenzy"></div>
+                </td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="6" id="mortal_strike_talent" data-max="1">
+                        <img src="images/ability_warrior_savageblow.jpg" alt="Mortal Strike"></div>
+                </td>
+                <td>
+                    <div class="icon" data-count="0" data-x="2" data-y="6" id="second_wind_talent" data-max="2">
+                        <img src="images/ability_hunter_harass.jpg" alt="Second Wind"></div>
+                </td>
                 <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="6" id="mortal_strike_talent" data-max="1">
-                        <img src="images/ability_warrior_savageblow.jpg" alt="Mortal Strike"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="7" id="improved_mortal_strike_talent" data-max="5">
+                        <img src="images/ability_warrior_savageblow.jpg" alt="Improved Mortal Strike"></div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="8" id="endless_rage_talent" data-max="1">
+                        <img src="images/ability_warrior_endlessrage.jpg" alt="Endless Rage"></div>
                 </td>
                 <td></td>
                 <td></td>
@@ -1722,9 +1746,9 @@
                         <img src="images/spell_shadow_summonimp.jpg" alt="Blood Craze"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="2" id="improved_battle_shout_talent"
+                    <div class="icon" data-count="0" data-x="3" data-y="2" id="commanding_presence_talent"
                          data-max="5">
-                        <img src="images/ability_warrior_battleshout.jpg" alt="Improved Battle Shout"></div>
+                        <img src="images/spell_nature_focusedmind.jpg" alt="Commanding Pressence"></div>
                 </td>
             </tr>
             <tr>
@@ -1745,17 +1769,17 @@
             </tr>
             <tr>
                 <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="4" id="improved_slam_talent" data-max="5">
+                    <div class="icon" data-count="0" data-x="0" data-y="4" id="improved_slam_talent" data-max="2">
                         <img src="images/ability_warrior_decisivestrike.jpg" alt="Improved Slam"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="4" id="death_wish_talent" data-max="1">
-                        <img src="images/spell_shadow_deathpact.jpg" alt="Death Wish"></div>
+                    <div class="icon" data-count="0" data-x="1" data-y="4" id="sweeping_strikes_talent" data-max="1">
+                        <img src="images/ability_rogue_slicedice.jpg" alt="Sweeping Strikes"></div>
                 </td>
                 <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="4" id="improved_intercept_talent" data-max="2">
-                        <img src="images/ability_rogue_sprint.jpg" alt="Improved Intercept"></div>
+                    <div class="icon" data-count="0" data-x="3" data-y="4" id="weapon_mastery_talent" data-max="2">
+                        <img src="images/ability_warrior_weaponmastery.jpg" alt="Weapon Mastery"></div>
                 </td>
             </tr>
             <tr>
@@ -1773,10 +1797,34 @@
                 <td></td>
             </tr>
             <tr>
-                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="0" data-y="6" id="precision_talent" data-max="3">
+                        <img src="images/ability_marksmanship.jpg" alt="Precision"></div>
+                </td>
                 <td>
                     <div class="icon" data-count="0" data-x="1" data-y="6" id="bloodthirst_talent" data-max="1">
                         <img src="images/spell_nature_bloodlust.jpg" alt="Bloodthirst"></div>
+                </td>
+                <td>
+                    <div class="icon" data-count="0" data-x="2" data-y="6" id="improved_whirlwind_talent" data-max="2">
+                        <img src="images/ability_whirlwind.jpg" alt="Improved Whirlwind"></div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="3" data-y="7" id="improved_berserker_stance_talent" data-max="5">
+                        <img src="images/ability_racial_avatar.jpg" alt="Improved Berserker Stance"></div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="8" id="rampage_talent" data-max="1">
+                        <img src="images/ability_warrior_rampage.jpg" alt="Rampage"></div>
                 </td>
                 <td></td>
                 <td></td>
@@ -1789,11 +1837,14 @@
                 <th id="prot_title" colspan="4">Protection</th>
             </tr>
             <tr>
-                <td></td>
                 <td>
-                    <div class="icon" data-count="0" data-x="1" data-y="0" id="shield_specialization_talent"
-                         data-max="5">
-                        <img src="images/inv_shield_06.jpg" alt="Shield Specialization"></div>
+                    <div class="icon" data-count="0" data-x="0" data-y="1" id="improved_bloodrage_talent" data-max="2">
+                        <img src="images/ability_racial_bloodrage.jpg" alt="Improved Bloodrage"></div>
+                </td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="1" id="tactical_mastery_talent" data-max="3">
+                        <img
+                                src="images/spell_nature_enchantarmor.jpg" alt="Tactical Mastery"></div>
                 </td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="0" id="anticipation_talent" data-max="5">
@@ -1802,18 +1853,18 @@
                 <td></td>
             </tr>
             <tr>
-                <td>
-                    <div class="icon" data-count="0" data-x="0" data-y="1" id="improved_bloodrage_talent" data-max="2">
-                        <img src="images/ability_racial_bloodrage.jpg" alt="Improved Bloodrage"></div>
-                </td>
                 <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="2" id="shield_specialization_talent"
+                    data-max="5">
+                   <img src="images/inv_shield_06.jpg" alt="Shield Specialization"></div>
+                </td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="1" id="toughness_talent" data-max="5">
                         <img src="images/spell_holy_devotion.jpg" alt="Toughness"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="1" id="iron_will_talent" data-max="5">
-                        <img src="images/spell_magic_magearmor.jpg" alt="Iron Will"></div>
+
                 </td>
             </tr>
             <tr>
@@ -1831,7 +1882,7 @@
                         <img src="images/ability_warrior_revenge.jpg" alt="Improved Revenge"></div>
                 </td>
                 <td>
-                    <div class="icon" data-count="0" data-x="3" data-y="2" id="defiance_talent" data-max="5">
+                    <div class="icon" data-count="0" data-x="3" data-y="2" id="defiance_talent" data-max="3">
                         <img src="images/ability_warrior_innerrage.jpg" alt="Defiance"></div>
                 </td>
             </tr>
@@ -1869,7 +1920,11 @@
                 <td></td>
             </tr>
             <tr>
-                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="0" data-y="5" id="shield_mastery_talent"
+                         data-max="5">
+                        <img src="images/ability_warrior_shieldmastery.jpg" alt="Shield Mastery"></div>     
+                </td>
                 <td></td>
                 <td>
                     <div class="icon" data-count="0" data-x="2" data-y="5" id="one_handed_weapon_specialization_talent"
@@ -1879,10 +1934,34 @@
                 <td></td>
             </tr>
             <tr>
-                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="0" data-y="6" id="improved_defensive_stance_talent" data-max="3">
+                        <img src="images/ability_warrior_defensivestance.jpg" alt="Improved Defensive Stance"></div>
+                </td>
                 <td>
                     <div class="icon" data-count="0" data-x="1" data-y="6" id="shield_slam_talent" data-max="1">
                         <img src="images/inv_shield_05.jpg" alt="Shield Slam"></div>
+                </td>
+                <td>
+                    <div class="icon" data-count="0" data-x="2" data-y="6" id="focused_rage_talent" data-max="3">
+                        <img src="images/ability_warrior_focusedrage.jpg" alt="Focused Rage"></div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="7" id="vitality_talent" data-max="5">
+                        <img src="images/inv_helmet_21.jpg" alt="Vitality"></div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="icon" data-count="0" data-x="1" data-y="8" id="devastate_talent" data-max="1">
+                        <img src="images/inv_sword_11.jpg" alt="Devastate"></div>
                 </td>
                 <td></td>
                 <td></td>
@@ -2092,6 +2171,12 @@
                 <input type="checkbox" id="use_bt_in_exec_phase">
                 <label for="use_bt_in_exec_phase"> Use bloodthirst in execute phase</label><br>
             </div>
+        </div>
+
+        <div class="hide_description" id="rampage_talent_div">
+            <input type="checkbox" id="use_rampage" checked
+                   onclick="show_div('use_rampage', 'rampage_div')">
+            <label for="use_rampage"><b> Use rampage</b></label><br>
         </div>
 
         <div class="hide_description" id="mortal_strike_talent_div">
@@ -2491,7 +2576,7 @@
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
-        "cleave_if_adds", "use_hamstring", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
+        "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
         "item_strengths", "wep_strengths", "deep_wounds", "heroic_strike_aq", "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
         "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",
