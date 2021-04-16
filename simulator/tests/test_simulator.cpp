@@ -31,7 +31,7 @@ Combat_simulator_config get_test_config()
     //    config.combat.use_heroic_strike = true;
     //    config.combat.deep_wounds = true;
     //    config.combat.heroic_strike_damage = 157;
-    config.combat.heroic_strike_damage = 138;
+    config.combat.heroic_strike_damage = 208;
     //    config.combat.first_hit_heroic_strike = true;
     //    config.multi_target_mode_ = true;
     //    config.essence_of_the_red_ = true;
