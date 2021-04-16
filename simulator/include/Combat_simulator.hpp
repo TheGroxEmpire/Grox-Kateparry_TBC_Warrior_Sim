@@ -116,6 +116,7 @@ struct Combat_simulator_config
         bool use_heroic_strike{false};
         double hamstring_cd_thresh{};
         bool dont_use_hm_when_ss{false};
+        double slam_cd_thresh{};
         double hamstring_thresh_dd{};
         double initial_rage{};
         bool deep_wounds{false};
