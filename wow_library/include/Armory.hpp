@@ -34,8 +34,8 @@ struct Buffs
     Buff blood_frenzy{"blood_frenzy", Attributes{0.0, 0.0}, Special_stats{0.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, .04}};
     Buff improved_sanctity_aura{"improved_sanctity_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, .02, 0, 0, 0, 0, 0, 0, 0, .02}};
     Buff ferocious_inspiration{"ferocious_inspiration", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, .03, 0, 0, 0, 0, 0, 0, 0, .03}};
-    Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0}};
-    Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0}};
+    Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0, 0}};
+    Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0}};
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
     Buff drums_of_battle{"drums_of_battle", Attributes{0, 0}, Special_stats{0.0, 0.0, 0.0, 0, .5}};
     Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0}, 0,
