@@ -1087,9 +1087,9 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stat
                                     double& rage, Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active,
                                     double attack_power_bonus)
 {
-    double damage = weapon.swing(special_stats.attack_power + attack_power_bonus);
-    auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::white, weapon.socket, special_stats, damage_sources);
-    rage += rage_generation(hit_outcome.damage, weapon.socket, weapon.swing_speed);
+    double damage = main_hand_weapon.swing(special_stats.attack_power + attack_power_bonus);
+    auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::white, main_hand_weapon.socket, special_stats, damage_sources);
+    rage += rage_generation(hit_outcome.damage, main_hand_weapon.socket, main_hand_weapon.swing_speed);
     if (config.talents.endless_rage)
     {
         rage = rage *1.25;
@@ -1116,7 +1116,7 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stat
     damage_sources.add_damage(Damage_source::white_mh, hit_outcome.damage, time_keeper_.time);
 
     // Unbridled wrath
-    if (get_uniform_random(1) < (p_unbridled_wrath_ * weapon.swing_speed))
+    if (get_uniform_random(1) < (p_unbridled_wrath_ * main_hand_weapon.swing_speed))
     {
         rage += 1;
         if (rage > 100.0)
