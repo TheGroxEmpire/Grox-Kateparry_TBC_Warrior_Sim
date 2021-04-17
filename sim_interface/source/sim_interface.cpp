@@ -832,6 +832,12 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         compute_talent_weight(simulator_talent, character, talents_info, "Death wish", config,
                               &Combat_simulator_config::talents_t::death_wish);
 
+        compute_talent_weight(simulator_talent, character, talents_info, "Rampage", config,
+                              &Combat_simulator_config::talents_t::rampage);
+        
+        compute_talent_weight(simulator_talent, character, talents_info, "Endless Rage", config,
+                              &Combat_simulator_config::talents_t::endless_rage);
+
         if (!is_two_handed)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Dual Wield Specialization", config,

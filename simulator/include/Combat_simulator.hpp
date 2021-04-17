@@ -144,6 +144,8 @@ struct Combat_simulator_config
     {
         bool death_wish{false};
         bool anger_management{false};
+        bool endless_rage{false};
+        bool rampage{false};
         int improved_heroic_strike = 0;
         int flurry = 0;
         int unbridled_wrath = 0;
@@ -156,12 +158,10 @@ struct Combat_simulator_config
         int tactical_mastery = 0;
         int deep_wounds = 0;
         int bloodthirst = 0;
-        int rampage = 0;
         int mortal_strike = 0;
         int sweeping_strikes = 0;
         int improved_disciplines = 0;
         int improved_mortal_strike = 0;
-        int endless_rage = 0;
         int weapon_mastery = 0;
         int precision = 0;
         int improved_whirlwind = 0;
