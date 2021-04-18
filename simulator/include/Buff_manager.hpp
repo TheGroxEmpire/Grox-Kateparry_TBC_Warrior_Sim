@@ -1,7 +1,6 @@
 #ifndef WOW_SIMULATOR_BUFF_MANAGER_HPP
 #define WOW_SIMULATOR_BUFF_MANAGER_HPP
 
-#include "Helper_functions.hpp"
 #include "Attributes.hpp"
 #include "Item.hpp"
 

@@ -1,6 +1,6 @@
 #include "Combat_simulator.hpp"
 #include "Armory.hpp"
-
+#include "Use_effects.hpp"
 #include "gtest/gtest.h"
 
 namespace
@@ -26,15 +26,15 @@ TEST(TestSuite, test_use_effect_time_function)
     use_effect2.duration = 30;
     std::vector<std::pair<double, Use_effect>> use_effect_timers;
     use_effect_timers.emplace_back(0.0, use_effect1);
-    double time = is_time_available(use_effect_timers, 0.0, use_effect2.duration);
+    double time = Use_effects::is_time_available(use_effect_timers, 0.0, use_effect2.duration);
     EXPECT_TRUE(time == 20.0);
-    time = is_time_available(use_effect_timers, 10.0, use_effect2.duration);
+    time = Use_effects::is_time_available(use_effect_timers, 10.0, use_effect2.duration);
     EXPECT_TRUE(time == 20.0);
-    time = is_time_available(use_effect_timers, 20.0, use_effect2.duration);
+    time = Use_effects::is_time_available(use_effect_timers, 20.0, use_effect2.duration);
     EXPECT_TRUE(time == 20.0);
 
     use_effect_timers.emplace_back(40.0, use_effect1);
-    time = get_next_available_time(use_effect_timers, 0.0, use_effect2.duration);
+    time = Use_effects::get_next_available_time(use_effect_timers, 0.0, use_effect2.duration);
     EXPECT_TRUE(time == 60.0);
 }
 
@@ -60,7 +60,7 @@ TEST(TestSuite, test_use_effect_ordering)
     use_effect3.effect_socket = Use_effect::Effect_socket::shared;
 
     std::vector<Use_effect> use_effects{use_effect1, use_effect2, use_effect3};
-    auto order = compute_use_effect_order(use_effects, Special_stats{}, 580, 1500, 0, 0, 0);
+    auto order = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, 580, 1500, 0, 0, 0);
     for (const auto& effect : order)
     {
         EXPECT_TRUE(effect.second.name != "should_not_fit");
@@ -74,8 +74,8 @@ TEST(TestSuite, test_use_effect_shuffle)
     use_effects.emplace_back(sim.deathwish);
     use_effects.emplace_back(sim.bloodrage);
     double sim_time = 20.0;
-    auto order_with_rage = compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 10);
-    auto order_without_rage = compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
+    auto order_with_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 10);
+    auto order_without_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
 
     EXPECT_TRUE(order_with_rage[0].second.name == "Bloodrage");
     EXPECT_TRUE(order_with_rage[1].second.name == "Death_wish");
@@ -93,8 +93,8 @@ TEST(TestSuite, test_use_effect_shuffle)
     use_effects.emplace_back(sim.bloodrage);
     use_effects.emplace_back(sim.recklessness);
     use_effects.emplace_back(use1.use_effects[0]);
-    order_with_rage = compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 10);
-    order_without_rage = compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
+    order_with_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 10);
+    order_without_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
 
     EXPECT_TRUE(order_with_rage[0].second.name == "Bloodrage");
     EXPECT_TRUE(order_with_rage[1].second.name == "Recklessness");
@@ -129,7 +129,7 @@ TEST(TestSuite, test_use_effects)
     use_effects.emplace_back(use2.use_effects[0]);
     use_effects.emplace_back(use3.use_effects[0]);
     double sim_time = 320.0;
-    auto order = compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
+    auto order = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
     EXPECT_TRUE(is_descending(order));
     int df = 0;
     int es = 0;

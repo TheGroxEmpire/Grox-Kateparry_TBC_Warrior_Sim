@@ -8,6 +8,6 @@ add_library(
         source/sim_interface_mult.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} simulator wow_library)
+target_link_libraries(${PROJECT_NAME} item_optimizer wow_library common)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include ${CMAKE_CURRENT_SOURCE_DIR})

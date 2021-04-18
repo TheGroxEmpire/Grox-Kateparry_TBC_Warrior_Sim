@@ -1,5 +1,5 @@
 #include "Armory.hpp"
-#include "Combat_simulator.hpp"
+#include "item_heuristics.hpp"
 
 #include "gtest/gtest.h"
 
@@ -11,11 +11,6 @@ TEST(TestSuite, test_ap_estimation)
     special_stats.attack_power = 2500;
     special_stats.chance_for_extra_hit = 0;
     special_stats.haste = 0;
-    special_stats.sword_skill = 311;
-    special_stats.axe_skill = 311;
-    special_stats.dagger_skill = 311;
-    special_stats.mace_skill = 311;
-    special_stats.fist_skill = 311;
     special_stats.damage_mod_physical = 0.1;
     special_stats.damage_mod_spell = 0.1;
     special_stats.stat_multiplier = 0.265;

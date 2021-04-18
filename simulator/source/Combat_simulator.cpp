@@ -1,6 +1,8 @@
 #include "Combat_simulator.hpp"
 
-#include "include/Statistics.hpp"
+#include "Statistics.hpp"
+#include "Use_effects.hpp"
+#include "item_heuristics.hpp"
 
 #include <algorithm>
 
@@ -1133,6 +1135,7 @@ void Combat_simulator::simulate(const Character& character, size_t n_simulations
 {
     dps_distribution_.mean_ = init_mean;
     dps_distribution_.variance_ = init_variance;
+    dps_distribution_.n_samples_ = init_simulations;
     config.n_batches = n_simulations;
     simulate(character, init_simulations);
 }
@@ -1235,9 +1238,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         ap_equiv = get_character_ap_equivalent(starting_special_stats, character.weapons[0], sim_time, {});
     }
 
-    auto use_effect_order =
-        compute_use_effect_order(use_effects_all, starting_special_stats, sim_time + averaging_interval / 2, ap_equiv,
-                                 0, 0, config.combat.initial_rage);
+    auto use_effect_order = Use_effects::compute_use_effect_order(use_effects_all, starting_special_stats,
+                                                                  sim_time + averaging_interval / 2, ap_equiv, 0, 0,
+                                                                  config.combat.initial_rage);
 
     for (int iter = init_iteration; iter < n_damage_batches + init_iteration; iter++)
     {
@@ -1770,8 +1773,8 @@ std::vector<std::pair<double, Use_effect>> Combat_simulator::get_use_effect_orde
         ap_equiv =
             get_character_ap_equivalent(character.total_special_stats, character.weapons[0], config.sim_time, {});
     }
-    return compute_use_effect_order(use_effects_all, character.total_special_stats, config.sim_time, ap_equiv, 0, 0,
-                                    config.combat.initial_rage);
+    return Use_effects::compute_use_effect_order(use_effects_all, character.total_special_stats, config.sim_time,
+                                                 ap_equiv, 0, 0, config.combat.initial_rage);
 }
 
 void Combat_simulator::init_histogram()

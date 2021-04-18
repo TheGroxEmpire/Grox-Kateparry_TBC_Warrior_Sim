@@ -44,6 +44,26 @@ struct Special_stats
     {
     }
 
+    bool operator<(Special_stats other)
+    {
+        return (this->hit < other.hit) &&
+               (this->critical_strike < other.critical_strike) &&
+               (this->attack_power < other.attack_power) &&
+               (this->axe_skill < other.axe_skill) &&
+               (this->sword_skill < other.sword_skill) &&
+               (this->mace_skill < other.mace_skill) &&
+               (this->dagger_skill < other.dagger_skill) &&
+               (this->bonus_damage < other.bonus_damage) &&
+               (this->damage_mod_physical < other.damage_mod_physical) &&
+               (this->two_hand_sword_skill < other.two_hand_sword_skill) &&
+               (this->two_hand_mace_skill < other.two_hand_mace_skill) &&
+               (this->two_hand_axe_skill < other.two_hand_axe_skill) &&
+               (this->expertise < other.expertise) &&
+               (this->sword_expertise < other.sword_expertise) &&
+               (this->mace_expertise < other.mace_expertise) &&
+               (this->axe_expertise < other.axe_expertise);
+    }
+
     Special_stats operator+(const Special_stats& rhs) const
     {
         return {

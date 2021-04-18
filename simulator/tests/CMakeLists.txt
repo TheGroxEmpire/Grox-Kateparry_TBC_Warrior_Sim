@@ -2,7 +2,6 @@ project(test_simulator)
 
 add_executable(${PROJECT_NAME}
         test_ap_estimation.cpp
-        test_item_optimizer.cpp
         test_use_effects.cpp
         test_simulator.cpp
         )

@@ -1,7 +1,5 @@
 #include "Character.hpp"
 
-#include "Helper_functions.hpp"
-
 #include <iostream>
 
 Character::Character(const Race& race, int level)
@@ -129,4 +127,96 @@ std::ostream& operator<<(std::ostream& os, const Character& character)
         os << character.weapons[1].name << "<br>";
     }
     return os;
+}
+
+Race get_race(const std::string& race)
+{
+    if (race == "human")
+    {
+        return Race::human;
+    }
+    else if (race == "gnome")
+    {
+        return Race::gnome;
+    }
+    else if (race == "dwarf")
+    {
+        return Race::dwarf;
+    }
+    else if (race == "night_elf")
+    {
+        return Race::night_elf;
+    }
+    else if (race == "draenei")
+    {
+        return Race::draenei;
+    }
+    else if (race == "orc")
+    {
+        return Race::orc;
+    }
+    else if (race == "troll")
+    {
+        return Race::troll;
+    }
+    else if (race == "undead")
+    {
+        return Race::undead;
+    }
+    else if (race == "tauren")
+    {
+        return Race::tauren;
+    }
+    else
+    {
+        std::cout << "Race not found!!! picking human"
+                  << "\n";
+        return Race::human;
+    }
+}
+
+Character get_character_of_race(const std::string& race)
+{
+    if (race == "human")
+    {
+        return {Race::human, 70};
+    }
+    else if (race == "gnome")
+    {
+        return {Race::gnome, 70};
+    }
+    else if (race == "dwarf")
+    {
+        return {Race::dwarf, 70};
+    }
+    else if (race == "night_elf")
+    {
+        return {Race::night_elf, 70};
+    }
+        else if (race == "draenei")
+    {
+        return {Race::draenei, 70};
+    }
+    else if (race == "orc")
+    {
+        return {Race::orc, 70};
+    }
+    else if (race == "troll")
+    {
+        return {Race::troll, 70};
+    }
+    else if (race == "undead")
+    {
+        return {Race::undead, 70};
+    }
+    else if (race == "tauren")
+    {
+        return {Race::tauren, 70};
+    }
+    else
+    {
+        std::cout << "Race not found!!! picking human"
+                  << "\n";
+        return {Race::human, 70};
+    }
 }

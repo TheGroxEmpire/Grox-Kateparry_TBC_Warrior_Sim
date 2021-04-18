@@ -27,6 +27,8 @@ add_subdirectory(simulator)
 add_subdirectory(statistics)
 add_subdirectory(wow_library)
 add_subdirectory(sim_interface)
+add_subdirectory(common)
+add_subdirectory(item_optimizer)
 
 if (NOT EMSCRIPTEN)
     add_subdirectory(local_build)

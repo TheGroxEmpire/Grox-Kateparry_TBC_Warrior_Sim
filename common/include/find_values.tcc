@@ -1,18 +1,3 @@
-#include <algorithm>
-
-template <typename T>
-bool does_vector_contain(const std::vector<T>& vec, const T& match)
-{
-    for (const auto& elem : vec)
-    {
-        if (elem == match)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 template <typename T>
 Find_values<T>::Find_values(const std::vector<std::string>& string_vec, const std::vector<T>& value_vec)
     : string_vec(string_vec), value_vec(value_vec)
@@ -36,3 +21,4 @@ T Find_values<T>::find(const std::string& name)
     std::cout << "ERROR: Could not find: " << name << std::endl;
     return {0};
 }
+

@@ -1,11 +1,11 @@
 #ifndef WOW_SIMULATOR_ITEM_OPTIMIZER_HPP
 #define WOW_SIMULATOR_ITEM_OPTIMIZER_HPP
 
-#include "Helper_functions.hpp"
+#include "Armory.hpp"
+#include "Character.hpp"
+#include "item_heuristics.hpp"
+#include "string_helpers.hpp"
 
-#include "include/Armory.hpp"
-#include <include/Character.hpp>
-#include "Combat_simulator.hpp"
 #include <algorithm>
 #include <ctime>
 #include <iostream>

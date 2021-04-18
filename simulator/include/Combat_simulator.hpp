@@ -3,13 +3,14 @@
 
 #include "Buff_manager.hpp"
 #include "Character.hpp"
-#include "Helper_functions.hpp"
+#include "Distribution.hpp"
+#include "find_values.hpp"
 #include "damage_sources.hpp"
 #include "sim_input.hpp"
 #include "sim_input_mult.hpp"
+#include "string_helpers.hpp"
 #include "time_keeper.hpp"
 #include "weapon_sim.hpp"
-#include "Distribution.hpp"
 
 #include <array>
 #include <cassert>
@@ -26,10 +27,11 @@ struct Combat_simulator_config
     {
         get_combat_simulator_config(input);
 
-        n_batches =
-            static_cast<int>(find_value(input.float_options_string, input.float_options_val, "n_simulations_dd"));
-        if (find_string(input.options, "item_strengths") || find_string(input.options, "wep_strengths") ||
-            !input.stat_weights.empty() || find_string(input.options, "compute_dpr"))
+        n_batches = static_cast<int>(
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_dd"));
+        if (String_helpers::find_string(input.options, "item_strengths") ||
+            String_helpers::find_string(input.options, "wep_strengths") || !input.stat_weights.empty() ||
+            String_helpers::find_string(input.options, "compute_dpr"))
         {
             if (n_batches < 100000)
             {

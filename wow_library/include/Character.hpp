@@ -192,6 +192,10 @@ Character character_setup(const Armory& armory, const std::string& race, const s
                           const std::vector<std::string>& talent_string, const std::vector<int>& talent_val,
                           const std::vector<std::string>& ench_vec);
 
+Race get_race(const std::string& race);
+
+Character get_character_of_race(const std::string& race);
+
 std::ostream& operator<<(std::ostream& os, const Character& character);
 
 #endif // WOW_SIMULATOR_CHARACTER_HPP

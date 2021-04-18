@@ -1,95 +1,95 @@
 template <typename T>
 void Combat_simulator_config::get_combat_simulator_config(const T& input)
 {
-    if (find_string(input.options, "exposed_armor"))
+    if (String_helpers::find_string(input.options, "exposed_armor"))
     {
         exposed_armor = true;
     }
-    if (find_string(input.options, "curse_of_recklessness"))
+    if (String_helpers::find_string(input.options, "curse_of_recklessness"))
     {
         curse_of_recklessness_active = true;
     }
-    if (find_string(input.options, "faerie_fire"))
+    if (String_helpers::find_string(input.options, "faerie_fire"))
     {
         faerie_fire_feral_active = true;
     }
-    if (find_string(input.options, "death_wish"))
+    if (String_helpers::find_string(input.options, "death_wish"))
     {
         combat.use_death_wish = true;
     }
-    if (find_string(input.options, "recklessness"))
+    if (String_helpers::find_string(input.options, "recklessness"))
     {
         enable_recklessness = true;
     }
-    if (find_string(input.options, "enable_blood_fury"))
+    if (String_helpers::find_string(input.options, "enable_blood_fury"))
     {
         enable_blood_fury = true;
     }
-    if (find_string(input.options, "enable_berserking"))
+    if (String_helpers::find_string(input.options, "enable_berserking"))
     {
         enable_berserking = true;
     }
-    if (find_string(input.options, "use_bt_in_exec_phase"))
+    if (String_helpers::find_string(input.options, "use_bt_in_exec_phase"))
     {
         combat.use_bt_in_exec_phase = true;
     }
-    if (find_string(input.options, "use_ms_in_exec_phase"))
+    if (String_helpers::find_string(input.options, "use_ms_in_exec_phase"))
     {
         combat.use_ms_in_exec_phase = true;
     }
-    if (find_string(input.options, "use_hs_in_exec_phase"))
+    if (String_helpers::find_string(input.options, "use_hs_in_exec_phase"))
     {
         combat.use_hs_in_exec_phase = true;
     }
-    if (find_string(input.options, "cleave_if_adds"))
+    if (String_helpers::find_string(input.options, "cleave_if_adds"))
     {
         combat.cleave_if_adds = true;
     }
-    if (find_string(input.options, "use_sweeping_strikes"))
+    if (String_helpers::find_string(input.options, "use_sweeping_strikes"))
     {
         combat.use_sweeping_strikes = true;
     }
-    if (find_string(input.options, "dont_use_hm_when_ss"))
+    if (String_helpers::find_string(input.options, "dont_use_hm_when_ss"))
     {
         combat.dont_use_hm_when_ss = true;
     }
-    if (find_string(input.options, "use_hamstring"))
+    if (String_helpers::find_string(input.options, "use_hamstring"))
     {
         combat.use_hamstring = true;
     }
-    if (find_string(input.options, "use_bloodthirst"))
+    if (String_helpers::find_string(input.options, "use_bloodthirst"))
     {
         combat.use_bloodthirst = true;
     }
-    if (find_string(input.options, "use_rampage"))
+    if (String_helpers::find_string(input.options, "use_rampage"))
     {
         combat.use_rampage = true;
     }
-    if (find_string(input.options, "use_mortal_strike"))
+    if (String_helpers::find_string(input.options, "use_mortal_strike"))
     {
         combat.use_mortal_strike = true;
     }
-    if (find_string(input.options, "use_slam"))
+    if (String_helpers::find_string(input.options, "use_slam"))
     {
         combat.use_slam = true;
     }
-    if (find_string(input.options, "use_whirlwind"))
+    if (String_helpers::find_string(input.options, "use_whirlwind"))
     {
         combat.use_whirlwind = true;
     }
-    if (find_string(input.options, "use_overpower"))
+    if (String_helpers::find_string(input.options, "use_overpower"))
     {
         combat.use_overpower = true;
     }
-    if (find_string(input.options, "use_heroic_strike"))
+    if (String_helpers::find_string(input.options, "use_heroic_strike"))
     {
         combat.use_heroic_strike = true;
     }
-    if (find_string(input.options, "deep_wounds"))
+    if (String_helpers::find_string(input.options, "deep_wounds"))
     {
         combat.deep_wounds = true;
     }
-    // if (find_string(input.options, "heroic_strike_aq"))
+    // if (String_helpers::find_string(input.options, "heroic_strike_aq"))
     // {
     //     combat.heroic_strike_damage = 157;
     // }
@@ -97,32 +97,32 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     // {
     combat.heroic_strike_damage = 208;
     // }
-    if (find_string(input.options, "first_hit_heroic_strike"))
+    if (String_helpers::find_string(input.options, "first_hit_heroic_strike"))
     {
         combat.first_hit_heroic_strike = true;
     }
 
-    if (find_string(input.options, "multi_target_mode"))
+    if (String_helpers::find_string(input.options, "multi_target_mode"))
     {
         multi_target_mode_ = true;
     }
-    if (find_string(input.options, "essence_of_the_red"))
+    if (String_helpers::find_string(input.options, "essence_of_the_red"))
     {
         essence_of_the_red_ = true;
     }
-    if (find_string(input.options, "can_trigger_enrage"))
+    if (String_helpers::find_string(input.options, "can_trigger_enrage"))
     {
         can_trigger_enrage_ = true;
     }
-    if (find_string(input.options, "first_global_sunder"))
+    if (String_helpers::find_string(input.options, "first_global_sunder"))
     {
         first_global_sunder_ = true;
     }
-    if (find_string(input.options, "periodic_damage"))
+    if (String_helpers::find_string(input.options, "periodic_damage"))
     {
         take_periodic_damage_ = true;
     }
-    if (find_string(input.options, "ability_queue"))
+    if (String_helpers::find_string(input.options, "ability_queue"))
     {
         ability_queue_ = true;
     }

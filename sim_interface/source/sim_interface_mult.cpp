@@ -1,11 +1,11 @@
-#include "sim_interface.hpp"
 #include "Combat_simulator.hpp"
-#include "Helper_functions.hpp"
 #include "Item_optimizer.hpp"
 #include "Item_popularity.hpp"
 #include "include/Armory.hpp"
 #include "include/Character.hpp"
 #include "include/Statistics.hpp"
+#include "item_heuristics.hpp"
+#include "sim_interface.hpp"
 
 #include <algorithm>
 #include <ctime>
@@ -20,24 +20,26 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     // Combat settings
     auto temp_buffs = input.buffs;
 
-    if (find_string(input.options, "mighty_rage_potion"))
+    if (String_helpers::find_string(input.options, "mighty_rage_potion"))
     {
         temp_buffs.emplace_back("mighty_rage_potion");
     }
-    if (find_string(input.options, "full_polarity"))
+    if (String_helpers::find_string(input.options, "full_polarity"))
     {
-        double full_polarity_val = find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
+        double full_polarity_val =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
         item_optimizer.armory.buffs.full_polarity.special_stats.damage_mod_physical = full_polarity_val / 100.0;
         item_optimizer.armory.buffs.full_polarity.special_stats.damage_mod_spell = full_polarity_val / 100.0;
         temp_buffs.emplace_back("full_polarity");
     }
-    if (find_string(input.options, "fungal_bloom"))
+    if (String_helpers::find_string(input.options, "fungal_bloom"))
     {
         temp_buffs.emplace_back("fungal_bloom");
     }
-    if (find_string(input.options, "battle_squawk"))
+    if (String_helpers::find_string(input.options, "battle_squawk"))
     {
-        double battle_squawk_val = find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
+        double battle_squawk_val =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
         item_optimizer.armory.buffs.battle_squawk.special_stats.haste = battle_squawk_val / 100.0;
         temp_buffs.emplace_back("battle_squawk");
     }
@@ -113,10 +115,10 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
                          std::to_string(highest_attack_power) + "]\n";
         double filter_value = .4;
         double filtering_ap = (1 - filter_value) * lowest_attack_power + filter_value * highest_attack_power;
-        debug_message += "Removing bottom " + string_with_precision(filter_value * 100, 2) + "% sets. AP < " +
-                         string_with_precision(filtering_ap, 4) + "<br>";
-        std::cout << "Removing bottom " + string_with_precision(filter_value * 100, 2) + "% sets. AP < " +
-                         string_with_precision(filtering_ap, 4) + "\n";
+        debug_message += "Removing bottom " + String_helpers::string_with_precision(filter_value * 100, 2) +
+                         "% sets. AP < " + String_helpers::string_with_precision(filtering_ap, 4) + "<br>";
+        std::cout << "Removing bottom " + String_helpers::string_with_precision(filter_value * 100, 2) +
+                         "% sets. AP < " + String_helpers::string_with_precision(filtering_ap, 4) + "\n";
         keepers.reserve(item_optimizer.total_combinations / 2);
         for (size_t i = 0; i < item_optimizer.total_combinations; ++i)
         {
@@ -144,9 +146,10 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
             {
                 filter_value += .02;
                 filtering_ap = (1 - filter_value) * lowest_attack_power + filter_value * highest_attack_power;
-                debug_message += "Removing bottom " + string_with_precision(filter_value * 100, 2) + "% sets. AP < " +
-                                 string_with_precision(filtering_ap, 4) + "<br>";
-                std::cout << "Removing bottom " << string_with_precision(filter_value * 100, 2) << "%\n";
+                debug_message += "Removing bottom " + String_helpers::string_with_precision(filter_value * 100, 2) +
+                                 "% sets. AP < " + String_helpers::string_with_precision(filtering_ap, 4) + "<br>";
+                std::cout << "Removing bottom " << String_helpers::string_with_precision(filter_value * 100, 2)
+                          << "%\n";
                 std::vector<Item_optimizer::Sim_result_t> temp_keepers;
                 temp_keepers.reserve(keepers.size());
                 for (const auto& keeper : keepers)
@@ -165,11 +168,11 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         debug_message += "Set filter done. Combinations: " + std::to_string(keepers.size()) + "<br>";
         if (filter_value > 0.8)
         {
-            debug_message +=
-                "WARNING! Pushed the heuristic filter to: " + string_with_precision(filter_value * 100, 2) +
-                "%. Might have filtered away good sets. <br>";
-            std::cout << "WARNING! Pushed the heuristic filter to: " << string_with_precision(filter_value * 100, 2)
-                      << "\n";
+            debug_message += "WARNING! Pushed the heuristic filter to: " +
+                             String_helpers::string_with_precision(filter_value * 100, 2) +
+                             "%. Might have filtered away good sets. <br>";
+            std::cout << "WARNING! Pushed the heuristic filter to: "
+                      << String_helpers::string_with_precision(filter_value * 100, 2) << "\n";
         }
         debug_message += "Time spent filtering: " + std::to_string(time_spent_filter) + "s.<br><br>";
     }
@@ -194,7 +197,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     cumulative_simulations.push_back(cumulative_simulations.back() + batches_per_iteration.back());
     size_t n_sim{};
     size_t performed_iterations{};
-    double max_optimize_time = find_value(input.float_options_string, input.float_options_val, "max_optimize_time_dd");
+    double max_optimize_time =
+        String_helpers::find_value(input.float_options_string, input.float_options_val, "max_optimize_time_dd");
     Combat_simulator simulator{};
     simulator.set_config(config);
     for (size_t i = 0; i < batches_per_iteration.size(); i++)
@@ -249,8 +253,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         double time = double(clock() - start_time_main) / (double)CLOCKS_PER_SEC;
         if (time > max_optimize_time)
         {
-            debug_message +=
-                "<b>Maximum time limit (" + string_with_precision(max_optimize_time, 3) + ") exceeded! </b><br>";
+            debug_message += "<b>Maximum time limit (" + String_helpers::string_with_precision(max_optimize_time, 3) +
+                             ") exceeded! </b><br>";
             break;
         }
 
@@ -419,8 +423,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
             {
                 if (item.name != "none")
                 {
-                    message +=
-                        item.name + " - (" + percent_to_str(100.0 * item.counter / best_characters.size()) + "), ";
+                    message += item.name + " - (" +
+                               String_helpers::percent_to_str(100.0 * item.counter / best_characters.size()) + "), ";
                 }
             }
             message += "<br>";
@@ -432,8 +436,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
             {
                 if (item.name != "none")
                 {
-                    message +=
-                        item.name + " - (" + percent_to_str(100.0 * item.counter / best_characters.size()) + "), ";
+                    message += item.name + " - (" +
+                               String_helpers::percent_to_str(100.0 * item.counter / best_characters.size()) + "), ";
                 }
             }
             message += "<br>";
@@ -451,18 +455,21 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     for (size_t i = 0; i < max_number; i++)
     {
         message += "<b>Set " + std::to_string(i + 1) + ":</b><br>";
-        message += "DPS: " + string_with_precision(keepers[i].mean_dps, 5) + " (-<b>" +
-                   string_with_precision(keepers[0].mean_dps - keepers[i].mean_dps, 3) + "</b>)<br> ";
+        message += "DPS: " + String_helpers::string_with_precision(keepers[i].mean_dps, 5) + " (-<b>" +
+                   String_helpers::string_with_precision(keepers[0].mean_dps - keepers[i].mean_dps, 3) + "</b>)<br> ";
         double error_margin = Statistics::sample_deviation(std::sqrt(keepers[i].variance),
                                                            cumulative_simulations[performed_iterations + 1]);
-        message += "Error margin DPS: " + string_with_precision(error_margin, 3) + "<br>";
+        message += "Error margin DPS: " + String_helpers::string_with_precision(error_margin, 3) + "<br>";
         message += "<b>Stats:</b><br>";
-        message += "Hit: " + string_with_precision(best_characters[i].total_special_stats.hit, 3) + " %<br>";
         message +=
-            "Crit: " + string_with_precision(best_characters[i].total_special_stats.critical_strike, 3) + " %<br>";
-        message +=
-            "Attackpower: " + string_with_precision(best_characters[i].total_special_stats.attack_power, 4) + " <br>";
-        //        message += "Equivalent attackpower: " + string_with_precision(
+            "Hit: " + String_helpers::string_with_precision(best_characters[i].total_special_stats.hit, 3) + " %<br>";
+        message += "Crit: " +
+                   String_helpers::string_with_precision(best_characters[i].total_special_stats.critical_strike, 3) +
+                   " %<br>";
+        message += "Attackpower: " +
+                   String_helpers::string_with_precision(best_characters[i].total_special_stats.attack_power, 4) +
+                   " <br>";
+        //        message += "Equivalent attackpower: " + String_helpers::string_with_precision(
         //                keepers[i].ap_equivalent, 4) + " <br>";
         message += "<b>Armor:</b><br>";
         for (size_t j = 0; j < best_characters[i].armor.size(); j++)

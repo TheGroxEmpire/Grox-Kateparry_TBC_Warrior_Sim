@@ -1,11 +1,10 @@
 #include "sim_interface.hpp"
 
+#include "Armory.hpp"
 #include "Combat_simulator.hpp"
-#include "Helper_functions.hpp"
 #include "Item_optimizer.hpp"
-#include "include/Armory.hpp"
-#include "include/Character.hpp"
-#include "include/Statistics.hpp"
+#include "Statistics.hpp"
+#include "item_heuristics.hpp"
 
 #include <sstream>
 
@@ -95,8 +94,8 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
                 double dps_increase = simulator.get_dps_mean() - dps_mean;
                 double dps_increase_std = Statistics::add_standard_deviations(sample_std, dps_sample_std);
                 item_strengths_string += "<br><b>Up</b>grade: <b>" + items[i].name + "</b> ( +<b>" +
-                                         string_with_precision(dps_increase, 2) + " &plusmn " +
-                                         string_with_precision(dps_increase_std, 2) + "</b> DPS).";
+                                         String_helpers::string_with_precision(dps_increase, 2) + " &plusmn " +
+                                         String_helpers::string_with_precision(dps_increase_std, 2) + "</b> DPS).";
                 break;
             }
             else if (simulator.get_dps_mean() + sample_std * quantile <= dps_mean &&
@@ -105,9 +104,9 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
                 double dps_decrease = simulator.get_dps_mean() - dps_mean;
                 double dps_decrease_std = Statistics::add_standard_deviations(sample_std, dps_sample_std);
                 item_downgrades_string += "<br><b>Down</b>grade: <b>" + items[i].name + "</b> ( <b>" +
-                                          string_with_precision(dps_decrease, 3) + " &plusmn " +
-                                          string_with_precision(dps_decrease_std, 2) + "</b> DPS).";
-                if (does_vector_contain(stronger_indexies, i))
+                                          String_helpers::string_with_precision(dps_decrease, 3) + " &plusmn " +
+                                          String_helpers::string_with_precision(dps_decrease_std, 2) + "</b> DPS).";
+                if (String_helpers::does_vector_contain(stronger_indexies, i))
                 {
                     found_upgrade = true;
                     item_downgrades_string += " Note: Similar item stats, difficult to draw conclusions.";
@@ -179,8 +178,8 @@ void item_upgrades_wep(std::string& item_strengths_string, Character character_n
                 double dps_increase = simulator.get_dps_mean() - dps_mean;
                 double dps_increase_std = Statistics::add_standard_deviations(sample_std, dps_sample_std);
                 item_strengths_string += "<br><b>Up</b>grade: <b>" + item.name + "</b> ( +<b>" +
-                                         string_with_precision(dps_increase, 3) + " &plusmn " +
-                                         string_with_precision(dps_increase_std, 2) + "</b> DPS).";
+                                         String_helpers::string_with_precision(dps_increase, 3) + " &plusmn " +
+                                         String_helpers::string_with_precision(dps_increase_std, 2) + "</b> DPS).";
                 break;
             }
             else if (simulator.get_dps_mean() + sample_std * quantile <= dps_mean &&
@@ -189,8 +188,8 @@ void item_upgrades_wep(std::string& item_strengths_string, Character character_n
                 double dps_decrease = simulator.get_dps_mean() - dps_mean;
                 double dps_decrease_std = Statistics::add_standard_deviations(sample_std, dps_sample_std);
                 item_downgrades_string += "<br><b>Down</b>grade: <b>" + item.name + "</b> ( <b>" +
-                                          string_with_precision(dps_decrease, 3) + " &plusmn " +
-                                          string_with_precision(dps_decrease_std, 2) + "</b> DPS).";
+                                          String_helpers::string_with_precision(dps_decrease, 3) + " &plusmn " +
+                                          String_helpers::string_with_precision(dps_decrease_std, 2) + "</b> DPS).";
                 break;
             }
         }
@@ -415,8 +414,9 @@ void compute_talent_weight(Combat_simulator& combat_simulator, const Character& 
 
     double delta_dps = (dps_with - dps_without) / n_points;
     double std_dps = std::sqrt(var_without + var_with) / n_points / std::sqrt(config.n_batches);
-    talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" + string_with_precision(delta_dps, 4) +
-                    " &plusmn " + string_with_precision(std_dps, 3) + " DPS</b><br>";
+    talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" +
+                    String_helpers::string_with_precision(delta_dps, 4) + " &plusmn " +
+                    String_helpers::string_with_precision(std_dps, 3) + " DPS</b><br>";
 }
 
 void compute_talent_weight(Combat_simulator& combat_simulator, const Character& character, std::string& talents_info,
@@ -437,8 +437,9 @@ void compute_talent_weight(Combat_simulator& combat_simulator, const Character& 
 
     double delta_dps = dps_with - dps_without;
     double std_dps = std::sqrt(var_without + var_with) / std::sqrt(config.n_batches);
-    talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" + string_with_precision(delta_dps, 4) +
-                    " &plusmn " + string_with_precision(std_dps, 3) + " DPS</b><br>";
+    talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" +
+                    String_helpers::string_with_precision(delta_dps, 4) + " &plusmn " +
+                    String_helpers::string_with_precision(std_dps, 3) + " DPS</b><br>";
 }
 
 Sim_output Sim_interface::simulate(const Sim_input& input)
@@ -448,24 +449,26 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     auto temp_buffs = input.buffs;
 
     // Separate case for options which in reality are buffs. Add them to the buff list
-    if (find_string(input.options, "mighty_rage_potion"))
+    if (String_helpers::find_string(input.options, "mighty_rage_potion"))
     {
         temp_buffs.emplace_back("mighty_rage_potion");
     }
-    if (find_string(input.options, "full_polarity"))
+    if (String_helpers::find_string(input.options, "full_polarity"))
     {
-        double full_polarity_val = find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
+        double full_polarity_val =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
         armory.buffs.full_polarity.special_stats.damage_mod_physical = full_polarity_val / 100.0;
         armory.buffs.full_polarity.special_stats.damage_mod_spell = full_polarity_val / 100.0;
         temp_buffs.emplace_back("full_polarity");
     }
-    if (find_string(input.options, "fungal_bloom"))
+    if (String_helpers::find_string(input.options, "fungal_bloom"))
     {
         temp_buffs.emplace_back("fungal_bloom");
     }
-    if (find_string(input.options, "battle_squawk"))
+    if (String_helpers::find_string(input.options, "battle_squawk"))
     {
-        double battle_squawk_val = find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
+        double battle_squawk_val =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
         armory.buffs.battle_squawk.special_stats.haste = battle_squawk_val / 100.0;
         temp_buffs.emplace_back("battle_squawk");
     }
@@ -483,9 +486,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         auto use_effect_order = simulator.get_use_effect_order(character);
         for (const auto& use_effect_timing : use_effect_order)
         {
-            use_effect_order_string.emplace_back(use_effect_timing.second.name + " " +
-                                                 string_with_precision(use_effect_timing.first, 3) + " " +
-                                                 string_with_precision(use_effect_timing.second.duration, 3));
+            use_effect_order_string.emplace_back(
+                use_effect_timing.second.name + " " +
+                String_helpers::string_with_precision(use_effect_timing.first, 3) + " " +
+                String_helpers::string_with_precision(use_effect_timing.second.duration, 3));
         }
     }
     for (const auto& wep : character.weapons)
@@ -543,61 +547,66 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     std::string rage_info = "<b>Rage Statistics:</b><br>";
     rage_info += "(Average per simulation)<br>";
     rage_info += "Rage lost to rage cap (gaining rage when at 100): <b>" +
-                 string_with_precision(simulator.get_rage_lost_capped() / double(simulator.get_n_simulations()), 3) +
+                 String_helpers::string_with_precision(
+                     simulator.get_rage_lost_capped() / double(simulator.get_n_simulations()), 3) +
                  "</b><br>";
-    rage_info += "</b>Rage lost when changing stance (cutting rage at 25): <b>" +
-                 string_with_precision(simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()), 3) +
+    rage_info += "</b>Rage lost when changing stace: <b>" +
+                 String_helpers::string_with_precision(
+                     simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()), 3) +
                  "</b><br>";
 
     std::string extra_info_string = "<b>Fight stats vs. target:</b> <br/>";
     extra_info_string += "<b>Hit:</b> <br/>";
-    extra_info_string += percent_to_str("Yellow hits", yellow_ht[0], "chance to miss");
-    extra_info_string += percent_to_str("Main-hand, white hits", white_mh_ht[0], "chance to miss");
+    extra_info_string += String_helpers::percent_to_str("Yellow hits", yellow_ht[0], "chance to miss");
+    extra_info_string += String_helpers::percent_to_str("Main-hand, white hits", white_mh_ht[0], "chance to miss");
     if (!is_two_handed)
     {
-        extra_info_string += percent_to_str("off-hand, white hits", white_oh_ht[0], "chance to miss");
-        extra_info_string += percent_to_str("off-hand, while ability queued", white_oh_ht_2h[0], "chance to miss");
+        extra_info_string += String_helpers::percent_to_str("off-hand, white hits", white_oh_ht[0], "chance to miss");
+        extra_info_string +=
+            String_helpers::percent_to_str("off-hand, while ability queued", white_oh_ht_2h[0], "chance to miss");
     }
 
     extra_info_string += "<b>Crit chance:</b> <br/>";
     double white_mh_crit = std::min(white_mh_ht[3], 100.0) - white_mh_ht[2];
     double left_to_crit_cap_white_mh = std::max(100.0 - white_mh_ht.back(), 0.0);
     double yellow_crit = std::min(yellow_ht[3], 100.0) - yellow_ht[2];
-    extra_info_string += percent_to_str("Yellow", yellow_crit, "chance to crit per cast (double roll suppression)",
-                                        100 - yellow_crit * (1 + yellow_ht[1] / 100.0), "left to crit-cap");
-    extra_info_string += percent_to_str("White main hand", white_mh_crit, "chance to crit", left_to_crit_cap_white_mh,
-                                        "left to crit-cap");
+    extra_info_string +=
+        String_helpers::percent_to_str("Yellow", yellow_crit, "chance to crit per cast (double roll suppression)",
+                                       100 - yellow_crit * (1 + yellow_ht[1] / 100.0), "left to crit-cap");
+    extra_info_string += String_helpers::percent_to_str("White main hand", white_mh_crit, "chance to crit",
+                                                        left_to_crit_cap_white_mh, "left to crit-cap");
 
     if (!is_two_handed)
     {
         double white_oh_crit = std::min(white_oh_ht[3], 100.0) - white_oh_ht[2];
         double left_to_crit_cap_white_oh = std::max(100.0 - white_oh_ht.back(), 0.0);
 
-        extra_info_string += percent_to_str("White off hand", white_oh_crit, "chance to crit",
-                                            left_to_crit_cap_white_oh, "left to crit-cap");
+        extra_info_string += String_helpers::percent_to_str("White off hand", white_oh_crit, "chance to crit",
+                                                            left_to_crit_cap_white_oh, "left to crit-cap");
     }
     extra_info_string += "<b>Glancing blows:</b><br/>";
     double glancing_probability = white_mh_ht[2] - white_mh_ht[1];
     double glancing_penalty_mh = 100 * simulator.get_glancing_penalty_mh();
-    extra_info_string += percent_to_str("Chance to occur", glancing_probability, "(based on level difference)");
     extra_info_string +=
-        percent_to_str("Glancing damage main-hand", glancing_penalty_mh, "(based on skill difference)");
+        String_helpers::percent_to_str("Chance to occur", glancing_probability, "(based on level difference)");
+    extra_info_string +=
+        String_helpers::percent_to_str("Glancing damage main-hand", glancing_penalty_mh, "(based on skill difference)");
     if (!is_two_handed)
     {
         double glancing_penalty_oh = 100 * simulator.get_glancing_penalty_oh();
-        extra_info_string +=
-            percent_to_str("Glancing damage off-hand", glancing_penalty_oh, "(based on skill difference)");
+        extra_info_string += String_helpers::percent_to_str("Glancing damage off-hand", glancing_penalty_oh,
+                                                            "(based on skill difference)");
     }
     extra_info_string += "<b>Other:</b><br/>";
     double dodge_chance = yellow_ht[1] - yellow_ht[0];
-    extra_info_string += percent_to_str("Target dodge chance", dodge_chance, "(based on skill difference and expertise)") + "<br>"
+    extra_info_string += String_helpers::percent_to_str("Target dodge chance", dodge_chance, "(based on skill difference and expertise)") + "<br>"
                                                                                                               "<"
                                                                                                               "br>";
 
     std::string dpr_info = "<br>(Hint: Ability damage per rage computations can be turned on under 'Simulation "
                            "settings')";
     config.performance_mode = true;
-    if (find_string(input.options, "compute_dpr"))
+    if (String_helpers::find_string(input.options, "compute_dpr"))
     {
         config.n_batches = 10000;
         dpr_info = "<br><b>Ability damage per rage:</b><br>";
@@ -617,9 +626,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 double dmg_tot = delta_dps * (config.sim_time - 1);
                 double dmg_per_hit = dmg_tot / avg_bt_casts;
                 double dmg_per_rage = dmg_per_hit / 30.0;
-                dpr_info += "<b>Bloodthirst</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hit, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision(30.0, 3) + "</b><br>DPR: <b>" +
-                            string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Bloodthirst</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision(30.0, 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_bt_ = false;
             }
         }
@@ -655,9 +665,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 double dmg_tot = delta_dps * (config.sim_time - 1);
                 double dmg_per_hit = dmg_tot / avg_ww_casts;
                 double dmg_per_rage = dmg_per_hit / 25.0;
-                dpr_info += "<b>Whirlwind</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hit, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision(25.0, 3) + "</b><br>DPR: <b>" +
-                            string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Whirlwind</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision(25.0, 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_ww_ = false;
             }
         }
@@ -674,9 +685,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 double dmg_tot = delta_dps * (config.sim_time - 1);
                 double dmg_per_hit = dmg_tot / avg_sl_casts;
                 double dmg_per_rage = dmg_per_hit / 15.0;
-                dpr_info += "<b>Slam</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hit, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision(15.0, 3) + "</b><br>DPR: <b>" +
-                            string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Slam</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision(15.0, 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_sl_ = false;
             }
         }
@@ -696,9 +708,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                     static_cast<double>(dmg_dist.white_mh_damage) / static_cast<double>(dmg_dist.white_mh_count);
                 double avg_mh_rage_lost = avg_mh_dmg * 3.75 / 274.7 + (3.5 * character.weapons[0].swing_speed / 2);
                 double dmg_per_rage = dmg_per_hs / (13 + avg_mh_rage_lost);
-                dpr_info += "<b>Heroic Strike</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hs, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision((13 + avg_mh_rage_lost), 3) +
-                            "</b><br>DPR: <b>" + string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Heroic Strike</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_hs, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision((13 + avg_mh_rage_lost), 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_hs_ = false;
             }
         }
@@ -718,9 +731,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                     static_cast<double>(dmg_dist.white_mh_damage) / static_cast<double>(dmg_dist.white_mh_count);
                 double avg_mh_rage_lost = avg_mh_dmg * 3.75 / 274.7 + (3.5 * character.weapons[0].swing_speed / 2);
                 double dmg_per_rage = dmg_per_hs / (20 + avg_mh_rage_lost);
-                dpr_info += "<b>Cleave</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hs, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision((20 + avg_mh_rage_lost), 3) +
-                            "</b><br>DPR: <b>" + string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Cleave</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_hs, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision((20 + avg_mh_rage_lost), 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_cl_ = false;
             }
         }
@@ -737,9 +751,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 double dmg_tot = delta_dps * (config.sim_time - 1);
                 double dmg_per_ha = dmg_tot / avg_ha_casts;
                 double dmg_per_rage = dmg_per_ha / 10;
-                dpr_info += "<b>Hamstring</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_ha, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision(10, 3) + "</b><br>DPR: <b>" +
-                            string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Hamstring</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_ha, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision(10, 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_ha_ = false;
             }
         }
@@ -758,9 +773,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 double overpower_cost =
                     simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()) / avg_op_casts + 5.0;
                 double dmg_per_rage = dmg_per_hit / overpower_cost;
-                dpr_info += "<b>Overpower</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hit, 4) +
-                            "</b><br>Average rage cost: <b>" + string_with_precision(overpower_cost, 3) +
-                            "</b><br>DPR: <b>" + string_with_precision(dmg_per_rage, 4) + "</b><br>";
+                dpr_info += "<b>Overpower</b>: <br>Damage per cast: <b>" +
+                            String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
+                            String_helpers::string_with_precision(overpower_cost, 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_op_ = false;
             }
         }
@@ -778,19 +794,20 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             double execute_rage_cost = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
             double execute_cost = simulator.get_avg_rage_spent_executing() / avg_ex_casts + execute_rage_cost;
             double dmg_per_rage = dmg_per_hit / execute_cost;
-            dpr_info += "<b>Execute</b>: <br>Damage per cast: <b>" + string_with_precision(dmg_per_hit, 4) +
-                        "</b><br>Average rage cost: <b>" + string_with_precision(execute_cost, 3) + "</b><br>DPR: <b>" +
-                        string_with_precision(dmg_per_rage, 4) + "</b><br>";
+            dpr_info += "<b>Execute</b>: <br>Damage per cast: <b>" +
+                        String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
+                        String_helpers::string_with_precision(execute_cost, 3) + "</b><br>DPR: <b>" +
+                        String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
             config.dpr_settings.compute_dpr_ex_ = false;
         }
         config.n_batches = static_cast<int>(n_simulations_base);
     }
 
     std::string talents_info = "<br>(Hint: Talent stat-weights can be activated under 'Simulation settings')";
-    if (find_string(input.options, "talents_stat_weights"))
+    if (String_helpers::find_string(input.options, "talents_stat_weights"))
     {
         config.n_batches = static_cast<int>(
-            find_value(input.float_options_string, input.float_options_val, "n_simulations_talent_dd"));
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_talent_dd"));
         Combat_simulator simulator_talent{};
 
         talents_info = "<br><b>Value per 1 talent point:</b>";
@@ -865,7 +882,11 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
 
     std::string item_strengths_string;
-    if (find_string(input.options, "item_strengths") || find_string(input.options, "wep_strengths"))
+    if (String_helpers::find_string(input.options, "item_strengths") || String_helpers::find_string(input.options, "wep"
+                                                                                                                   "_st"
+                                                                                                                   "ren"
+                                                                                                                   "gth"
+                                                                                                                   "s"))
     {
         item_strengths_string = "<b>Character items and proposed upgrades:</b><br>";
 
@@ -890,7 +911,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             Socket::belt, Socket::legs, Socket::boots,    Socket::ring, Socket::trinket, Socket::ranged,
         };
 
-        if (find_string(input.options, "item_strengths"))
+        if (String_helpers::find_string(input.options, "item_strengths"))
         {
             for (auto socket : all_sockets)
             {
@@ -911,7 +932,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 }
             }
         }
-        if (find_string(input.options, "wep_strengths"))
+        if (String_helpers::find_string(input.options, "wep_strengths"))
         {
             if (is_two_handed)
             {
@@ -930,7 +951,8 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         item_strengths_string += "<br><br>";
     }
 
-    config.n_batches = find_value(input.float_options_string, input.float_options_val, "n_simulations_stat_dd");
+    config.n_batches =
+        String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_stat_dd");
     simulator.set_config(config);
     std::vector<std::string> stat_weights;
     if (!input.stat_weights.empty())
@@ -1019,8 +1041,8 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             {
                 Character char_plus = character;
                 Character char_minus = character;
-                double swing_speed_diff =
-                    find_value(input.float_options_string, input.float_options_val, "stat_weight_mh_speed_dd");
+                double swing_speed_diff = String_helpers::find_value(
+                    input.float_options_string, input.float_options_val, "stat_weight_mh_speed_dd");
                 double factor_p =
                     (char_plus.weapons[0].swing_speed + swing_speed_diff) / char_plus.weapons[0].swing_speed;
                 double factor_n =
@@ -1035,7 +1057,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 mod_hit_effects(char_minus.weapons[0].hit_effects, factor_n);
                 Stat_weight hit = compute_stat_weight(simulator, char_plus, char_minus, "mh_speed", swing_speed_diff, 1,
                                                       dps_mean, dps_sample_std);
-                stat_weights.emplace_back(string_with_precision(swing_speed_diff, 2) + "-MH-speed " +
+                stat_weights.emplace_back(String_helpers::string_with_precision(swing_speed_diff, 2) + "-MH-speed " +
                                           std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
                                           std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
             }
@@ -1043,8 +1065,8 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             {
                 Character char_plus = character;
                 Character char_minus = character;
-                double swing_speed_diff =
-                    find_value(input.float_options_string, input.float_options_val, "stat_weight_oh_speed_dd");
+                double swing_speed_diff = String_helpers::find_value(
+                    input.float_options_string, input.float_options_val, "stat_weight_oh_speed_dd");
                 double factor_p =
                     (char_plus.weapons[1].swing_speed + swing_speed_diff) / char_plus.weapons[1].swing_speed;
                 double factor_n =
@@ -1059,7 +1081,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 mod_hit_effects(char_minus.weapons[1].hit_effects, factor_n);
                 Stat_weight hit = compute_stat_weight(simulator, char_plus, char_minus, "oh_speed", swing_speed_diff, 1,
                                                       dps_mean, dps_sample_std);
-                stat_weights.emplace_back(string_with_precision(swing_speed_diff, 2) + "-OH-speed " +
+                stat_weights.emplace_back(String_helpers::string_with_precision(swing_speed_diff, 2) + "-OH-speed " +
                                           std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
                                           std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
             }
@@ -1067,7 +1089,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
 
     std::string debug_topic{};
-    if (find_string(input.options, "debug_on"))
+    if (String_helpers::find_string(input.options, "debug_on"))
     {
         config.display_combat_debug = true;
         config.performance_mode = false;
