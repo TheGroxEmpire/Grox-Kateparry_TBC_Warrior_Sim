@@ -695,7 +695,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_heroic_strike)
         {
             double avg_hs_casts = static_cast<double>(dmg_dist.heroic_strike_count) / n_simulations_base;
-            if (avg_hs_casts > 0.0)
+            if (avg_hs_casts > 1.0)
             {
                 config.dpr_settings.compute_dpr_hs_ = true;
                 Combat_simulator simulator_dpr{};
