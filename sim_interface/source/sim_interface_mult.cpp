@@ -279,10 +279,10 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
                     temp_keepers.emplace_back(keeper);
                 }
             }
-            // Removed to many sets
+            // Removed too many sets
             if (temp_keepers.size() < 5)
             {
-                std::cout << "removed to many sets. Adding them back again\n";
+                std::cout << "removed too many sets. Adding them back again\n";
                 size_t attempts = 0;
                 while (temp_keepers.size() < 5)
                 {
@@ -463,6 +463,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         message += "<b>Stats:</b><br>";
         message +=
             "Hit: " + String_helpers::string_with_precision(best_characters[i].total_special_stats.hit, 3) + " %<br>";
+        message +=
+            "Expertise (before rounding down): " + String_helpers::string_with_precision(best_characters[i].total_special_stats.expertise, 3) + " <br>";
         message += "Crit: " +
                    String_helpers::string_with_precision(best_characters[i].total_special_stats.critical_strike, 3) +
                    " %<br>";
