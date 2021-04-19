@@ -146,44 +146,52 @@ double get_hit_crit_expertise_ap_equivalent(const Special_stats& special_stats, 
     {
         if (base_skill_diff > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - (special_stats.expertise + special_stats.sword_expertise), 0.0);
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - 
+            (int(special_stats.expertise + special_stats.sword_expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - (special_stats.expertise + special_stats.sword_expertise), 0.0);
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            (int(special_stats.expertise + special_stats.sword_expertise) * 0.25), 0.0);
         }
     }
     else if (weapon_type == Weapon_type::mace)
     {
         if (base_skill_diff > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - (special_stats.expertise + special_stats.mace_expertise), 0.0);
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
+            (int(special_stats.expertise + special_stats.mace_expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - (special_stats.expertise + special_stats.mace_expertise), 0.0);
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            (int(special_stats.expertise + special_stats.mace_expertise) * 0.25), 0.0);
         }
     }
     else if (weapon_type == Weapon_type::axe)
     {
         if (base_skill_diff > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - (special_stats.expertise + special_stats.axe_expertise), 0.0);
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
+            (int(special_stats.expertise + special_stats.axe_expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - (special_stats.expertise + special_stats.axe_expertise), 0.0);
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            (int(special_stats.expertise + special_stats.axe_expertise) * 0.25), 0.0);
         }
     }
     else
     {
         if (base_skill_diff > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - special_stats.expertise, 0.0);
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
+            (int(special_stats.expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - special_stats.expertise, 0.0);
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            (int(special_stats.expertise) * 0.25), 0.0);
         }
     }
     double crit_cap = 100 - (miss_chance + dodge_chance + 40);

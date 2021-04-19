@@ -13,8 +13,8 @@ Character::Character(const Race& race, int level)
     {
     case Race::human:
         base_attributes = Attributes{145, 96};
-        base_special_stats.sword_expertise = 1.25;
-        base_special_stats.mace_expertise = 1.25;
+        base_special_stats.sword_expertise = 5;
+        base_special_stats.mace_expertise = 5;
         base_special_stats.axe_expertise = 0.0;
         break;
     case Race::dwarf:
@@ -45,7 +45,7 @@ Character::Character(const Race& race, int level)
         base_attributes = Attributes{148, 93};
         base_special_stats.sword_expertise = 0.0;
         base_special_stats.mace_expertise = 0.0;
-        base_special_stats.axe_expertise = 1.25;
+        base_special_stats.axe_expertise = 5;
         break;
     case Race::tauren:
         base_attributes = Attributes{150, 91};
