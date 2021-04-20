@@ -104,6 +104,12 @@ Character get_test_character()
 
     return character;
 }
+
+double geometric_series(double p)
+{
+    return 1 / (1 - p);
+}
+
 } // namespace
 
 TEST(TestSuite, test_flurry)
@@ -209,4 +215,142 @@ TEST(TestSuite, test_dps_return)
 
     EXPECT_LT(conf_interval.first, expected_dps);
     EXPECT_GT(conf_interval.second, expected_dps);
+}
+
+TEST(TestSuite, test_hit_effects_extra_hit)
+{
+    auto config = get_test_config();
+    config.sim_time = 1000.0;
+    config.n_batches = 500.0;
+
+    auto character = get_test_character();
+    character.total_special_stats.critical_strike = 0;
+    character.total_special_stats.attack_power = 0;
+
+    double mh_proc_prob = 0.1;
+    double oh_proc_prob = 0.2;
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, oh_proc_prob, 0};
+    character.weapons[0].hit_effects.push_back(test_effect_mh);
+    character.weapons[1].hit_effects.push_back(test_effect_oh);
+
+    Combat_simulator sim{};
+    sim.set_config(config);
+    sim.simulate(character);
+
+    Damage_sources sources = sim.get_damage_distribution();
+
+    auto proc_data = sim.get_proc_data();
+
+    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double dodge_chance = 6.5 / 100.0;
+    double hit_chance = (1 - miss_chance - dodge_chance);
+
+    double expected_swings_oh = config.n_batches * config.sim_time / character.weapons[1].swing_speed;
+    double expected_procs_oh = hit_chance * expected_swings_oh * oh_proc_prob;
+
+    double expected_swings_mh = config.n_batches * config.sim_time / character.weapons[0].swing_speed;
+    double expected_procs_mh = hit_chance * expected_swings_mh * mh_proc_prob;
+    expected_swings_mh += expected_procs_mh + expected_procs_oh;
+
+    EXPECT_NEAR(sources.white_mh_count, expected_swings_mh, 0.01 * expected_swings_mh);
+    EXPECT_NEAR(sources.white_oh_count, expected_swings_oh, 0.01 * expected_swings_oh);
+
+    EXPECT_NEAR(proc_data["test_wep_mh"], expected_procs_mh, 0.05 * expected_procs_mh);
+    EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, 0.05 * expected_procs_oh);
+}
+
+TEST(TestSuite, test_hit_effects_physical_damage)
+{
+    auto config = get_test_config();
+    config.sim_time = 100000.0;
+    config.n_batches = 1.0;
+
+    auto character = get_test_character();
+    character.total_special_stats.critical_strike = 0;
+    character.total_special_stats.attack_power = 0;
+
+    double mh_proc_prob = 0.1;
+    double oh_proc_prob = 0.2;
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::damage_physical, {}, {}, 100, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::damage_physical, {}, {}, 100, 0, oh_proc_prob, 0};
+    character.weapons[0].hit_effects.push_back(test_effect_mh);
+    character.weapons[1].hit_effects.push_back(test_effect_oh);
+
+    Combat_simulator sim{};
+    sim.set_config(config);
+    sim.simulate(character);
+
+    Damage_sources sources = sim.get_damage_distribution();
+
+    auto proc_data = sim.get_proc_data();
+
+    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double dodge_chance = 6.5 / 100.0;
+    double hit_chance = (1 - miss_chance - dodge_chance);
+    double yellow_hit_chance = (1 - 0.09);
+
+    double expected_swings_oh = config.n_batches * config.sim_time / character.weapons[1].swing_speed;
+    double expected_procs_oh = hit_chance * expected_swings_oh * oh_proc_prob;
+
+    double expected_swings_mh = config.n_batches * config.sim_time / character.weapons[0].swing_speed;
+    double expected_procs_mh = hit_chance * expected_swings_mh * mh_proc_prob;
+
+    double second_order_procs =
+        (expected_procs_oh + expected_procs_mh) * (geometric_series(yellow_hit_chance * mh_proc_prob) - 1);
+    expected_procs_mh += second_order_procs;
+
+    double expected_total_procs = expected_procs_oh + expected_procs_mh;
+    EXPECT_NEAR(sources.white_mh_count, expected_swings_mh, 0.01 * expected_swings_mh);
+    EXPECT_NEAR(sources.white_oh_count, expected_swings_oh, 0.01 * expected_swings_oh);
+
+    EXPECT_NEAR(sources.item_hit_effects_count, expected_total_procs, 0.03 * expected_total_procs);
+
+    EXPECT_NEAR(proc_data["test_wep_mh"], expected_procs_mh, 0.03 * expected_procs_mh);
+    EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, 0.03 * expected_procs_oh);
+}
+
+TEST(TestSuite, test_hit_effects_magic_damage)
+{
+    auto config = get_test_config();
+    config.sim_time = 100000.0;
+    config.n_batches = 1.0;
+
+    auto character = get_test_character();
+    character.total_special_stats.critical_strike = 0;
+    character.total_special_stats.attack_power = 0;
+
+    double mh_proc_prob = 0.1;
+    double oh_proc_prob = 0.2;
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::damage_magic, {}, {}, 100, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::damage_magic, {}, {}, 100, 0, oh_proc_prob, 0};
+    character.weapons[0].hit_effects.push_back(test_effect_mh);
+    character.weapons[1].hit_effects.push_back(test_effect_oh);
+
+    Combat_simulator sim{};
+    sim.set_config(config);
+    sim.simulate(character);
+
+    Damage_sources sources = sim.get_damage_distribution();
+
+    auto proc_data = sim.get_proc_data();
+
+    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double dodge_chance = 6.5 / 100.0;
+    double hit_chance = (1 - miss_chance - dodge_chance);
+
+    double expected_swings_oh = config.n_batches * config.sim_time / character.weapons[1].swing_speed;
+    double expected_procs_oh = hit_chance * expected_swings_oh * oh_proc_prob;
+
+    double expected_swings_mh = config.n_batches * config.sim_time / character.weapons[0].swing_speed;
+    double expected_procs_mh = hit_chance * expected_swings_mh * mh_proc_prob;
+
+    double expected_total_procs = expected_procs_oh + expected_procs_mh;
+    EXPECT_NEAR(sources.white_mh_count, expected_swings_mh, 0.01 * expected_swings_mh);
+    EXPECT_NEAR(sources.white_oh_count, expected_swings_oh, 0.01 * expected_swings_oh);
+
+    EXPECT_NEAR(sources.item_hit_effects_count, expected_total_procs, 0.03 * expected_total_procs);
+
+    EXPECT_NEAR(proc_data["test_wep_mh"], expected_procs_mh, 0.03 * expected_procs_mh);
+    EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, 0.03 * expected_procs_oh);
 }

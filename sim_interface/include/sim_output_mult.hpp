@@ -8,9 +8,13 @@ struct Sim_output_mult
 {
     Sim_output_mult() = default;
 
-    Sim_output_mult(std::vector<std::string> messages) : messages(std::move(messages)) {}
+    Sim_output_mult(std::vector<std::string> messages, std::vector<std::vector<std::string>> keepers)
+        : messages(std::move(messages)), keepers(std::move(keepers))
+    {
+    }
 
     std::vector<std::string> messages;
+    std::vector<std::vector<std::string>> keepers;
 };
 
 #endif // COVID_OUTPUT_MULT_HPP

@@ -1,5 +1,5 @@
-#include "sim_interface.hpp"
 #include "emscripten/bind.h"
+#include "sim_interface.hpp"
 
 using namespace emscripten;
 
@@ -13,6 +13,7 @@ EMSCRIPTEN_BINDINGS(module)
     register_vector<double>("vectorDouble");
     register_vector<int>("vectorInt");
     register_vector<std::vector<double>>("vector<vector<double>>");
+    register_vector<std::vector<std::string>>("StringListList");
     register_vector<std::string>("StringList");
 
     value_object<Sim_input>("Sim_input")
@@ -57,5 +58,7 @@ EMSCRIPTEN_BINDINGS(module)
         .field("std_dps", &Sim_output::std_dps)
         .field("messages", &Sim_output::messages);
 
-    value_object<Sim_output_mult>("Sim_output_mult").field("messages", &Sim_output_mult::messages);
+    value_object<Sim_output_mult>("Sim_output_mult")
+        .field("messages", &Sim_output_mult::messages)
+        .field("keepers", &Sim_output_mult::keepers);
 };

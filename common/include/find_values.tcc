@@ -18,7 +18,6 @@ T Find_values<T>::find(const std::string& name)
         auto pos = it - string_vec.cbegin();
         return value_vec[pos];
     }
-    std::cout << "ERROR: Could not find: " << name << std::endl;
     return {0};
 }
 

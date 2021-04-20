@@ -43,6 +43,26 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         item_optimizer.armory.buffs.battle_squawk.special_stats.haste = battle_squawk_val / 100.0;
         temp_buffs.emplace_back("battle_squawk");
     }
+    double item_filter_threshold = 500;
+    if (String_helpers::find_string(input.float_options_string, "item_filter_threshold"))
+    {
+        item_filter_threshold =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "item_filter_threshold");
+    }
+
+    double item_filter_timeout = 20.0;
+    if (String_helpers::find_string(input.float_options_string, "item_filter_timeout"))
+    {
+        item_filter_timeout =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "item_filter_timeout");
+    }
+
+    double min_iterations = 1;
+    if (String_helpers::find_string(input.float_options_string, "min_iterations"))
+    {
+        min_iterations =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "min_iterations");
+    }
 
     Race race = get_race(input.race[0]);
     item_optimizer.race = race;
@@ -62,7 +82,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     std::cout << "init. Combinations: " << std::to_string(item_optimizer.total_combinations) << "\n";
     debug_message += "Total item combinations: " + std::to_string(item_optimizer.total_combinations) + "<br>";
     clock_t start_filter = clock();
-    if (item_optimizer.total_combinations > 500)
+
+    if (item_optimizer.total_combinations > item_filter_threshold)
     {
         debug_message += "Applying item filter.<br>";
         {
@@ -306,10 +327,14 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
             keepers = temp_keepers;
         }
 
-        if (keepers.size() <= 5 && time > 20)
+        if (double(i) + 1 >= min_iterations)
         {
-            debug_message += +"<b>: 20 seconds passed with 5 or less combinations remaining. breaking! </b><br>";
-            break;
+            if (keepers.size() <= 5 && time > item_filter_timeout)
+            {
+                debug_message += +"<br><b>: 20 seconds passed with 5 or less combinations remaining. breaking! "
+                                  "</b><br>";
+                break;
+            }
         }
         performed_iterations = i;
     }
@@ -488,5 +513,21 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         message += "<br>";
     }
 
-    return {{message, debug_message}};
+    std::vector<std::vector<std::string>> keeper_msg{};
+    for (const auto& character : best_characters)
+    {
+        std::vector<std::string> character_string{};
+        for (const auto& wep : character.weapons)
+        {
+            character_string.push_back(wep.name);
+        }
+
+        for (const auto& armor : character.armor)
+        {
+            character_string.push_back(armor.name);
+        }
+        keeper_msg.push_back(character_string);
+    }
+
+    return {{message, debug_message}, keeper_msg};
 }

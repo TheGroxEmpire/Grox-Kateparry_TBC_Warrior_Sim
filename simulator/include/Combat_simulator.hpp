@@ -4,8 +4,8 @@
 #include "Buff_manager.hpp"
 #include "Character.hpp"
 #include "Distribution.hpp"
-#include "find_values.hpp"
 #include "damage_sources.hpp"
+#include "find_values.hpp"
 #include "sim_input.hpp"
 #include "sim_input_mult.hpp"
 #include "string_helpers.hpp"
@@ -343,6 +343,8 @@ public:
     void add_damage_source_to_time_lapse(std::vector<Damage_instance>& damage_instances);
 
     [[nodiscard]] std::vector<std::string> get_aura_uptimes() const;
+
+    [[nodiscard]] std::map<std::string, int> get_proc_data() const { return proc_data_; };
 
     [[nodiscard]] std::vector<std::string> get_proc_statistics() const;
 
