@@ -1,7 +1,7 @@
 {
   "name": "wow_nerd",
   "version": "1.0.0",
-  "description": "TBC DPS Warrior Sim",
+  "description": "wow simulator",
   "main": "index.js",
   "dependencies": {
     "express": "^4.17.1",
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheGroxEmpire/TBC_DPS_Warrior_Sim.git"
+    "url": "git+https://github.com/albinoyoda/wow_classic_simulator.git"
   },
-  "author": "Grox Empire",
+  "author": "Oliver Sundell",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/TheGroxEmpire/TBC_DPS_Warrior_Sim/issues"
+    "url": "https://github.com/albinoyoda/wow_classic_simulator/issues"
   },
-  "homepage": "https://github.com/TheGroxEmpire/TBC_DPS_Warrior_Sim#readme"
+  "homepage": "https://github.com/albinoyoda/wow_classic_simulator#readme"
 }
