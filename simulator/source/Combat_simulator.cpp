@@ -1423,7 +1423,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 target_armor = std::max(target_armor, 0);
                 armor_reduction_factor_ = 1 - armor_mitigation(target_armor, config.main_target_level);
                 simulator_cout("Target armor: ", target_armor, ". Mitigation factor: ", 1 - armor_reduction_factor_,
-                               "%.", "Gear armor pen: ", special_stats.gear_armor_pen);
+                               "%.");
                 if (config.multi_target_mode_)
                 {
                     int extra_target_armor = config.extra_target_initial_armor_ - armor_penetration_;
