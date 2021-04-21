@@ -216,7 +216,8 @@ struct Armory
                                                                                                  0},        Socket::chest, Set::dreadnaughts_battlegear},
                     {"icebane_breastplate",              Attributes{12, 0}, Special_stats{0, 0, 0},        Socket::chest},
                     {"icy_scale_breastplate",              Attributes{0, 0}, Special_stats{0, 0, 40},        Socket::chest},
-                    {"polar_tunic",              Attributes{0, 18}, Special_stats{0, 0, 0},        Socket::chest},
+                    {"arpen_test_tunic",              Attributes{0, 0}, Special_stats{0, 0, 0, 0, 0, 0, 0, 0, 
+                                                                                 0, 0, 0, 0, 0, 0, 0, 3000},        Socket::chest},
             };
 
     std::vector<Armor> wrists_t
@@ -241,7 +242,8 @@ struct Armory
                     {"dreadnaught_bracers",           Attributes{14, 0}, Special_stats{0, 0, 0}, Socket::wrist},
                     {"icebane_bracers",           Attributes{6, 0}, Special_stats{0, 0, 0}, Socket::wrist},
                     {"icy_scale_bracers",           Attributes{0, 0}, Special_stats{0, 0, 32}, Socket::wrist},
-                    {"polar_bracers",           Attributes{0, 12}, Special_stats{0, 0, 0}, Socket::wrist},
+                    {"arpen_test_bracers",           Attributes{0, 0}, Special_stats{0, 0, 0, 0, 0, 0, 0, 0, 
+                                                                                 0, 0, 0, 0, 0, 0, 0, 3000}, Socket::wrist},
             };
 
     std::vector<Armor> hands_t
@@ -280,7 +282,8 @@ struct Armory
                     {"dreadnaught_gauntlets",     Attributes{17, 0}, Special_stats{0, 0, 0}, Socket::hands, Set::dreadnaughts_battlegear},
                     {"icebane_gauntlets",     Attributes{9, 0}, Special_stats{0, 0, 0}, Socket::hands},
                     {"icy_scale_gauntlets",     Attributes{0, 0}, Special_stats{0, 0, 22}, Socket::hands},
-                    {"polar_gloves",     Attributes{0, 18}, Special_stats{0, 0, 0}, Socket::hands},
+                    {"arpen_test_gloves",     Attributes{0, 0}, Special_stats{0, 0, 0, 0, 0, 0, 0, 0, 
+                                                                                 0, 0, 0, 0, 0, 0, 0, 3000}, Socket::hands},
             };
 
     std::vector<Armor> belt_t

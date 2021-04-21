@@ -7,7 +7,8 @@ Character::Character(const Race& race, int level)
 {
     base_special_stats = Special_stats{0,          0,          160, 0,          0,
                                        0,          0,          0,   0,          0,  
-                                       0,          0,          0,   0,          0,};
+                                       0,          0,          0,   0,          0,
+                                       0,};
     switch (race)
     {
     case Race::human:

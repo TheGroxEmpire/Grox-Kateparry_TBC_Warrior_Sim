@@ -15,7 +15,8 @@ struct Special_stats
     Special_stats(double critical_strike, double hit, double attack_power, double chance_for_extra_hit = 0.0,
                   double haste = 0.0, double damage_mod_physical = 0, double stat_multiplier = 0,
                   double bonus_damage = 0, double crit_multiplier = 0, double spell_crit = 0,
-                  double damage_mod_spell = 0, double expertise = 0.0, double sword_expertise = 0.0, double mace_expertise = 0.0, double axe_expertise = 0.0)
+                  double damage_mod_spell = 0, double expertise = 0.0, double sword_expertise = 0.0, double mace_expertise = 0.0, double axe_expertise = 0.0,
+                  double gear_armor_pen = 0)
         : critical_strike{critical_strike}
         , hit{hit}
         , attack_power{attack_power}
@@ -31,6 +32,7 @@ struct Special_stats
         , sword_expertise{sword_expertise}
         , mace_expertise{mace_expertise}
         , axe_expertise{axe_expertise}
+        , gear_armor_pen{gear_armor_pen}
     {
     }
 
@@ -44,7 +46,8 @@ struct Special_stats
                (this->expertise < other.expertise) &&
                (this->sword_expertise < other.sword_expertise) &&
                (this->mace_expertise < other.mace_expertise) &&
-               (this->axe_expertise < other.axe_expertise);
+               (this->axe_expertise < other.axe_expertise) &&
+               (this->gear_armor_pen < other.gear_armor_pen);
     }
 
     Special_stats operator+(const Special_stats& rhs) const
@@ -64,7 +67,8 @@ struct Special_stats
             expertise + rhs.expertise,
             sword_expertise + rhs.sword_expertise,
             mace_expertise + rhs.mace_expertise,
-            axe_expertise + rhs.axe_expertise
+            axe_expertise + rhs.axe_expertise,
+            gear_armor_pen + rhs.gear_armor_pen
         };
     }
 
@@ -85,7 +89,8 @@ struct Special_stats
             expertise - rhs.expertise,
             sword_expertise - rhs.sword_expertise,
             mace_expertise - rhs.mace_expertise,
-            axe_expertise - rhs.axe_expertise
+            axe_expertise - rhs.axe_expertise,
+            gear_armor_pen - rhs.gear_armor_pen
         };
     }
 
@@ -116,6 +121,7 @@ struct Special_stats
     double sword_expertise{};
     double mace_expertise{};
     double axe_expertise{};
+    double gear_armor_pen{};
 };
 
 class Attributes

@@ -1415,7 +1415,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             if (recompute_mitigation_)
             {
                 int target_armor =
-                    config.main_target_initial_armor_ - armor_reduction_from_spells_ - armor_penetration_;
+                    config.main_target_initial_armor_ - armor_reduction_from_spells_ - armor_penetration_ - character.total_special_stats.gear_armor_pen;
                 if (apply_delayed_armor_reduction)
                 {
                     target_armor -= armor_reduction_delayed_;
