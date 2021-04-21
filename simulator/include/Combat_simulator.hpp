@@ -318,7 +318,8 @@ public:
 
     Combat_simulator::Hit_outcome generate_hit_oh(double damage, bool is_whirlwind = false);
 
-    Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false, bool is_melee_spell = false);
+    Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false, 
+                                                  bool is_melee_spell = false);
 
     void compute_hit_table(const Special_stats& special_stats, Socket weapon_hand,
                            Weapon_socket weapon_socket, Weapon_type weapon_type);
@@ -343,6 +344,8 @@ public:
     void add_damage_source_to_time_lapse(std::vector<Damage_instance>& damage_instances);
 
     [[nodiscard]] std::vector<std::string> get_aura_uptimes() const;
+
+    [[nodiscard]] std::map<std::string, double> get_aura_uptimes_map() const { return buff_manager_.aura_uptime; };
 
     [[nodiscard]] std::map<std::string, int> get_proc_data() const { return proc_data_; };
 
@@ -427,6 +430,7 @@ private:
     std::vector<double> hit_table_white_oh_;
     std::vector<double> damage_multipliers_white_oh_;
     std::vector<double> hit_table_yellow_;
+    std::vector<double> hit_table_yellow_spell_;
     std::vector<double> hit_table_overpower_;
     std::vector<double> hit_table_melee_spell_;
     std::vector<double> damage_multipliers_yellow_;
