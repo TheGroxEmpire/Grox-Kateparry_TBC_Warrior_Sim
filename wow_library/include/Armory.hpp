@@ -426,7 +426,7 @@ struct Armory
                     {"badge_of_the_swarmguard",   Attributes{0, 0}, Special_stats{0, 0,
                                                                                   0},        Socket::trinket, Set::none, {}, {{"badge_of_the_swarmguard", Use_effect::Effect_socket::unique, {},      {},          0, 30, 180, false, {{"badge_of_the_swarmguard", Hit_effect::Type::reduce_armor, {}, {}, 0, 30, 0.5, 0, 1, 200, 6}}}}},
                     {"kiss_of_the_spider",               Attributes{0, 0}, Special_stats{0.63, 0.63,
-                                                                                  0},        Socket::trinket, Set::none, {}, {{"kiss_of_the_spider",             Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 0, 0, .2}, 0, 15, 120, true}}},
+                                                                                  0},        Socket::trinket, Set::none, {}, {{"kiss_of_the_spider",             Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 0, 0, .095}, 0, 15, 120, true}}},
                     {"mark_of_the_champion",       Attributes{0, 0}, Special_stats{0, 0, 150}, Socket::trinket},
                     {"seal_of_the_dawn",           Attributes{0, 0}, Special_stats{0, 0, 81}, Socket::trinket},
                     {"slayers_crest",              Attributes{0, 0}, Special_stats{0, 0,
@@ -571,11 +571,11 @@ struct Armory
         {"jekliks_crusher", Attributes{.0, 0.0}, Special_stats{.0, 0.0, 0.0}, 3.6, 159.0, 248.0, Weapon_socket::two_hand,Weapon_type::mace,
          {{"jekliks_crusher", Hit_effect::Type::damage_physical, {}, {}, 210, 0, 4*3.6/60.0,0}}},
         {"manual_crowd_pummeler_1charge", Attributes{16.0, 5.0}, Special_stats{.0, 0.0, 0.0},
-         2.0, 46.0, 70.0, Weapon_socket::two_hand,Weapon_type::mace, {}, Set::none, {{"manual_crowd_pummeler", Use_effect::Effect_socket::unique, {}, {0,0,0,0,0.5}, 0, 30, 1000,false}}},
+         2.0, 46.0, 70.0, Weapon_socket::two_hand,Weapon_type::mace, {}, Set::none, {{"manual_crowd_pummeler", Use_effect::Effect_socket::unique, {}, {0,0,0,0,0.31}, 0, 30, 1000,false}}},
         {"manual_crowd_pummeler_2charge", Attributes{16.0, 5.0}, Special_stats{.0, 0.0, 0.0},
-            2.0, 46.0, 70.0, Weapon_socket::two_hand,Weapon_type::mace, {}, Set::none, {{"manual_crowd_pummeler", Use_effect::Effect_socket::unique, {}, {0,0,0,0,0.5}, 0, 60, 1000,false}}},
+            2.0, 46.0, 70.0, Weapon_socket::two_hand,Weapon_type::mace, {}, Set::none, {{"manual_crowd_pummeler", Use_effect::Effect_socket::unique, {}, {0,0,0,0,0.31}, 0, 60, 1000,false}}},
         {"manual_crowd_pummeler_3charge", Attributes{16.0, 5.0}, Special_stats{.0, 0.0, 0.0},
-            2.0, 46.0, 70.0, Weapon_socket::two_hand,Weapon_type::mace, {}, Set::none, {{"manual_crowd_pummeler", Use_effect::Effect_socket::unique, {}, {0,0,0,0,0.5}, 0, 90, 1000,false}}},
+            2.0, 46.0, 70.0, Weapon_socket::two_hand,Weapon_type::mace, {}, Set::none, {{"manual_crowd_pummeler", Use_effect::Effect_socket::unique, {}, {0,0,0,0,0.31}, 0, 90, 1000,false}}},
     };
 
     std::vector<Weapon> axes_t
@@ -667,7 +667,7 @@ struct Armory
                                                                                       0},             2.8, 94,   175,
                                                                                                                       Weapon_socket::main_hand, Weapon_type::mace,
                             {{"empyrean_demolisher", Hit_effect::Type::stat_boost,   {0, 0}, Special_stats{0, 0, 0, 0,
-                                                                                                           .2}, 0,   10, 2.8 / 60}}},
+                                                                                                           .13}, 0,   10, 2.8 / 60}}},
                     {"anubisath_warhammer",       Attributes{0, 0},     Special_stats{0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0,
                                                                                       2.28},             1.8, 66,
                                                                                                                  123, Weapon_socket::one_hand,  Weapon_type::mace},
