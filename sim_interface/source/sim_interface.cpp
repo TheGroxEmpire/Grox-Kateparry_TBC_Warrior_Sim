@@ -571,7 +571,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     double left_to_crit_cap_white_mh = std::max(100.0 - white_mh_ht.back(), 0.0);
     double yellow_crit = std::min(yellow_ht[3], 100.0) - yellow_ht[2];
     extra_info_string +=
-        String_helpers::percent_to_str("Yellow", yellow_crit, "chance to crit per cast (double roll suppression)",
+        String_helpers::percent_to_str("Yellow", yellow_crit, "chance to crit per cast",
                                        100 - yellow_crit * (1 + yellow_ht[1] / 100.0), "left to crit-cap");
     extra_info_string += String_helpers::percent_to_str("White main hand", white_mh_crit, "chance to crit",
                                                         left_to_crit_cap_white_mh, "left to crit-cap");

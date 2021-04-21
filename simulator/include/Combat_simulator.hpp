@@ -314,11 +314,11 @@ public:
     Combat_simulator::Hit_outcome generate_hit(const Weapon_sim& weapon, double damage, Hit_type hit_type,
                                                Socket weapon_hand, const Special_stats& special_stats,
                                                Damage_sources& damage_sources, bool boss_target = true,
-                                               bool is_overpower = false, bool can_sweep = true, bool is_whirlwind = false);
+                                               bool is_overpower = false, bool can_sweep = true, bool is_whirlwind = false, bool is_melee_spell = false);
 
     Combat_simulator::Hit_outcome generate_hit_oh(double damage, bool is_whirlwind = false);
 
-    Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false);
+    Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false, bool is_melee_spell = false);
 
     void compute_hit_table(const Special_stats& special_stats, Socket weapon_hand,
                            Weapon_socket weapon_socket, Weapon_type weapon_type);
@@ -428,6 +428,7 @@ private:
     std::vector<double> damage_multipliers_white_oh_;
     std::vector<double> hit_table_yellow_;
     std::vector<double> hit_table_overpower_;
+    std::vector<double> hit_table_melee_spell_;
     std::vector<double> damage_multipliers_yellow_;
     std::vector<double> hit_table_two_hand_;
     Damage_sources damage_distribution_{};
