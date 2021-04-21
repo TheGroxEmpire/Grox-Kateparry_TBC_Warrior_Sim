@@ -217,7 +217,6 @@ struct Armory
                     {"icebane_breastplate",              Attributes{12, 0}, Special_stats{0, 0, 0},        Socket::chest},
                     {"icy_scale_breastplate",              Attributes{0, 0}, Special_stats{0, 0, 40},        Socket::chest},
                     {"polar_tunic",              Attributes{0, 18}, Special_stats{0, 0, 0},        Socket::chest},
-                    {"primal_batskin_jerkin",              Attributes{0, 32}, Special_stats{0, 1, 0},        Socket::chest},
             };
 
     std::vector<Armor> wrists_t
@@ -243,7 +242,6 @@ struct Armory
                     {"icebane_bracers",           Attributes{6, 0}, Special_stats{0, 0, 0}, Socket::wrist},
                     {"icy_scale_bracers",           Attributes{0, 0}, Special_stats{0, 0, 32}, Socket::wrist},
                     {"polar_bracers",           Attributes{0, 12}, Special_stats{0, 0, 0}, Socket::wrist},
-                    {"primal_batskin_bracers",           Attributes{0, 14}, Special_stats{0, 1, 0}, Socket::wrist},
             };
 
     std::vector<Armor> hands_t
@@ -283,7 +281,6 @@ struct Armory
                     {"icebane_gauntlets",     Attributes{9, 0}, Special_stats{0, 0, 0}, Socket::hands},
                     {"icy_scale_gauntlets",     Attributes{0, 0}, Special_stats{0, 0, 22}, Socket::hands},
                     {"polar_gloves",     Attributes{0, 18}, Special_stats{0, 0, 0}, Socket::hands},
-                    {"primal_batskin_gloves",     Attributes{0, 10}, Special_stats{0, 2, 0}, Socket::hands},
             };
 
     std::vector<Armor> belt_t
@@ -310,7 +307,7 @@ struct Armory
                     {"dreadnaught_waistguard",                 Attributes{20, 0},  Special_stats{0, 0, 0},        Socket::belt, Set::dreadnaughts_battlegear},
                     {"frostbite_girdle",                 Attributes{5, 15},  Special_stats{0, 0, 0},        Socket::belt},
                     {"unmelting_ice_girdle",                 Attributes{14, 14},  Special_stats{0, 0, 0},        Socket::belt},
-                    {"ossirians_binding",                 Attributes{0, 20},  Special_stats{1, 1, 0},        Socket::belt},
+                    {"ossirians_binding",                 Attributes{0, 20},  Special_stats{0.63, 0.63, 0},        Socket::belt},
             };
 
     std::vector<Armor> legs_t

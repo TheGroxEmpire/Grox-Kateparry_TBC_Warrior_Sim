@@ -32,6 +32,4 @@ bool estimate_special_stats_smart_no_skill(const Special_stats& special_stats1, 
 
 double estimate_stat_diff(Special_stats special_stats1, Special_stats special_stats2);
 
-int get_weapon_skill(const Special_stats& special_stats, Weapon_type weapon_type, Weapon_socket weapon_socket);
-
 #endif // WOW_SIMULATOR_INTERFACE_HELPER_H
