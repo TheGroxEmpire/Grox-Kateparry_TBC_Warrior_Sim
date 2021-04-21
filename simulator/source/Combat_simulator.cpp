@@ -44,7 +44,7 @@ std::vector<double> create_hit_table_yellow(double miss, double dodge, double cr
 {
     double double_roll_factor = double_roll ? (100 - miss - dodge) / 100 : 1.0;
     // Order -> Miss, parry, dodge, block, glancing, crit, hit.
-    return {miss, miss + dodge, miss + dodge, miss + dodge + crit};
+    return {miss, miss + dodge, miss + dodge, miss + dodge + double_roll_factor * crit};
 }
 
 std::vector<double> create_multipliers(double glancing_factor, double crit_damage_bonus, double bonus_crit_multiplier)
