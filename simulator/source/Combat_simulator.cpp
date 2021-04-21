@@ -826,7 +826,6 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
     time_keeper_.global_cd = 1.5;
     manage_flurry_rampage(hit_outcome.hit_result, special_stats, flurry_charges, rampage_stacks, rampage_active, true);
     damage_sources.add_damage(Damage_source::execute, hit_outcome.damage, time_keeper_.time);
-    buff_manager_.rage_spent_executing += rage + execute_rage_cost_;
     rage = 0;
     simulator_cout("Current rage: ", int(rage));
 }
