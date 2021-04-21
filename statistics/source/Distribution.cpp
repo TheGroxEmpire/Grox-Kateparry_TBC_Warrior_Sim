@@ -30,6 +30,11 @@ void Distribution::add_sample(const double sample)
     mean_ = Statistics::update_mean(mean_, n_samples_, sample);
 }
 
+void Distribution::reset()
+{
+    n_samples_ = mean_ = variance_ = min_ = max_ = 0;
+}
+
 double Distribution::std_() const
 {
     return std::sqrt(variance_);

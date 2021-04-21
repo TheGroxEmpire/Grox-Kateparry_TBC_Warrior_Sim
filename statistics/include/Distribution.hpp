@@ -11,6 +11,8 @@ public:
 
     void add_sample(double sample);
 
+    void reset();
+
     [[nodiscard]] double std_() const;
 
     [[nodiscard]] double std_of_the_mean() const;

@@ -307,7 +307,7 @@ public:
     void simulate(const Character& character, size_t n_simulations, double init_mean, double init_variance,
                   size_t init_simulations);
 
-    void simulate(const Character& character, int init_iteration = 0, bool log_data = false);
+    void simulate(const Character& character, int init_iteration = 0, bool log_data = false, bool reset_dps = true);
 
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
@@ -457,9 +457,10 @@ private:
     int heroic_strike_rage_cost{};
 
     double cleave_bonus_damage_{};
+    double rage_spent_on_execute_{};
+    double avg_rage_spent_executing_{};
     double rage_lost_stance_swap_{};
     double rage_lost_capped_{};
-    double avg_rage_spent_executing_{};
     double p_unbridled_wrath_{};
     double flurry_haste_factor_{};
     double dual_wield_damage_factor_{};

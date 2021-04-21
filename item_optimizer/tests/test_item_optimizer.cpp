@@ -128,7 +128,7 @@ TEST(TestSuite, test_multi_select)
     std::vector<extra_option> extra_options{};
     extra_options.emplace_back("item_filter_threshold", 2500);
     extra_options.emplace_back("item_filter_timeout", 1);
-    extra_options.emplace_back("min_iterations", 20);
+    extra_options.emplace_back("min_iterations", 15);
 
     int total_runs = 10;
     int successful_runs = 0;
@@ -208,7 +208,7 @@ TEST(TestSuite, test_multi_select_item_filter)
     std::vector<extra_option> extra_options{};
     extra_options.emplace_back("item_filter_threshold", 200);
     extra_options.emplace_back("item_filter_timeout", 0.5);
-    extra_options.emplace_back("min_iterations", 10);
+    extra_options.emplace_back("min_iterations", 15);
 
     int total_runs = 10;
     int successful_runs = 0;

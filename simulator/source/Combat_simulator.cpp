@@ -804,6 +804,8 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
     {
         get_uniform_random(100) < hit_table_yellow_[1] ? rage *= 0.8 : rage -= execute_rage_cost_;
         time_keeper_.global_cd = 1.5;
+        rage_spent_on_execute_ += rage;
+        rage = 0;
         return;
     }
     simulator_cout("Execute!");
@@ -819,7 +821,8 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
         rage -= execute_rage_cost_;
         hit_effects(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
     }
-    buff_manager_.rage_before_execute = rage;
+    rage_spent_on_execute_ += rage;
+    rage = 0;
     time_keeper_.global_cd = 1.5;
     manage_flurry_rampage(hit_outcome.hit_result, special_stats, flurry_charges, rampage_stacks, rampage_active, true);
     damage_sources.add_damage(Damage_source::execute, hit_outcome.damage, time_keeper_.time);
@@ -1153,10 +1156,10 @@ void Combat_simulator::simulate(const Character& character, size_t n_simulations
     dps_distribution_.variance_ = init_variance;
     dps_distribution_.n_samples_ = init_simulations;
     config.n_batches = n_simulations;
-    simulate(character, init_simulations);
+    simulate(character, init_simulations, false, false);
 }
 
-void Combat_simulator::simulate(const Character& character, int init_iteration, bool log_data)
+void Combat_simulator::simulate(const Character& character, int init_iteration, bool log_data, bool reset_dps)
 {
     int n_damage_batches = config.n_batches;
     if (config.display_combat_debug)
@@ -1171,6 +1174,10 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     }
     buff_manager_.aura_uptime.clear();
     damage_distribution_ = Damage_sources{};
+    if (reset_dps)
+    {
+        dps_distribution_.reset();
+    }
     flurry_uptime_mh_ = 0;
     flurry_uptime_oh_ = 0;
     rage_lost_stance_swap_ = 0;
@@ -1284,6 +1291,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         recompute_mitigation_ = true;
         current_armor_red_stacks_ = 0;
         armor_penetration_ = 0;
+        rage_spent_on_execute_ = 0;
 
         int flurry_charges = 0;
         bool crit_for_rampage = false;
@@ -1337,8 +1345,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     time_keeper_.get_dynamic_time_step(100.0, 100.0, buff_dt, 0.0 - time_keeper_.time, use_effect_dt);
                 time_keeper_.increment(dt);
                 std::vector<std::string> debug_msg{};
-                buff_manager_.increment(dt, time_keeper_.time, rage, rage_lost_stance_swap_,
-                                        time_keeper_.global_cd, config.display_combat_debug, debug_msg);
+                buff_manager_.increment(dt, time_keeper_.time, rage, rage_lost_stance_swap_, time_keeper_.global_cd,
+                                        config.display_combat_debug, debug_msg);
                 for (const auto& msg : debug_msg)
                 {
                     simulator_cout(msg);
@@ -1369,8 +1377,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 time_keeper_.get_dynamic_time_step(mh_dt, oh_dt, buff_dt, sim_time - time_keeper_.time, slam_dt);
             time_keeper_.increment(dt);
             std::vector<std::string> debug_msg{};
-            buff_manager_.increment(dt, time_keeper_.time, rage, rage_lost_stance_swap_,
-                                    time_keeper_.global_cd, config.display_combat_debug, debug_msg);
+            buff_manager_.increment(dt, time_keeper_.time, rage, rage_lost_stance_swap_, time_keeper_.global_cd,
+                                    config.display_combat_debug, debug_msg);
             for (const auto& msg : debug_msg)
             {
                 simulator_cout(msg);
@@ -1749,7 +1757,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 Statistics::update_mean(heroic_strike_uptime_, iter + 1, double(oh_hits_w_heroic) / oh_hits);
         }
         avg_rage_spent_executing_ =
-            Statistics::update_mean(avg_rage_spent_executing_, iter + 1, buff_manager_.rage_spent_executing);
+            Statistics::update_mean(avg_rage_spent_executing_, iter + 1, rage_spent_on_execute_);
         if (log_data)
         {
             add_damage_source_to_time_lapse(damage_sources.damage_instances);

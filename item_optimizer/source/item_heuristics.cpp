@@ -8,7 +8,9 @@ double get_character_ap_equivalent(const Special_stats& special_stats, const Wea
                                    double sim_time, const std::vector<Use_effect>& use_effects)
 {
     double attack_power = special_stats.attack_power;
+
     double mh_hit_crit_expertise_ap = get_hit_crit_expertise_ap_equivalent(special_stats, mh_wep.type);
+
     double oh_hit_crit_expertise_ap = get_hit_crit_expertise_ap_equivalent(special_stats, oh_wep.type);
 
     /// Weighted combination of ap from mh and oh, based on the hit-tables
@@ -58,6 +60,7 @@ double get_character_ap_equivalent(const Special_stats& special_stats, const Wea
                                    const std::vector<Use_effect>& use_effects)
 {
     double attack_power = special_stats.attack_power;
+
     double hit_crit_expertise_ap = get_hit_crit_expertise_ap_equivalent(special_stats, mh_wep.type);
 
     double mh_ap = ((mh_wep.max_damage + mh_wep.min_damage) / 2 + special_stats.bonus_damage) / mh_wep.swing_speed * 14;
@@ -246,7 +249,6 @@ double estimate_special_stats_high(const Special_stats& special_stats)
 
 double estimate_special_stats_low(const Special_stats& special_stats)
 {
-
     // Assume 2.6 speed for the low estimation
     double low_estimation = special_stats.bonus_damage / 2.6 * 14;
 

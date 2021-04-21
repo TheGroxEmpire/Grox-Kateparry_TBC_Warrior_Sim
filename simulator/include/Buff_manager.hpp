@@ -69,7 +69,6 @@ public:
         hit_effects_oh = &hit_effects_oh_input;
         use_effect_order = use_effects_order;
         deep_wounds_damage = 0.0;
-        rage_spent_executing = 0.0;
         deep_wounds_timestamps.clear();
         need_to_recompute_hittables = true;
         tactical_mastery_rage_ = tactical_mastery_rage;
@@ -92,9 +91,8 @@ public:
         return dt;
     }
 
-    void increment_stat_gains(double current_time, double dt, double& rage, double& rage_lost_stance,
-                              bool debug, std::vector<std::string>& debug_msg)
-                              
+    void increment_stat_gains(double current_time, double dt, double& rage, double& rage_lost_stance, bool debug,
+                              std::vector<std::string>& debug_msg)
     {
         for (auto it = stat_gains.begin(); it != stat_gains.end();)
         {
@@ -117,7 +115,6 @@ public:
                         rage = tactical_mastery_rage_;
                     }
                 }
-
                 if (it->second.special_stats.hit > 0.0 || it->second.special_stats.critical_strike > 0.0)
                 {
                     need_to_recompute_hittables = true;
@@ -284,8 +281,8 @@ public:
         }
     }
 
-    void increment(double dt, double current_time, double& rage, double& rage_lost_stance,
-                   double& global_cooldown, bool debug, std::vector<std::string>& debug_msg)
+    void increment(double dt, double current_time, double& rage, double& rage_lost_stance, double& global_cooldown,
+                   bool debug, std::vector<std::string>& debug_msg)
     {
         next_event = 100000;
         increment_stat_gains(current_time, dt, rage, rage_lost_stance, debug, debug_msg);
@@ -355,8 +352,6 @@ public:
     std::vector<Hit_effect>* hit_effects_oh;
     std::vector<std::pair<double, Use_effect>> use_effect_order;
     double next_event = 100000;
-    double rage_before_execute{};
-    double rage_spent_executing{};
     int min_interval = 100000;
     std::map<std::string, double> aura_uptime;
     double deep_wounds_damage{};
