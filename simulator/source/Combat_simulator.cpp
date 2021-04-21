@@ -42,7 +42,6 @@ std::vector<double> create_hit_table(double miss, double dodge, double glancing,
 
 std::vector<double> create_hit_table_yellow(double miss, double dodge, double crit)
 {
-    double double_roll_factor = (100 - miss - dodge) / 100;
     // Order -> Miss, parry, dodge, block, glancing, crit, hit.
     return {miss, miss + dodge, miss + dodge, miss + dodge + crit};
 }
