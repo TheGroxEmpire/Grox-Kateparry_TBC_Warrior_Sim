@@ -29,7 +29,7 @@ struct Buffs
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
     Buff drums_of_battle{"drums_of_battle", Attributes{0, 0}, Special_stats{0.0, 0.0, 0.0, 0, .5}};
     Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 0,
-                        {{"windfury_totem", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0.2, 315}}};
+                        {{"windfury_totem", Hit_effect::Type::windfury_hit, {}, {}, 0, 0, 0.2, 445}}};
     Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{86.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0.0}};
 

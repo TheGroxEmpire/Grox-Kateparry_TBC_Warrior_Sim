@@ -91,6 +91,7 @@ public:
     {
         none,
         extra_hit,
+        windfury_hit,
         sword_spec,
         stat_boost,
         damage_physical,

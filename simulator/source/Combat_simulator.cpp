@@ -875,7 +875,7 @@ void Combat_simulator::hamstring(Weapon_sim& main_hand_weapon, Special_stats& sp
 
 void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
                                    double& rage, Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active,
-                                   bool is_extra_attack)
+                                   bool is_extra_attack, bool is_instant)
 {
     for (const auto& hit_effect : weapon.hit_effects)
     {
@@ -887,6 +887,18 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
             {
             case Hit_effect::Type::extra_hit:
                 if (!is_extra_attack)
+                {
+                    simulator_cout("PROC: extra hit from: ", hit_effect.name);
+                    swing_weapon(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
+                                 flurry_charges, rampage_stacks, rampage_active, hit_effect.attack_power_boost, true);
+                }
+                else
+                {
+                    // Decrement the proc statistics for extra hit if it got triggered by an extra hit
+                    proc_data_[hit_effect.name]--;
+                }
+            case Hit_effect::Type::windfury_hit:
+                if (!is_extra_attack  && !is_instant)
                 {
                     simulator_cout("PROC: extra hit from: ", hit_effect.name);
                     swing_weapon(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
@@ -1101,7 +1113,8 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     {
         if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
         {
-            hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, is_extra_attack);
+                hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, is_extra_attack, 
+                false);
         }
     }
 
