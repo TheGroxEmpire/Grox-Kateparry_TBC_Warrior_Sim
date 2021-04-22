@@ -897,6 +897,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
                     // Decrement the proc statistics for extra hit if it got triggered by an extra hit
                     proc_data_[hit_effect.name]--;
                 }
+                break;
             case Hit_effect::Type::windfury_hit:
                 if (!is_extra_attack  && !is_instant)
                 {
