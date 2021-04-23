@@ -86,6 +86,7 @@ Combat_simulator_config get_test_config()
     config.talents.bloodthirst = 0;
     config.talents.mortal_strike = 0;
     config.talents.sweeping_strikes = 0;
+    config.talents.endless_rage = false;
 
     config.performance_mode = true;
     config.n_batches = 10;
@@ -137,6 +138,29 @@ TEST(TestSuite, test_flurry)
     EXPECT_GT(sim.get_flurry_uptime_oh(), .95);
     EXPECT_NEAR(sim.get_flurry_uptime_mh(), sim.get_flurry_uptime_oh(), 0.02);
     EXPECT_NE(sim.get_flurry_uptime_mh(), sim.get_flurry_uptime_oh());
+}
+
+TEST(TestSuite, test_endless_rage)
+{
+    auto config = get_test_config();
+    config.sim_time = 500.0;
+    config.main_target_initial_armor_ = 0.0;
+
+    auto character = get_test_character();
+
+    Combat_simulator sim{};
+    sim.set_config(config);
+    sim.simulate(character);
+
+    rage_normal = sim.get_rage_lost_capped();
+
+    config.talents.endless_rage = true;
+    sim.set_config(config);
+    sim.simulate(character);
+
+    rage_endless = sim.get_rage_lost_capped();
+
+    EXPECT_NEAR(rage_normal * 1.25, rage_endless, 0.01);
 }
 
 TEST(TestSuite, test_bloodthirst_count)
