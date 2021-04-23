@@ -61,6 +61,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
 
     heroic_strike_rage_cost = 15 - config.talents.improved_heroic_strike;
     p_unbridled_wrath_ = 3 * config.talents.unbridled_wrath  / 60;
+    p_mace_spec_ = 0.3 * config.talents.mace_specialization / 60;
     execute_rage_cost_ = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
 
     armor_reduction_from_spells_ = 0.0;
@@ -1140,6 +1141,18 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         }
         simulator_cout("Unbridled wrath. Current rage: ", int(rage));
     }
+
+    // Mace specialization
+    if (get_uniform_random(1) < (p_mace_spec_ * weapon.swing_speed))
+    {
+        rage += 7;
+        if (rage > 100.0)
+        {
+            rage_lost_capped_ += rage - 100.0;
+            rage = 100.0;
+        }
+        simulator_cout("Mace specialization. Current rage: ", int(rage));
+    }
 }
 
 void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
@@ -1625,7 +1638,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     {
                         crit_for_rampage = true;
                     }
-                    if (time_keeper_.rampage_cd < 5.0 && time_keeper_.global_cd < 0 && rage > 20 && crit_for_rampage)
+                    if (time_keeper_.rampage_cd < (0 + config.combat.rampage_use_thresh) && time_keeper_.global_cd < 0 && rage > 20 && crit_for_rampage)
                     {
                         time_keeper_.rampage_cd = 30.0;
                         time_keeper_.global_cd = 1.5;

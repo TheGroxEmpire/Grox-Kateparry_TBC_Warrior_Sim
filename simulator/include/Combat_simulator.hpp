@@ -119,6 +119,7 @@ struct Combat_simulator_config
         double hamstring_cd_thresh{};
         bool dont_use_hm_when_ss{false};
         double slam_cd_thresh{};
+        double rampage_use_thresh{};
         double hamstring_thresh_dd{};
         double initial_rage{};
         bool deep_wounds{false};
@@ -151,6 +152,7 @@ struct Combat_simulator_config
         int improved_heroic_strike = 0;
         int flurry = 0;
         int unbridled_wrath = 0;
+        int mace_specialization = 0;
         int impale = 0;
         int overpower = 0;
         int improved_execute = 0;
@@ -467,6 +469,7 @@ private:
     double avg_rage_spent_executing_{};
     double rage_lost_stance_swap_{};
     double rage_lost_capped_{};
+    double p_mace_spec_{};
     double p_unbridled_wrath_{};
     double flurry_haste_factor_{};
     double dual_wield_damage_factor_{};

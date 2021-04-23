@@ -297,7 +297,8 @@
 </head>
 
 <h1>TBC DPS Warrior Sim</h1>
-<h3>Ported by GroxEmpire / Grahand - BloodsailBuccaneers</h3>
+<h4>Ported from Kateparry's WoW Fury Sim</h4>
+<h4>GroxEmpire | Grahand - BloodsailBuccaneers</h4>
 
 <body style="background-color:#bfbfbf;"
       onload="openTab('event', 'Simulator');open_armor();show_div('cleave_if_adds', 'cleave_div');
@@ -2286,7 +2287,7 @@
                 "unique_checkboxes_unselect
                 ('blessed_sunfruit', 
                 ['roasted_clefthoof', 
-                'spicy_hot_talbuk', 'grilled_mudfish'
+                'spicy_hot_talbuk', 'grilled_mudfish',
                 'ravager_dog', 'charred_bear_kabobs'] )"
             <label for="blessed_sunfruit"> Blessed Sunfruit</label><br>
 
@@ -2294,7 +2295,7 @@
                 "unique_checkboxes_unselect
                 ('roasted_clefthoof', 
                 ['blessed_sunfruit',
-                'spicy_hot_talbuk', 'grilled_mudfish'
+                'spicy_hot_talbuk', 'grilled_mudfish',
                 'ravager_dog', 'charred_bear_kabobs'] )"
             <label for="roasted_clefthoof"> Roasted Clefthoof</label><br>
 
@@ -2302,13 +2303,13 @@
                 "unique_checkboxes_unselect
                 ('spicy_hot_talbuk', 
                 ['blessed_sunfruit', 'roasted_clefthoof', 
-                'grilled_mudfish'
+                'grilled_mudfish',
                 'ravager_dog', 'charred_bear_kabobs'] )"
             <label for="spicy_hot_talbuk"> Spicy Hot Talbuk</label><br>
 
             <input type="checkbox" id="grilled_mudfish" onclick=
                "unique_checkboxes_unselect
-                ('grilled_mudfish' 
+                ('grilled_mudfish',
                 ['blessed_sunfruit', 'roasted_clefthoof', 
                 'spicy_hot_talbuk',
                 'ravager_dog', 'charred_bear_kabobs'] )"
@@ -2318,7 +2319,7 @@
                 "unique_checkboxes_unselect
                 ('ravager_dog', 
                 ['blessed_sunfruit', 'roasted_clefthoof', 
-                'spicy_hot_talbuk', 'grilled_mudfish'
+                'spicy_hot_talbuk', 'grilled_mudfish',
                 'charred_bear_kabobs'] )"
             <label for="ravager_dog"> Ravager Dog</label><br>
 
@@ -2326,7 +2327,7 @@
                 "unique_checkboxes_unselect
                 ('charred_bear_kabobs', 
                 ['blessed_sunfruit', 'roasted_clefthoof', 
-                'spicy_hot_talbuk', 'grilled_mudfish'
+                'spicy_hot_talbuk', 'grilled_mudfish',
                 'ravager_dog'] )"
             <label for="charred_bear_kabobs"> Charred Bear Kabobs</label><br>
 
@@ -2406,13 +2407,13 @@
         "unique_checkboxes_unselect
                 ('mighty_rage_potion', 
                 ['haste_potion', 
-                'insane_strength_potion'
+                'insane_strength_potion',
                 'heroic_potion'] )"
         <label for="mighty_rage_potion"> Use mighty rage potion</label><br>
 
         <input type="checkbox" id="haste_potion" onclick=
         "unique_checkboxes_unselect
-                ('mighty_rage_potion', 
+                ('haste_potion',
                 ['mighty_rage_potion', 
                 'insane_strength_potion',
                 'heroic_potion'] )"
@@ -2453,6 +2454,11 @@
             <input type="checkbox" id="use_rampage" checked
                    onclick="show_div('use_rampage', 'rampage_div')">
             <label for="use_rampage"><b> Use rampage</b></label><br>
+            <div class="description" id="rampage_div">
+                <label for="rampage_use_thresh_dd">Rampage when the buff has:</label>
+                <input type="number" id="rampage_use_thresh_dd" name="quantity" min="0" max="30" value="5"
+                <label for="rampage_use_thresh_dd"> seconds left.</label><br>
+            </div>
         </div>
 
         <div class="hide_description" id="mortal_strike_talent_div">
@@ -2642,13 +2648,13 @@
         <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
-        <input type="checkbox" id="stat_weight_crit" checked>
+        <input type="checkbox" id="stat_weight_crit">
         <label for="stat_weight_crit"> &plusmn 1% crit.</label><br>
 
-        <input type="checkbox" id="stat_weight_expertise" checked>
+        <input type="checkbox" id="stat_weight_expertise">
         <label for="stat_weight_expertise"> &plusmn 1% hit.</label><br>
 
-        <input type="checkbox" id="stat_weight_hit" checked>
+        <input type="checkbox" id="stat_weight_hit">
         <label for="stat_weight_hit"> &plusmn 1% expertise.</label><br>
 
         <input type="checkbox" id="stat_weight_haste">
@@ -2847,7 +2853,7 @@
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
         "slam_spam_max_time_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
-        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd"];
+        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",

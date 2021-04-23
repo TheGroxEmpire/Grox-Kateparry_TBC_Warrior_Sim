@@ -70,7 +70,7 @@ std::vector<std::vector<std::string>> run_multiselect(const std::vector<std::str
         "impale_talent",
         "cruelty_talent",
         "unbridled_wrath_talent",
-        "improved_battle_shout_talent",
+        "commanding_presence_talent",
         "dual_wield_specialization_talent",
         "improved_execute_talent",
         "enrage_talent",
@@ -79,6 +79,14 @@ std::vector<std::vector<std::string>> run_multiselect(const std::vector<std::str
         "bloodthirst_talent",
         "sweeping_strikes_talent",
         "improved_slam_talent",
+        "improved_disciplines_talent", 
+        "improved_mortal_strike_talent",
+        "endless_rage_talent",
+        "weapon_mastery_talent",
+        "precision_talent",
+        "improved_whirlwind_talent",
+        "improved_berserker_stance_talent",
+        "rampage_talent"
     };
 
     std::vector<int> talents_val{3, 3, 5, 1, 3, 2, 5, 5, 5, 5, 2, 5, 1, 5, 1, 1, 5};
