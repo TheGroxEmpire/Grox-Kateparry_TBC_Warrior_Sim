@@ -1068,20 +1068,16 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         else
         {
             rage += rage_generation(hit_outcomes[0].damage, weapon.socket, weapon.swing_speed);
-        if (config.talents.endless_rage)
-        {
-            rage = rage *1.25;
-        }
         }
         if (hit_outcomes[0].hit_result == Hit_result::dodge)
         {
             simulator_cout("Rage gained since the enemy dodged.");
             rage += 0.75 *
                     rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed);
+        }
         if (config.talents.endless_rage)
         {
             rage = rage *1.25;
-        }
         }
         if (rage > 100.0)
         {
@@ -1139,20 +1135,16 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stat
     double damage = main_hand_weapon.swing(special_stats.attack_power + attack_power_bonus);
     auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::white, main_hand_weapon.socket, special_stats, damage_sources);
     rage += rage_generation(hit_outcome.damage, main_hand_weapon.socket, main_hand_weapon.swing_speed);
-    if (config.talents.endless_rage)
-    {
-        rage = rage *1.25;
-    }
     
     if (hit_outcome.hit_result == Hit_result::dodge)
     {
         simulator_cout("Rage gained since the enemy dodged.");
         rage += 0.75 *
                 rage_generation(damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), main_hand_weapon.socket, main_hand_weapon.swing_speed);
-        if (config.talents.endless_rage)
-        {
-            rage = rage *1.25;
-        }
+    }
+    if (config.talents.endless_rage)
+    {
+        rage = rage *1.25;
     }
     if (rage > 100.0)
     {
