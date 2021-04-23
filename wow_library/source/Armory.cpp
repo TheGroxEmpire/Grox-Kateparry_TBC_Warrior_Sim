@@ -1041,6 +1041,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.drums_of_battle);
     }
+    if (String_helpers::find_string(buffs_vec, "bloodlust"))
+    {
+        character.add_buff(buffs.bloodlust);
+    }
     if (String_helpers::find_string(buffs_vec, "haste_potion"))
     {
         character.add_buff(buffs.haste_potion);

@@ -469,6 +469,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     {
         temp_buffs.emplace_back("drums_of_battle");
     }
+    if (String_helpers::find_string(input.options, "bloodlust"))
+    {
+        temp_buffs.emplace_back("bloodlust");
+    }
     if (String_helpers::find_string(input.options, "full_polarity"))
     {
         double full_polarity_val =

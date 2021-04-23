@@ -40,6 +40,10 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     {
         temp_buffs.emplace_back("drums_of_battle");
     }
+    if (String_helpers::find_string(input.options, "bloodlust"))
+    {
+        temp_buffs.emplace_back("bloodlust");
+    }
     if (String_helpers::find_string(input.options, "full_polarity"))
     {
         double full_polarity_val =

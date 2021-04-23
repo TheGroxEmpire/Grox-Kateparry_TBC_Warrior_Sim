@@ -64,6 +64,9 @@ struct Buffs
     Buff drums_of_battle{"drums_of_battle", {}, {}, 0, {},
                          {{"drums_of_battle", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .05},
                           0, 30, 120, true}}};
+    Buff bloodlust{"bloodlust", {}, {}, 0, {},
+                         {{"bloodlust", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .3},
+                          0, 40, 600, true}}};
     Buff haste_potion{"haste_potion", {}, {}, 0, {},
                          {{"haste_potion", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .25},
                           0, 15, 120, true}}};
