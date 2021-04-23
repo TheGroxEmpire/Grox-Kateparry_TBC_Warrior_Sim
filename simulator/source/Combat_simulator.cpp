@@ -1160,9 +1160,17 @@ void Combat_simulator::sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stat
 
     if (hit_outcome.hit_result == Hit_result::dodge)
     {
-        simulator_cout("Rage gained since the enemy dodged.");
-        rage += 0.75 *
+        if (config.talents.endless_rage)
+        {
+            rage += 0.75 * 1.25 *
                 rage_generation(damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), main_hand_weapon.socket, main_hand_weapon.swing_speed);
+        }
+        else
+        {
+            rage += 0.75 *
+                rage_generation(damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), main_hand_weapon.socket, main_hand_weapon.swing_speed);
+        }
+        simulator_cout("Rage gained since the enemy dodged.");
     }
     
     if (rage > 100.0)
