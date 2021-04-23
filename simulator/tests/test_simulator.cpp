@@ -143,7 +143,8 @@ TEST(TestSuite, test_flurry)
 TEST(TestSuite, test_endless_rage)
 {
     auto config = get_test_config();
-    config.sim_time = 10000.0;
+    config.sim_time = 100000.0;
+    config.n_batches = 1;
     config.main_target_initial_armor_ = 0.0;
     config.combat.initial_rage = 100;
 
@@ -161,7 +162,9 @@ TEST(TestSuite, test_endless_rage)
 
     double rage_endless = sim.get_rage_lost_capped();
 
-    EXPECT_NEAR(rage_normal * 1.25, rage_endless, 0.02);
+    double rage_ratio = 1 - (rage_endless / rage_normal * 1.25);
+
+    EXPECT_NEAR(rage_ratio, 0.99, 0.02);
 }
 
 TEST(TestSuite, test_bloodthirst_count)
