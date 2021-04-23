@@ -145,6 +145,7 @@ TEST(TestSuite, test_endless_rage)
     auto config = get_test_config();
     config.sim_time = 500.0;
     config.main_target_initial_armor_ = 0.0;
+    config.combat.initial_rage = 100;
 
     auto character = get_test_character();
 
