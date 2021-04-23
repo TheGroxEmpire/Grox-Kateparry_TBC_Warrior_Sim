@@ -63,8 +63,6 @@ std::vector<std::vector<std::string>> run_multiselect(const std::vector<std::str
 
     std::vector<std::string> talents_string{
         "improved_heroic_strike_talent",
-        "improved_rend_talent",
-        "tactical_mastery_talent",
         "anger_management_talent",
         "deep_wounds_talent",
         "impale_talent",
@@ -74,14 +72,9 @@ std::vector<std::vector<std::string>> run_multiselect(const std::vector<std::str
         "dual_wield_specialization_talent",
         "improved_execute_talent",
         "enrage_talent",
-        "death_wish_talent",
+        "sweeping_strike_talent",
         "flurry_talent",
         "bloodthirst_talent",
-        "sweeping_strikes_talent",
-        "improved_slam_talent",
-        "improved_disciplines_talent", 
-        "improved_mortal_strike_talent",
-        "endless_rage_talent",
         "weapon_mastery_talent",
         "precision_talent",
         "improved_whirlwind_talent",
@@ -89,7 +82,7 @@ std::vector<std::vector<std::string>> run_multiselect(const std::vector<std::str
         "rampage_talent"
     };
 
-    std::vector<int> talents_val{3, 3, 5, 1, 3, 2, 5, 5, 5, 5, 2, 5, 1, 5, 1, 1, 5};
+    std::vector<int> talents_val{3, 1, 3, 2, 5, 5, 5, 5, 2, 5, 1, 5, 1, 2, 3, 1, 5, 1};
 
     Sim_input_mult sim_input_mult{{race},      mult_armor_vec,       mult_weapons_vec,  buff_vec,       ench_vec,
                                   sim_options, float_options_string, float_options_val, talents_string, talents_val};

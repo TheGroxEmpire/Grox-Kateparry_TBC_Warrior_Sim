@@ -52,7 +52,8 @@
         "variant": "cpp",
         "unordered_set": "cpp",
         "numeric": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "forward_list": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
