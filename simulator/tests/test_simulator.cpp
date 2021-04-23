@@ -161,7 +161,7 @@ TEST(TestSuite, test_endless_rage)
 
     double rage_endless = sim.get_rage_lost_capped();
 
-    EXPECT_NEAR(rage_normal * 1.25, rage_endless, 0.01);
+    EXPECT_NEAR(rage_normal * 1.25, rage_endless, 0.02);
 }
 
 TEST(TestSuite, test_bloodthirst_count)
