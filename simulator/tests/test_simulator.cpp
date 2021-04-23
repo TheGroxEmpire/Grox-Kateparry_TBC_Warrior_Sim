@@ -164,7 +164,7 @@ TEST(TestSuite, test_endless_rage)
 
     double rage_ratio = 1 - (rage_endless / rage_normal * 1.25);
 
-    EXPECT_NEAR(rage_ratio, 0.99, 0.02);
+    EXPECT_NEAR(rage_ratio, 0.0, 1);
 }
 
 TEST(TestSuite, test_bloodthirst_count)
