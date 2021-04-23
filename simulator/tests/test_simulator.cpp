@@ -152,13 +152,13 @@ TEST(TestSuite, test_endless_rage)
     sim.set_config(config);
     sim.simulate(character);
 
-    rage_normal = sim.get_rage_lost_capped();
+    double rage_normal = sim.get_rage_lost_capped();
 
     config.talents.endless_rage = true;
     sim.set_config(config);
     sim.simulate(character);
 
-    rage_endless = sim.get_rage_lost_capped();
+    double rage_endless = sim.get_rage_lost_capped();
 
     EXPECT_NEAR(rage_normal * 1.25, rage_endless, 0.01);
 }
