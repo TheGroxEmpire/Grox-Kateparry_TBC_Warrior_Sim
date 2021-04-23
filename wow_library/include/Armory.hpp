@@ -21,34 +21,62 @@ struct Buffs
     Buff gift_of_the_wild{"gift_of_the_wild", Attributes{18.9, 18.9}, Special_stats{0.0, 0.0, 0.0}};
     Buff leader_of_the_pack{"leader_of_the_pack", Attributes{0.0, 0.0}, Special_stats{5.0, 0.0, 0.0}};
     Buff improved_seal_of_the_crusader{"improved_seal_of_the_crusader", Attributes{0.0, 0.0}, Special_stats{3.0, 0.0, 0.0}};
-    Buff blood_frenzy{"blood_frenzy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0, 0, .04}};
+    Buff blood_frenzy{"blood_frenzy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .04}};
     Buff improved_sanctity_aura{"improved_sanctity_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .02, 0, 0, 0, 0, .02}};
     Buff ferocious_inspiration{"ferocious_inspiration", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .03, 0, 0, 0, 0, .03}};
     Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0, 0.0}};
     Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0.0}};
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
-    Buff drums_of_battle{"drums_of_battle", Attributes{0, 0}, Special_stats{0.0, 0.0, 0.0, 0, .5}};
     Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 0,
                         {{"windfury_totem", Hit_effect::Type::windfury_hit, {}, {}, 0, 0, 0.2, 445}}};
     Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{86.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0.0}};
 
     // Consumables
-    Buff elixir_mongoose{"elixir_mongoose", Attributes{0.0, 25.0}, Special_stats{2.0, 0.0, 0.0}};
+    Buff elixir_mongoose{"elixir_mongoose", Attributes{0.0, 25.0}, Special_stats{1.26, 0.0, 0.0}};
+    Buff elixir_of_major_agility{"elixir_of_major_agility", Attributes{0.0, 35.0}, Special_stats{0.9, 0.0, 0.0}};
+    Buff elixir_of_mastery_bloodberry_elixir{"elixir_of_mastery_bloodberry_elixir", Attributes{15.0, 15.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff blessed_sunfruit{"blessed_sunfruit", Attributes{10.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff smoked_dessert_dumplings{"smoked_dessert_dumplings", Attributes{20.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff roasted_clefthoof{"roasted_clefthoof", Attributes{20.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff spicy_hot_talbuk{"spicy_hot_talbuk", Attributes{0.0, 0.0}, Special_stats{0.0, 1.26, 0.0}};
+    Buff grilled_mudfish{"grilled_mudfish", Attributes{0.0, 20.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff ravager_dog{"ravager_dog", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 40}};
+    Buff charred_bear_kabobs{"charred_bear_kabobs", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 24}};
     Buff juju_power{"juju_power", Attributes{30.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff elixir_of_giants{"elixir_of_giants", Attributes{25.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff elixir_of_major_strength{"elixir_of_major_strength", Attributes{35.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff elixir_of_brute_force{"elixir_of_brute_force", Attributes{18.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff juju_might{"juju_might", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 40}};
     Buff winterfall_firewater{"winterfall_firewater", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 35}};
+    Buff fel_strength_elixir{"fel_strength_elixir", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 90}};
+    Buff onslaught_elixir{"onslaught_elixir", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 60}};
+    Buff elixir_of_demonslaying{"elixir_of_demonslaying", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 265}};
+    Buff flask_of_relentless_assault{"flask_of_relentless_assault", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 120}};
+    Buff unstable_flask_of_the_bandit{"unstable_flask_of_the_bandit", Attributes{0.0, 20.0}, Special_stats{0.0, 0.0, 40}};
+    Buff unstable_flask_of_the_beast{"unstable_flask_of_the_beast", Attributes{20.0, 20.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff unstable_flask_of_the_soldier{"unstable_flask_of_the_soldier", Attributes{20.0, 0.0}, Special_stats{0.9, 0.0, 0.0}};
     Buff roids{"roids", Attributes{25.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff fire_toasted_bun{"fire_toasted_bun", Attributes{0.0, 0.0}, Special_stats{0.0, 2.0, 0.0}};
+    Buff scroll_of_strength_v{"scroll_of_strength_v", Attributes{20.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
+    Buff scroll_of_agility_v{"scroll_of_agility_v", Attributes{0.0, 20.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff mighty_rage_potion{"mighty_rage_potion", {}, {}, 0, {},
                             {{"mighty_rage_potion", Use_effect::Effect_socket::unique, {60, 0}, {0, 0, 0}, 60, 20,
                               120, false}}};
+    Buff drums_of_battle{"drums_of_battle", {}, {}, 0, {},
+                         {{"drums_of_battle", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .05},
+                          0, 30, 120, true}}};
+    Buff haste_potion{"haste_potion", {}, {}, 0, {},
+                         {{"haste_potion", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .25},
+                          0, 15, 120, true}}};
+    Buff insane_strength_potion{"insane_strength_potion", {}, {}, 0, {},
+                         {{"insane_strength_potion", Use_effect::Effect_socket::unique, {120, 0.0}, {},
+                          0, 15, 120, true}}};
+    Buff heroic_potion{"heroic_potion", {}, {}, 0, {},
+                         {{"heroic_potion", Use_effect::Effect_socket::unique, {70, 0.0}, {},
+                          0, 15, 120, true}}};
 
     Weapon_buff dense_stone{"dense_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 8};
-    Buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{2.0, 0.0, 0.0}};
+    Weapon_buff adamantite_stone{"adamantite_stone", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}, 12};
+    Buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{1.26, 0.0, 0.0}};
     Buff consecrated_sharpening_stone{"consecrated_sharpening_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 100.0}};
 };
 

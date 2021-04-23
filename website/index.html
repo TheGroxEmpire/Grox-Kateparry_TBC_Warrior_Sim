@@ -1991,19 +1991,37 @@
             <label for="trueshot_aura"> Trueshot Aura</label><br>
 
             <input type="checkbox" id="blessing_of_kings" checked>
-            <label for="blessing_of_kings" style="color: #003d99"> Blessing of Kings</label><br>
+            <label for="blessing_of_kings"> Blessing of Kings</label><br>
 
             <input type="checkbox" id="blessing_of_might" checked>
-            <label for="blessing_of_might" style="color: #003d99"> Blessing of Might</label><br>
+            <label for="blessing_of_might"> Blessing of Might</label><br>
 
-            <input type="checkbox" id="windfury_totem">
-            <label for="windfury_totem" style="color: #cc0000"> Windfury totem</label><br>
+            <input type="checkbox" id="windfury_totem" checked>
+            <label for="windfury_totem"> Windfury totem</label><br>
 
             <input type="checkbox" id="strength_of_earth_totem">
-            <label for="strength_of_earth_totem" style="color: #cc0000"> Strength of earth Totem</label><br>
+            <label for="strength_of_earth_totem"> Strength of earth Totem</label><br>
 
             <input type="checkbox" id="grace_of_air_totem">
-            <label for="grace_of_air_totem" style="color: #cc0000"> Grace of Air Totem</label><br>
+            <label for="grace_of_air_totem"> Grace of Air Totem</label><br>
+
+            <input type="checkbox" id="improved_seal_of_the_crusader">
+            <label for="improved_seal_of_the_crusader"> Improved Seal of The Crusader</label><br>
+
+            <input type="checkbox" id="improved_sanctity_aura">
+            <label for="improved_sanctity_aura"> Improved Sanctity Aura</label><br>
+
+            <input type="checkbox" id="blood_frenzy" checked>
+            <label for="blood_frenzy"> Blood Frenzy</label><br>
+
+            <input type="checkbox" id="ferocious_inspiration">
+            <label for="ferocious_inspiration"> Ferocious Inspiration</label><br>
+
+            <input type="checkbox" id="heroic_presence">
+            <label for="heroic_presence" style="color: #003d99"> Heroic Presence</label><br>
+
+            <input type="checkbox" id="improved_faerie_fire">
+            <label for="improved_faerie_fire"> Improved Faerie Fire</label><br>
 
             <input type="checkbox" id="battle_squawk">
             <label for="battle_squawk">Battle squawk:
@@ -2012,93 +2030,360 @@
 
         <div class="checkbox_div">
             <p class="select-title">Consumables:</p><br>
-            <input type="checkbox" id="elixir_mongoose" checked>
+            <b>Flasks & Battle Elixirs:</b><br>
+            <input type="checkbox" id="elixir_mongoose" onclick=
+                "unique_checkboxes_unselect
+                ('elixir_mongoose', 
+                ['elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )" checked>
             <label for="elixir_mongoose"> Elixir of the Mongoose</label><br>
 
-            <input type="checkbox" id="blessed_sunfruit" onclick=
-                    "if (document.getElementById('smoked_dessert_dumplings').checked)
-                {
-                    document.getElementById('smoked_dessert_dumplings').checked = false;
-                }" checked>
-            <label for="blessed_sunfruit"> Blessed Sunfruit</label><br>
+            <input type="checkbox" id="elixir_of_major_agility" onclick=
+                "unique_checkboxes_unselect
+                ('elixir_of_major_agility', 
+                ['elixir_mongoose', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="elixir_of_major_agility"> Elixir of Major Agility</label><br>
 
-            <input type="checkbox" id="smoked_dessert_dumplings" onclick=
-                    "if (document.getElementById('blessed_sunfruit').checked)
-                {
-                    document.getElementById('blessed_sunfruit').checked = false;
-                }">
-            <label for="smoked_dessert_dumplings"> Smoked Desert Dumplings</label><br>
+            <input type="checkbox" id="elixir_of_mastery_bloodberry_elixir" onclick=
+                "unique_checkboxes_unselect
+                ('elixir_of_mastery_bloodberry_elixir', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="elixir_of_mastery_bloodberry_elixir"> Elixir of the Mastery / Bloodberry Elixir</label><br>
 
             <input type="checkbox" id="juju_might" onclick=
-                    "if (document.getElementById('winterfall_firewater').checked)
-                {
-                    document.getElementById('winterfall_firewater').checked = false;
-                }">
+                "unique_checkboxes_unselect
+                ('juju_might', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
             <label for="juju_might"> Juju Might</label><br>
 
             <input type="checkbox" id="winterfall_firewater" onclick=
-                    "if (document.getElementById('juju_might').checked)
-                {
-                    document.getElementById('juju_might').checked = false;
-                }">
+                "unique_checkboxes_unselect
+                ('winterfall_firewater', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
             <label for="winterfall_firewater"> Winterfall Firewater</label><br>
 
+            <input type="checkbox" id="fel_strength_elixir" onclick=
+                "unique_checkboxes_unselect
+                ('fel_strength_elixir', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="fel_strength_elixir"> Fel Strength Elixir</label><br>
+
+            <input type="checkbox" id="onslaught_elixir" onclick=
+                "unique_checkboxes_unselect
+                ('onslaught_elixir', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="onslaught_elixir"> Onslaught Elixir</label><br>
+
+            <input type="checkbox" id="elixir_of_demonslaying" onclick=
+                "unique_checkboxes_unselect
+                ('elixir_of_demonslaying', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="elixir_of_demonslaying"> Elixir of Demonslaying</label><br>
+
             <input type="checkbox" id="juju_power" onclick=
-                    "if (document.getElementById('elixir_of_giants').checked)
-                {
-                    document.getElementById('elixir_of_giants').checked = false;
-                }" checked>
+                "unique_checkboxes_unselect
+                ('juju_power', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
             <label for="juju_power"> Juju Power</label><br>
 
             <input type="checkbox" id="elixir_of_giants" onclick=
-                    "if (document.getElementById('juju_power').checked)
-                {
-                    document.getElementById('juju_power').checked = false;
-                }">
+                "unique_checkboxes_unselect
+                ('elixir_of_giants', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power',
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
             <label for="elixir_of_giants"> Elixir of Giants</label><br>
 
-            <input type="checkbox" id="roids">
+            <input type="checkbox" id="elixir_of_major_strength" onclick=
+                "unique_checkboxes_unselect
+                ('elixir_of_major_strength', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="elixir_of_major_strength"> Elixir of Major Strength</label><br>
+
+            <input type="checkbox" id="elixir_of_brute_force" onclick=
+                "unique_checkboxes_unselect
+                ('elixir_of_brute_force', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength',
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="elixir_of_brute_force"> Elixir of Brute Force</label><br>
+
+            <input type="checkbox" id="roids"onclick=
+                "unique_checkboxes_unselect
+                ('roids', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
             <label for="roids"> R.O.I.D.S</label><br>
 
-            <input type="checkbox" id="fire_toasted_bun">
-            <label for="fire_toasted_bun"> Fire-Toasted Bun</label><br><br>
+            <input type="checkbox" id="flask_of_relentless_assault" onclick=
+                "unique_checkboxes_unselect
+                ('flask_of_relentless_assault', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids',
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="flask_of_relentless_assault"> Flask of Relentless Assault</label><br>
+
+            <input type="checkbox" id="unstable_flask_of_the_bandit" onclick=
+                "unique_checkboxes_unselect
+                ('unstable_flask_of_the_bandit', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_beast', 
+                'unstable_flask_of_the_soldier'] )">
+            <label for="unstable_flask_of_the_bandit"> Unstable Flask of The Bandit</label><br>
+
+            <input type="checkbox" id="unstable_flask_of_the_beast" onclick=
+                "unique_checkboxes_unselect
+                ('unstable_flask_of_the_beast',
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit',
+                'unstable_flask_of_the_soldier'] )">
+            <label for="unstable_flask_of_the_beast"> Unstable Flask of The Beast</label><br>
+
+            <input type="checkbox" id="unstable_flask_of_the_soldier" onclick=
+                "unique_checkboxes_unselect
+                ('unstable_flask_of_the_soldier', 
+                ['elixir_mongoose', 'elixir_of_major_agility', 
+                'elixir_of_mastery_bloodberry_elixir', 'juju_might', 
+                'winterfall_firewater', 'fel_strength_elixir', 
+                'onslaught_elixir', 'elixir_of_demonslaying', 
+                'juju_power', 'elixir_of_giants', 
+                'elixir_of_major_strength', 'elixir_of_brute_force', 
+                'roids', 'flask_of_relentless_assault', 
+                'unstable_flask_of_the_bandit', 'unstable_flask_of_the_beast'] )">
+            <label for="unstable_flask_of_the_soldier"> Unstable Flask of The Soldier</label><br>
+
+            <b>Scrolls:</b><br>
+            <input type="checkbox" id="scroll_of_strength_v" onclick=
+                "unique_checkboxes_unselect
+                    ('scroll_of_strength_v', 
+                    ['scroll_of_agility_v'] )"
+            <label for="scroll_of_strength_v"> Scroll of Strength V</label><br>
+
+            <input type="checkbox" id="scroll_of_agility_v" onclick=
+                "unique_checkboxes_unselect
+                ('scroll_of_agility_v', 
+                ['scroll_of_strength_v'] )"
+            <label for="scroll_of_agility_v"> Scroll of Agility V</label><br>
+
+            <b>Food:</b><br>
+            <input type="checkbox" id="blessed_sunfruit" onclick=
+                "unique_checkboxes_unselect
+                ('blessed_sunfruit', 
+                ['roasted_clefthoof', 
+                'spicy_hot_talbuk', 'grilled_mudfish'
+                'ravager_dog', 'charred_bear_kabobs'] )"
+            <label for="blessed_sunfruit"> Blessed Sunfruit</label><br>
+
+            <input type="checkbox" id="roasted_clefthoof" onclick=
+                "unique_checkboxes_unselect
+                ('roasted_clefthoof', 
+                ['blessed_sunfruit',
+                'spicy_hot_talbuk', 'grilled_mudfish'
+                'ravager_dog', 'charred_bear_kabobs'] )"
+            <label for="roasted_clefthoof"> Roasted Clefthoof</label><br>
+
+            <input type="checkbox" id="spicy_hot_talbuk" onclick=
+                "unique_checkboxes_unselect
+                ('spicy_hot_talbuk', 
+                ['blessed_sunfruit', 'roasted_clefthoof', 
+                'grilled_mudfish'
+                'ravager_dog', 'charred_bear_kabobs'] )"
+            <label for="spicy_hot_talbuk"> Spicy Hot Talbuk</label><br>
+
+            <input type="checkbox" id="grilled_mudfish" onclick=
+               "unique_checkboxes_unselect
+                ('grilled_mudfish' 
+                ['blessed_sunfruit', 'roasted_clefthoof', 
+                'spicy_hot_talbuk',
+                'ravager_dog', 'charred_bear_kabobs'] )"
+            <label for="grilled_mudfish"> Grilled Mudfish</label><br>
+
+            <input type="checkbox" id="ravager_dog" onclick=
+                "unique_checkboxes_unselect
+                ('ravager_dog', 
+                ['blessed_sunfruit', 'roasted_clefthoof', 
+                'spicy_hot_talbuk', 'grilled_mudfish'
+                'charred_bear_kabobs'] )"
+            <label for="ravager_dog"> Ravager Dog</label><br>
+
+            <input type="checkbox" id="charred_bear_kabobs" onclick=
+                "unique_checkboxes_unselect
+                ('charred_bear_kabobs', 
+                ['blessed_sunfruit', 'roasted_clefthoof', 
+                'spicy_hot_talbuk', 'grilled_mudfish'
+                'ravager_dog'] )"
+            <label for="charred_bear_kabobs"> Charred Bear Kabobs</label><br>
 
             <b>Weapon Stones:</b><br>
             Main-hand:<br>
             <input type="checkbox" id="dense_stone_main_hand"
-                   onclick="unique_checkboxes_unselect('dense_stone_main_hand', ['elemental_stone_main_hand', 'consecrated_sharpening_stone_main_hand'] )"
-                   checked>
+                   onclick="unique_checkboxes_unselect('dense_stone_main_hand', ['elemental_stone_main_hand', 
+                   'consecrated_sharpening_stone_main_hand', 'adamantite_stone_main_hand'] )"
+                   >
             <label for="dense_stone_main_hand"> Dense Stone</label><br>
 
+            <input type="checkbox" id="adamantite_stone_main_hand"
+                   onclick="unique_checkboxes_unselect('adamantite_stone_main_hand', ['elemental_stone_main_hand', 
+                   'consecrated_sharpening_stone_main_hand', 'dense_stone_main_hand'] )"
+                   checked>
+            <label for="adamantite_stone_main_hand"> Adamantite Stone</label><br>
+
             <input type="checkbox" id="elemental_stone_main_hand"
-                   onclick="unique_checkboxes_unselect('elemental_stone_main_hand', ['dense_stone_main_hand', 'consecrated_sharpening_stone_main_hand'] )">
+                   onclick="unique_checkboxes_unselect('elemental_stone_main_hand', ['dense_stone_main_hand', 
+                   'consecrated_sharpening_stone_main_hand', 'adamantite_stone_main_hand'] )">
             <label for="elemental_stone_main_hand"> Elemental Stone</label><br>
 
             <input type="checkbox" id="consecrated_sharpening_stone_main_hand"
-                   onclick="unique_checkboxes_unselect('consecrated_sharpening_stone_main_hand', ['elemental_stone_main_hand', 'dense_stone_main_hand'] )">
+                   onclick="unique_checkboxes_unselect('consecrated_sharpening_stone_main_hand', ['elemental_stone_main_hand', 
+                   'dense_stone_main_hand', 'adamantite_stone_main_hand'] )">
             <label for="consecrated_sharpening_stone_main_hand"> Consecrated Stone</label><br>
 
             Off-hand:<br>
             <input type="checkbox" id="dense_stone_off_hand"
-                   onclick="unique_checkboxes_unselect('dense_stone_off_hand', ['elemental_stone_off_hand', 'consecrated_sharpening_stone_off_hand'] )"
-                   checked>
+                   onclick="unique_checkboxes_unselect('dense_stone_off_hand', ['elemental_stone_off_hand', 
+                   'consecrated_sharpening_stone_off_hand', 'adamantite_stone_off_hand'] )"
+                   >
             <label for="dense_stone_off_hand"> Dense Stone</label><br>
 
+            <input type="checkbox" id="adamantite_stone_off_hand"
+                    onclick="unique_checkboxes_unselect('adamantite_stone_off_hand', ['elemental_stone_off_hand', 
+                    'consecrated_sharpening_stone_off_hand', 'dense_stone_off_hand'] )"
+                    checked>
+            <label for="adamantite_stone_off_hand"> Adamantite Stone</label><br>
+
             <input type="checkbox" id="elemental_stone_off_hand"
-                   onclick="unique_checkboxes_unselect('elemental_stone_off_hand', ['consecrated_sharpening_stone_off_hand', 'dense_stone_off_hand'] )">
+                   onclick="unique_checkboxes_unselect('elemental_stone_off_hand', ['consecrated_sharpening_stone_off_hand', 
+                   'dense_stone_off_hand', 'adamantite_stone_off_hand'] )">
             <label for="elemental_stone_off_hand"> Elemental Stone Off Hand</label><br>
 
             <input type="checkbox" id="consecrated_sharpening_stone_off_hand"
-                   onclick="unique_checkboxes_unselect('consecrated_sharpening_stone_off_hand', ['elemental_stone_off_hand', 'dense_stone_off_hand'] )">
+                   onclick="unique_checkboxes_unselect('consecrated_sharpening_stone_off_hand', ['elemental_stone_off_hand', 
+                   'dense_stone_off_hand', 'adamantite_stone_off_hand'] )">
             <label for="consecrated_sharpening_stone_off_hand"> Consecrated Stone</label>
             <br><br>
 
             <b> Talents:</b><br>
             <input type="checkbox" id="improved_weapon_totems">
-            <label for="improved_weapon_totems" style="color: #cc0000"> Improved Weapon Totems</label><br>
+            <label for="improved_weapon_totems"> Improved Weapon Totems</label><br>
 
             <input type="checkbox" id="enhancing_totems">
-            <label for="enhancing_totems" style="color: #cc0000"> Enhancing Totems</label><br><br>
+            <label for="enhancing_totems"> Enhancing Totems</label><br><br>
         </div>
     </div>
     <br><br>
@@ -2117,8 +2402,38 @@
         <label for="enable_berserking" style="color: #cc0000"> Use berserking (increases haste by
             <input type="number" id="berserking_haste_dd" name="quantity" min="10" max="30" value="10"> %).</label><br>
 
-        <input type="checkbox" id="mighty_rage_potion">
+        <input type="checkbox" id="mighty_rage_potion" onclick=
+        "unique_checkboxes_unselect
+                ('mighty_rage_potion', 
+                ['haste_potion', 
+                'insane_strength_potion'
+                'heroic_potion'] )"
         <label for="mighty_rage_potion"> Use mighty rage potion</label><br>
+
+        <input type="checkbox" id="haste_potion" onclick=
+        "unique_checkboxes_unselect
+                ('mighty_rage_potion', 
+                ['mighty_rage_potion', 
+                'insane_strength_potion',
+                'heroic_potion'] )"
+        <label for="haste_potion"> Use haste potion</label><br>
+               
+        <input type="checkbox" id="insane_strength_potion" onclick=
+        "unique_checkboxes_unselect
+                ('insane_strength_potion',
+                ['mighty_rage_potion', 'haste_potion',
+                'heroic_potion'] )"
+        <label for="insane_strength_potion"> Use insane strength potion</label><br>
+
+        <input type="checkbox" id="heroic_potion" onclick=
+        "unique_checkboxes_unselect
+                ('heroic_potion', 
+                ['haste_potion', 
+                'insane_strength_potion'] )"
+        <label for="heroic_potion"> Use heroic potion</label><br>
+
+        <input type="checkbox" id="drums_of_battle">
+        <label for="drums_of_battle"> Use drums of battle</label><br>
 
         <input type="checkbox" id="recklessness">
         <label for="recklessness"> Use recklessness</label><br><br>
@@ -2241,7 +2556,7 @@
     </div>
     <br><br>
 
-    <button type="button" class="collapsible">Target and miscellaneous</button>
+    <button type="button" class="collapsible">Target and Miscellaneous</button>
     <div class="content">
         <b>Fight length:</b><br>
         <label for="fight_time_dd">Fight duration: (10-300s):</label>
@@ -2309,13 +2624,13 @@
             <label for="can_trigger_enrage"> Damage can trigger Enrage (coming soon!) </label><br>
         </div>
 
-        <input type="checkbox" id="deep_wounds">
+        <input type="checkbox" id="deep_wounds" checked>
         <label for="deep_wounds"> Enable deep wounds.</label><br>
 
     </div>
     <br><br>
 
-    <button type="button" class="collapsible">Simulator settings</button>
+    <button type="button" class="collapsible">Simulator Settings</button>
     <div class="content">
         <label for="n_simulations_dd">Number of simulations (DPS): (1 - 1.000.000):</label>
         <input type="number" id="n_simulations_dd" name="quantity" min="1" max="1000000" value="50000"><br>
@@ -2327,13 +2642,13 @@
         <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
-        <input type="checkbox" id="stat_weight_crit">
+        <input type="checkbox" id="stat_weight_crit" checked>
         <label for="stat_weight_crit"> &plusmn 1% crit.</label><br>
 
-        <input type="checkbox" id="stat_weight_expertise">
+        <input type="checkbox" id="stat_weight_expertise" checked>
         <label for="stat_weight_expertise"> &plusmn 1% hit.</label><br>
 
-        <input type="checkbox" id="stat_weight_hit">
+        <input type="checkbox" id="stat_weight_hit" checked>
         <label for="stat_weight_hit"> &plusmn 1% expertise.</label><br>
 
         <input type="checkbox" id="stat_weight_haste">
@@ -2365,7 +2680,7 @@
     </div>
 
     <p></p>
-    <button class="run_sim_button" onclick="run_sim()">Run simulator</button>
+    <button class="run_sim_button" onclick="run_sim()">Run Simulator</button>
 
     <h2>----------- RESULTS BELOW -----------</h2>
     <div id="loader">
@@ -2486,14 +2801,20 @@
 
 
     let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura",
-        "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem"];
+        "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem", "improved_seal_of_the_crusader", "blood_frenzy", "improved_sanctity_aura",
+        "ferocious_inspiration", "heroic_presence", "improved_faerie_fire", "trueshot_aura"];
     let buffs_input = [];
 
-    let consumables = ["elixir_mongoose", "blessed_sunfruit", "smoked_dessert_dumplings", "juju_power",
+    let consumables = ["elixir_mongoose", "blessed_sunfruit", "roasted_clefthoof", "juju_power",
         "elixir_of_giants", "winterfall_firewater", "juju_might", "roids", "dense_stone_main_hand",
         "elemental_stone_main_hand", "dense_stone_off_hand", "elemental_stone_off_hand",
         "consecrated_sharpening_stone_main_hand", "consecrated_sharpening_stone_off_hand",
-        "improved_weapon_totems", "enhancing_totems"];
+        "improved_weapon_totems", "enhancing_totems", "elixir_of_major_agility", 
+        "elixir_of_mastery_bloodberry_elixir", "blessed_sunfruit", "spicy_hot_talbuk", 
+        "grilled_mudfish", "ravager_dog", "charred_bear_kabobs", "elixir_of_major_strength",
+        "elixir_of_brute_force", "fel_strength_elixir", "onslaught_elixir", "elixir_of_demonslaying",
+        "flask_of_relentless_assault", "unstable_flask_of_the_bandit", "unstable_flask_of_the_beast",
+        "unstable_flask_of_the_soldier", "scroll_of_strength_v", "scroll_of_agility_v"];
     let consumables_input = [];
 
     let armor = ["helmet_dd", "neck_dd", "shoulder_dd", "back_dd",
@@ -2534,7 +2855,8 @@
         "item_strengths", "wep_strengths", "deep_wounds", "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
         "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",
-        "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk"];
+        "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk",
+        "drums_of_battle", "haste_potion", "insane_strength_potion", "heroic_potion"];
 
     let stat_weigths = ["stat_weight_expertise", "stat_weight_hit", "stat_weight_crit", "stat_weight_haste",
         "stat_weight_extra_hit", "stat_weight_mh_speed", "stat_weight_oh_speed"];

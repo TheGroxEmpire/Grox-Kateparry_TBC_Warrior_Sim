@@ -905,6 +905,30 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.leader_of_the_pack);
     }
+    if (String_helpers::find_string(buffs_vec, "improved_seal_of_the_crusader"))
+    {
+        character.add_buff(buffs.improved_seal_of_the_crusader);
+    }
+    if (String_helpers::find_string(buffs_vec, "blood_frenzy"))
+    {
+        character.add_buff(buffs.blood_frenzy);
+    }
+    if (String_helpers::find_string(buffs_vec, "improved_sanctity_aura"))
+    {
+        character.add_buff(buffs.improved_sanctity_aura);
+    }
+    if (String_helpers::find_string(buffs_vec, "ferocious_inspiration"))
+    {
+        character.add_buff(buffs.ferocious_inspiration);
+    }
+    if (String_helpers::find_string(buffs_vec, "heroic_presence"))
+    {
+        character.add_buff(buffs.heroic_presence);
+    }
+    if (String_helpers::find_string(buffs_vec, "improved_faerie_fire"))
+    {
+        character.add_buff(buffs.improved_faerie_fire);
+    }
     if (String_helpers::find_string(buffs_vec, "trueshot_aura"))
     {
         character.add_buff(buffs.trueshot_aura);
@@ -913,13 +937,37 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.elixir_mongoose);
     }
+    if (String_helpers::find_string(buffs_vec, "elixir_of_major_agility"))
+    {
+        character.add_buff(buffs.elixir_of_major_agility);
+    }
+    if (String_helpers::find_string(buffs_vec, "elixir_of_mastery_bloodberry_elixir"))
+    {
+        character.add_buff(buffs.elixir_of_mastery_bloodberry_elixir);
+    }
     if (String_helpers::find_string(buffs_vec, "blessed_sunfruit"))
     {
         character.add_buff(buffs.blessed_sunfruit);
     }
-    if (String_helpers::find_string(buffs_vec, "smoked_dessert_dumplings"))
+    if (String_helpers::find_string(buffs_vec, "roasted_clefthoof"))
     {
-        character.add_buff(buffs.smoked_dessert_dumplings);
+        character.add_buff(buffs.roasted_clefthoof);
+    }
+    if (String_helpers::find_string(buffs_vec, "spicy_hot_talbuk"))
+    {
+        character.add_buff(buffs.spicy_hot_talbuk);
+    }
+    if (String_helpers::find_string(buffs_vec, "grilled_mudfish"))
+    {
+        character.add_buff(buffs.grilled_mudfish);
+    }
+    if (String_helpers::find_string(buffs_vec, "ravager_dog"))
+    {
+        character.add_buff(buffs.ravager_dog);
+    }
+    if (String_helpers::find_string(buffs_vec, "charred_bear_kabobs"))
+    {
+        character.add_buff(buffs.charred_bear_kabobs);
     }
     if (String_helpers::find_string(buffs_vec, "juju_power"))
     {
@@ -929,6 +977,14 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.elixir_of_giants);
     }
+    if (String_helpers::find_string(buffs_vec, "elixir_of_major_strength"))
+    {
+        character.add_buff(buffs.elixir_of_major_strength);
+    }
+    if (String_helpers::find_string(buffs_vec, "elixir_of_brute_force"))
+    {
+        character.add_buff(buffs.elixir_of_brute_force);
+    }
     if (String_helpers::find_string(buffs_vec, "juju_might"))
     {
         character.add_buff(buffs.juju_might);
@@ -937,19 +993,66 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.winterfall_firewater);
     }
+    if (String_helpers::find_string(buffs_vec, "fel_strength_elixir"))
+    {
+        character.add_buff(buffs.fel_strength_elixir);
+    }
+    if (String_helpers::find_string(buffs_vec, "onslaught_elixir"))
+    {
+        character.add_buff(buffs.onslaught_elixir);
+    }
+    if (String_helpers::find_string(buffs_vec, "elixir_of_demonslaying"))
+    {
+        character.add_buff(buffs.elixir_of_demonslaying);
+    }
+    if (String_helpers::find_string(buffs_vec, "flask_of_relentless_assault"))
+    {
+        character.add_buff(buffs.flask_of_relentless_assault);
+    }
+    if (String_helpers::find_string(buffs_vec, "unstable_flask_of_the_bandit"))
+    {
+        character.add_buff(buffs.unstable_flask_of_the_bandit);
+    }
+    if (String_helpers::find_string(buffs_vec, "unstable_flask_of_the_beast"))
+    {
+        character.add_buff(buffs.unstable_flask_of_the_beast);
+    }
+    if (String_helpers::find_string(buffs_vec, "unstable_flask_of_the_soldier"))
+    {
+        character.add_buff(buffs.unstable_flask_of_the_soldier);
+    }
     if (String_helpers::find_string(buffs_vec, "roids"))
     {
         character.add_buff(buffs.roids);
     }
-    if (String_helpers::find_string(buffs_vec, "fire_toasted_bun"))
+    if (String_helpers::find_string(buffs_vec, "scroll_of_strength_v"))
     {
-        character.add_buff(buffs.fire_toasted_bun);
+        character.add_buff(buffs.scroll_of_strength_v);
+    }
+    if (String_helpers::find_string(buffs_vec, "scroll_of_agility_v"))
+    {
+        character.add_buff(buffs.scroll_of_agility_v);
     }
     if (String_helpers::find_string(buffs_vec, "mighty_rage_potion"))
     {
         character.add_buff(buffs.mighty_rage_potion);
     }
-
+    if (String_helpers::find_string(buffs_vec, "drums_of_battle"))
+    {
+        character.add_buff(buffs.drums_of_battle);
+    }
+    if (String_helpers::find_string(buffs_vec, "haste_potion"))
+    {
+        character.add_buff(buffs.haste_potion);
+    }
+    if (String_helpers::find_string(buffs_vec, "insane_strength_potion"))
+    {
+        character.add_buff(buffs.insane_strength_potion);
+    }
+    if (String_helpers::find_string(buffs_vec, "heroic_potion"))
+    {
+        character.add_buff(buffs.heroic_potion);
+    }
     if (String_helpers::find_string(buffs_vec, "dense_stone_main_hand"))
     {
         character.add_weapon_buff(Socket::main_hand, buffs.dense_stone);
@@ -961,6 +1064,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     else if (String_helpers::find_string(buffs_vec, "consecrated_sharpening_stone_main_hand"))
     {
         character.add_buff(buffs.consecrated_sharpening_stone);
+    }
+    else if (String_helpers::find_string(buffs_vec, "adamantite_stone_main_hand"))
+    {
+        character.add_weapon_buff(Socket::main_hand, buffs.adamantite_stone);
     }
 
     if (String_helpers::find_string(buffs_vec, "dense_stone_off_hand"))
@@ -974,6 +1081,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     else if (String_helpers::find_string(buffs_vec, "consecrated_sharpening_stone_off_hand"))
     {
         character.add_buff(buffs.consecrated_sharpening_stone);
+    }
+    else if (String_helpers::find_string(buffs_vec, "adamantite_stone_off_hand"))
+    {
+        character.add_weapon_buff(Socket::off_hand, buffs.adamantite_stone);
     }
 }
 

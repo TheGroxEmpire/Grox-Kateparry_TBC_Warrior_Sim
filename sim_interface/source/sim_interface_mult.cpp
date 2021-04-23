@@ -24,6 +24,22 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     {
         temp_buffs.emplace_back("mighty_rage_potion");
     }
+    else if (String_helpers::find_string(input.options, "haste_potion"))
+    {
+        temp_buffs.emplace_back("haste_potion");
+    }
+    else if (String_helpers::find_string(input.options, "insane_strength_potion"))
+    {
+        temp_buffs.emplace_back("insane_strength_potion");
+    }
+    else if (String_helpers::find_string(input.options, "heroic_potion"))
+    {
+        temp_buffs.emplace_back("heroic_potion");
+    }
+    if (String_helpers::find_string(input.options, "drums_of_battle"))
+    {
+        temp_buffs.emplace_back("drums_of_battle");
+    }
     if (String_helpers::find_string(input.options, "full_polarity"))
     {
         double full_polarity_val =
