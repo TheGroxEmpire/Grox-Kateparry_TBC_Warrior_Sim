@@ -954,11 +954,11 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
 
     if (String_helpers::find_string(ench_vec, "r2+4 stats"))
     {
-        character.add_enchant(Socket::ring, Enchant::Type::major_stats);
+        character.add_enchant(Socket::ring2, Enchant::Type::major_stats);
     }
     else if (String_helpers::find_string(ench_vec, "r2+2 damage"))
     {
-        character.add_enchant(Socket::ring, Enchant::Type::damage);
+        character.add_enchant(Socket::ring2, Enchant::Type::damage);
     }
 }
 

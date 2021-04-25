@@ -20,6 +20,7 @@ enum class Socket
     legs,
     boots,
     ring,
+    ring2,
     trinket,
     main_hand,
     off_hand,

@@ -40,6 +40,9 @@ std::ostream& operator<<(std::ostream& os, const Socket& socket)
     case Socket::ring:
         os << "ring.\n";
         break;
+    case Socket::ring2:
+        os << "ring2.\n";
+        break;
     case Socket::trinket:
         os << "trinket.\n";
         break;
@@ -95,6 +98,9 @@ std::string operator+(std::string& string, const Socket& socket)
         break;
     case Socket::ring:
         string += "Ring";
+        break;
+    case Socket::ring2:
+        string += "Ring2";
         break;
     case Socket::trinket:
         string += "Trinket";
