@@ -24,6 +24,8 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
         {
         case Enchant::Type::agility:
             return {0, 3};
+        case Enchant::Type::greater_agility:
+            return {0, 12};
         default:
             return {0, 0};
         }
@@ -46,6 +48,8 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
             return {7, 0};
         case Enchant::Type::strength9:
             return {9, 0};
+        case Enchant::Type::strength12:
+            return {12, 0};
         default:
             return {0, 0};
         }
@@ -79,6 +83,8 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
         {
         case Enchant::Type::agility:
             return {0, 7};
+        case Enchant::Type::agility12:
+            return {0, 12};
         default:
             return {0, 0};
         }
@@ -91,6 +97,19 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
             return {0, 15};
         case Enchant::Type::strength:
             return {15, 0};
+        case Enchant::Type::strength20:
+            return {20, 0};
+        case Enchant::Type::greater_agility:
+            return {0, 20};
+        default:
+            return {0, 0};
+        }
+    }
+    case Socket::ring: {
+        switch (type)
+        {
+        case Enchant::Type::major_stats:
+            return {4, 4};
         default:
             return {0, 0};
         }
@@ -108,7 +127,9 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         switch (type)
         {
         case Enchant::Type::haste:
-            return {0, 0, 0, 0, .01};
+            return {0, 0, 0, 0, .0063};
+        case Enchant::Type::ferocity:
+            return {0, 1.01, 34};
         default:
             return {0, 0, 0};
         }
@@ -119,7 +140,11 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         case Enchant::Type::attack_power:
             return {0, 0, 30};
         case Enchant::Type::naxxramas:
-            return {1, 0, 26};
+            return {0.63, 0, 26};
+        case Enchant::Type::greater_vengeance:
+            return {0.45, 0, 30};
+        case Enchant::Type::greater_blade:
+            return {0.67, 0, 20};
         default:
             return {0, 0, 0};
         }
@@ -128,7 +153,9 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         switch (type)
         {
         case Enchant::Type::haste:
-            return {0, 0, 0, 0, .01};
+            return {0, 0, 0, 0, .0063};
+        case Enchant::Type::attack_power:
+            return {0, 0, 26};
         default:
             return {0, 0, 0};
         }
@@ -137,7 +164,20 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         switch (type)
         {
         case Enchant::Type::haste:
-            return {0, 0, 0, 0, .01};
+            return {0, 0, 0, 0, .0063};
+        case Enchant::Type::cobrahide:
+            return {0.45, 0, 40};
+        case Enchant::Type::nethercobra:
+            return {0.54, 0, 50};
+        default:
+            return {0, 0, 0};
+        }
+    }
+    case Socket::ring: {
+        switch (type)
+        {
+        case Enchant::Type::damage:
+            return {0, 0, 0, 0, 0, 0, 0, 2};
         default:
             return {0, 0, 0};
         }
@@ -149,11 +189,15 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
 
 Hit_effect Armory::enchant_hit_effect(double weapon_speed, Enchant::Type type) const
 {
-    if (type == Enchant::Type::crusader)
+    switch (type)
     {
+    case Enchant::Type::crusader:
         return {"crusader", Hit_effect::Type::stat_boost, {100, 0}, {0, 0, 0}, 0, 15, weapon_speed / 60};
+    case Enchant::Type::mongoose:
+        return {"mongoose", Hit_effect::Type::stat_boost, {0, 120}, {0, 0, 0, 0, 0.02}, 0, 15, weapon_speed / 60};
+    default:
+        return {"none", Hit_effect::Type::none, {}, {}, 0, 0, 0};
     }
-    return {"none", Hit_effect::Type::none, {}, {}, 0, 0, 0};
 }
 
 void Armory::clean_weapon(Weapon& weapon) const
@@ -739,9 +783,13 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     {
         character.add_enchant(Socket::head, Enchant::Type::strength);
     }
-    else if (String_helpers::find_string(ench_vec, "e+1 haste"))
+    else if (String_helpers::find_string(ench_vec, "e+10 haste"))
     {
         character.add_enchant(Socket::head, Enchant::Type::haste);
+    }
+    else if (String_helpers::find_string(ench_vec, "eferocity"))
+    {
+        character.add_enchant(Socket::head, Enchant::Type::ferocity);
     }
 
     if (String_helpers::find_string(ench_vec, "s+30 attack_power"))
@@ -752,10 +800,22 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     {
         character.add_enchant(Socket::shoulder, Enchant::Type::naxxramas);
     }
+    else if (String_helpers::find_string(ench_vec, "sgreater_vengeance"))
+    {
+        character.add_enchant(Socket::shoulder, Enchant::Type::greater_vengeance);
+    }
+    else if (String_helpers::find_string(ench_vec, "sgreater_blade"))
+    {
+        character.add_enchant(Socket::shoulder, Enchant::Type::greater_blade);
+    }
 
     if (String_helpers::find_string(ench_vec, "b+3 agility"))
     {
         character.add_enchant(Socket::back, Enchant::Type::agility);
+    }
+    else if (String_helpers::find_string(ench_vec, "b+12 agility"))
+    {
+        character.add_enchant(Socket::back, Enchant::Type::greater_agility);
     }
 
     if (String_helpers::find_string(ench_vec, "c+3 stats"))
@@ -766,6 +826,10 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     {
         character.add_enchant(Socket::chest, Enchant::Type::major_stats);
     }
+    else if (String_helpers::find_string(ench_vec, "c+6 stats"))
+    {
+        character.add_enchant(Socket::chest, Enchant::Type::exceptional_stats);
+    }
 
     if (String_helpers::find_string(ench_vec, "w+7 strength"))
     {
@@ -774,6 +838,10 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     else if (String_helpers::find_string(ench_vec, "w+9 strength"))
     {
         character.add_enchant(Socket::wrist, Enchant::Type::strength9);
+    }
+    else if (String_helpers::find_string(ench_vec, "w+12 strength"))
+    {
+        character.add_enchant(Socket::wrist, Enchant::Type::strength12);
     }
 
     if (String_helpers::find_string(ench_vec, "h+7 strength"))
@@ -788,49 +856,98 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     {
         character.add_enchant(Socket::hands, Enchant::Type::greater_agility);
     }
-    else if (String_helpers::find_string(ench_vec, "h+1 haste"))
+    else if (String_helpers::find_string(ench_vec, "h+10 haste"))
     {
         character.add_enchant(Socket::hands, Enchant::Type::haste);
+    }
+    else if (String_helpers::find_string(ench_vec, "h+26 attack_power"))
+    {
+        character.add_enchant(Socket::hands, Enchant::Type::attack_power);
     }
 
     if (String_helpers::find_string(ench_vec, "l+8 strength"))
     {
         character.add_enchant(Socket::legs, Enchant::Type::strength);
     }
-    else if (String_helpers::find_string(ench_vec, "l+1 haste"))
+    else if (String_helpers::find_string(ench_vec, "l+10 haste"))
     {
         character.add_enchant(Socket::legs, Enchant::Type::haste);
     }
+    else if (String_helpers::find_string(ench_vec, "lcobrahide"))
+    {
+        character.add_enchant(Socket::legs, Enchant::Type::cobrahide);
+    }
+    else if (String_helpers::find_string(ench_vec, "lnethercobra"))
+    {
+        character.add_enchant(Socket::legs, Enchant::Type::nethercobra);
+    }
 
-    if (String_helpers::find_string(ench_vec, "b+7 agility"))
+    if (String_helpers::find_string(ench_vec, "t+7 agility"))
     {
         character.add_enchant(Socket::boots, Enchant::Type::agility);
+    }
+    if (String_helpers::find_string(ench_vec, "t+12 agility"))
+    {
+        character.add_enchant(Socket::boots, Enchant::Type::agility12);
     }
 
     if (String_helpers::find_string(ench_vec, "mcrusader"))
     {
         character.add_enchant(Socket::main_hand, Enchant::Type::crusader);
     }
+    else if (String_helpers::find_string(ench_vec, "mmongoose"))
+    {
+        character.add_enchant(Socket::main_hand, Enchant::Type::mongoose);
+    }
     else if (String_helpers::find_string(ench_vec, "m+15 agility"))
     {
         character.add_enchant(Socket::main_hand, Enchant::Type::agility);
     }
+    else if (String_helpers::find_string(ench_vec, "m+20 agility"))
+    {
+        character.add_enchant(Socket::main_hand, Enchant::Type::greater_agility);
+    }
     else if (String_helpers::find_string(ench_vec, "m+15 strength"))
     {
         character.add_enchant(Socket::main_hand, Enchant::Type::strength);
+    }
+    else if (String_helpers::find_string(ench_vec, "m+20 strength"))
+    {
+        character.add_enchant(Socket::main_hand, Enchant::Type::strength20);
     }
 
     if (String_helpers::find_string(ench_vec, "ocrusader"))
     {
         character.add_enchant(Socket::off_hand, Enchant::Type::crusader);
     }
+    else if (String_helpers::find_string(ench_vec, "omongoose"))
+    {
+        character.add_enchant(Socket::off_hand, Enchant::Type::mongoose);
+    }
     else if (String_helpers::find_string(ench_vec, "o+15 agility"))
     {
         character.add_enchant(Socket::off_hand, Enchant::Type::agility);
     }
+    else if (String_helpers::find_string(ench_vec, "o+20 agility"))
+    {
+        character.add_enchant(Socket::off_hand, Enchant::Type::greater_agility);
+    }
     else if (String_helpers::find_string(ench_vec, "o+15 strength"))
     {
         character.add_enchant(Socket::off_hand, Enchant::Type::strength);
+    }
+    else if (String_helpers::find_string(ench_vec, "o+20 strength"))
+    {
+        character.add_enchant(Socket::off_hand, Enchant::Type::strength20);
+    }
+
+    if (String_helpers::find_string(ench_vec, "r+4 stats"))
+    {
+        character.add_enchant(Socket::ring, Enchant::Type::major_stats);
+    }
+    else if (String_helpers::find_string(ench_vec, "r+2 damage"))
+    {
+        character.add_enchant(Socket::ring, Enchant::Type::damage);
     }
 }
 

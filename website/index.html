@@ -1487,26 +1487,31 @@
         <span style="position: relative;left: 90px;">Back</span>
         <span style="position: relative;left: 150px;">Chest</span><br>
         <select id="helmet_ench_dd" class="enchant-select">
-            <option value="helmet">helmet</option>
+            <option value="helmet">none</option>
             <option value="+8 strength">+8 strength</option>
-            <option value="+1 haste">+1 haste</option>
+            <option value="+10 haste">+10 haste</option>
+            <option value="ferocity">+16 hit +34 AP</option>
         </select>
 
         <select id="shoulder_ench_dd" class="enchant-select">
-            <option value="shoulder">shoulder</option>
+            <option value="shoulder">none</option>
             <option value="+30 attack_power">+30 AP</option>
-            <option value="naxxramas">+1 crit +26 AP</option>
+            <option value="naxxramas">+14 crit +26 AP</option>
+            <option value="greater_vengeance">+10 crit +30 AP</option>
+            <option value="greater_blade">+15 crit +20 AP</option>
         </select>
 
         <select id="back_ench_dd" class="enchant-select">
-            <option value="back">back</option>
+            <option value="back">none</option>
             <option value="+3 agility">+3 agility</option>
+            <option value="+12 agility">+12 agility</option>
         </select>
 
         <select id="chest_ench_dd" class="enchant-select">
-            <option value="back">chest</option>
+            <option value="back">none</option>
             <option value="+3 stats">+3 stats</option>
             <option value="+4 stats">+4 stats</option>
+            <option value="+6 stats">+6 stats</option>
         </select>
 
         <p></p>
@@ -1515,46 +1520,70 @@
         <span style="position: relative;left: 120px;">Legs</span>
         <span style="position: relative;left: 185px;">Boots</span><br>
         <select id="wrist_ench_dd" class="enchant-select">
-            <option value="wrist">wrist</option>
+            <option value="wrist">none</option>
             <option value="+7 strength">+7 strength</option>
             <option value="+9 strength">+9 strength</option>
+            <option value="+12 strength">+12 strength</option>
         </select>
 
         <select id="hands_ench_dd" class="enchant-select">
-            <option value="hands">hands</option>
+            <option value="hands">none</option>
             <option value="+7 agility">+7 agility</option>
             <option value="+15 agility">+15 agility</option>
             <option value="+7 strength">+7 strength</option>
-            <option value="+1 haste">+1 haste</option>
+            <option value="+10 haste">+10 haste</option>
+            <option value="+26 attack_power">+26 AP</option>
         </select>
 
         <select id="legs_ench_dd" class="enchant-select">
-            <option value="legs">legs</option>
+            <option value="legs">none</option>
             <option value="+8 strength">+8 strength</option>
-            <option value="+1 haste">+1 haste</option>
+            <option value="+10 haste">+10 haste</option>
+            <option value="cobrahide">+10 crit +40 AP</option>
+            <option value="nethercobra">+12 crit +50 AP</option>
         </select>
 
         <select id="boots_ench_dd" class="enchant-select">
-            <option value="boots">boots</option>
+            <option value="boots">none</option>
             <option value="+7 agility">+7 agility</option>
+            <option value="+12 agility">+12 agility</option>
             <option value="minor speed">minor speed</option>
         </select>
 
         <p></p>
         <span>Main-Hand</span>
-        <span style="position: relative;left: 25px;">Off-Hand</span><br>
+        <span style="position: relative;left: 25px;">Off-Hand</span>
+        <span style="position: relative;left: 60px;">Ring 1</span>
+        <span style="position: relative;left: 115px;">Ring 2</span><br>
         <select id="main_hand_ench_dd" class="enchant-select">
-            <option value="main_hand">weapon</option>
+            <option value="main_hand">none</option>
             <option value="crusader">crusader</option>
+            <option value="mongoose">mongoose</option>
             <option value="+15 agility">+15 agility</option>
             <option value="+15 strength">+15 strength</option>
+            <option value="+20 agility">+20 agility</option>
+            <option value="+20 strength">+20 strength</option>
         </select>
 
         <select id="off_hand_ench_dd" class="enchant-select">
-            <option value="off_hand">off_hand</option>
+            <option value="off_hand">none</option>
             <option value="crusader">crusader</option>
             <option value="+15 agility">+15 agility</option>
             <option value="+15 strength">+15 strength</option>
+            <option value="+20 agility">+20 agility</option>
+            <option value="+20 strength">+20 strength</option>
+        </select>
+
+        <select id="ring_1_ench_dd" class="enchant-select">
+            <option value="ring_1">none</option>
+            <option value="+4 stats">+4 stats</option>
+            <option value="+2 damage">+2 damage</option>
+        </select>
+
+        <select id="ring_2_ench_dd" class="enchant-select">
+            <option value="ring_2">none</option>
+            <option value="+4 stats">+4 stats</option>
+            <option value="+2 damage">+2 damage</option>
         </select>
     </div>
     <br><br>
@@ -2842,8 +2871,8 @@
     let weapons_input_mult = [];
 
     let enchants = ["helmet_ench_dd", "shoulder_ench_dd", "back_ench_dd", "chest_ench_dd", "wrist_ench_dd",
-        "hands_ench_dd", "legs_ench_dd", "boots_ench_dd", "main_hand_ench_dd", "off_hand_ench_dd"];
-    let enchant_prefixes = ["e", "s", "b", "c", "w", "h", "l", "b", "m", "o"];
+        "hands_ench_dd", "legs_ench_dd", "boots_ench_dd", "main_hand_ench_dd", "off_hand_ench_dd", "ring_1_ench_dd", "ring_2_ench_dd"];
+    let enchant_prefixes = ["e", "s", "b", "c", "w", "h", "l", "t", "m", "o", "r", "r"];
     let enchants_input = [];
 
     let float_options = ["n_simulations_dd", "n_simulations_stat_dd", "n_simulations_talent_dd",

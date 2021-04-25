@@ -191,14 +191,25 @@ struct Enchant
         strength,
         strength7,
         strength9,
+        strength12,
+        strength20,
         agility,
+        agility12,
         greater_agility,
         haste,
         crusader,
         minor_stats,
         major_stats,
         attack_power,
-        naxxramas
+        naxxramas,
+        damage,
+        ferocity,
+        greater_vengeance,
+        greater_blade,
+        exceptional_stats,
+        cobrahide,
+        nethercobra,
+        mongoose
     };
 
     Enchant() = default;
