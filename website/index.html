@@ -2044,7 +2044,8 @@
             <label for="blood_frenzy"> Blood Frenzy</label><br>
 
             <input type="checkbox" id="ferocious_inspiration">
-            <label for="ferocious_inspiration"> Ferocious Inspiration</label><br>
+            <label for="ferocious_inspiration"> Ferocious Inspiration</label>
+            <input type="number" id="ferocious_inspiration_dd" name="quantity" min="0" max="12" value="3" step="3">% damage increase.<br>
 
             <input type="checkbox" id="heroic_presence">
             <label for="heroic_presence" style="color: #003d99"> Heroic Presence</label><br>
@@ -2056,7 +2057,7 @@
             <label for="battle_squawk">Battle squawk:
                 <input type="number" id="battle_squawk_dd" name="quantity" min="0" max="25" value="5" step="5">% haste.
         </div>
-
+        <br><br>
         <div class="checkbox_div">
             <p class="select-title">Consumables:</p><br>
             <b>Flasks & Battle Elixirs:</b><br>
@@ -2301,13 +2302,13 @@
             <input type="checkbox" id="scroll_of_strength_v" onclick=
                 "unique_checkboxes_unselect
                     ('scroll_of_strength_v', 
-                    ['scroll_of_agility_v'] )"
+                    ['scroll_of_agility_v'] )">
             <label for="scroll_of_strength_v"> Scroll of Strength V</label><br>
 
             <input type="checkbox" id="scroll_of_agility_v" onclick=
                 "unique_checkboxes_unselect
                 ('scroll_of_agility_v', 
-                ['scroll_of_strength_v'] )"
+                ['scroll_of_strength_v'] )">
             <label for="scroll_of_agility_v"> Scroll of Agility V</label><br>
 
             <b>Food:</b><br>
@@ -2316,7 +2317,7 @@
                 ('blessed_sunfruit', 
                 ['roasted_clefthoof', 
                 'spicy_hot_talbuk', 'grilled_mudfish',
-                'ravager_dog', 'charred_bear_kabobs'] )"
+                'ravager_dog', 'charred_bear_kabobs'] )">
             <label for="blessed_sunfruit"> Blessed Sunfruit</label><br>
 
             <input type="checkbox" id="roasted_clefthoof" onclick=
@@ -2324,7 +2325,7 @@
                 ('roasted_clefthoof', 
                 ['blessed_sunfruit',
                 'spicy_hot_talbuk', 'grilled_mudfish',
-                'ravager_dog', 'charred_bear_kabobs'] )"
+                'ravager_dog', 'charred_bear_kabobs'] )">
             <label for="roasted_clefthoof"> Roasted Clefthoof</label><br>
 
             <input type="checkbox" id="spicy_hot_talbuk" onclick=
@@ -2332,7 +2333,7 @@
                 ('spicy_hot_talbuk', 
                 ['blessed_sunfruit', 'roasted_clefthoof', 
                 'grilled_mudfish',
-                'ravager_dog', 'charred_bear_kabobs'] )"
+                'ravager_dog', 'charred_bear_kabobs'] )" checked>
             <label for="spicy_hot_talbuk"> Spicy Hot Talbuk</label><br>
 
             <input type="checkbox" id="grilled_mudfish" onclick=
@@ -2340,7 +2341,7 @@
                 ('grilled_mudfish',
                 ['blessed_sunfruit', 'roasted_clefthoof', 
                 'spicy_hot_talbuk',
-                'ravager_dog', 'charred_bear_kabobs'] )"
+                'ravager_dog', 'charred_bear_kabobs'] )">
             <label for="grilled_mudfish"> Grilled Mudfish</label><br>
 
             <input type="checkbox" id="ravager_dog" onclick=
@@ -2348,7 +2349,7 @@
                 ('ravager_dog', 
                 ['blessed_sunfruit', 'roasted_clefthoof', 
                 'spicy_hot_talbuk', 'grilled_mudfish',
-                'charred_bear_kabobs'] )"
+                'charred_bear_kabobs'] )">
             <label for="ravager_dog"> Ravager Dog</label><br>
 
             <input type="checkbox" id="charred_bear_kabobs" onclick=
@@ -2356,7 +2357,7 @@
                 ('charred_bear_kabobs', 
                 ['blessed_sunfruit', 'roasted_clefthoof', 
                 'spicy_hot_talbuk', 'grilled_mudfish',
-                'ravager_dog'] )"
+                'ravager_dog'] )">
             <label for="charred_bear_kabobs"> Charred Bear Kabobs</label><br>
 
             <b>Weapon Stones:</b><br>
@@ -2531,8 +2532,9 @@
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
             <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
-            <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5"
-                   step="0.1"><br>
+            <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5"step="0.1"><br>
+            <input type="checkbox" id="use_sl_in_exec_phase">
+            <label for="use_sl_in_exec_phase"> Use slam in execute phase</label><br>    
         </div>
 
         <input type="checkbox" id="use_overpower" onclick="show_div('use_overpower', 'overpower_div')">
@@ -2884,15 +2886,15 @@
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
         "slam_spam_max_time_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
-        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd"];
+        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
         "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
         "item_strengths", "wep_strengths", "deep_wounds", "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",
-        "ability_queue", "first_hit_heroic_strike", "use_slam", "use_ms_in_exec_phase", "use_mortal_strike",
-        "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk",
+        "ability_queue", "first_hit_heroic_strike", "use_slam", "use_sl_in_exec_phase", "use_ms_in_exec_phase", "use_mortal_strike",
+        "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk", "ferocious_inspiration",
         "drums_of_battle", "haste_potion", "insane_strength_potion", "heroic_potion"];
 
     let stat_weigths = ["stat_weight_expertise", "stat_weight_hit", "stat_weight_crit", "stat_weight_haste",

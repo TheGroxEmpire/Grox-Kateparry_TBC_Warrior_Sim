@@ -13,6 +13,7 @@ struct Buffs
     // these are set in "sim_interface.cpp" or "sim_interface_mult.cpp" depending on whats specified
     Buff full_polarity{"full_polarity", {}, {}};
     Buff battle_squawk{"battle_squawk", {}, {}};
+    Buff ferocious_inspiration{"ferocious_inspiration", {}, {}};
 
     // Player_buffs
     Buff battle_shout{"battle_shout", {}, {}, 0, {}, {{"battle_shout", Use_effect::Effect_socket::unique, {}, {0, 0, 193}, 0, 120, 120, true}}};
@@ -23,7 +24,6 @@ struct Buffs
     Buff improved_seal_of_the_crusader{"improved_seal_of_the_crusader", Attributes{0.0, 0.0}, Special_stats{3.0, 0.0, 0.0}};
     Buff blood_frenzy{"blood_frenzy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .04}};
     Buff improved_sanctity_aura{"improved_sanctity_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .02, 0, 0, 0, 0, .02}};
-    Buff ferocious_inspiration{"ferocious_inspiration", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .03, 0, 0, 0, 0, .03}};
     Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0, 0.0}};
     Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0.0}};
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};

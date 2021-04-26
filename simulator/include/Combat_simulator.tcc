@@ -37,6 +37,10 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     {
         combat.use_ms_in_exec_phase = true;
     }
+    if (String_helpers::find_string(input.options, "use_sl_in_exec_phase"))
+    {
+        combat.use_sl_in_exec_phase = true;
+    }
     if (String_helpers::find_string(input.options, "use_hs_in_exec_phase"))
     {
         combat.use_hs_in_exec_phase = true;

@@ -392,7 +392,7 @@ int main()
         "use_overpower", "use_slam", "use_sweeping_strikes", "multi_target_mode",
         //        "wep_strengths",
         //        "fungal_bloom",
-        "full_polarity",
+        "full_polarity", "ferocious_inspiration",
         //        "item_strengths",
         "wep_strengths", "battle_squawk"};
 
@@ -428,6 +428,7 @@ int main()
         "slam_rage_dd",
         "full_polarity_dd",
         "battle_squawk_dd",
+        "ferocious_inspiration_dd",
         "max_optimize_time_dd",
     };
 

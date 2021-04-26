@@ -976,6 +976,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.full_polarity);
     }
+    if (String_helpers::find_string(buffs_vec, "ferocious_inspiration"))
+    {
+        character.add_buff(buffs.ferocious_inspiration);
+    }
     if (String_helpers::find_string(buffs_vec, "battle_squawk"))
     {
         character.add_buff(buffs.battle_squawk);
@@ -1048,10 +1052,6 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     if (String_helpers::find_string(buffs_vec, "improved_sanctity_aura"))
     {
         character.add_buff(buffs.improved_sanctity_aura);
-    }
-    if (String_helpers::find_string(buffs_vec, "ferocious_inspiration"))
-    {
-        character.add_buff(buffs.ferocious_inspiration);
     }
     if (String_helpers::find_string(buffs_vec, "heroic_presence"))
     {

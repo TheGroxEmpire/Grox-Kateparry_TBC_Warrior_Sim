@@ -52,6 +52,14 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         item_optimizer.armory.buffs.full_polarity.special_stats.damage_mod_spell = full_polarity_val / 100.0;
         temp_buffs.emplace_back("full_polarity");
     }
+    if (String_helpers::find_string(input.options, "ferocious_inspiration"))
+    {
+        double ferocious_inspiration_val =
+            String_helpers::find_value(input.float_options_string, input.float_options_val, "ferocious_inspiration_dd");
+        item_optimizer.armory.buffs.ferocious_inspiration.special_stats.damage_mod_physical = ferocious_inspiration_val / 100.0;
+        item_optimizer.armory.buffs.ferocious_inspiration.special_stats.damage_mod_spell = ferocious_inspiration_val / 100.0;
+        temp_buffs.emplace_back("ferocious_inspiration");
+    }
     if (String_helpers::find_string(input.options, "fungal_bloom"))
     {
         temp_buffs.emplace_back("fungal_bloom");

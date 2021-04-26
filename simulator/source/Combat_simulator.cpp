@@ -1563,6 +1563,37 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
             else if (execute_phase)
             {
+                if (weapons[0].weapon_socket == Weapon_socket::two_hand && config.combat.use_slam && config.combat.use_sl_in_exec_phase)
+                {
+                    if (!slam_manager.is_slam_queued() && time_keeper_.global_cd < 0.0)
+                    {
+                        if (start_cast_slam(mh_swing, rage, weapons[0].internal_swing_timer))
+                        {
+                            continue;
+                        }
+                    }
+                    else if (slam_manager.time_left(time_keeper_.time) <= 0.0)
+                    {
+                        slam(weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
+                        slam_manager.un_queue_slam();
+                        weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
+                        if (time_keeper_.global_cd < 0.0)
+                        {
+                            if (start_cast_slam(mh_swing, rage, weapons[0].internal_swing_timer))
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                if (time_keeper_.global_cd < 0 && rage > execute_rage_cost_)
+                {
+                    execute(weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
+                }
                 if (rage > heroic_strike_rage_cost && !ability_queue_manager.heroic_strike_queued &&
                     config.combat.use_hs_in_exec_phase)
                 {
@@ -1595,10 +1626,6 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     {
                         mortal_strike(weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
                     }
-                }
-                if (time_keeper_.global_cd < 0 && rage > execute_rage_cost_)
-                {
-                    execute(weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
                 }
             }
             else
