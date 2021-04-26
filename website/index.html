@@ -923,6 +923,7 @@
                     <option value="perditions_blade"> Perditions Blade</option>
                     <option value="r14_dagger"> R14 Dagger</option>
                     <option value="none" disabled> --- MACES ---</option>
+                    <option value="empyrean_demolisher"> Empyrean Demolisher</option>
                     <option value="anubisath_warhammer"> Anubisath Warhammer</option>
                     <option value="blessed_qiraji_warhammer"> Blessed Qiraji Warhammer</option>
                     <option value="ebon_hand"> Ebon Hand</option>
@@ -2877,6 +2878,12 @@
     let enchant_prefixes = ["e", "s", "b", "c", "w", "h", "l", "t", "m", "o", "r1", "r2"];
     let enchants_input = [];
 
+    let gems = ["helmet_gem1_dd", "helmet_gem2_dd", "helmet_gem3_dd", "neck_gem1_dd", "shoulder_gem1_dd", "shoulder_gem2_dd", 
+        "back_gem1_dd","chest_gem1_dd", "chest_gem2_dd", "chest_gem3_dd", "wrists_gem1_dd", "wrists_gem2_dd", "hands_gem1_dd", 
+        "hands_gem2_dd","belt_gem1_dd", "belt_gem2_dd", "legs_gem1_dd", "legs_gem2_dd", "legs_gem3_dd",
+        "boots_gem1_dd", "boots_gem2_dd", "ranged_gem1_dd", "ranged_gem2_dd", "main_hand_gem1_dd", "off_hand_gem1_dd"];
+    let gems_input = [];
+
     let float_options = ["n_simulations_dd", "n_simulations_stat_dd", "n_simulations_talent_dd",
         "opponent_level_dd", "boss_armor_dd", "fight_time_dd",
         "sunder_armor_dd", "heroic_strike_rage_thresh_dd", "cleave_rage_thresh_dd", "whirlwind_rage_thresh_dd",
@@ -2953,10 +2960,6 @@
         let myFile = file.files[0];
         let reader = new FileReader();
 
-        //set all buff-values to unchecked before loading
-        // for (let world_buff of world_buffs) {
-        //     document.getElementById(world_buff).checked = false;
-        // }
         for (let buff of buffs) {
             document.getElementById(buff).checked = false;
         }
@@ -3012,9 +3015,7 @@
             let dd_string = enchants_input[i].slice(1, enchants_input[i].length);
             file_content += enchants[i] + " " + dd_string + "\n";
         }
-        // for (let i = 0; i < world_buffs.length; i++) {
-        //     file_content += world_buffs[i] + " " + world_buffs_input[i] + "\n";
-        // }
+
         for (let i = 0; i < buffs.length; i++) {
             file_content += buffs[i] + " " + buffs_input[i] + "\n";
         }
@@ -3078,11 +3079,6 @@
         race = document.getElementById("race_dd");
         race_string = race.options[race.selectedIndex].value;
 
-        // world_buffs_input = [];
-        // for (let world_buff of world_buffs) {
-        //     let temp = document.getElementById(world_buff);
-        //     world_buffs_input.push((temp.checked) ? world_buff : "");
-        // }
         buffs_input = [];
         for (let buff of buffs) {
             let temp = document.getElementById(buff);
@@ -3223,9 +3219,7 @@
         }
 
         let buff_vec = new Module.StringList();
-        // for (let buff of world_buffs_input) {
-        //     buff_vec.push_back(buff);
-        // }
+
         for (let buff of buffs_input) {
             buff_vec.push_back(buff);
         }
