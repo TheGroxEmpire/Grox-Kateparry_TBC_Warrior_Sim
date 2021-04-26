@@ -112,6 +112,8 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
         {
         case Enchant::Type::major_stats:
             return {4, 4};
+        case Enchant::Type::ring_stats:
+            return {4, 4};
         default:
             return {0, 0};
         }
@@ -954,11 +956,11 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
 
     if (String_helpers::find_string(ench_vec, "r2+4 stats"))
     {
-        character.add_enchant(Socket::ring2, Enchant::Type::major_stats);
+        character.add_enchant(Socket::ring, Enchant::Type::ring_stats);
     }
     else if (String_helpers::find_string(ench_vec, "r2+2 damage"))
     {
-        character.add_enchant(Socket::ring2, Enchant::Type::damage);
+        character.add_enchant(Socket::ring, Enchant::Type::damage);
     }
 }
 
