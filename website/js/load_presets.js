@@ -90,7 +90,7 @@ function load_p1prebisitems() {
         "blackhands_breadth", "hand_of_justice", "satyrs_bow"];
     let selected_weapons = ["dal_rends_sacred_charge", "dal_rends_tribal_guardian", "ironfoe", "thrash_blade", "mirahs_song"];
     let selected_enchants = ["+8 strength", "+30 attack_power", "+3 agility", "+4 stats", "+9 strength",
-        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis_mult(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -102,7 +102,7 @@ function load_p6pvebismult() {
         "kiss_of_the_spider", "badge_of_the_swarmguard", "nerubian_slavemaker"];
     let selected_weapons = ["the_hungering_cold", "iblis_blade_of_the_fallen_seraph"];
     let selected_enchants = ["+8 strength", "naxxramas", "+3 agility", "+4 stats", "+9 strength",
-        "+15 agility", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+15 agility", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis_mult(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -114,7 +114,7 @@ function load_p5pvebismult() {
         "jom_gabbar", "badge_of_the_swarmguard", "crossbow_of_imminent_doom"];
     let selected_weapons = ["chromatically_tempered_sword", "maladath"];
     let selected_enchants = ["+8 strength", "+30 attack_power", "+3 agility", "+4 stats", "+9 strength",
-        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis_mult(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -126,7 +126,7 @@ function load_p6pvebis() {
         "kiss_of_the_spider", "badge_of_the_swarmguard", "nerubian_slavemaker"];
     let selected_weapons = ["the_hungering_cold", "iblis_blade_of_the_fallen_seraph", "might_of_menethil"];
     let selected_enchants = ["+8 strength", "naxxramas", "+3 agility", "+4 stats", "+9 strength",
-        "+15 agility", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+15 agility", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -138,7 +138,7 @@ function load_p5pvebis() {
         "jom_gabbar", "badge_of_the_swarmguard", "crossbow_of_imminent_doom"];
     let selected_weapons = ["chromatically_tempered_sword", "maladath", "bonereavers_edge"];
     let selected_enchants = ["+8 strength", "+30 attack_power", "+3 agility", "+4 stats", "+9 strength",
-        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -150,7 +150,7 @@ function load_p4pvebis() {
         "diamond_flask", "hand_of_justice", "strikers_mark"];
     let selected_weapons = ["chromatically_tempered_sword", "maladath", "bonereavers_edge"];
     let selected_enchants = ["+8 strength", "+30 attack_power", "+3 agility", "+4 stats", "+9 strength",
-        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -162,7 +162,7 @@ function load_p3pvebis() {
         "diamond_flask", "hand_of_justice", "strikers_mark"];
     let selected_weapons = ["chromatically_tempered_sword", "maladath", "bonereavers_edge"];
     let selected_enchants = ["+8 strength", "shoulder", "+3 agility", "+4 stats", "+9 strength",
-        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader"];
+        "+7 strength", "+8 strength", "+7 agility", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis(selected_items, selected_weapons, selected_enchants);
 }
 
@@ -174,6 +174,6 @@ function load_p1prebis() {
         "blackhands_breadth", "hand_of_justice", "satyrs_bow"];
     let selected_weapons = ["dal_rends_sacred_charge", "dal_rends_tribal_guardian", "treants_bane"];
     let selected_enchants = ["+8 strength", "shoulder", "+3 agility", "+4 stats", "+9 strength",
-        "+7 strength", "+8 strength", "boots", "crusader", "crusader"];
+        "+7 strength", "+8 strength", "boots", "crusader", "crusader", "+4 stats", "+4 stats"];
     select_prebis(selected_items, selected_weapons, selected_enchants);
 }
