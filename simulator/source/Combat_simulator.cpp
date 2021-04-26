@@ -476,12 +476,12 @@ void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Soc
     {
         if (level_difference > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - config.talents.weapon_mastery -
             (int(special_stats.expertise + special_stats.sword_expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - config.talents.weapon_mastery -
             (int(special_stats.expertise + special_stats.sword_expertise) * 0.25), 0.0);
         }
     }
@@ -489,12 +489,12 @@ void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Soc
     {
         if (level_difference > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - config.talents.weapon_mastery -
             (int(special_stats.expertise + special_stats.mace_expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - config.talents.weapon_mastery -
             (int(special_stats.expertise + special_stats.mace_expertise) * 0.25), 0.0);
         }
     }
@@ -502,12 +502,12 @@ void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Soc
     {
         if (level_difference > 0)
         {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
+            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - config.talents.weapon_mastery -
             (int(special_stats.expertise + special_stats.axe_expertise) * 0.25), 0.0);
         }
         else
         {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
+            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - config.talents.weapon_mastery -
             (int(special_stats.expertise + special_stats.axe_expertise) * 0.25), 0.0);
         }
     }

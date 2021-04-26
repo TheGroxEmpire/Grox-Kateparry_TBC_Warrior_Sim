@@ -61,6 +61,36 @@ enum class Set
     battlegear_of_undead_slaying
 };
 
+enum class Gem_type
+{
+    none,
+    meta,
+    red,
+    yellow,
+    blue
+};
+
+enum class Gem_bonus
+{
+    none
+};
+
+struct Gem_socket
+{
+    Gem_socket() = default;
+
+    Gem_socket(Gem_type socket_1 = Gem_type::none, Gem_type socket_2 = Gem_type::none, Gem_type socket_3 = Gem_type::none, Gem_bonus set_bonus = Gem_bonus::none)
+        : socket_1(socket_1)
+        , socket_2(socket_2)
+        , socket_3(socket_3)
+        , set_bonus(set_bonus){};
+
+    Gem_type socket_1;
+    Gem_type socket_2;
+    Gem_type socket_3;
+    Gem_bonus set_bonus;
+};
+
 struct Over_time_effect
 {
     Over_time_effect() = default;
@@ -272,14 +302,15 @@ struct Armor
 {
     Armor(std::string name, Attributes attributes, Special_stats special_stats, Socket socket, Set set_name = Set::none,
           std::vector<Hit_effect> hit_effects = std::vector<Hit_effect>(),
-          std::vector<Use_effect> use_effects = std::vector<Use_effect>())
+          std::vector<Use_effect> use_effects = std::vector<Use_effect>(), std::vector<Gem_socket> gem_socket = std::vector<Gem_socket>())
         : name(std::move(name))
         , attributes(attributes)
         , special_stats(special_stats)
         , socket(socket)
         , set_name(set_name)
         , hit_effects(std::move(hit_effects))
-        , use_effects(std::move(use_effects)){};
+        , use_effects(std::move(use_effects))
+        , gem_socket(std::move(gem_socket)){};
     std::string name;
     Attributes attributes;
     Special_stats special_stats;
@@ -288,6 +319,7 @@ struct Armor
     Enchant enchant{};
     std::vector<Hit_effect> hit_effects{};
     std::vector<Use_effect> use_effects{};
+    std::vector<Gem_socket> gem_socket{};
 };
 
 struct Weapon

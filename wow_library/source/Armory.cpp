@@ -1238,11 +1238,6 @@ void Armory::add_talents_to_character(Character& character, const std::vector<st
     {
         character.talent_special_stats.expertise += val * 0.5;
     }
-    val = fv.find("weapon_mastery_talent");
-    if (val > 0)
-    {
-        character.talent_special_stats.expertise += val;
-    }
     val = fv.find("precision_talent");
     if (val > 0)
     {
