@@ -528,7 +528,7 @@ void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Soc
     double glancing_chance = 0.0;
     if (level_difference > 0)
     {
-        glancing_chance = 10 + level_difference * 5;
+        glancing_chance = 6 + level_difference * 6;
     }
 
     double glancing_penalty;
