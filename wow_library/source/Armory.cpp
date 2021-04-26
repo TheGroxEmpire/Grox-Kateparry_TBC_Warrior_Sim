@@ -113,7 +113,7 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
         case Enchant::Type::major_stats:
             return {4, 4};
         case Enchant::Type::ring_stats:
-            return {4, 4};
+            return {8, 8};
         default:
             return {0, 0};
         }
@@ -182,6 +182,8 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         {
         case Enchant::Type::damage:
             return {0, 0, 0, 0, 0, 0, 0, 2};
+        case Enchant::Type::ring_damage:
+            return {0, 0, 0, 0, 0, 0, 0, 4};
         default:
             return {0, 0, 0};
         }
@@ -945,20 +947,20 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
         character.add_enchant(Socket::off_hand, Enchant::Type::strength20);
     }
 
-    if (String_helpers::find_string(ench_vec, "r1+4 stats"))
-    {
-        character.add_enchant(Socket::ring, Enchant::Type::major_stats);
-    }
-    else if (String_helpers::find_string(ench_vec, "r1+2 damage"))
-    {
-        character.add_enchant(Socket::ring, Enchant::Type::damage);
-    }
-
-    if (String_helpers::find_string(ench_vec, "r2+4 stats"))
+    if (String_helpers::find_string(ench_vec, "r1+4 stats") && String_helpers::find_string(ench_vec, "r2+4 stats"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::ring_stats);
     }
-    else if (String_helpers::find_string(ench_vec, "r2+2 damage"))
+    else if (String_helpers::find_string(ench_vec, "r1+4 stats") || String_helpers::find_string(ench_vec, "r2+4 stats"))
+    {
+        character.add_enchant(Socket::ring, Enchant::Type::major_stats);
+    }
+
+    if (String_helpers::find_string(ench_vec, "r1+2 damage") && String_helpers::find_string(ench_vec, "r2+2 damage"))
+    {
+        character.add_enchant(Socket::ring, Enchant::Type::ring_damage);
+    }
+    else if (String_helpers::find_string(ench_vec, "r1+2 damage") || String_helpers::find_string(ench_vec, "r2+2 damage"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::damage);
     }

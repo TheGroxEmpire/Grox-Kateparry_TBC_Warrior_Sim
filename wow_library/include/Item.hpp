@@ -201,6 +201,7 @@ struct Enchant
         minor_stats,
         major_stats,
         ring_stats,
+        ring_damage,
         attack_power,
         naxxramas,
         damage,
