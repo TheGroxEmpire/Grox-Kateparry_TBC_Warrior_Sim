@@ -220,7 +220,7 @@ double get_hit_crit_expertise_ap_equivalent(const Special_stats& special_stats, 
     }
 
     double ap_from_expertise{};
-    if (special_stats.expertise < dodge_chance)
+    if (dodge_chance > 0)
     {
         ap_from_expertise = special_stats.expertise * expertise_w;
     }

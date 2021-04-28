@@ -56,5 +56,6 @@
         "forward_list": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "python.pythonPath": "D:\\Programs\\Anaconda\\envs\\Xorgress\\python.exe"
 }
