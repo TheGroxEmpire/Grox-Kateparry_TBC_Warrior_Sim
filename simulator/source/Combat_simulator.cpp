@@ -532,9 +532,9 @@ void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Soc
     }
 
     double glancing_penalty;
-    if (skill_diff >= 8)
+    if (level_difference > 0)
     {
-        glancing_penalty = 35.0 - (15.0 - skill_diff) * 4.0;
+        glancing_penalty = 25.0 - (15.0 - level_difference * 5);
     }
     else
     {
