@@ -237,7 +237,7 @@ TEST(TestSuite, test_dps_return)
     double glancing_chance = 0.24;
     double hit_chance = (1 - dodge_chance - miss_chance - glancing_chance);
     double dps_white = 50 + 25;
-    double expected_dps = dps_white * hit_chance + dps_white * 0.65 * glancing_chance;
+    double expected_dps = dps_white * hit_chance + dps_white * 0.75 * glancing_chance;
 
     Distribution distribution = sim.get_dps_distribution();
     auto conf_interval = distribution.confidence_interval_of_the_mean(0.99);
