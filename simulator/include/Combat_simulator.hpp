@@ -461,6 +461,7 @@ private:
     double flurry_uptime_mh_{};
     double flurry_uptime_oh_{};
     double heroic_strike_uptime_{};
+    double rampage_uptime_{};
 
     int execute_rage_cost_{};
     int heroic_strike_rage_cost{};

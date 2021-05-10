@@ -48,6 +48,8 @@ armory_location = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', 'wow_library', 'include', 'Armory.hpp'))
 index_html_location = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', 'index.html'))
+gems_js_location = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', 'js', 'gems.js'))
 file1 = open(armory_location, "r")
 lines = file1.readlines()
 file1.close()
@@ -123,6 +125,8 @@ copy_lines = []
 copy_line = True
 string_begin = "<!--armor begin{}-->"
 string_stop = "<!--armor stop{}-->"
+socket_begin = "//item socket begin"
+socket_stop = "//item socket end"
 n_found = 0
 start_indexes = []
 stop_indexes = []

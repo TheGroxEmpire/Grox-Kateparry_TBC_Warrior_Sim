@@ -1243,6 +1243,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     rage_lost_stance_swap_ = 0;
     rage_lost_capped_ = 0;
     heroic_strike_uptime_ = 0;
+    rampage_uptime_ = 0;
     const auto starting_special_stats = character.total_special_stats;
     std::vector<Weapon_sim> weapons;
     for (const auto& wep : character.weapons)
@@ -1365,6 +1366,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         int oh_hits = 0;
         int oh_hits_w_flurry = 0;
         int oh_hits_w_heroic = 0;
+        int mh_hits_w_rampage = 0;
 
         for (auto& wep : weapons)
         {
@@ -1513,6 +1515,10 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 if (flurry_charges > 0)
                 {
                     mh_hits_w_flurry++;
+                }
+                if (rampage_stacks > 0)
+                {
+                    mh_hits_w_rampage++;
                 }
                 swing_weapon(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
             }
@@ -1836,6 +1842,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         dps_distribution_.add_sample(new_sample);
         damage_distribution_ = damage_distribution_ + damage_sources;
         flurry_uptime_mh_ = Statistics::update_mean(flurry_uptime_mh_, iter + 1, double(mh_hits_w_flurry) / mh_hits);
+        rampage_uptime_ = Statistics::update_mean(rampage_uptime_, iter + 1, double(mh_hits_w_rampage));
         if (weapons.size() > 1)
         {
             flurry_uptime_oh_ =
@@ -1991,6 +1998,10 @@ std::vector<std::string> Combat_simulator::get_aura_uptimes() const
     if (heroic_strike_uptime_ != 0.0)
     {
         aura_uptimes.emplace_back("'Heroic_strike_bug' " + std::to_string(100 * heroic_strike_uptime_));
+    }
+    if (rampage_uptime_ != 0.0)
+    {
+        aura_uptimes.emplace_back("Rampage" + std::to_string(100 * rampage_uptime_));
     }
     return aura_uptimes;
 }
