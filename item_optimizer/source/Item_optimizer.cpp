@@ -762,7 +762,7 @@ std::vector<size_t> Item_optimizer::get_item_ids(size_t index)
 
 Character Item_optimizer::generate_character(const std::vector<size_t>& item_ids)
 {
-    Character character{race, 60};
+    Character character{race, 70};
     character.equip_armor(helmets[item_ids[0]]);
     character.equip_armor(necks[item_ids[1]]);
     character.equip_armor(shoulders[item_ids[2]]);

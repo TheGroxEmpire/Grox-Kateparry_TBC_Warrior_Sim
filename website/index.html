@@ -65,6 +65,10 @@
         width: 100px;
     }
 
+    select.gem-select{
+        width: 100px;
+    }
+
     .run_sim_button {
         background-color: #4CAF50;
         border: none;
@@ -293,6 +297,7 @@
     <script src="emscripten/website/wasm_interface.js"></script>
     <script src="js/talents.js"></script>
     <script src="js/load_presets.js"></script>
+    <script src="js/gems.js"></script>
     <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
 </head>
 
@@ -399,7 +404,7 @@
             <br><br>
             <!--armor begin1-->
             <span class="left_select">helmet</span><span class="middle_select">neck</span><span class="right_select">shoulder</span><br>
-            <select id="helmet_dd" class="item-select">
+            <select id="helmet_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="circlet_of_restless_dreams"> Circlet of Restless Dreams</option>
                 <option value="conquerors_crown"> Conquerors Crown</option>
@@ -422,7 +427,7 @@
                 <option value="r13_plate_helm"> R13 Plate Helm</option>
             </select>
 
-            <select id="neck_dd" class="item-select">
+            <select id="neck_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="amulet_of_the_darkmoon"> Amulet of the Darkmoon</option>
                 <option value="barbed_choker"> Barbed Choker</option>
@@ -439,7 +444,7 @@
                 <option value="the_eye_of_hakkar"> The Eye of Hakkar</option>
             </select>
 
-            <select id="shoulder_dd" class="item-select">
+            <select id="shoulder_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="abyssal_plate_epaulets"> Abyssal Plate Epaulets</option>
                 <option value="black_dragonscale_shoulders"> Black Dragonscale Shoulders</option>
@@ -467,7 +472,7 @@
             <p></p>
 
             <span class="left_select">back</span><span class="middle_select">chest</span><span class="right_select">wrists</span><br>
-            <select id="back_dd" class="item-select">
+            <select id="back_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="blackveil_cloak"> Blackveil Cloak</option>
                 <option value="cape_of_the_black_baron"> Cape of the Black Baron</option>
@@ -489,7 +494,7 @@
                 <option value="zulian_tigerhide_cloak"> Zulian Tigerhide Cloak</option>
             </select>
 
-            <select id="chest_dd" class="item-select">
+            <select id="chest_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="black_dragonscale_chest"> Black Dragonscale Chest</option>
                 <option value="bloodsoul_breastplate"> Bloodsoul Breastplate</option>
@@ -521,7 +526,7 @@
                 <option value="zandalar_vindicators_breastplate"> Zandalar Vindicators Breastplate</option>
             </select>
 
-            <select id="wrists_dd" class="item-select">
+            <select id="wrists_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="abyssal_plate_vambraces"> Abyssal Plate Vambraces</option>
                 <option value="battleborn_armbraces"> Battleborn Armbraces</option>
@@ -549,7 +554,7 @@
 
             <span class="left_select">hands</span><span class="middle_select">belt</span><span
                 class="right_select">legs</span><br>
-            <select id="hands_dd" class="item-select">
+            <select id="hands_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="aged_core_leather_gloves"> Aged Core Leather Gloves</option>
                 <option value="bloodmail_gauntlets"> Bloodmail Gauntlets</option>
@@ -630,7 +635,7 @@
             <p></p>
 
             <span class="left_select">boots</span><span class="middle_select">ring 1</span><span class="right_select">ring 2</span><br>
-            <select id="boots_dd" class="item-select">
+            <select id="boots_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="battlechasers_greaves"> Battlechasers Greaves</option>
                 <option value="black_dragonscale_boots"> Black Dragonscale Boots</option>
@@ -748,7 +753,7 @@
                 <option value="slayers_crest"> Slayers Crest</option>
             </select>
 
-            <select id="ranged_dd" class="item-select">
+            <select id="ranged_dd" class="item-select" >
                 <option value="none" selected disabled></option>
                 <option value="blastershot"> Blastershot</option>
                 <option value="bloodseeker"> Bloodseeker</option>
@@ -785,7 +790,7 @@
 
             <div id="dual_wield_div" style="display:none">
                 <!--armor begin2-->
-                <select id="main_hand_dd" class="weapon-select">
+                <select id="main_hand_dd" class="weapon-select" >
                     <option value="none" selected disabled></option>
                     <option value="none" disabled> --- SWORDS ---</option>
                     <option value="ancient_qiraji_ripper"> Ancient Qiraji Ripper</option>
@@ -865,7 +870,7 @@
                     <option value="claw_of_the_black_drake"> Claw of the Black Drake</option>
                     <option value="silithid_claw"> Silithid Claw</option>
                 </select>
-                <select id="off_hand_dd" class="weapon-select">
+                <select id="off_hand_dd" class="weapon-select" >
                     <option value="none" selected disabled></option>
                     <option value="none" disabled> --- SWORDS ---</option>
                     <option value="ancient_qiraji_ripper"> Ancient Qiraji Ripper</option>
@@ -940,7 +945,7 @@
                 <!--armor stop2-->
             </div>
 
-            <div id="two_hand_div" style="display:none">
+            <div id="two_hand_div" style="display:none" >
                 <!--armor begin3-->
                 <select id="two_hand_dd" class="weapon-select">
                     <option value="none" selected disabled></option>
@@ -1467,8 +1472,8 @@
     </div>
     <br><br>
 
-    <button type="button" class="collapsible">Race and Enchants</button>
-    <div class="content">
+    <button type="button" onclick="gem_select()" class="collapsible">Race, Enchants, and Gems </button>
+    <div id="race_enchant_gem" class="content">
         <p class="select-title">Select race:</p><br>
         <select id="race_dd">
             <option value="human">human</option>
@@ -1509,7 +1514,7 @@
         </select>
 
         <select id="chest_ench_dd" class="enchant-select">
-            <option value="back">none</option>
+            <option value="chest">none</option>
             <option value="+3 stats">+3 stats</option>
             <option value="+4 stats">+4 stats</option>
             <option value="+6 stats">+6 stats</option>
@@ -1586,6 +1591,1858 @@
             <option value="+4 stats">+4 stats</option>
             <option value="+2 damage">+2 damage</option>
         </select>
+        <br><br>
+
+        <p class="select-title">Select gems:</p><br>
+        <span>Helmet</span>
+        <span style="position: relative;left: 50px;">Neck</span>
+        <span style="position: relative;left: 115px;">Shoulder</span>
+        <span style="position: relative;left: 150px;">Back</span><br>
+        <select id="helmet_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="neck_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="shoulder_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="back_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="helmet_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="neck_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="shoulder_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="back_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="helmet_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="neck_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="shoulder_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="back_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+
+        <p></p>
+        <span>Chest</span>
+        <span style="position: relative;left: 65px;">Legs</span>
+        <span style="position: relative;left: 125px;">Wrist</span>
+        <span style="position: relative;left: 190px;">Belt</span><br>
+        <select id="chest_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="legs_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="wrists_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="belt_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="chest_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="legs_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="wrists_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="belt_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="chest_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="legs_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="wrists_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <select id="belt_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <p></p>
+        <span>Hands</span>
+        <span style="position: relative;left: 55px;">Boots</span>
+        <span style="position: relative;left: 115px;">Main-Hand</span>
+        <span style="position: relative;left: 135px;">Off-Hand</span><br>
+        <select id="hands_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="boots_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="main_hand_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="off_hand_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="hands_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="boots_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="main_hand_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="off_hand_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="hands_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="boots_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="main_hand_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+        <select id="off_hand_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <p></p>
+        <span>Ranged</span><br>
+        <select id="ranged_gem1_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="ranged_gem2_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
+        <br>
+        <select id="ranged_gem3_dd" class="gem-select">
+            <option value="none">none</option>
+            <option value="empty">no socket</option>
+            <option value="meta" disabled> --- META ---</option>
+            <option value="+3 dmg"> +3 dmg</option>
+            <option value="+12 agi +3 crit dmg"> +12 agi +3 crit dmg</option>
+            <option value="+20 AP meta"> +20 AP</option>
+            <option value="+24 AP meta"> +24 AP</option>
+            <option value="haste proc"> haste proc</option>
+            <option value="red" disabled> --- RED ---</option>
+            <option value="+4 strength">+4 strength</option>
+            <option value="+6 strength">+6 strength</option>
+            <option value="+8 strength">+8 strength</option>
+            <option value="+4 agility">+4 agility</option>
+            <option value="+6 agility">+6 agility</option>
+            <option value="+10 agility">+10 agility</option>
+            <option value="+20 AP">+20 AP</option>
+            <option value="+24 AP">+24 AP</option>
+            <option value="yellow" disabled> --- YELLOW ---</option>
+            <option value="+4 crit">+4 crit</option>
+            <option value="+6 crit">+6 crit</option>
+            <option value="+8 crit">+8 crit</option>
+            <option value="+10 crit">+10 crit</option>
+            <option value="+12 crit">+12 crit</option>
+            <option value="+4 hit">+4 hit</option>
+            <option value="+6 hit">+6 hit</option>
+            <option value="+8 hit">+8 hit</option>
+            <option value="+10 hit">+10 hit</option>
+            <option value="+12 hit">+12 hit</option>
+            <option value="orange" disabled> --- ORANGE ---</option>
+            <option value="+3 crit +3 str">+3 crit +3 str</option>
+            <option value="+4 crit +4 str">+4 crit +4 str</option>
+            <option value="+4 crit +5 str">+4 crit +5 str</option>
+            <option value="+5 crit +5 str">+5 crit +5 str</option>
+            <option value="purple" disabled> --- PURPLE ---</option>
+            <option value="+3 strength">+3 strength</option>
+            <option value="+4 strength purple">+4 strength</option>
+            <option value="+5 strength">+5 strength</option>
+            <option value="+3 agility">+3 agility</option>
+            <option value="+4 agility purple">+4 agility</option>
+            <option value="+5 agility">+5 agility</option>
+            <option value="green" disabled> --- GREEN ---</option>
+            <option value="+3 crit">+3 crit</option>
+            <option value="+4 crit purple">+4 crit</option>
+            <option value="+5 crit">+5 crit</option>
+        </select>
+
     </div>
     <br><br>
 
@@ -2878,12 +4735,6 @@
     let enchant_prefixes = ["e", "s", "b", "c", "w", "h", "l", "t", "m", "o", "r1", "r2"];
     let enchants_input = [];
 
-    let gems = ["helmet_gem1_dd", "helmet_gem2_dd", "helmet_gem3_dd", "neck_gem1_dd", "shoulder_gem1_dd", "shoulder_gem2_dd", 
-        "back_gem1_dd","chest_gem1_dd", "chest_gem2_dd", "chest_gem3_dd", "wrists_gem1_dd", "wrists_gem2_dd", "hands_gem1_dd", 
-        "hands_gem2_dd","belt_gem1_dd", "belt_gem2_dd", "legs_gem1_dd", "legs_gem2_dd", "legs_gem3_dd",
-        "boots_gem1_dd", "boots_gem2_dd", "ranged_gem1_dd", "ranged_gem2_dd", "main_hand_gem1_dd", "off_hand_gem1_dd"];
-    let gems_input = [];
-
     let float_options = ["n_simulations_dd", "n_simulations_stat_dd", "n_simulations_talent_dd",
         "opponent_level_dd", "boss_armor_dd", "fight_time_dd",
         "sunder_armor_dd", "heroic_strike_rage_thresh_dd", "cleave_rage_thresh_dd", "whirlwind_rage_thresh_dd",
@@ -2909,7 +4760,6 @@
 
     let race;
     let race_string;
-
     function string_is_armor(string) {
         for (let armor_string of armor) {
             if (string === armor_string) {
@@ -3130,6 +4980,12 @@
         for (let i = 0; i < enchants.length; i++) {
             let temp = document.getElementById(enchants[i]);
             enchants_input.push(enchant_prefixes[i] + temp.options[temp.selectedIndex].value);
+        }
+
+        gems_input = [];
+        for (let i = 0; i < gems.length; i++){
+            let temp = document.getElementById(gems[i]);
+            gems_input.push(temp.options[temp.selectedIndex].value);
         }
     }
 
