@@ -373,11 +373,6 @@ void Armory::compute_total_stats(Character& character) const
                 use_effect.special_stats_boost.attack_power *=
                     1.0 + 0.05 * character.talents.commanding_presence_talent;
             }
-            if (character.talents.improved_berserker_stance_talent > 0)
-            {
-                use_effect.special_stats_boost.attack_power *=
-                    1.0 + 0.02 * character.talents.improved_berserker_stance_talent;
-            }
             break;
         }
     }
@@ -1007,11 +1002,6 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
         if (String_helpers::find_string(buffs_vec, "improved_weapon_totems"))
         {
             totem.hit_effects[0].attack_power_boost *= 1.3;
-        }
-        if (character.talents.improved_berserker_stance_talent > 0)
-        {
-            totem.hit_effects[0].attack_power_boost *=
-                1.0 + 0.02 * character.talents.improved_berserker_stance_talent;
         }
         character.add_buff(totem);
     }

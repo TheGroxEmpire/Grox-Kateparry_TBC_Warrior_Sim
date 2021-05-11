@@ -695,7 +695,6 @@ void Combat_simulator::bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& 
         return;
     }
     simulator_cout("Bloodthirst!");
-    simulator_cout("Total AP: ", special_stats.attack_power);
     double damage = special_stats.attack_power * 0.45;
     auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, 
                                     damage_sources, true, false, true, false, true);
