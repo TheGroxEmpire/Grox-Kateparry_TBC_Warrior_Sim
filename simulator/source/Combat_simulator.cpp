@@ -2001,7 +2001,7 @@ std::vector<std::string> Combat_simulator::get_aura_uptimes() const
     }
     if (rampage_uptime_ != 0.0)
     {
-        aura_uptimes.emplace_back("Rampage" + std::to_string(100 * rampage_uptime_));
+        aura_uptimes.emplace_back("Rampage " + std::to_string(100 * rampage_uptime_));
     }
     return aura_uptimes;
 }
