@@ -387,6 +387,8 @@ public:
 
     [[nodiscard]] constexpr double get_hs_uptime() const { return heroic_strike_uptime_; }
 
+    [[nodiscard]] constexpr double get_rampage_uptime() const { return rampage_uptime_; }
+
     void init_histogram();
 
     void prune_histogram();
