@@ -981,7 +981,12 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     {
         swing_damage *= dual_wield_damage_factor_;
     }
-    weapon.internal_swing_timer = weapon.swing_speed / (1 + special_stats.haste);
+
+    //Reset swing timer only if it's not extra attack
+    if (!is_extra_attack)
+    {
+        weapon.internal_swing_timer = weapon.swing_speed / (1 + special_stats.haste);
+    }
 
     // Check if heroic strike should be performed
     if (ability_queue_manager.heroic_strike_queued && weapon.socket == Socket::main_hand &&

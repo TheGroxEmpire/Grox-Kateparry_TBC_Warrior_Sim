@@ -327,7 +327,7 @@ struct Weapon
     Weapon(std::string name, Attributes attributes, Special_stats special_stats, double swing_speed, double min_damage,
            double max_damage, Weapon_socket weapon_socket, Weapon_type weapon_type,
            std::vector<Hit_effect> hit_effects = std::vector<Hit_effect>(), Set set_name = Set::none,
-           std::vector<Use_effect> use_effects = std::vector<Use_effect>())
+           std::vector<Use_effect> use_effects = std::vector<Use_effect>(), std::vector<Gem_socket> gem_socket = std::vector<Gem_socket>())
         : name(std::move(name))
         , attributes(attributes)
         , special_stats(special_stats)
@@ -338,7 +338,8 @@ struct Weapon
         , type(weapon_type)
         , hit_effects(std::move(hit_effects))
         , set_name(set_name)
-        , use_effects(std::move(use_effects)){};
+        , use_effects(std::move(use_effects))
+        , gem_socket(std::move(gem_socket)){};
 
     std::string name;
     Attributes attributes;
@@ -351,6 +352,7 @@ struct Weapon
     std::vector<Hit_effect> hit_effects;
     Set set_name;
     std::vector<Use_effect> use_effects;
+    std::vector<Gem_socket> gem_socket;
     Socket socket;
     Enchant enchant;
     Weapon_buff buff;
