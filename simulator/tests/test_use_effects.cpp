@@ -97,13 +97,13 @@ TEST(TestSuite, test_use_effect_shuffle)
     order_without_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
 
     EXPECT_TRUE(order_with_rage[0].second.name == "Bloodrage");
-    EXPECT_TRUE(order_with_rage[1].second.name == "Death_wish");
-    EXPECT_TRUE(order_with_rage[2].second.name == "Recklessness");
+    EXPECT_TRUE(order_with_rage[1].second.name == "Recklessness");
+    EXPECT_TRUE(order_with_rage[2].second.name == "Death_wish");
     //EXPECT_TRUE(order_with_rage[3].second.name == "diamond_flask");
 
-    EXPECT_TRUE(order_without_rage[0].second.name == "Bloodrage");
+    EXPECT_TRUE(order_without_rage[0].second.name == "Recklessness");
     EXPECT_TRUE(order_without_rage[1].second.name == "Death_wish");
-    EXPECT_TRUE(order_without_rage[2].second.name == "Recklessness");
+    EXPECT_TRUE(order_without_rage[2].second.name == "Bloodrage");
     //EXPECT_TRUE(order_without_rage[3].second.name == "diamond_flask");
 
     EXPECT_TRUE(is_descending(order_with_rage));
