@@ -87,7 +87,7 @@ TEST(TestSuite, test_use_effect_shuffle)
     EXPECT_TRUE(is_descending(order_without_rage));
 
     Armory armory;
-    auto use1 = armory.find_armor(Socket::trinket, "diamond_flask");
+    auto use1 = armory.find_armor(Socket::trinket, "figurine_nightseye_panther");
     use_effects.clear();
     use_effects.emplace_back(sim.deathwish);
     use_effects.emplace_back(sim.bloodrage);
@@ -99,12 +99,12 @@ TEST(TestSuite, test_use_effect_shuffle)
     EXPECT_TRUE(order_with_rage[0].second.name == "Bloodrage");
     EXPECT_TRUE(order_with_rage[1].second.name == "Recklessness");
     EXPECT_TRUE(order_with_rage[2].second.name == "Death_wish");
-    EXPECT_TRUE(order_with_rage[3].second.name == "diamond_flask");
+    EXPECT_TRUE(order_with_rage[3].second.name == "figurine_nightseye_panther");
 
     EXPECT_TRUE(order_without_rage[0].second.name == "Recklessness");
     EXPECT_TRUE(order_without_rage[1].second.name == "Death_wish");
     EXPECT_TRUE(order_without_rage[2].second.name == "Bloodrage");
-    EXPECT_TRUE(order_without_rage[3].second.name == "diamond_flask");
+    EXPECT_TRUE(order_without_rage[3].second.name == "figurine_nightseye_panther");
 
     EXPECT_TRUE(is_descending(order_with_rage));
     EXPECT_TRUE(is_descending(order_without_rage));
@@ -113,9 +113,9 @@ TEST(TestSuite, test_use_effect_shuffle)
 TEST(TestSuite, test_use_effects)
 {
     Armory armory;
-    auto use1 = armory.find_armor(Socket::trinket, "diamond_flask");
-    auto use2 = armory.find_armor(Socket::trinket, "earthstrike");
-    auto use3 = armory.find_armor(Socket::legs, "cloudkeeper_legplates");
+    auto use1 = armory.find_armor(Socket::trinket, "figurine_nightseye_panther");
+    auto use2 = armory.find_armor(Socket::trinket, "icon_of_unyeilding_courage");
+    auto use3 = armory.find_armor(Socket::legs, "bulwark_of_kings");
     Combat_simulator sim{};
 
     std::vector<Use_effect> use_effects{};
@@ -131,9 +131,9 @@ TEST(TestSuite, test_use_effects)
     double sim_time = 320.0;
     auto order = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
     EXPECT_TRUE(is_descending(order));
-    int df = 0;
-    int es = 0;
-    int ck = 0;
+    int fg = 0;
+    int ic = 0;
+    int bk = 0;
     int dw = 0;
     int rl = 0;
     int br = 0;
@@ -141,12 +141,12 @@ TEST(TestSuite, test_use_effects)
     int bs = 0;
     for (const auto& effect : order)
     {
-        if (effect.second.name == "diamond_flask")
-            df++;
-        if (effect.second.name == "earthstrike")
-            es++;
-        if (effect.second.name == "cloudkeeper_legplates")
-            ck++;
+        if (effect.second.name == "figurine_nightseye_panther")
+            fg++;
+        if (effect.second.name == "icon_of_unyeilding_courage")
+            ic++;
+        if (effect.second.name == "bulwark_of_kings")
+            bk++;
         if (effect.second.name == "Blood_fury")
             bf++;
         if (effect.second.name == "Berserking")
@@ -158,9 +158,9 @@ TEST(TestSuite, test_use_effects)
         if (effect.second.name == "Death_wish")
             dw++;
     }
-    EXPECT_TRUE(df == 1);
-    EXPECT_TRUE(es == 3);
-    EXPECT_TRUE(ck == 1);
+    EXPECT_TRUE(fg == 1);
+    EXPECT_TRUE(ic == 3);
+    EXPECT_TRUE(bk == 1);
     EXPECT_TRUE(dw == 2);
     EXPECT_TRUE(rl == 1);
     EXPECT_TRUE(br == 6);

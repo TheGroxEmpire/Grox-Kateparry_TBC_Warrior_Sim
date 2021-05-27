@@ -96,7 +96,7 @@ Combat_simulator_config get_test_config()
 
 Character get_test_character()
 {
-    Character character{Race::gnome, 60};
+    Character character{Race::gnome, 70};
     Weapon wep = Weapon{"test_wep", {}, {}, 2.0, 100, 100, Weapon_socket::one_hand, Weapon_type::axe};
 
     character.equip_weapon(wep, wep);
