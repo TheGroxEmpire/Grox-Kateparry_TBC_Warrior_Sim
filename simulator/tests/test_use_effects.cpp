@@ -92,7 +92,7 @@ TEST(TestSuite, test_use_effect_shuffle)
     use_effects.emplace_back(sim.deathwish);
     use_effects.emplace_back(sim.bloodrage);
     use_effects.emplace_back(sim.recklessness);
-    use_effects.emplace_back(use1.use_effects[0]);
+    //use_effects.emplace_back(use1.use_effects[0]);
     order_with_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 10);
     order_without_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
 
