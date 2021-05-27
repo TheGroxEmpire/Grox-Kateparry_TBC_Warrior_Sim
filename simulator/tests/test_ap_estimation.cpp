@@ -1,4 +1,4 @@
-#include "Armory.hpp"
+/* #include "Armory.hpp"
 #include "item_heuristics.hpp"
 
 #include "gtest/gtest.h"
@@ -27,4 +27,4 @@ TEST(TestSuite, test_ap_estimation)
     double ap_equiv_2 = get_character_ap_equivalent(special_stats, wep2, wep3, 65.0, {});
 
     EXPECT_GE(ap_equiv_1, ap_equiv_2);
-}
+} */

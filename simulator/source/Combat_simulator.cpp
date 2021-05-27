@@ -891,7 +891,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
         }
         if (r < probability && hit_effect.time_counter <= 0)
         {
-            simulator_cout("Proc PPM: ", hit_effect.ppm, " Proc chance: ", probability);
+            //simulator_cout("Proc PPM: ", hit_effect.ppm, " Proc chance: ", probability, "Proc ICD: ");
             buff_manager_.reset_icd(hit_effect);
             proc_data_[hit_effect.name]++;
             switch (hit_effect.type)
