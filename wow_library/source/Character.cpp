@@ -73,7 +73,7 @@ Character::Character(const Race& race, int level)
 Character character_setup(const Armory& armory, const std::string& race, const std::vector<std::string>& armor_vec,
                           const std::vector<std::string>& weapons_vec, const std::vector<std::string>& buffs_vec,
                           const std::vector<std::string>& talent_string, const std::vector<int>& talent_val,
-                          const std::vector<std::string>& ench_vec)
+                          const std::vector<std::string>& ench_vec, const std::vector<std::string>& gem_vec)
 {
     auto character = get_character_of_race(race);
 
@@ -104,6 +104,7 @@ Character character_setup(const Armory& armory, const std::string& race, const s
     }
 
     armory.add_enchants_to_character(character, ench_vec);
+    armory.add_gems_to_character(character, gem_vec);
     armory.add_buffs_to_character(character, buffs_vec);
     armory.add_talents_to_character(character, talent_string, talent_val);
 

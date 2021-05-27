@@ -198,11 +198,11 @@ Hit_effect Armory::enchant_hit_effect(double weapon_speed, Enchant::Type type) c
     switch (type)
     {
     case Enchant::Type::crusader:
-        return {"crusader", Hit_effect::Type::stat_boost, {100, 0}, {0, 0, 0}, 0, 15, weapon_speed / 60};
+        return {"crusader", Hit_effect::Type::stat_boost, {100, 0}, {0, 0, 0}, 0, 15, 0, weapon_speed / 60};
     case Enchant::Type::mongoose:
-        return {"mongoose", Hit_effect::Type::stat_boost, {0, 120}, {0, 0, 0, 0, 0.02}, 0, 15, weapon_speed / 60};
+        return {"mongoose", Hit_effect::Type::stat_boost, {0, 120}, {0, 0, 0, 0, 0.02}, 0, 15, 0, weapon_speed / 60};
     default:
-        return {"none", Hit_effect::Type::none, {}, {}, 0, 0, 0};
+        return {"none", Hit_effect::Type::none, {}, {}, 0, 0, 0, 0};
     }
 }
 
@@ -359,6 +359,25 @@ void Armory::compute_total_stats(Character& character) const
         }
     }
 
+/*     for (const auto& gem : character.gems)
+    {
+        total_attributes += gem.attributes;
+        total_special_stats += gem.special_stats;
+
+        for (const auto& use_effect : gem.use_effects)
+        {
+            use_effects.emplace_back(use_effect);
+        }
+
+        for (const auto& hit_effect : gem.hit_effects)
+        {
+            for (Weapon& weapon : character.weapons)
+            {
+                weapon.hit_effects.emplace_back(hit_effect);
+            }
+        }
+    } */
+
     // Effects gained from talents
     for (auto& use_effect : use_effects)
     {
@@ -384,7 +403,7 @@ void Armory::compute_total_stats(Character& character) const
             if (wep.type == Weapon_type::sword)
             {
                 double prob = double(character.talents.sword_specialization) / 100.0;
-                wep.hit_effects.push_back({"sword_specialization", Hit_effect::Type::sword_spec, {}, {}, 0, 0, prob});
+                wep.hit_effects.push_back({"sword_specialization", Hit_effect::Type::sword_spec, {}, {}, 0, 0, 0.5, prob});
             }
         }
     }
@@ -606,7 +625,7 @@ std::vector<Weapon> Armory::get_weapon_in_socket(const Weapon_socket socket) con
         {
             th_weapons.emplace_back(wep);
         }
-        for (const auto& wep : two_handed_axes_t)
+        for (const auto& wep : two_handed_axes_polearm_t)
         {
             th_weapons.emplace_back(wep);
         }
@@ -731,7 +750,7 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
                 return item;
             }
         }
-        for (const auto& item : two_handed_axes_t)
+        for (const auto& item : two_handed_axes_polearm_t)
         {
             if (item.name == name)
             {
@@ -958,6 +977,203 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     else if (String_helpers::find_string(ench_vec, "r1+2 damage") || String_helpers::find_string(ench_vec, "r2+2 damage"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::damage);
+    }
+}
+
+void Armory::add_gems_to_character(Character& character, const std::vector<std::string>& gem_vec) const
+{
+    int gem_counter, i;
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_3);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_4);
+    }
+    
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+5 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_5);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+6 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_6);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+8 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_8);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 agility");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agility_3);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 agility");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agility_4);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+5 agility");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agility_5);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+6 agility");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agility_6);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+8 agility");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agility_8);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+10 agility");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agility_10);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_3);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_4);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+5 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_5);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+6 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_6);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+8 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_8);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+10 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_10);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+12 crit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_12);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+20 AP");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.ap_20);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+24 AP");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.ap_24);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 hit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.hit_4);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+6 hit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.hit_6);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+8 hit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.hit_8);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+10 hit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.hit_10);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+12 hit");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.hit_12);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 crit +3 str");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_3_str_3);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit +4 str");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_4_str_4);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit +5 str");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_4_str_5);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+5 crit +5 str");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.crit_5_str_5);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "haste proc");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.gem_haste);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 dmg");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.dmg_3);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+12 agi +3% crit dmg");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.agi_12_critDmg_3);
     }
 }
 

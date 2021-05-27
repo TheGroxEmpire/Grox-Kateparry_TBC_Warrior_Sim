@@ -166,6 +166,7 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         talents.improved_heroic_strike = fv.find("improved_heroic_strike_talent");
         talents.overpower = fv.find("improved_overpower_talent");
         talents.unbridled_wrath = fv.find("unbridled_wrath_talent");
+        talents.mace_specialization = fv.find("mace_specialization_talent");
         talents.flurry = fv.find("flurry_talent");
         talents.anger_management = fv.find("anger_management_talent");
         talents.impale = fv.find("impale_talent");

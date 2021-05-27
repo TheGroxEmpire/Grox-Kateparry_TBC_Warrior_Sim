@@ -97,8 +97,10 @@ public:
 
     Race race{};
     Buffs buffs;
+    Gems gems;
     std::vector<std::string> buffs_vec;
     std::vector<std::string> ench_vec;
+    std::vector<std::string> gem_vec;
     std::vector<std::string> talent_vec;
     std::vector<int> talent_val_vec;
 

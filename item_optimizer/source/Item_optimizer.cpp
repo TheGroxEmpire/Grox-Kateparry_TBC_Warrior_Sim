@@ -790,6 +790,8 @@ Character Item_optimizer::construct(size_t index)
 
     armory.add_buffs_to_character(character, buffs_vec);
 
+    armory.add_gems_to_character(character, gem_vec);
+
     armory.add_talents_to_character(character, talent_vec, talent_val_vec);
 
     armory.compute_total_stats(character);

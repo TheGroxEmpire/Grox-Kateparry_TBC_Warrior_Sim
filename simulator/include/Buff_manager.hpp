@@ -281,10 +281,58 @@ public:
         }
     }
 
+    void increment_icd(double dt)
+    {
+        size_t i = 0;
+        while(i < (*hit_effects_mh).size())
+        {
+            (*hit_effects_mh)[i].time_counter -= dt;
+            i++;
+        }
+        i = 0;
+        while(i < (*hit_effects_oh).size())
+        {
+            (*hit_effects_oh)[i].time_counter -= dt;
+            i++;
+        }
+    }
+
+    void reset_icd(Hit_effect& hit_effect)
+    {
+        // hit_effect.time_counter = hit_effect.cooldown;
+        size_t i = 0;
+        while(i < (*hit_effects_mh).size())
+        {
+            if (hit_effect.name == (*hit_effects_mh)[i].name)
+            {
+                (*hit_effects_mh)[i].time_counter = hit_effect.cooldown;
+                break;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        i = 0;
+        while(i < (*hit_effects_oh).size())
+        {
+            if (hit_effect.name == (*hit_effects_oh)[i].name)
+            {
+                (*hit_effects_oh)[i].time_counter = hit_effect.cooldown;
+                break;
+            }
+            else
+            {
+                i++;
+            }
+        }
+    }
+
     void increment(double dt, double current_time, double& rage, double& rage_lost_stance, double& global_cooldown,
                    bool debug, std::vector<std::string>& debug_msg)
     {
         next_event = 100000;
+        increment_icd(dt);
         increment_stat_gains(current_time, dt, rage, rage_lost_stance, debug, debug_msg);
         increment_hit_gains(current_time, dt, debug, debug_msg);
         increment_use_effects(current_time, rage, global_cooldown, debug, debug_msg);

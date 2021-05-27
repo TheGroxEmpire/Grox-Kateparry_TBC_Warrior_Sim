@@ -502,7 +502,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
 
     const Character character = character_setup(armory, input.race[0], input.armor, input.weapons, temp_buffs,
-                                                input.talent_string, input.talent_val, input.enchants);
+                                                input.talent_string, input.talent_val, input.enchants, input.gems);
 
     // Simulator & Combat settings
     Combat_simulator_config config{input};
@@ -895,7 +895,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         Combat_simulator simulator_compare{};
         simulator_compare.set_config(config);
         Character character2 = character_setup(armory, input.race[0], input.compare_armor, input.compare_weapons,
-                                               temp_buffs, input.talent_string, input.talent_val, input.enchants);
+                                               temp_buffs, input.talent_string, input.talent_val, input.enchants, input.gems);
 
         simulator_compare.simulate(character2);
 
@@ -932,7 +932,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         Item_optimizer item_optimizer{};
         item_optimizer.race = get_race(input.race[0]);
         Character character_new = character_setup(armory, input.race[0], input.armor, input.weapons, temp_buffs,
-                                                  input.talent_string, input.talent_val, input.enchants);
+                                                  input.talent_string, input.talent_val, input.enchants, input.gems);
         std::string dummy{};
         std::vector<Socket> all_sockets = {
             Socket::head, Socket::neck, Socket::shoulder, Socket::back, Socket::chest,   Socket::wrist,  Socket::hands,
@@ -1053,7 +1053,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             {
                 Character char_plus = character;
                 Character char_minus = character;
-                Hit_effect extra_hit{"stat_weight_extra_hit", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0.05};
+                Hit_effect extra_hit{"stat_weight_extra_hit", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0, 0.05};
                 char_plus.weapons[0].hit_effects.emplace_back(extra_hit);
                 if (char_plus.is_dual_wield())
                 {

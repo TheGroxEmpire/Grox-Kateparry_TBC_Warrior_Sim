@@ -15,6 +15,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
 {
     clock_t start_time_main = clock();
     Buffs buffs{};
+   // Gems gems{};
     Item_optimizer item_optimizer;
 
     // Combat settings
@@ -97,6 +98,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     item_optimizer.buffs = buffs;
     item_optimizer.buffs_vec = temp_buffs;
     item_optimizer.ench_vec = input.enchants;
+  // item_optimizer.gems = gems;
+    item_optimizer.gem_vec = input.gems;
     item_optimizer.talent_vec = input.talent_string;
     item_optimizer.talent_val_vec = input.talent_val;
     item_optimizer.item_setup(input.armor, input.weapons);

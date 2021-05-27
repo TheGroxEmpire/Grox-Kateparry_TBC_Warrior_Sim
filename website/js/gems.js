@@ -7,7 +7,7 @@ let gems = ["helmet_gem1_dd", "helmet_gem2_dd", "helmet_gem3_dd", "neck_gem1_dd"
 "chest_gem1_dd", "chest_gem2_dd", "chest_gem3_dd", "legs_gem1_dd", "legs_gem2_dd", "legs_gem3_dd", "wrists_gem1_dd", "wrists_gem2_dd", "wrists_gem3_dd", "belt_gem1_dd", "belt_gem2_dd", "belt_gem3_dd", "hands_gem1_dd", "hands_gem2_dd", "hands_gem3_dd", 
 "boots_gem1_dd", "boots_gem2_dd", "boots_gem3_dd",  "main_hand_gem1_dd", "main_hand_gem2_dd", "main_hand_gem3_dd", "off_hand_gem1_dd", "off_hand_gem2_dd", "off_hand_gem3_dd", 
 "ranged_gem1_dd", "ranged_gem2_dd", "ranged_gem3_dd"];
-let gem_option = {meta: ["meta", "+3 dmg", "+3 crit dmg", "+12 crit", "+12 agi +3 crit dmg", "+20 AP meta", "+24 AP meta", "haste proc",
+let gem_option = {meta: ["meta", "+3 dmg", "+12 crit", "+12 agi +3% crit dmg", "haste proc",
                         "none"], 
                   red: ["red", "+4 strength", "+6 strength", "+8 strength", "+4 agility", "+6 agility", "+10 agility", "+20 AP", "+24 AP",
                  /*orange*/ "orange", "+3 crit +3 str", "+4 crit +4 str", "+4 crit +5 str", "+5 crit +5 str",
@@ -18,17 +18,17 @@ let gem_option = {meta: ["meta", "+3 dmg", "+3 crit dmg", "+12 crit", "+12 agi +
                 /*green*/ "green", "+3 crit", "+5 crit",
                         "none"], 
                   blue: [
-                /*purple*/ "purple", "+3 strength", "+4 strength purple", "+5 strength", "+3 agility", "+4 agility purple", "+5 agility",
-                /*green*/ "green", "+3 crit", "+4 crit purple", "+5 crit",
+                /*purple*/ "purple", "+3 strength", "+5 strength", "+3 agility", "+5 agility",
+                /*green*/ "green", "+3 crit", "+5 crit",
                         "none"],
                   none: ["none"],
                   empty: ["empty"]};
 let gem_list = ["red", "+4 strength", "+6 strength", "+8 strength", "+4 agility", "+6 agility", "+10 agility", "+20 AP", "+24 AP",  
                 "yellow", "+4 crit", "+6 crit", "+8 crit", "+10 crit", "+12 crit", "+4 hit", "+6 hit", "+8 hit", "+10 hit", "+12 hit",
-                "meta", "+3 dmg", "+3 crit dmg", "+12 crit", "+12 agi +3 crit dmg", "+20 AP", "+24 AP", "+20 AP meta", "+24 AP meta", "haste proc",
-                "purple", "+3 strength", "+4 strength", "+4 strength purple", "+5 strength", "+3 agility", "+4 agility", "+4 agility purple", "+5 agility",
+                "meta", "+3 dmg", "+12 crit", "+12 agi +3% crit dmg", "+20 AP", "+24 AP", "haste proc",
+                "purple", "+3 strength", "+5 strength", "+3 agility", "+5 agility",
                 "orange", "+3 crit +3 str", "+4 crit +4 str", "+4 crit +5 str", "+5 crit +5 str",
-                "green", "+3 crit", "+4 crit", "+4 crit purple", "+5 crit",
+                "green", "+3 crit", "+5 crit",
                 "empty"];
 let gem_type = [];
 let gems_input = [];

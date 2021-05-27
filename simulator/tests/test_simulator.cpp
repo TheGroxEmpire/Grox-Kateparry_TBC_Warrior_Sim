@@ -258,8 +258,8 @@ TEST(TestSuite, test_hit_effects_extra_hit)
 
     double mh_proc_prob = 0.1;
     double oh_proc_prob = 0.2;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, mh_proc_prob, 0};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, oh_proc_prob, 0};
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0, oh_proc_prob, 0};
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
@@ -310,8 +310,8 @@ TEST(TestSuite, test_hit_effects_windfury_hit)
 
     double mh_proc_prob = 0.1;
     double oh_proc_prob = 0.2;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::windfury_hit, {}, {}, 0, 0, mh_proc_prob, 0};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::windfury_hit, {}, {}, 0, 0, oh_proc_prob, 0};
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::windfury_hit, {}, {}, 0, 0, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::windfury_hit, {}, {}, 0, 0, 0, mh_proc_prob, 0};
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
@@ -360,8 +360,8 @@ TEST(TestSuite, test_hit_effects_sword_spec)
 
     double mh_proc_prob = 0.1;
     double oh_proc_prob = 0.2;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::sword_spec, {}, {}, 0, 0, mh_proc_prob, 0};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::sword_spec, {}, {}, 0, 0, oh_proc_prob, 0};
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::sword_spec, {}, {}, 0, 0, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::sword_spec, {}, {}, 0, 0, 0, mh_proc_prob, 0};
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
@@ -410,8 +410,8 @@ TEST(TestSuite, test_hit_effects_physical_damage)
 
     double mh_proc_prob = 0.1;
     double oh_proc_prob = 0.2;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::damage_physical, {}, {}, 100, 0, mh_proc_prob, 0};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::damage_physical, {}, {}, 100, 0, oh_proc_prob, 0};
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::damage_physical, {}, {}, 100, 0, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::damage_physical, {}, {}, 100, 0, 0, oh_proc_prob, 0};
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
@@ -462,8 +462,8 @@ TEST(TestSuite, test_hit_effects_magic_damage)
 
     double mh_proc_prob = 0.1;
     double oh_proc_prob = 0.2;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::damage_magic, {}, {}, 100, 0, mh_proc_prob, 0};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::damage_magic, {}, {}, 100, 0, oh_proc_prob, 0};
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::damage_magic, {}, {}, 100, 0, 0, mh_proc_prob, 0};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::damage_magic, {}, {}, 100, 0, 0, oh_proc_prob, 0};
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
@@ -512,9 +512,9 @@ TEST(TestSuite, test_hit_effects_stat_boost_short_duration)
     int mh_proc_duration = 1;
     double oh_proc_prob = 1.0;
     int oh_proc_duration = 2;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::stat_boost, {50, 0}, {}, 0, mh_proc_duration,
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::stat_boost, {50, 0}, {}, 0, mh_proc_duration, 0,
                               mh_proc_prob};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::stat_boost, {}, {10, 0, 0, 0, 0.1}, 0, oh_proc_duration,
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::stat_boost, {}, {10, 0, 0, 0, 0.1}, 0, oh_proc_duration, 0,
                               oh_proc_prob};
     character.weapons[0].swing_speed = 3.0;
     character.weapons[1].swing_speed = 3.0;
@@ -562,9 +562,9 @@ TEST(TestSuite, test_hit_effects_stat_boost_long_duration)
     int mh_proc_duration = 30;
     double oh_proc_prob = .01;
     int oh_proc_duration = 20;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::stat_boost, {50, 0}, {}, 0, mh_proc_duration,
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::stat_boost, {50, 0}, {}, 0, mh_proc_duration, 0,
                               mh_proc_prob};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::stat_boost, {}, {10, 0, 0, 0, 0.1}, 0, oh_proc_duration,
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::stat_boost, {}, {10, 0, 0, 0, 0.1}, 0, oh_proc_duration, 0,
                               oh_proc_prob};
     character.weapons[0].swing_speed = 1.7;
     character.weapons[1].swing_speed = 1.9;
@@ -623,9 +623,9 @@ TEST(TestSuite, test_hit_effects_stat_boost_long_duration_overlap)
     int mh_proc_duration = 17;
     double oh_proc_prob = .85;
     int oh_proc_duration = 19;
-    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::stat_boost, {50, 0}, {}, 0, mh_proc_duration,
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::stat_boost, {50, 0}, {}, 0, mh_proc_duration, 0,
                               mh_proc_prob};
-    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::stat_boost, {}, {10, 0, 0, 0, 0.1}, 0, oh_proc_duration,
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::stat_boost, {}, {10, 0, 0, 0, 0.1}, 0, oh_proc_duration, 0,
                               oh_proc_prob};
     character.weapons[0].swing_speed = 1.7;
     character.weapons[1].swing_speed = 1.9;
