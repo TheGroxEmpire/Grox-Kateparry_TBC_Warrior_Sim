@@ -87,7 +87,7 @@ TEST(TestSuite, test_use_effect_shuffle)
     EXPECT_TRUE(is_descending(order_without_rage));
 
     Armory armory;
-    auto use1 = armory.find_armor(Socket::trinket, "figurine_nightseye_panther");
+    //auto use1 = armory.find_armor(Socket::trinket, "diamond_flask");
     use_effects.clear();
     use_effects.emplace_back(sim.deathwish);
     use_effects.emplace_back(sim.bloodrage);
@@ -96,16 +96,15 @@ TEST(TestSuite, test_use_effect_shuffle)
     order_with_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 10);
     order_without_rage = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0, 0);
 
+    EXPECT_TRUE(order_with_rage[0].second.name == "Bloodrage");
+    EXPECT_TRUE(order_with_rage[1].second.name == "Death_wish");
+    EXPECT_TRUE(order_with_rage[2].second.name == "Recklessness");
+    //EXPECT_TRUE(order_with_rage[3].second.name == "diamond_flask");
+
     EXPECT_TRUE(order_without_rage[0].second.name == "Bloodrage");
     EXPECT_TRUE(order_without_rage[1].second.name == "Death_wish");
-    EXPECT_TRUE(order_without_rage[2].second.name == "figurine_nightseye_panther");
-    EXPECT_TRUE(order_without_rage[3].second.name == "Recklessness");
-
-    EXPECT_TRUE(order_with_rage[1].second.name == "Death_wish");
-    EXPECT_TRUE(order_with_rage[3].second.name == "figurine_nightseye_panther");
-    EXPECT_TRUE(order_with_rage[0].second.name == "Recklessness");
-    EXPECT_TRUE(order_with_rage[2].second.name == "Bloodrage");
-
+    EXPECT_TRUE(order_without_rage[2].second.name == "Recklessness");
+    //EXPECT_TRUE(order_without_rage[3].second.name == "diamond_flask");
 
     EXPECT_TRUE(is_descending(order_with_rage));
     EXPECT_TRUE(is_descending(order_without_rage));
@@ -114,7 +113,7 @@ TEST(TestSuite, test_use_effect_shuffle)
 TEST(TestSuite, test_use_effects)
 {
     Armory armory;
-    auto use1 = armory.find_armor(Socket::trinket, "figurine_nightseye_panther");
+    auto use1 = armory.find_armor(Socket::trinket, "badge_of_the_swarmguard");
     auto use2 = armory.find_armor(Socket::trinket, "icon_of_unyeilding_courage");
     auto use3 = armory.find_armor(Socket::legs, "bulwark_of_kings");
     Combat_simulator sim{};
