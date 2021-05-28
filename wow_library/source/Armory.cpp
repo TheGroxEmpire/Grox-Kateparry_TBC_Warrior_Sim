@@ -198,7 +198,7 @@ Hit_effect Armory::enchant_hit_effect(double weapon_speed, Enchant::Type type) c
     switch (type)
     {
     case Enchant::Type::crusader:
-        return {"crusader", Hit_effect::Type::stat_boost, {100, 0}, {0, 0, 0}, 0, 15, 0, weapon_speed / 60};
+        return {"crusader", Hit_effect::Type::stat_boost, {60, 0}, {0, 0, 0}, 0, 15, 0, weapon_speed / 60};
     case Enchant::Type::mongoose:
         return {"mongoose", Hit_effect::Type::stat_boost, {0, 120}, {0, 0, 0, 0, 0.02}, 0, 15, 0, weapon_speed / 60};
     default:
