@@ -29,6 +29,12 @@ std::vector<std::string> get_enchant_vec()
     return ench_vec;
 }
 
+std::vector<std::string> get_gem_vec()
+{
+    std::vector<std::string> gem_vec{};
+    return gem_vec;
+}
+
 std::vector<std::string> get_simulator_options()
 {
     return {"faerie_fire",     "curse_of_recklessness",        "mighty_rage_potion", "use_hamstring",
@@ -121,6 +127,8 @@ public:
         buff_vec = get_buff_vec();
 
         ench_vec = get_enchant_vec();
+
+        gem_vec = get_gem_vec();
 
         sim_options = get_simulator_options();
 
