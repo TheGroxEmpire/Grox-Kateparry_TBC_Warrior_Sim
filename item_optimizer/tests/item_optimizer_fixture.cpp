@@ -169,8 +169,8 @@ public:
             }
 
             Sim_input_mult sim_input_mult{{race},         mult_armor_vec, mult_weapons_vec,     buff_vec,
-                                          ench_vec,       sim_options,    float_options_string, float_options_val,
-                                          talents_string, talents_val};
+                                          ench_vec,        gem_vec,       sim_options,    float_options_string, 
+                                          float_options_val, talents_string, talents_val};
             Sim_interface sim_interface{};
 
             auto sim_output = sim_interface.simulate_mult(sim_input_mult);
