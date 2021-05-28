@@ -1,4 +1,4 @@
-#include "Armory.hpp"
+/*#include "Armory.hpp"
 #include "BinomialDistribution.hpp"
 #include "Combat_simulator.hpp"
 
@@ -644,3 +644,4 @@ TEST(TestSuite, test_hit_effects_stat_boost_long_duration_overlap)
     EXPECT_GT(aura_uptimes["main_hand_test_wep_mh"], 0.98 * expected_duration);
     EXPECT_GT(aura_uptimes["off_hand_test_wep_oh"], 0.98 * expected_duration);
 }
+*/
