@@ -36,19 +36,19 @@ TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
     EXPECT_NE(sim.get_flurry_uptime_mh(), sim.get_flurry_uptime_oh());
 }
 
-TEST(Sim_fixture, test_endless_rage)
+TEST_F(Sim_fixture, test_endless_rage)
 {
     config.sim_time = 100000.0;
     config.n_batches = 1;
     config.main_target_initial_armor_ = 0.0;
     config.combat.initial_rage = 100;
 
-    Combat_simulator sim{};
     sim.set_config(config);
     sim.simulate(character);
 
     double rage_normal = sim.get_rage_lost_capped();
 
+    Combat_simulator sim{};
     config.talents.endless_rage = true;
     sim.set_config(config);
     sim.simulate(character);
@@ -60,7 +60,7 @@ TEST(Sim_fixture, test_endless_rage)
     EXPECT_NEAR(rage_ratio, 0.0, 1);
 }
 
-TEST(Sim_fixture, test_bloodthirst_count)
+TEST_F(Sim_fixture, test_bloodthirst_count)
 {
     config.talents.bloodthirst = 1;
     config.combat.use_bloodthirst = true;
@@ -178,16 +178,14 @@ TEST_F(Sim_fixture, test_hit_effects_extra_hit)
     EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, conf_interval_oh / 2);
 }
 
-TEST(Sim_fixture, test_hit_effects_windfury_hit)
+TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
 {
-    auto config = get_test_config();
     config.sim_time = 1000.0;
     config.n_batches = 500.0;
     config.combat.use_hamstring = true;
     config.essence_of_the_red_ = true;
     config.combat.initial_rage = 100;
 
-    auto character = get_test_character();
     character.total_special_stats.critical_strike = 0;
     character.total_special_stats.attack_power = 0;
 
@@ -231,13 +229,10 @@ TEST(Sim_fixture, test_hit_effects_windfury_hit)
     EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, conf_interval_oh / 2);
 }
 
-TEST(TestSuite, test_hit_effects_sword_spec)
+TEST_F(TestSuite, test_hit_effects_sword_spec)
 {
-    auto config = get_test_config();
     config.sim_time = 1000.0;
     config.n_batches = 500.0;
-
-    auto character = get_test_character();
     character.total_special_stats.critical_strike = 0;
     character.total_special_stats.attack_power = 0;
 
@@ -281,7 +276,7 @@ TEST(TestSuite, test_hit_effects_sword_spec)
     EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, conf_interval_oh / 2);
 }
 
-TEST(Sim_fixture, test_hit_effects_physical_damage)
+TEST_F(Sim_fixture, test_hit_effects_physical_damage)
 {
     config.sim_time = 100000.0;
     config.n_batches = 1.0;
