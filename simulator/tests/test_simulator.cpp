@@ -38,13 +38,10 @@ TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
 
 TEST(Sim_fixture, test_endless_rage)
 {
-    auto config = get_test_config();
     config.sim_time = 100000.0;
     config.n_batches = 1;
     config.main_target_initial_armor_ = 0.0;
     config.combat.initial_rage = 100;
-
-    auto character = get_test_character();
 
     Combat_simulator sim{};
     sim.set_config(config);
