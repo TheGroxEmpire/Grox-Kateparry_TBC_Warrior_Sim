@@ -11,13 +11,10 @@ namespace
 std::vector<std::string> get_buff_vec()
 {
     std::vector<std::string> buff_vec{};
-    buff_vec.emplace_back("rallying_cry");
-    buff_vec.emplace_back("dire_maul");
-    buff_vec.emplace_back("spirit_of_zandalar");
     buff_vec.emplace_back("blessing_of_kings");
     buff_vec.emplace_back("dense_stone_off_hand");
     buff_vec.emplace_back("elemental_stone_main_hand");
-    buff_vec.emplace_back("battle_shout_aq");
+    buff_vec.emplace_back("battle_shout");
     return buff_vec;
 }
 
@@ -34,7 +31,7 @@ std::vector<std::string> get_enchant_vec()
 
 std::vector<std::string> get_simulator_options()
 {
-    return {"faerie_fire",     "curse_of_recklessness", "death_wish",        "mighty_rage_potion", "use_hamstring",
+    return {"faerie_fire",     "curse_of_recklessness",        "mighty_rage_potion", "use_hamstring",
             "use_bloodthirst", "use_whirlwind",         "use_heroic_strike", "use_hamstring",      "use_overpower"};
 }
 
@@ -67,28 +64,31 @@ std::vector<double> get_float_options_val()
 
 std::vector<std::string> get_talents_string()
 {
-    return {"improved_heroic_strike_talent",
-            "improved_rend_talent",
-            "tactical_mastery_talent",
-            "anger_management_talent",
-            "deep_wounds_talent",
-            "impale_talent",
-            "cruelty_talent",
-            "unbridled_wrath_talent",
-            "improved_battle_shout_talent",
-            "dual_wield_specialization_talent",
-            "improved_execute_talent",
-            "enrage_talent",
-            "death_wish_talent",
-            "flurry_talent",
-            "bloodthirst_talent",
-            "sweeping_strikes_talent",
-            "improved_slam_talent"};
+    return {
+        "improved_heroic_strike_talent",
+        "anger_management_talent",
+        "deep_wounds_talent",
+        "impale_talent",
+        "cruelty_talent",
+        "unbridled_wrath_talent",
+        "commanding_presence_talent",
+        "dual_wield_specialization_talent",
+        "improved_execute_talent",
+        "enrage_talent",
+        "sweeping_strike_talent",
+        "flurry_talent",
+        "bloodthirst_talent",
+        "weapon_mastery_talent",
+        "precision_talent",
+        "improved_whirlwind_talent",
+        "improved_berserker_stance_talent",
+        "rampage_talent"
+        };
 }
 
 std::vector<int> get_talents_val()
 {
-    return {3, 3, 5, 1, 3, 2, 5, 5, 5, 5, 2, 5, 1, 5, 1, 1, 5};
+    return {3, 1, 3, 2, 5, 5, 5, 5, 2, 5, 1, 5, 1, 2, 3, 1, 5, 1};
 }
 } // namespace
 
