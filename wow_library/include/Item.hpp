@@ -240,6 +240,7 @@ struct Enchant
         strength7,
         strength9,
         strength12,
+        strength15,
         strength20,
         agility,
         agility12,
@@ -259,7 +260,9 @@ struct Enchant
         exceptional_stats,
         cobrahide,
         nethercobra,
-        mongoose
+        mongoose,
+        hit,
+        cats_swiftness
     };
 
     Enchant() = default;

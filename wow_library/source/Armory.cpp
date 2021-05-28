@@ -65,6 +65,8 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
             return {0, 15};
         case Enchant::Type::strength:
             return {7, 0};
+        case Enchant::Type::strength15:
+            return {15, 0};
         default:
             return {0, 0};
         }
@@ -87,6 +89,8 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
             return {0, 7};
         case Enchant::Type::agility12:
             return {0, 12};
+        case Enchant::Type::cats_swiftness:
+            return {0, 6};
         default:
             return {0, 0};
         }
@@ -173,6 +177,15 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
             return {0.45, 0, 40};
         case Enchant::Type::nethercobra:
             return {0.54, 0, 50};
+        default:
+            return {0, 0, 0};
+        }
+    }
+    case Socket::boots: {
+        switch (type)
+        {
+        case Enchant::Type::hit:
+            return {0, 0.63, 0};
         default:
             return {0, 0, 0};
         }
@@ -868,6 +881,10 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     {
         character.add_enchant(Socket::hands, Enchant::Type::strength);
     }
+    else if (String_helpers::find_string(ench_vec, "h+15 strength"))
+    {
+        character.add_enchant(Socket::hands, Enchant::Type::strength15);
+    }
     else if (String_helpers::find_string(ench_vec, "h+7 agility"))
     {
         character.add_enchant(Socket::hands, Enchant::Type::agility);
@@ -906,9 +923,17 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
     {
         character.add_enchant(Socket::boots, Enchant::Type::agility);
     }
-    if (String_helpers::find_string(ench_vec, "t+12 agility"))
+    else if (String_helpers::find_string(ench_vec, "t+12 agility"))
     {
         character.add_enchant(Socket::boots, Enchant::Type::agility12);
+    }
+    else if (String_helpers::find_string(ench_vec, "tcats_swiftness"))
+    {
+        character.add_enchant(Socket::boots, Enchant::Type::cats_swiftness);
+    }
+    else if (String_helpers::find_string(ench_vec, "t+10 hit"))
+    {
+        character.add_enchant(Socket::boots, Enchant::Type::hit);
     }
 
     if (String_helpers::find_string(ench_vec, "mcrusader"))
