@@ -563,7 +563,7 @@ struct Armory
         {"lunar_crescent", Attributes{0.0, 0.0}, Special_stats{2.1286231884057973, 0.0, 96.0, 0, 0.0}, 3.7, 324, 487, Weapon_socket::two_hand, Weapon_type::axe}, 
         {"felsteel_reaper", Attributes{0.0, 0.0}, Special_stats{1.358695652173913, 0.0, 112.0, 0, 0.0}, 3.4, 295, 443, Weapon_socket::two_hand, Weapon_type::axe}, 
         {"trident_of_the_outcast_tribe", Attributes{37.0, 0.0}, Special_stats{0.0, 2.28281547241598, 0.0, 0, 0.0}, 3.2, 270, 406, Weapon_socket::two_hand, Weapon_type::axe}, 
-        {"singing_crystal_axe", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.04248573240329741}, 3.5, 295, 444, Weapon_socket::two_hand, Weapon_type::axe, {{"singing_crystal_axe", Hit_effect::Type::stat_boost, {}, {0, 0, 0, .253}, 0, 10, 0, 3.5 / 60}}},  
+        {"singing_crystal_axe", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.04248573240329741}, 3.5, 295, 444, Weapon_socket::two_hand, Weapon_type::axe, {{"singing_crystal_axe", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .253}, 0, 10, 0, 3.5 / 60}}},  
         {"blackened_spear", Attributes{0.0, 26.0}, Special_stats{0.0, 1.2048192771084338, 92.0, 0, 0.0}, 3.5, 261, 392, Weapon_socket::two_hand, Weapon_type::axe}, 
         {"sonic_spear", Attributes{0.0, 35.0}, Special_stats{0.0, 1.5218769816106532, 62.0, 0, 0.0}, 3.5, 261, 392, Weapon_socket::two_hand, Weapon_type::axe}, 
         {"apexis_cleaver", Attributes{46.0, 0.0}, Special_stats{0.8605072463768116, 0.0, 0.0, 0, 0.0}, 3.6, 268, 403, Weapon_socket::two_hand, Weapon_type::axe}, 
@@ -606,9 +606,9 @@ struct Armory
     std::vector<Weapon> maces_t
             {
                 // main_hand / one_hand
-                {"dragonmaw", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 172, 320, Weapon_socket::main_hand, Weapon_type::mace, {{"dragonmaw", Hit_effect::Type::stat_boost, {}, {0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
+                {"dragonmaw", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 172, 320, Weapon_socket::main_hand, Weapon_type::mace, {{"dragonmaw", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
                 {"fools_bane", Attributes{0.0, 0.0}, Special_stats{1.0869565217391306, 0.0, 30.0, 0, 0.0}, 2.6, 159, 296, Weapon_socket::main_hand, Weapon_type::mace},
-                {"drakefist_hammer", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 159, 296, Weapon_socket::main_hand, Weapon_type::mace, {{"drakefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
+                {"drakefist_hammer", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 159, 296, Weapon_socket::main_hand, Weapon_type::mace, {{"drakefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
                 {"runic_hammer", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 50.0, 0, 0.0}, 2.4, 140, 261, Weapon_socket::one_hand, Weapon_type::mace}, 
                 {"bloodskull_destroyer", Attributes{0.0, 0.0}, Special_stats{0.9510869565217392, 0.0, 22.0, 0, 0.0}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::mace}, 
                 {"terokks_nightmace", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 4.819277108433735}, 2.0, 100, 187, Weapon_socket::one_hand, Weapon_type::mace}, 
@@ -618,7 +618,7 @@ struct Armory
             {
                 // main_hand / one_hand
                 {"big_bad_wolfs_paw", Attributes{0.0, 17.0}, Special_stats{0.9057971014492754, 0.0, 0.0, 0, 0.0}, 2.5, 153, 285, Weapon_socket::one_hand, Weapon_type::unarmed}, 
-                {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::one_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, .114}, 0, 10, 45, 2.6 / 60}}},
+                {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::one_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .114}, 0, 10, 45, 2.6 / 60}}},
                 {"claw_of_the_watcher", Attributes{0.0, 0.0}, Special_stats{0.5434782608695653, 0.0, 24.0, 0, 0.0}, 2.5, 125, 233, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"demonblood_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 28.0, 0, 0.00, 0, 0, 0, 0, 0, 4.311984781230184}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"reflex_blades", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0145846544071022, 32.0, 0, 0.0}, 2.7, 135, 252, Weapon_socket::one_hand, Weapon_type::unarmed}, 
