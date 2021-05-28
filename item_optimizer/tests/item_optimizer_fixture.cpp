@@ -104,6 +104,7 @@ public:
     std::string race;
     std::vector<std::string> buff_vec;
     std::vector<std::string> ench_vec;
+    std::vector<std::string> gem_vec;
     std::vector<std::string> sim_options;
 
     std::vector<extra_option> extra_options;
