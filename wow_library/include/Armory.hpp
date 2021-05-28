@@ -586,7 +586,7 @@ struct Armory
                 // main_hand / one_hand
                 {"black_planar_edge", Attributes{0.0, 0.0}, Special_stats{0.9510869565217392, 0.0, 44.0, 0, 0.0}, 2.7, 172, 320, Weapon_socket::main_hand, Weapon_type::axe}, 
                 {"gladiators_cleaver", Attributes{0.0, 0.0}, Special_stats{0.6793478260869565, 0.570703868103995, 28.0, 0, 0.0}, 2.6, 189, 285, Weapon_socket::one_hand, Weapon_type::axe}, 
-                {"the_decapitator", Attributes{0.0, 0.0}, Special_stats{1.2228260869565217, 0.0, 0.0, 0, 0.0}, 2.6, 167, 312, Weapon_socket::main_hand, Weapon_type::axe, {{"the_decapitator", Hit_effect::Type::damage_physical, {}, {}, 540, 0, 0, 2.6 / 60}}}, 
+                {"the_decapitator", Attributes{0.0, 0.0}, Special_stats{1.2228260869565217, 0.0, 0.0, 0, 0.0}, 2.6, 167, 312, Weapon_socket::main_hand, Weapon_type::axe, {{"the_decapitator", Hit_effect::Type::damage_physical, {}, {}, 540, 0, 180, 1}}}, 
                 {"the_planar_edge", Attributes{0.0, 0.0}, Special_stats{0.9057971014492754, 0.0, 42.0, 0, 0.0}, 2.7, 159, 296, Weapon_socket::main_hand, Weapon_type::axe}, 
                 {"fel_edged_battleaxe", Attributes{0.0, 0.0}, Special_stats{0.9510869565217392, 0.8877615726062144, 0.0, 0, 0.0}, 2.2, 128, 239, Weapon_socket::one_hand, Weapon_type::axe}, 
                 {"firebrand_battleaxe", Attributes{17.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 3.5510462904248574}, 2.4, 120, 224, Weapon_socket::one_hand, Weapon_type::axe}, 
