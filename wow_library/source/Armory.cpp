@@ -986,20 +986,20 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
         character.add_enchant(Socket::off_hand, Enchant::Type::strength20);
     }
 
-    if (String_helpers::find_string(ench_vec, "r1+4 stats") && String_helpers::find_string(ench_vec, "r2+4 stats"))
+    if (String_helpers::find_string(ench_vec, "r+4 stats") && String_helpers::find_string(ench_vec, "f+4 stats"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::ring_stats);
     }
-    else if (String_helpers::find_string(ench_vec, "r1+4 stats") || String_helpers::find_string(ench_vec, "r2+4 stats"))
+    else if (String_helpers::find_string(ench_vec, "r+4 stats") || String_helpers::find_string(ench_vec, "f+4 stats"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::major_stats);
     }
 
-    if (String_helpers::find_string(ench_vec, "r1+2 damage") && String_helpers::find_string(ench_vec, "r2+2 damage"))
+    if (String_helpers::find_string(ench_vec, "r+2 damage") && String_helpers::find_string(ench_vec, "f+2 damage"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::ring_damage);
     }
-    else if (String_helpers::find_string(ench_vec, "r1+2 damage") || String_helpers::find_string(ench_vec, "r2+2 damage"))
+    else if (String_helpers::find_string(ench_vec, "r+2 damage") || String_helpers::find_string(ench_vec, "f+2 damage"))
     {
         character.add_enchant(Socket::ring, Enchant::Type::damage);
     }
