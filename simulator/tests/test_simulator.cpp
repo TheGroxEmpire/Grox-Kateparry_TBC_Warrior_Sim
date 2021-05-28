@@ -229,7 +229,7 @@ TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
     EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, conf_interval_oh / 2);
 }
 
-TEST_F(TestSuite, test_hit_effects_sword_spec)
+TEST_F(Sim_fixture, test_hit_effects_sword_spec)
 {
     config.sim_time = 1000.0;
     config.n_batches = 500.0;
