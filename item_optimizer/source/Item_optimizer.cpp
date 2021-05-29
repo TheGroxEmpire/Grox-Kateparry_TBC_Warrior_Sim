@@ -298,7 +298,7 @@ std::vector<Weapon> Item_optimizer::remove_weaker_weapons(const Weapon_socket we
     for (size_t i = 0; i < weapon_vec.size(); ++i)
     {
         Special_stats wep_special_stats = weapon_vec[i].special_stats;
-        wep_special_stats += weapon_vec[i].attributes.convert_to_special_stats(special_stats);
+        wep_special_stats += weapon_vec[i].attributes.convert_to_special_stats(special_stats, 1);
 
         Weapon_struct wep_struct{i,
                                  wep_special_stats,
@@ -317,7 +317,7 @@ std::vector<Weapon> Item_optimizer::remove_weaker_weapons(const Weapon_socket we
                 if (weapon_vec[i].set_name == set_bonus.set)
                 {
                     Special_stats set_special_stats = set_bonus.special_stats;
-                    set_special_stats += set_bonus.attributes.convert_to_special_stats(special_stats);
+                    set_special_stats += set_bonus.attributes.convert_to_special_stats(special_stats, 1);
                     double ap_equiv = estimate_special_stats_high(set_special_stats);
                     if (ap_equiv > ap_equiv_max)
                     {
@@ -445,7 +445,7 @@ std::vector<Armor> Item_optimizer::remove_weaker_items(const std::vector<Armor>&
     for (size_t i = 0; i < armors.size(); ++i)
     {
         Special_stats armor_special_stats = armors[i].special_stats;
-        armor_special_stats += armors[i].attributes.convert_to_special_stats(special_stats);
+        armor_special_stats += armors[i].attributes.convert_to_special_stats(special_stats, 1);
         Armor_struct armor_equiv{i, armor_special_stats, armors[i].name};
         if (armors[i].set_name != Set::none)
         {
@@ -456,7 +456,7 @@ std::vector<Armor> Item_optimizer::remove_weaker_items(const std::vector<Armor>&
                 if (armors[i].set_name == set_bonus.set)
                 {
                     Special_stats set_special_stats = set_bonus.special_stats;
-                    set_special_stats += set_bonus.attributes.convert_to_special_stats(special_stats);
+                    set_special_stats += set_bonus.attributes.convert_to_special_stats(special_stats, 1);
                     double ap_equiv = estimate_special_stats_high(set_special_stats);
                     if (ap_equiv > ap_equiv_max)
                     {

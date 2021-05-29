@@ -143,10 +143,10 @@ public:
         return {strength * multiplier, agility * multiplier};
     }
 
-    Special_stats convert_to_special_stats(const Special_stats& special_stats) const
+    Special_stats convert_to_special_stats(const Special_stats& special_stats, double ap_multiplier) const
     {
         double multiplier = special_stats.stat_multiplier + 1;
-        return {agility / 33 * multiplier, 0, strength * 2 * multiplier};
+        return {agility / 33 * multiplier, 0, strength * 2 * multiplier * ap_multiplier};
     }
 
     Attributes operator+(const Attributes& rhs) const { return {strength + rhs.strength, agility + rhs.agility}; }

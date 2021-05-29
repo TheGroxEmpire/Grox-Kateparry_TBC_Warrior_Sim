@@ -148,7 +148,7 @@ void sort_use_effect_order(std::vector<std::pair<double, Use_effect>>& use_effec
 double get_active_use_effect_ap_equivalent(const Use_effect& use_effect, const Special_stats& special_stats,
                                            double total_ap)
 {
-    double use_effect_ap_boost = use_effect.get_special_stat_equivalent(special_stats).attack_power;
+    double use_effect_ap_boost = use_effect.get_special_stat_equivalent(special_stats, 1).attack_power;
 
     double use_effect_haste_boost = total_ap * use_effect.special_stats_boost.haste;
 

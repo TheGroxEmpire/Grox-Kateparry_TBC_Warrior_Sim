@@ -19,7 +19,7 @@ TEST(TestSuite, test_attributes)
     ASSERT_FLOAT_EQ(multiplied.strength, 7.5);
     ASSERT_FLOAT_EQ(multiplied.agility, 24.75);
 
-    st = b.convert_to_special_stats(st);
+    st = b.convert_to_special_stats(st, 1);
 
     ASSERT_FLOAT_EQ(st.attack_power, 45.0);
     ASSERT_FLOAT_EQ(st.critical_strike, 1.5);

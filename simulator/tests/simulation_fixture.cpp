@@ -31,7 +31,7 @@ Combat_simulator_config get_config_with_everything_deactivated()
     //    config.combat.use_heroic_strike = true;
     //    config.combat.deep_wounds = true;
     //    config.combat.heroic_strike_damage = 157;
-    config.combat.heroic_strike_damage = 138;
+    config.combat.heroic_strike_damage = 208;
     //    config.combat.first_hit_heroic_strike = true;
     //    config.multi_target_mode_ = true;
     //    config.essence_of_the_red_ = true;
@@ -56,13 +56,13 @@ Combat_simulator_config get_config_with_everything_deactivated()
     config.combat.slam_rage_dd = 0.0;
 
     config.sim_time = 60.0;
-    config.main_target_level = 63.0;
-    config.main_target_initial_armor_ = 3731.0;
+    config.main_target_level = 73.0;
+    config.main_target_initial_armor_ = 7700.0;
     config.n_sunder_armor_stacks = 5.0;
     config.number_of_extra_targets = 0.0;
     config.extra_target_duration = 0.0;
     config.extra_target_initial_armor_ = 0.0;
-    config.extra_target_level = 60.0;
+    config.extra_target_level = 70.0;
     config.periodic_damage_interval_ = 0.0;
     config.periodic_damage_amount_ = 0.0;
     config.execute_phase_percentage_ = 0.0;
@@ -101,7 +101,7 @@ public:
     Character character;
     Combat_simulator_config config{};
     Combat_simulator sim{};
-    Sim_fixture() : character{Race::gnome, 60} {}
+    Sim_fixture() : character{Race::gnome, 70} {}
 
     void SetUp() override
     {

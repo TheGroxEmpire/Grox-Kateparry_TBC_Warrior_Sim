@@ -16,7 +16,7 @@ struct Buffs
     Buff ferocious_inspiration{"ferocious_inspiration", {}, {}};
 
     // Player_buffs
-    Buff battle_shout{"battle_shout", {}, {}, 0, {}, {{"battle_shout", Use_effect::Effect_socket::unique, {}, {0, 0, 193}, 0, 120, 120, true}}};
+    Buff battle_shout{"battle_shout", {}, {}, 0, {}, {{"battle_shout", Use_effect::Effect_socket::unique, {}, {0, 0, 306}, 0, 120, 120, true}}};
     Buff blessing_of_kings{"blessing_of_kings", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, 0, 0.1}};
     Buff blessing_of_might{"blessing_of_might", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 264}};
     Buff gift_of_the_wild{"gift_of_the_wild", Attributes{18.9, 18.9}, Special_stats{0.0, 0.0, 0.0}};
@@ -618,7 +618,7 @@ struct Armory
             {
                 // main_hand / one_hand
                 {"big_bad_wolfs_paw", Attributes{0.0, 17.0}, Special_stats{0.9057971014492754, 0.0, 0.0, 0, 0.0}, 2.5, 153, 285, Weapon_socket::one_hand, Weapon_type::unarmed}, 
-                {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::one_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .114}, 0, 10, 45, 2.6 / 60}}},
+                {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::one_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .114}, 0, 10, 0, 2.6 / 60}}},
                 {"claw_of_the_watcher", Attributes{0.0, 0.0}, Special_stats{0.5434782608695653, 0.0, 24.0, 0, 0.0}, 2.5, 125, 233, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"demonblood_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 28.0, 0, 0.00, 0, 0, 0, 0, 0, 4.311984781230184}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"reflex_blades", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0145846544071022, 32.0, 0, 0.0}, 2.7, 135, 252, Weapon_socket::one_hand, Weapon_type::unarmed}, 

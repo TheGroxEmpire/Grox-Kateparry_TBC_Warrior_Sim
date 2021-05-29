@@ -172,7 +172,7 @@ public:
     }
 
     void increment_use_effects(double current_time, double& rage, double& global_cooldown, bool debug,
-                               std::vector<std::string>& debug_msg)
+                               std::vector<std::string>& debug_msg, double ap_multiplier)
     {
         // Try to use the use effect within one second of what was planned (compensate some for GCD's)
         double margin = 0.0;
@@ -189,6 +189,10 @@ public:
                 {
                     debug_msg.emplace_back("Activating: " + use_effect.name);
                 }
+                if (ap_multiplier > 0)
+                {
+                    use_effect.special_stats_boost.attack_power += use_effect.special_stats_boost.attack_power * ap_multiplier;
+                }
                 if (!use_effect.hit_effects.empty())
                 {
                     add_hit_effect(use_effect.name, use_effect.hit_effects[0], use_effect.hit_effects[0].duration);
@@ -199,7 +203,7 @@ public:
                 }
                 else
                 {
-                    add(use_effect.name, use_effect.get_special_stat_equivalent(*simulation_special_stats),
+                    add(use_effect.name, use_effect.get_special_stat_equivalent(*simulation_special_stats, ap_multiplier + 1),
                         use_effect.duration);
                 }
                 if (use_effect.rage_boost != 0.0)
@@ -329,13 +333,13 @@ public:
     }
 
     void increment(double dt, double current_time, double& rage, double& rage_lost_stance, double& global_cooldown,
-                   bool debug, std::vector<std::string>& debug_msg)
+                   bool debug, std::vector<std::string>& debug_msg, double ap_multiplier)
     {
         next_event = 100000;
         increment_icd(dt);
         increment_stat_gains(current_time, dt, rage, rage_lost_stance, debug, debug_msg);
         increment_hit_gains(current_time, dt, debug, debug_msg);
-        increment_use_effects(current_time, rage, global_cooldown, debug, debug_msg);
+        increment_use_effects(current_time, rage, global_cooldown, debug, debug_msg, ap_multiplier);
         increment_over_time_buffs(current_time, rage, debug, debug_msg);
     }
 

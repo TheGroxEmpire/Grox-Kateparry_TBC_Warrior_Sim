@@ -164,9 +164,9 @@ public:
         , affects_both_weapons(affects_both_weapons)
         , max_stacks(max_stacks){};
 
-    inline Special_stats get_special_stat_equivalent(const Special_stats& special_stats) const
+    inline Special_stats get_special_stat_equivalent(const Special_stats& special_stats, double ap_multiplier) const
     {
-        return attribute_boost.convert_to_special_stats(special_stats) + special_stats_boost;
+        return attribute_boost.convert_to_special_stats(special_stats, ap_multiplier) + special_stats_boost;
     }
 
     std::string name;
@@ -214,9 +214,9 @@ public:
         , hit_effects(std::move(hit_effects))
         , over_time_effects(std::move(over_time_effects)){};
 
-    inline Special_stats get_special_stat_equivalent(const Special_stats& special_stats) const
+    inline Special_stats get_special_stat_equivalent(const Special_stats& special_stats, double ap_multiplier) const
     {
-        return attribute_boost.convert_to_special_stats(special_stats) + special_stats_boost;
+        return attribute_boost.convert_to_special_stats(special_stats, ap_multiplier) + special_stats_boost;
     }
 
     std::string name;

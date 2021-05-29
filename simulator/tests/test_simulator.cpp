@@ -178,6 +178,53 @@ TEST_F(Sim_fixture, test_hit_effects_extra_hit)
     EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, conf_interval_oh / 2);
 }
 
+TEST_F(Sim_fixture, test_hit_effects_icd)
+{
+    config.sim_time = 1000.0;
+    config.n_batches = 500.0;
+
+    character.total_special_stats.critical_strike = 0;
+    character.total_special_stats.attack_power = 0;
+
+    double mh_proc_prob = 1;
+    double oh_proc_prob = 1;
+    Hit_effect test_effect_mh{"test_wep_mh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 10, mh_proc_prob};
+    Hit_effect test_effect_oh{"test_wep_oh", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 10, oh_proc_prob};
+    character.weapons[0].hit_effects.push_back(test_effect_mh);
+    character.weapons[1].hit_effects.push_back(test_effect_oh);
+
+    Combat_simulator sim{};
+    sim.set_config(config);
+    sim.simulate(character);
+
+    Damage_sources sources = sim.get_damage_distribution();
+
+    auto proc_data = sim.get_proc_data();
+
+    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double dodge_chance = 6.5 / 100.0;
+    double hit_chance = (1 - miss_chance - dodge_chance);
+
+    double expected_swings_oh = config.n_batches * config.sim_time / character.weapons[1].swing_speed / 10;
+    BinomialDistribution bin_dist_oh{expected_swings_oh, hit_chance * oh_proc_prob};
+    double expected_procs_oh = bin_dist_oh.mean_;
+    double conf_interval_oh = bin_dist_oh.confidence_interval_width(0.99);
+
+    double expected_swings_mh = config.n_batches * config.sim_time / character.weapons[0].swing_speed / 10;
+    BinomialDistribution bin_dist_mh{expected_swings_mh, hit_chance * mh_proc_prob};
+    double expected_procs_mh = bin_dist_mh.mean_;
+    auto conf_interval_mh = bin_dist_mh.confidence_interval_width(0.99);
+
+    // OH proc's trigger main hand swings
+    expected_swings_mh += expected_procs_mh + expected_procs_oh;
+
+    EXPECT_NEAR(sources.white_mh_count, expected_swings_mh, 0.01 * expected_swings_mh);
+    EXPECT_NEAR(sources.white_oh_count, expected_swings_oh, 0.01 * expected_swings_oh);
+
+    EXPECT_NEAR(proc_data["test_wep_mh"], expected_procs_mh, conf_interval_mh / 2);
+    EXPECT_NEAR(proc_data["test_wep_oh"], expected_procs_oh, conf_interval_oh / 2);
+}
+
 TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
 {
     config.sim_time = 1000.0;

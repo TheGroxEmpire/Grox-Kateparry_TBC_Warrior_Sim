@@ -208,6 +208,13 @@ function showHideTalentDiv() {
     } else {
         document.getElementById("bloodthirst_talent_div").style.display = "none";
     }
+    let dw_talent = document.getElementById("death_wish_talent");
+    current_val = parseInt(dw_talent.getAttribute("data-count"));
+    if (current_val === 1) {
+        document.getElementById("death_wish_talent_div").style.display = "block";
+    } else {
+        document.getElementById("death_wish_talent_div").style.display = "none";
+    }
     let rm_talent = document.getElementById("rampage_talent");
     current_val = parseInt(rm_talent.getAttribute("data-count"));
     if (current_val === 1) {

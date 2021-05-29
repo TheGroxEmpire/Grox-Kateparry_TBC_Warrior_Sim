@@ -54,7 +54,7 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
 
     Armor item_in_socket = character_new.get_item_from_socket(socket, first_item);
     Special_stats item_special_stats = item_in_socket.special_stats;
-    item_special_stats += item_in_socket.attributes.convert_to_special_stats(special_stats);
+    item_special_stats += item_in_socket.attributes.convert_to_special_stats(special_stats, character_new.talents.improved_berserker_stance * 0.02 + 1);
     std::vector<size_t> stronger_indexies{};
     if (item_in_socket.set_name == Set::none && item_in_socket.use_effects.empty() &&
         item_in_socket.hit_effects.empty())
@@ -64,7 +64,7 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
             if (items[i].set_name == Set::none && items[i].use_effects.empty() && items[i].hit_effects.empty())
             {
                 Special_stats armor_special_stats = items[i].special_stats;
-                armor_special_stats += items[i].attributes.convert_to_special_stats(special_stats);
+                armor_special_stats += items[i].attributes.convert_to_special_stats(special_stats, character_new.talents.improved_berserker_stance * 0.02 + 1);
 
                 if (estimate_special_stats_smart_no_skill(item_special_stats, armor_special_stats))
                 {

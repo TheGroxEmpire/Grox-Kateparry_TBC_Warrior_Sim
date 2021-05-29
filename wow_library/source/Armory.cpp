@@ -372,25 +372,6 @@ void Armory::compute_total_stats(Character& character) const
         }
     }
 
-/*     for (const auto& gem : character.gems)
-    {
-        total_attributes += gem.attributes;
-        total_special_stats += gem.special_stats;
-
-        for (const auto& use_effect : gem.use_effects)
-        {
-            use_effects.emplace_back(use_effect);
-        }
-
-        for (const auto& hit_effect : gem.hit_effects)
-        {
-            for (Weapon& weapon : character.weapons)
-            {
-                weapon.hit_effects.emplace_back(hit_effect);
-            }
-        }
-    } */
-
     // Effects gained from talents
     for (auto& use_effect : use_effects)
     {
@@ -430,9 +411,13 @@ void Armory::compute_total_stats(Character& character) const
     // Cruelty etc.
     total_special_stats += character.talent_special_stats;
     total_special_stats.critical_strike += 3; // crit from berserker stance
+    if (character.talents.improved_berserker_stance > 0)
+    {
+        double ap_multiplier = double(character.talents.improved_berserker_stance) * 0.02;
+        total_special_stats.attack_power += total_special_stats.attack_power * ap_multiplier;
+    }
 
-    total_special_stats += total_attributes.convert_to_special_stats(total_special_stats);
-
+    total_special_stats += total_attributes.convert_to_special_stats(total_special_stats, character.talents.improved_berserker_stance * 0.02 + 1);
     character.total_attributes = total_attributes.multiply(total_special_stats);
     character.total_special_stats = total_special_stats;
     character.use_effects = use_effects;
@@ -1501,11 +1486,6 @@ void Armory::add_talents_to_character(Character& character, const std::vector<st
     {
         character.talents.commanding_presence_talent = val;
     }
-    val = fv.find("improved_berserker_stance");
-    if (val > 0)
-    {
-        character.talents.improved_berserker_stance_talent = val;
-    }
     val = fv.find("sword_specialization_talent");
     if (val > 0)
     {
@@ -1516,5 +1496,11 @@ void Armory::add_talents_to_character(Character& character, const std::vector<st
     if (val > 0)
     {
         character.talents.one_handed_weapon_specialization = val;
+    }
+
+    val = fv.find("improved_berserker_stance_talent");
+    if (val > 0)
+    {
+        character.talents.improved_berserker_stance = val;
     }
 }
