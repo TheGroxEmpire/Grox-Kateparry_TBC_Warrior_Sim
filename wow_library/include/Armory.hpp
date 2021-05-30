@@ -124,34 +124,12 @@ struct Armory
 {
     std::vector<Armor> helmet_t
             {
-                {"coif_of_alleria", Attributes{0.0, 43.0}, Special_stats{1.5398550724637683, 0.0, 126.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 182.0}, Socket::head}, 
-                {"duplicitous_guise", Attributes{0.0, 43.0}, Special_stats{0.0, 1.9023462270133165, 126.0, 0, 0.021559923906150923}, Socket::head}, 
-                {"cursed_vision_of_sargeras", Attributes{0.0, 39.0}, Special_stats{1.7210144927536233, 1.3316423589093216, 108.0, 0, 0.0}, Socket::head}, 
-                {"crown_of_anasterian", Attributes{61.0, 0.0}, Special_stats{1.8115942028985508, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 231.0}, Socket::head}, 
-                {"mayhem_projection_goggles", Attributes{62.0, 0.0}, Special_stats{2.3097826086956523, 1.648700063411541, 0.0, 0, 0.0}, Socket::head}, 
-                {"surestrike_goggles_v3.0", Attributes{0.0, 0.0}, Special_stats{2.3097826086956523, 1.648700063411541, 124.0, 0, 0.0}, Socket::head}, 
-                {"mask_of_the_fury_hunter", Attributes{50.0, 50.0}, Special_stats{1.358695652173913, 0.0, 0.0, 0, 0.0}, Socket::head}, 
-                {"helm_of_the_illidari_shatterer", Attributes{51.0, 0.0}, Special_stats{1.9021739130434785, 2.155992390615092, 0.0, 0, 0.0}, Socket::head}, 
-                {"brutal_gladiators_plate_helm", Attributes{45.0, 0.0}, Special_stats{1.8568840579710146, 1.14140773620799, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 84.0}, Socket::head}, 
-                {"quad_deathblow_x44_goggles", Attributes{0.0, 61.0}, Special_stats{0.0, 1.5218769816106532, 104.0, 0, 0.0}, Socket::head}, 
-                {"fel-steel_warhelm", Attributes{46.0, 0.0}, Special_stats{1.992753623188406, 1.9023462270133165, 0.0, 0, 0.0}, Socket::head}, 
-                {"grimgrin_faceguard", Attributes{0.0, 40.0}, Special_stats{0.0, 1.5218769816106532, 82.0, 0, 0.0}, Socket::head}, 
-                {"onslaught_battle-helm", Attributes{54.0, 41.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 105.0}, Socket::head}, 
-                {"forest_prowlers_helm", Attributes{0.0, 42.0}, Special_stats{0.9057971014492754, 0.0, 100.0, 0, 0.0}, Socket::head}, 
-                {"destroyer_battle-helm", Attributes{47.0, 0.0}, Special_stats{1.6304347826086958, 1.3316423589093216, 0.0, 0, 0.0}, Socket::head}, 
-                {"coif_of_the_jungle_stalker", Attributes{0.0, 36.0}, Special_stats{0.0, 0.0, 72.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 140.0}, Socket::head}, 
-                {"vengeful_gladiator_plate_helm", Attributes{39.0, 0.0}, Special_stats{1.585144927536232, 0.7609384908053266, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 84.0}, Socket::head}, 
-                {"furious_girmatic_goggles", Attributes{48.0, 0.0}, Special_stats{1.7210144927536233, 0.8243500317057705, 0.0, 0, 0.0}, Socket::head}, 
-                {"amani_mask_of_death", Attributes{46.0, 0.0}, Special_stats{0.0, 2.0925808497146483, 0.0, 0, 0.0}, Socket::head}, 
-                {"surestrike_goggles_v2.0", Attributes{0.0, 0.0}, Special_stats{1.7210144927536233, 0.8243500317057705, 96.0, 0, 0.0}, Socket::head}, 
-                {"warbringer_battle-helm", Attributes{45.0, 0.0}, Special_stats{1.0869565217391306, 0.8877615726062144, 0.0, 0, 0.0}, Socket::head}, 
-                {"mask_of_the_deceiver", Attributes{0.0, 32.0}, Special_stats{0.0, 1.0145846544071022, 64.0, 0, 0.0}, Socket::head}, 
+                {"warbringer_battle-helm", Attributes{45.0, 0.0}, Special_stats{1.0869565217391306, 0.8877615726062144, 0.0, 0, 0.0}, Socket::head},
                 {"wastewalker_helm", Attributes{0.0, 0.0}, Special_stats{0.996376811594203, 1.14140773620799, 56.0, 0, 0.0}, Socket::head}, 
                 {"helm_of_the_claw", Attributes{0.0, 25.0}, Special_stats{0.0, 0.8877615726062144, 66.0, 0, 0.0}, Socket::head}, 
                 {"helm_of_assassination", Attributes{0.0, 0.0}, Special_stats{1.1322463768115942, 0.0, 66.0, 0, 0.0}, Socket::head}, 
                 {"gladiators_plate_helm", Attributes{30.0, 0.0}, Special_stats{1.2681159420289856, 0.0, 0.0, 0, 0.0}, Socket::head}, 
                 {"malefic_mask_of_the_shadows", Attributes{0.0, 0.0}, Special_stats{1.9021739130434785, 1.9657577679137603, 84.0, 0, 0.0}, Socket::head}, 
-                {"cowl_of_beastly_rage", Attributes{29.0, 26.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::head}, 
                 {"helm_of_desolation", Attributes{0.0, 0.0}, Special_stats{0.6340579710144928, 0.0, 66.0, 0, 0.0}, Socket::head}, 
                 {"beast_lord_helm", Attributes{0.0, 25.0}, Special_stats{0.0, 0.0, 50.0, 0, 0.0}, Socket::head}, 
                 {"grand_marshal_plate_helm", Attributes{20.0, 0.0}, Special_stats{1.0869565217391306, 0.0, 0.0, 0, 0.0}, Socket::head}, 
@@ -178,21 +156,11 @@ struct Armory
                 {"gnomish_battle_goggles", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 0.0, 100.0, 0, 0.0}, Socket::head}, 
                 {"lionheart_helm", Attributes{18.0, 0.0}, Special_stats{1.2681159420289856, 1.2682308180088777, 0.0, 0, 0.0}, Socket::head}, 
                 {"helm_of_endless_rage", Attributes{26.0, 26.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::head}, 
-                {"conquerors_crown", Attributes{29.0, 18.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::head},             
+                {"conquerors_crown", Attributes{29.0, 18.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::head},          
             };
 
     std::vector<Armor> neck_t
             {
-                {"hard_khorium_choker", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 58.0, 0, 0.0183893468611287250, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 150.0}, Socket::neck}, 
-                {"choker_of_endless_nightmare", Attributes{0.0, 0.0}, Special_stats{1.2228260869565217, 1.3316423589093216, 72.0, 0, 0.0}, Socket::neck}, 
-                {"clutch_of_demise", Attributes{0.0, 25.0}, Special_stats{0.0, 0.0, 64.0, 0, 0.019023462270133164}, Socket::neck}, 
-                {"guardians_pendant_of_triumph", Attributes{0.0, 0.0}, Special_stats{1.177536231884058, 0.0, 58.0, 0, 0.0}, Socket::neck}, 
-                {"sindorei_pendant_of_triumph", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 0.0, 58.0, 0, 0.0}, Socket::neck}, 
-                {"pendant_of_the_perilous", Attributes{32.0, 0.0}, Special_stats{1.0416666666666667, 0.0, 0.0, 0, 0.0}, Socket::neck}, 
-                {"vindicators_pendant_of_triumph", Attributes{0.0, 0.0}, Special_stats{0.996376811594203, 0.0, 50.0, 0, 0.0}, Socket::neck}, 
-                {"choker_of_serrated_blades", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 70.0, 0, 0.00, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 175.0}, Socket::neck}, 
-                {"telonicus_pendant_of_mayhem", Attributes{0.0, 27.0}, Special_stats{0.0, 0.0, 70.0, 0, 0.0}, Socket::neck}, 
-                {"choker_of_animalistic_fury", Attributes{0.0, 0.0}, Special_stats{1.0416666666666667, 0.0, 64.0, 0, 0.0}, Socket::neck}, 
                 {"choker_of_vile_intent", Attributes{0.0, 20.0}, Special_stats{0.0, 1.14140773620799, 42.0, 0, 0.0}, Socket::neck}, 
                 {"worgen_claw_necklace", Attributes{0.0, 20.0}, Special_stats{0.0, 1.077996195307546, 42.0, 0, 0.0}, Socket::neck}, 
                 {"veterans_pendant_of_triumph", Attributes{0.0, 0.0}, Special_stats{0.8152173913043479, 0.0, 42.0, 0, 0.0}, Socket::neck}, 
@@ -202,8 +170,6 @@ struct Armory
                 {"adamantite_chain_of_the_unbroken", Attributes{0.0, 0.0}, Special_stats{1.358695652173913, 0.0, 34.0, 0, 0.0}, Socket::neck}, 
                 {"necklace_of_trophies", Attributes{22.0, 15.0}, Special_stats{0.0, 0.8877615726062144, 0.0, 0, 0.0}, Socket::neck}, 
                 {"traitors_noose", Attributes{0.0, 0.0}, Special_stats{0.8152173913043479, 0.7609384908053266, 38.0, 0, 0.0}, Socket::neck}, 
-                {"shattered_sun_pendant_of_might_aldor", Attributes{0.0, 18.0}, Special_stats{0.0, 0.0, 64.0, 0, 0.0}, Socket::neck, Set::none, {{"lights_strength", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 200}, 0, 10, 45, 0.15}}}, 
-                {"shattered_sun_pendant_of_might_scryer", Attributes{0.0, 18.0}, Special_stats{0.0, 0.0, 64.0, 0, 0.0}, Socket::neck, Set::none, {{"arcane_strike", Hit_effect::Type::damage_magic, {}, {}, 333, 0, 45, 0.15}}}, 
                 {"blood_guards_necklace_of_ferocity", Attributes{0.0, 0.0}, Special_stats{0.7699275362318841, 0.0, 54.0, 0, 0.0}, Socket::neck}, 
                 {"the_savages_choker", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 50.0, 0, 0.015852885225110972}, Socket::neck}, 
                 {"bone_chain_necklace", Attributes{0.0, 19.0}, Special_stats{0.0, 0.8243500317057705, 36.0, 0, 0.0}, Socket::neck}, 
@@ -253,6 +219,7 @@ struct Armory
                 {"consortium_cloak_of_the_quick", Attributes{0.0, 14.0}, Special_stats{0.0, 0.8877615726062144, 26.0, 0, 0.0}, Socket::back}, 
                 {"cloak_of_impulsiveness", Attributes{0.0, 18.0}, Special_stats{0.0, 0.0, 40.0, 0, 0.0}, Socket::back}, 
                 {"cloak_of_the_fallen_god", Attributes{11.0, 26.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::back}, 
+
             };
 
     std::vector<Armor> chest_t
@@ -315,7 +282,7 @@ struct Armory
                 {"gauntlets_of_martial_perfection", Attributes{36.0, 0.0}, Special_stats{1.0416666666666667, 0.0, 0.0, 0, 0.0}, Socket::hands}, 
                 {"liars_tongue_gloves", Attributes{0.0, 0.0}, Special_stats{1.177536231884058, 0.0, 72.0, 0, 0.0}, Socket::hands}, 
                 {"fel_leather_gloves", Attributes{0.0, 0.0}, Special_stats{1.0869565217391306, 1.077996195307546, 36.0, 0, 0.0}, Socket::hands}, 
-                {"grips_of_deftness", Attributes{0.0, 29.0}, Special_stats{0.0, 0.0, 60.0, 0, 0.00, 0, 0, 0, 0, 0, 3.804692454026633}, Socket::hands}, 
+                {"grips_of_deftness", Attributes{0.0, 29.0}, Special_stats{0.0, 0.0, 60.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 3.804692454026633}, Socket::hands}, 
                 {"warbringer_gauntlets", Attributes{34.0, 23.0}, Special_stats{0.0, 1.14140773620799, 0.0, 0, 0.0}, Socket::hands}, 
                 {"ragesteel_gloves", Attributes{35.0, 0.0}, Special_stats{1.2228260869565217, 0.0, 0.0, 0, 0.0}, Socket::hands}, 
                 {"windstrike_gloves", Attributes{36.0, 18.0}, Special_stats{0.0, 1.077996195307546, 0.0, 0, 0.0}, Socket::hands}, 
@@ -332,7 +299,7 @@ struct Armory
                 {"gauntlets_of_the_skullsplitter", Attributes{31.0, 18.0}, Special_stats{0.0, 0.7609384908053266, 0.0, 0, 0.0}, Socket::hands}, 
                 {"handgrips_of_assassination", Attributes{0.0, 25.0}, Special_stats{0.0, 1.077996195307546, 50.0, 0, 0.0}, Socket::hands}, 
                 {"deft_handguards", Attributes{0.0, 0.0}, Special_stats{0.5434782608695653, 0.0, 52.0, 0, 0.0}, Socket::hands}, 
-                {"flesh_handlers_gauntlets", Attributes{18.0, 17.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 4.56563094483196}, Socket::hands}, 
+                {"flesh_handlers_gauntlets", Attributes{18.0, 17.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 4.56563094483196}, Socket::hands}, 
                 {"gauntlets_of_cruel_intention", Attributes{30.0, 0.0}, Special_stats{0.9510869565217392, 0.0, 0.0, 0, 0.0}, Socket::hands}, 
                 {"gauntlets_of_the_vanquisher", Attributes{24.0, 23.0}, Special_stats{0.0, 0.8877615726062144, 0.0, 0, 0.0}, Socket::hands}, 
                 {"gloves_of_enforcement", Attributes{28.0, 20.0}, Special_stats{0.0, 0.6341154090044389, 0.0, 0, 0.0}, Socket::hands}, 
@@ -341,7 +308,7 @@ struct Armory
                 {"fists_of_the_unrelenting", Attributes{26.0, 0.0}, Special_stats{0.6340579710144928, 0.6341154090044389, 0.0, 0, 0.0}, Socket::hands}, 
                 {"wastewalker_gloves", Attributes{0.0, 32.0}, Special_stats{0.0, 0.0, 16.0, 0, 0.0}, Socket::hands}, 
                 {"high_warlords_plate_gauntlets", Attributes{22.0, 0.0}, Special_stats{0.9510869565217392, 0.0, 0.0, 0, 0.0}, Socket::hands}, 
-                {"edgemasters_handguards", Attributes{0.0, 0.0}, Special_stats{0.0, 1.2048192771084338, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 4.311984781230184}, Socket::hands}, 
+                {"edgemasters_handguards", Attributes{0.0, 0.0}, Special_stats{0.0, 1.2048192771084338, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 4.311984781230184}, Socket::hands}, 
             };
 
     std::vector<Armor> belt_t
@@ -383,11 +350,11 @@ struct Armory
                 {"fel_leather_leggings", Attributes{0.0, 0.0}, Special_stats{1.1322463768115942, 1.585288522511097, 52.0, 0, 0.0}, Socket::legs}, 
                 {"midnight_legguards", Attributes{0.0, 0.0}, Special_stats{1.2228260869565217, 1.077996195307546, 64.0, 0, 0.0}, Socket::legs}, 
                 {"warbringer_greaves", Attributes{51.0, 0.0}, Special_stats{1.6757246376811596, 0.0, 0.0, 0, 0.0}, Socket::legs}, 
-                {"clefthoof_hide_leggings", Attributes{30.0, 30.0}, Special_stats{0.0, 1.077996195307546, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 4.56563094483196}, Socket::legs}, 
+                {"clefthoof_hide_leggings", Attributes{30.0, 30.0}, Special_stats{0.0, 1.077996195307546, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 4.56563094483196}, Socket::legs}, 
                 {"vanquishers_legplates", Attributes{36.0, 0.0}, Special_stats{1.0416666666666667, 0.0, 0.0, 0, 0.0}, Socket::legs}, 
                 {"gladiators_plate_legguards", Attributes{40.0, 0.0}, Special_stats{1.6304347826086958, 0.7609384908053266, 0.0, 0, 0.0}, Socket::legs}, 
                 {"wyrmscale_greaves", Attributes{0.0, 0.0}, Special_stats{1.177536231884058, 0.0, 64.0, 0, 0.0}, Socket::legs}, 
-                {"shattrath_leggings", Attributes{35.0, 25.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 5.580215599239062}, Socket::legs}, 
+                {"shattrath_leggings", Attributes{35.0, 25.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 5.580215599239062}, Socket::legs}, 
                 {"legguards_of_the_shattered_hand", Attributes{39.0, 32.0}, Special_stats{0.0, 1.5218769816106532, 0.0, 0, 0.0}, Socket::legs}, 
                 {"rip_flayer_leggings", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 0.0, 56.0, 0, 0.0}, Socket::legs}, 
                 {"forestwalker_kilt", Attributes{33.0, 26.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::legs}, 
@@ -451,7 +418,7 @@ struct Armory
                 {"reaverss_ring", Attributes{23.0, 0.0}, Special_stats{0.8152173913043479, 0.0, 0.0, 0, 0.0}, Socket::ring}, 
                 {"kaylaans_signet", Attributes{0.0, 15.0}, Special_stats{0.0, 0.6341154090044389, 50.0, 0, 0.0}, Socket::ring}, 
                 {"slayers_mark_of_the_redemption", Attributes{0.0, 15.0}, Special_stats{0.0, 0.6341154090044389, 50.0, 0, 0.0}, Socket::ring}, 
-                {"shapeshifters_signet", Attributes{0.0, 25.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::ring}, 
+                {"shapeshifters_signet", Attributes{0.0, 25.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0, 0, 0, 0, 0, 0, 0, 5.072923272035511}, Socket::ring},
                 {"weathered_band_of_the_swamplord", Attributes{20.0, 0.0}, Special_stats{0.9510869565217392, 0.0, 0.0, 0, 0.0}, Socket::ring}, 
                 {"ring_of_the_shadow_deeps", Attributes{0.0, 0.0}, Special_stats{0.9510869565217392, 0.8243500317057705, 24.0, 0, 0.0}, Socket::ring}, 
                 {"band_of_anguish", Attributes{0.0, 13.0}, Special_stats{0.0, 0.6341154090044389, 50.0, 0, 0.0}, Socket::ring}, 
@@ -528,9 +495,9 @@ struct Armory
                 {"edge_of_the_cosmos", Attributes{0.0, 0.0}, Special_stats{0.7246376811594204, 0.0, 30.0, 0, 0.0}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::sword}, 
                 {"phosphorescent_blade", Attributes{0.0, 0.0}, Special_stats{0.4981884057971015, 0.0, 40.0, 0, 0.0}, 2.4, 120, 224, Weapon_socket::one_hand, Weapon_type::sword},
                 {"high_warlords_quickblade", Attributes{0.0, 0.0}, Special_stats{0.588768115942029, 0.5072923272035511, 26.0, 0, 0.0}, 1.8, 103, 155, Weapon_socket::one_hand, Weapon_type::sword}, 
-                {"the_hungering_cold", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 3.5510462904248574}, 1.5, 76, 143, Weapon_socket::one_hand, Weapon_type::sword},  
+                {"the_hungering_cold", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 3.5510462904248574}, 1.5, 76, 143, Weapon_socket::one_hand, Weapon_type::sword},  
                 {"the_sun_eater", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 1.6, 93, 174, Weapon_socket::one_hand, Weapon_type::sword}, 
-                {"latros_shifting_sword", Attributes{0.0, 15.0}, Special_stats{0.0, 0.0, 26.0, 0, 0.00, 0, 0, 0, 0, 0, 3.5510462904248574}, 1.4, 70, 131, Weapon_socket::one_hand, Weapon_type::sword}, 
+                {"latros_shifting_sword", Attributes{0.0, 15.0}, Special_stats{0.0, 0.0, 26.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 3.5510462904248574}, 1.4, 70, 131, Weapon_socket::one_hand, Weapon_type::sword}, 
                 {"kings_defender", Attributes{0.0, 0.0}, Special_stats{0.0, 1.077996195307546, 0.0, 0, 0.0}, 1.6, 98, 182, Weapon_socket::one_hand, Weapon_type::sword}, 
                 {"gladiators_quickblade", Attributes{0.0, 0.0}, Special_stats{0.6793478260869565, 0.570703868103995, 28.0, 0, 0.0}, 1.5, 95, 178, Weapon_socket::one_hand, Weapon_type::sword}, 
            };
@@ -589,7 +556,7 @@ struct Armory
                 {"the_decapitator", Attributes{0.0, 0.0}, Special_stats{1.2228260869565217, 0.0, 0.0, 0, 0.0}, 2.6, 167, 312, Weapon_socket::main_hand, Weapon_type::axe, {{"the_decapitator", Hit_effect::Type::damage_physical, {}, {}, 540, 0, 180, 1}}}, 
                 {"the_planar_edge", Attributes{0.0, 0.0}, Special_stats{0.9057971014492754, 0.0, 42.0, 0, 0.0}, 2.7, 159, 296, Weapon_socket::main_hand, Weapon_type::axe}, 
                 {"fel_edged_battleaxe", Attributes{0.0, 0.0}, Special_stats{0.9510869565217392, 0.8877615726062144, 0.0, 0, 0.0}, 2.2, 128, 239, Weapon_socket::one_hand, Weapon_type::axe}, 
-                {"firebrand_battleaxe", Attributes{17.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 3.5510462904248574}, 2.4, 120, 224, Weapon_socket::one_hand, Weapon_type::axe}, 
+                {"firebrand_battleaxe", Attributes{17.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 3.5510462904248574}, 2.4, 120, 224, Weapon_socket::one_hand, Weapon_type::axe}, 
                 {"the_harvester_of_souls", Attributes{16.0, 0.0}, Special_stats{0.6793478260869565, 0.0, 0.0, 0, 0.0}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::axe}, 
                 {"high_warlords_cleaver", Attributes{0.0, 0.0}, Special_stats{0.588768115942029, 0.5072923272035511, 26.0, 0, 0.0}, 2.6, 149, 224, Weapon_socket::one_hand, Weapon_type::axe}, 
                 {"warbringer", Attributes{0.0, 0.0}, Special_stats{0.0, 0.4438807863031072, 0.0, 0, 0.0}, 1.8, 102, 190, Weapon_socket::one_hand, Weapon_type::axe}, 
@@ -611,7 +578,7 @@ struct Armory
                 {"drakefist_hammer", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 159, 296, Weapon_socket::main_hand, Weapon_type::mace, {{"drakefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
                 {"runic_hammer", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 50.0, 0, 0.0}, 2.4, 140, 261, Weapon_socket::one_hand, Weapon_type::mace}, 
                 {"bloodskull_destroyer", Attributes{0.0, 0.0}, Special_stats{0.9510869565217392, 0.0, 22.0, 0, 0.0}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::mace}, 
-                {"terokks_nightmace", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 4.819277108433735}, 2.0, 100, 187, Weapon_socket::one_hand, Weapon_type::mace}, 
+                {"terokks_nightmace", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 4.819277108433735}, 2.0, 100, 187, Weapon_socket::one_hand, Weapon_type::mace}, 
             };
 
     std::vector<Weapon> fists_t
@@ -620,7 +587,7 @@ struct Armory
                 {"big_bad_wolfs_paw", Attributes{0.0, 17.0}, Special_stats{0.9057971014492754, 0.0, 0.0, 0, 0.0}, 2.5, 153, 285, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::one_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .114}, 0, 10, 0, 2.6 / 60}}},
                 {"claw_of_the_watcher", Attributes{0.0, 0.0}, Special_stats{0.5434782608695653, 0.0, 24.0, 0, 0.0}, 2.5, 125, 233, Weapon_socket::one_hand, Weapon_type::unarmed}, 
-                {"demonblood_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 28.0, 0, 0.00, 0, 0, 0, 0, 0, 4.311984781230184}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::unarmed}, 
+                {"demonblood_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 28.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 4.311984781230184}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"reflex_blades", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0145846544071022, 32.0, 0, 0.0}, 2.7, 135, 252, Weapon_socket::one_hand, Weapon_type::unarmed}, 
             };
 

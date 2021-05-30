@@ -1016,8 +1016,8 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             {
                 Character char_plus = character;
                 Character char_minus = character;
-                char_plus.total_special_stats.hit += 1;
-                char_minus.total_special_stats.hit -= 1;
+                char_plus.total_special_stats.expertise += 4;
+                char_minus.total_special_stats.expertise -= 4;
                 Stat_weight expertise =
                     compute_stat_weight(simulator, char_plus, char_minus, "expertise", 1, 1, dps_mean, dps_sample_std);
                 stat_weights.emplace_back("1%Expertise " + std::to_string(expertise.dps_plus) + " " +
