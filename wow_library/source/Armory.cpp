@@ -1419,7 +1419,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     else if (String_helpers::find_string(buffs_vec, "adamantite_stone_main_hand"))
     {
-        character.add_weapon_buff(Socket::main_hand, buffs.adamantite_stone);
+        character.add_buff(buffs.adamantite_stone);
     }
 
     if (String_helpers::find_string(buffs_vec, "dense_stone_off_hand"))
@@ -1436,7 +1436,7 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     else if (String_helpers::find_string(buffs_vec, "adamantite_stone_off_hand"))
     {
-        character.add_weapon_buff(Socket::off_hand, buffs.adamantite_stone);
+        character.add_buff(buffs.adamantite_stone);
     }
 }
 

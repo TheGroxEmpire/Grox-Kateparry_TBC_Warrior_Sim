@@ -78,7 +78,7 @@ struct Buffs
                           0, 15, 120, true}}};
 
     Weapon_buff dense_stone{"dense_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 8};
-    Weapon_buff adamantite_stone{"adamantite_stone", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}, 12};
+    Buff adamantite_stone{"adamantite_stone", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}, 12};
     Buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{1.26, 0.0, 0.0}};
     Buff consecrated_sharpening_stone{"consecrated_sharpening_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 100.0}};
 };
@@ -584,18 +584,18 @@ struct Armory
     std::vector<Weapon> fists_t
             {
                 // main_hand / one_hand
-                {"big_bad_wolfs_paw", Attributes{0.0, 17.0}, Special_stats{0.9057971014492754, 0.0, 0.0, 0, 0.0}, 2.5, 153, 285, Weapon_socket::one_hand, Weapon_type::unarmed}, 
-                {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::one_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .114}, 0, 10, 0, 2.6 / 60}}},
+                {"big_bad_wolfs_paw", Attributes{0.0, 17.0}, Special_stats{0.9057971014492754, 0.0, 0.0, 0, 0.0}, 2.5, 153, 285, Weapon_socket::main_hand, Weapon_type::unarmed}, 
+                {"the_bladefist", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.6, 152, 283, Weapon_socket::main_hand, Weapon_type::unarmed, {{"the_bladefist", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .114}, 0, 10, 0, 2.6 / 60}}},
                 {"claw_of_the_watcher", Attributes{0.0, 0.0}, Special_stats{0.5434782608695653, 0.0, 24.0, 0, 0.0}, 2.5, 125, 233, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"demonblood_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 28.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 4.311984781230184}, 2.6, 130, 243, Weapon_socket::one_hand, Weapon_type::unarmed}, 
                 {"reflex_blades", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0145846544071022, 32.0, 0, 0.0}, 2.7, 135, 252, Weapon_socket::one_hand, Weapon_type::unarmed}, 
             };
 
-    std::vector<Set_bonus> set_bonuses{
+    std::vector<Set_bonus> set_bonuses
+    {
             {"ragesteel",               Attributes{0, 0}, Special_stats{0, 1.26, 0},  2, Set::ragesteel},
             {"wastewalker",               Attributes{0, 0}, Special_stats{0, 2.21, 0},  2, Set::wastewalker},
             {"doomplate",               Attributes{0, 0}, Special_stats{0, 2.21, 0},  2, Set::doomplate},
-
     };
 
     std::vector<Armor> get_items_in_socket(Socket socket) const;
