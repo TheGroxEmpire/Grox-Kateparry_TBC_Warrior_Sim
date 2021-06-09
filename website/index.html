@@ -885,6 +885,8 @@
                 <option value="the_planar_edge"> The Planar Edge</option>
                 <option value="warbringer"> Warbringer</option>
                 <option value="none" disabled> --- DAGGERS --- </option>
+                <option value="malchazeen"> Malchazeen</option>
+                <option value="the_night_blade"> The Night Blade</option>
                 <option value="none" disabled> --- MACES --- </option>
                 <option value="bloodskull_destroyer"> Bloodskull Destroyer</option>
                 <option value="dragonmaw"> Dragonmaw</option>
@@ -928,6 +930,8 @@
                 <option value="the_harvester_of_souls"> The Harvester of Souls</option>
                 <option value="warbringer"> Warbringer</option>
                 <option value="none" disabled> --- DAGGERS --- </option>
+                <option value="malchazeen"> Malchazeen</option>
+                <option value="the_night_blade"> The Night Blade</option>
                 <option value="none" disabled> --- MACES --- </option>
                 <option value="bloodskull_destroyer"> Bloodskull Destroyer</option>
                 <option value="runic_hammer"> Runic Hammer</option>
@@ -945,6 +949,7 @@
             <select id="two_hand_dd" class="weapon-select">
                 <option value="none" selected disabled></option>
                 <option value="none" disabled> --- TWO_HANDED_SWORDS --- </option>
+                <option value="bonereavers_edge"> Bonereaver's Edge</option>
                 <option value="despair"> Despair</option>
                 <option value="endbringer"> Endbringer</option>
                 <option value="gladiators_greatsword"> Gladiators Greatsword</option>
@@ -972,6 +977,7 @@
                 <option value="lunar_crescent"> Lunar Crescent</option>
                 <option value="mooncleaver"> Mooncleaver</option>
                 <option value="reaver_of_the_infinites"> Reaver of the Infinites</option>
+                <option value="severance"> Severance</option>
                 <option value="singing_crystal_axe"> Singing Crystal Axe</option>
                 <option value="sonic_spear"> Sonic Spear</option>
                 <option value="terokks_quill"> Terokks Quill</option>
@@ -1386,6 +1392,8 @@
                 <option value="the_planar_edge"> The Planar Edge</option>
                 <option value="warbringer"> Warbringer</option>
                 <option value="none" disabled> --- DAGGERS --- </option>
+                <option value="malchazeen"> Malchazeen</option>
+                <option value="the_night_blade"> The Night Blade</option>
                 <option value="none" disabled> --- MACES --- </option>
                 <option value="bloodskull_destroyer"> Bloodskull Destroyer</option>
                 <option value="dragonmaw"> Dragonmaw</option>
@@ -1402,6 +1410,7 @@
             </select>
             <select id="two_hand_weapons_dd_mult" size="10" class="weapon-select" multiple>
                 <option value="none" disabled> --- TWO_HANDED_SWORDS --- </option>
+                <option value="bonereavers_edge"> Bonereaver's Edge</option>
                 <option value="despair"> Despair</option>
                 <option value="endbringer"> Endbringer</option>
                 <option value="gladiators_greatsword"> Gladiators Greatsword</option>
@@ -1429,6 +1438,7 @@
                 <option value="lunar_crescent"> Lunar Crescent</option>
                 <option value="mooncleaver"> Mooncleaver</option>
                 <option value="reaver_of_the_infinites"> Reaver of the Infinites</option>
+                <option value="severance"> Severance</option>
                 <option value="singing_crystal_axe"> Singing Crystal Axe</option>
                 <option value="sonic_spear"> Sonic Spear</option>
                 <option value="terokks_quill"> Terokks Quill</option>
@@ -3913,6 +3923,10 @@
             <input type="checkbox" id="grace_of_air_totem">
             <label for="grace_of_air_totem"> Grace of Air Totem</label><br>
 
+            <input type="checkbox" id="enable_unleashed_rage">
+            <label for="enable_unleashed_rage:"> Unleashed rage <input type="number" id="unleashed_rage_dd" name="quantity"
+                min="0" max="30" value="5" step="1"> seconds after fight start</label><br>
+
             <input type="checkbox" id="improved_seal_of_the_crusader">
             <label for="improved_seal_of_the_crusader"> Improved Seal of The Crusader</label><br>
 
@@ -4770,10 +4784,10 @@
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
         "slam_spam_max_time_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
-        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd"];
+        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
-        "enable_berserking", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
+        "enable_berserking", "enable_unleashed_rage", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_hs_in_exec_phase",
         "cleave_if_adds", "use_hamstring", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
         "item_strengths", "wep_strengths", "deep_wounds", "compute_dpr", "talents_stat_weights",
         "multi_target_mode", "essence_of_the_red", "periodic_damage", "can_trigger_enrage", "first_global_sunder",

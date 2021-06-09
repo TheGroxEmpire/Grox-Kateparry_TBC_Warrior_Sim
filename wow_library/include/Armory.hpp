@@ -519,7 +519,8 @@ struct Armory
                 {"quantum_blade", Attributes{0.0, 0.0}, Special_stats{1.358695652173913, 0.0, 102.0, 0, 0.0}, 3.5, 304, 456, Weapon_socket::two_hand, Weapon_type::sword}, 
                 {"endbringer", Attributes{29.0, 0.0}, Special_stats{2.0380434782608696, 0.0, 0.0, 0, 0.0}, 3.4, 253, 381, Weapon_socket::two_hand, Weapon_type::sword}, 
                 {"illidari-bane_claymore", Attributes{0.0, 0.0}, Special_stats{1.6757246376811596, 0.0, 0.0, 0, 0.0}, 3.7, 276, 414, Weapon_socket::two_hand, Weapon_type::sword}, 
-                {"illidari-bane_claymore_demons", Attributes{0.0, 0.0}, Special_stats{1.6757246376811596, 0.0, 150.0, 0, 0.0}, 3.7, 276, 414, Weapon_socket::two_hand, Weapon_type::sword}, 
+                {"illidari-bane_claymore_demons", Attributes{0.0, 0.0}, Special_stats{1.6757246376811596, 0.0, 150.0, 0, 0.0}, 3.7, 276, 414, Weapon_socket::two_hand, Weapon_type::sword},
+                {"bonereavers_edge", Attributes{0.0, 0.0}, Special_stats{0.634057971, 0.0, 0.0},3.4, 206.0, 310.0, Weapon_socket::two_hand, Weapon_type::sword, {{"bonereavers_edge", Hit_effect::Type::reduce_armor, {}, {}, 0, 10, 0, 2.0*3.4/60.0,0, 1, 700, 3}}}, 
             };
 
     std::vector<Weapon> two_handed_axes_polearm_t
@@ -544,6 +545,7 @@ struct Armory
         {"reaver_of_the_infinites", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 50.0, 0, 0.0}, 3.6, 268, 403, Weapon_socket::two_hand, Weapon_type::axe}, 
         {"crystalforged_war_axe", Attributes{0.0, 0.0}, Special_stats{1.2228260869565217, 0.0, 80.0, 0, 0.0}, 3.5, 253, 380, Weapon_socket::two_hand, Weapon_type::axe}, 
         {"terokks_quill", Attributes{0.0, 54.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 3.3, 246, 370, Weapon_socket::two_hand, Weapon_type::axe}, 
+        {"severance", Attributes{43.0, 0.0}, Special_stats{1.268115942, 0.0, 0.0}, 3.6, 235.0, 354.0, Weapon_socket::two_hand, Weapon_type::axe},
     };
 
     std::vector<Weapon> two_handed_maces_t
@@ -572,7 +574,8 @@ struct Armory
 
     std::vector<Weapon> daggers_t
             {
-                // Sadge no good daggers
+                {"malchazeen", Attributes{0.0, 0.0}, Special_stats{0.0, 0.9512213682368160, 50.0, 0, 0.0}, 1.8, 132, 199, Weapon_socket::one_hand, Weapon_type::dagger},
+                {"the_night_blade", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0},1.8, 117.0, 176.0, Weapon_socket::one_hand, Weapon_type::dagger, {{"the_night_blade", Hit_effect::Type::reduce_armor, {}, {}, 0, 10, 0, 2.0*1.8/60.0,0, 1, 700, 3}}},
             };
 
     std::vector<Weapon> maces_t

@@ -191,7 +191,14 @@ public:
                 }
                 if (ap_multiplier > 0)
                 {
-                    use_effect.special_stats_boost.attack_power += use_effect.special_stats_boost.attack_power * ap_multiplier;
+                    if (use_effect.name == "unleashed_rage")
+                    {
+                        use_effect.special_stats_boost.attack_power += use_effect.special_stats_boost.attack_power * (ap_multiplier - 0.1);
+                    }
+                    else
+                    {
+                        use_effect.special_stats_boost.attack_power += use_effect.special_stats_boost.attack_power * ap_multiplier;
+                    }
                 }
                 if (!use_effect.hit_effects.empty())
                 {

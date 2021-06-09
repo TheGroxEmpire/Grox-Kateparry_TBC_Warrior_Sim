@@ -596,7 +596,7 @@ void Combat_simulator::manage_flurry_rampage(Hit_result hit_result, Special_stat
     }
     if (use_rampage_)
     {
-        double rampage_ap = 50 * (1 + config.talents.improved_berserker_stance * 0.02);
+        double rampage_ap = 50 * (1 + config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1);
         if(rampage_active)
         {
             if (rampage_stacks < 5)
@@ -888,6 +888,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
     {
         double r = get_uniform_random(1);
         double probability;
+        double ap_multiplier = config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1;
         if (hit_effect.ppm != 0)
         {
             probability = hit_effect.ppm / (60.0 / weapon.swing_speed);
@@ -963,7 +964,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
             case Hit_effect::Type::stat_boost:
                 simulator_cout("PROC: ", hit_effect.name, " stats increased for ", hit_effect.duration, "s");
                 buff_manager_.add(weapon.socket_name + "_" + hit_effect.name,
-                                  hit_effect.get_special_stat_equivalent(special_stats, config.talents.improved_berserker_stance * 0.02 + 1), hit_effect.duration);
+                                  hit_effect.get_special_stat_equivalent(special_stats, ap_multiplier), hit_effect.duration);
                 break;
             case Hit_effect::Type::reduce_armor: {
                 if (current_armor_red_stacks_ < hit_effect.max_stacks)
@@ -1315,13 +1316,13 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     }
 
     
-    // if (config.talents.improved_berserker_stance > 0)
-    // {
-    //     double ap_boost = 
-    //         character.total_special_stats.attack_power * (config.talents.improved_berserker_stance * 0.02);
-    //     use_effects_all.emplace_back(
-    //         Use_effect{"Improved_berserker_stance", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, sim_time + 2, sim_time, false});
-    // }
+    if (config.enable_unleashed_rage > 0)
+    {
+        double ap_boost = 
+            character.total_special_stats.attack_power * 0.1; 
+        use_effects_all.emplace_back(
+            Use_effect{"unleashed_rage", Use_effect::Effect_socket::unique, {}, {0, 0, ap_boost}, 0, sim_time - config.unleashed_rage_start_, sim_time + 5, false});
+    }
 
     double ap_equiv{};
     if (is_dual_wield)
@@ -1419,8 +1420,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     time_keeper_.get_dynamic_time_step(100.0, 100.0, buff_dt, 0.0 - time_keeper_.time, use_effect_dt);
                 time_keeper_.increment(dt);
                 std::vector<std::string> debug_msg{};
+                double ap_multiplier = config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1;
                 buff_manager_.increment(dt, time_keeper_.time, rage, rage_lost_stance_swap_, time_keeper_.global_cd,
-                                        config.display_combat_debug, debug_msg, config.talents.improved_berserker_stance * 0.02);
+                                        config.display_combat_debug, debug_msg, ap_multiplier);
                 for (const auto& msg : debug_msg)
                 {
                     simulator_cout(msg);
@@ -1451,8 +1453,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 time_keeper_.get_dynamic_time_step(mh_dt, oh_dt, buff_dt, sim_time - time_keeper_.time, slam_dt);
             time_keeper_.increment(dt);
             std::vector<std::string> debug_msg{};
+            double ap_multiplier = config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1;
             buff_manager_.increment(dt, time_keeper_.time, rage, rage_lost_stance_swap_, time_keeper_.global_cd,
-                                    config.display_combat_debug, debug_msg, config.talents.improved_berserker_stance * 0.02);
+                                    config.display_combat_debug, debug_msg, ap_multiplier);
             for (const auto& msg : debug_msg)
             {
                 simulator_cout(msg);
@@ -1699,7 +1702,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     }
                     else if (time_keeper_.rampage_cd < 0.0 && rampage_active)
                     {
-                        double rampage_ap = 50 * (1 + config.talents.improved_berserker_stance * 0.02) * rampage_stacks;
+                        double rampage_ap = 50 * (1 + config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1) * rampage_stacks;
                         special_stats -= {0, 0, rampage_ap};
                         rampage_active = false;
                         rampage_stacks = 0;

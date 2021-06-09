@@ -82,12 +82,14 @@ struct Combat_simulator_config
     bool ability_queue_{};
     double ability_queue_rage_thresh_{};
     double berserking_haste_{};
+    double unleashed_rage_start_{};
 
     // Simulator settings
     bool enable_bloodrage{false};
     bool enable_recklessness{false};
     bool enable_blood_fury{false};
     bool enable_berserking{false};
+    bool enable_unleashed_rage{false};
 
     bool display_combat_debug{false};
     bool performance_mode{false};

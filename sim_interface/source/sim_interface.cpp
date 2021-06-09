@@ -644,7 +644,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_bloodthirst)
         {
             double avg_bt_casts = static_cast<double>(dmg_dist.bloodthirst_count) / n_simulations_base;
-            if (avg_bt_casts > 0.0)
+            if (avg_bt_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_bt_ = true;
                 Combat_simulator simulator_dpr{};
@@ -664,7 +664,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_mortal_strike)
         {
             double avg_ms_casts = static_cast<double>(dmg_dist.mortal_strike_count) / n_simulations_base;
-            if (avg_ms_casts > 0.0)
+            if (avg_ms_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_ms_ = true;
                 Combat_simulator simulator_dpr{};
@@ -683,7 +683,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_whirlwind)
         {
             double avg_ww_casts = static_cast<double>(dmg_dist.whirlwind_count) / n_simulations_base;
-            if (avg_ww_casts > 0.0)
+            if (avg_ww_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_ww_ = true;
                 Combat_simulator simulator_dpr{};
@@ -703,7 +703,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_slam)
         {
             double avg_sl_casts = static_cast<double>(dmg_dist.slam_count) / n_simulations_base;
-            if (avg_sl_casts > 0.0)
+            if (avg_sl_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_sl_ = true;
                 Combat_simulator simulator_dpr{};
@@ -711,11 +711,15 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 simulator_dpr.simulate(character, 0);
                 double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
                 double dmg_tot = delta_dps * (config.sim_time - 1);
+                double avg_mh_dmg =
+                    static_cast<double>(dmg_dist.white_mh_damage) / static_cast<double>(dmg_dist.white_mh_count);
+                double avg_mh_rage_lost = avg_mh_dmg * 3.75 / 274.7 + (3.5 * character.weapons[0].swing_speed / 2);
+                double sl_cast_time = 1.5 - 0.5 * config.talents.improved_slam;
                 double dmg_per_hit = dmg_tot / avg_sl_casts;
-                double dmg_per_rage = dmg_per_hit / 15.0;
+                double dmg_per_rage = dmg_per_hit / (15.0 + avg_mh_rage_lost * sl_cast_time / character.weapons[0].swing_speed);
                 dpr_info += "<b>Slam</b>: <br>Damage per cast: <b>" +
                             String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
-                            String_helpers::string_with_precision(15.0, 3) + "</b><br>DPR: <b>" +
+                            String_helpers::string_with_precision(15.0 + avg_mh_rage_lost * sl_cast_time / character.weapons[0].swing_speed, 3) + "</b><br>DPR: <b>" +
                             String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
                 config.dpr_settings.compute_dpr_sl_ = false;
             }
@@ -723,7 +727,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_heroic_strike)
         {
             double avg_hs_casts = static_cast<double>(dmg_dist.heroic_strike_count) / n_simulations_base;
-            if (avg_hs_casts > 1.0)
+            if (avg_hs_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_hs_ = true;
                 Combat_simulator simulator_dpr{};
@@ -746,7 +750,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.cleave_if_adds)
         {
             double avg_cl_casts = static_cast<double>(dmg_dist.cleave_count) / n_simulations_base;
-            if (avg_cl_casts > 0.0)
+            if (avg_cl_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_cl_ = true;
                 Combat_simulator simulator_dpr{};
@@ -769,7 +773,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_hamstring)
         {
             double avg_ha_casts = static_cast<double>(dmg_dist.hamstring_count) / n_simulations_base;
-            if (avg_ha_casts > 0.0)
+            if (avg_ha_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_ha_ = true;
                 Combat_simulator simulator_dpr{};
@@ -789,7 +793,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         if (config.combat.use_overpower)
         {
             double avg_op_casts = static_cast<double>(dmg_dist.overpower_count) / n_simulations_base;
-            if (avg_op_casts > 0.0)
+            if (avg_op_casts >= 1.0)
             {
                 config.dpr_settings.compute_dpr_op_ = true;
                 Combat_simulator simulator_dpr{};
@@ -810,7 +814,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         }
 
         double avg_ex_casts = static_cast<double>(dmg_dist.execute_count) / n_simulations_base;
-        if (avg_ex_casts > 0.0)
+        if (avg_ex_casts >= 1.0)
         {
             config.dpr_settings.compute_dpr_ex_ = true;
             Combat_simulator simulator_dpr{};

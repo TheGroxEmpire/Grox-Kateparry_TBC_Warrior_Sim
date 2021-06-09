@@ -29,6 +29,10 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     {
         enable_berserking = true;
     }
+    if (String_helpers::find_string(input.options, "enable_unleashed_rage"))
+    {
+        enable_unleashed_rage = true;
+    }
     if (String_helpers::find_string(input.options, "use_bt_in_exec_phase"))
     {
         combat.use_bt_in_exec_phase = true;
@@ -160,6 +164,7 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         execute_phase_percentage_ = fv.find("execute_phase_percentage_dd");
         ability_queue_rage_thresh_ = fv.find("re_queue_abilities_dd");
         berserking_haste_ = fv.find("berserking_haste_dd");
+        unleashed_rage_start_ = fv.find("unleashed_rage_dd");
     }
     {
         Find_values<int> fv(input.talent_string, input.talent_val);
