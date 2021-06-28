@@ -107,7 +107,7 @@ public:
     {
         config = get_config_with_everything_deactivated();
 
-        Weapon wep = Weapon{"test_wep", {}, {}, 2.0, 100, 100, Weapon_socket::one_hand, Weapon_type::axe};
+        auto wep = Weapon{"test_wep", {}, {}, 2.0, 100, 100, Weapon_socket::one_hand, Weapon_type::axe};
         character.equip_weapon(wep, wep);
 
         Armory armory{};

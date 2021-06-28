@@ -51,6 +51,7 @@ public:
             std::cout << "WARN: Wielding single weapon that is not two handed.\n";
         }
         weapon.socket = Socket::main_hand;
+        weapons.clear();
         weapons.emplace_back(weapon);
     }
 
@@ -63,6 +64,7 @@ public:
         }
         weapon1.socket = Socket::main_hand;
         weapon2.socket = Socket::off_hand;
+        weapons.clear();
         weapons.emplace_back(weapon1);
         weapons.emplace_back(weapon2);
     }

@@ -117,7 +117,7 @@ TEST_F(Sim_fixture, test_dps_return_matches_heristic_values)
     sim.set_config(config);
     sim.simulate(character);
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double glancing_chance = 0.24;
     double hit_chance = (1 - dodge_chance - miss_chance - glancing_chance);
@@ -154,7 +154,7 @@ TEST_F(Sim_fixture, test_hit_effects_extra_hit)
 
     auto proc_data = sim.get_proc_data();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -201,7 +201,7 @@ TEST_F(Sim_fixture, test_hit_effects_icd)
 
     auto proc_data = sim.get_proc_data();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -251,7 +251,7 @@ TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
 
     auto proc_data = sim.get_proc_data();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -298,7 +298,7 @@ TEST_F(Sim_fixture, test_hit_effects_sword_spec)
 
     auto proc_data = sim.get_proc_data();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -346,7 +346,7 @@ TEST_F(Sim_fixture, test_hit_effects_physical_damage)
 
     auto proc_data = sim.get_proc_data();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
     double yellow_hit_chance = (1 - 0.09);
@@ -396,7 +396,7 @@ TEST_F(Sim_fixture, test_hit_effects_magic_damage)
 
     auto proc_data = sim.get_proc_data();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -448,7 +448,7 @@ TEST_F(Sim_fixture, test_hit_effects_stat_boost_short_duration)
     auto proc_data = sim.get_proc_data();
     auto aura_uptimes = sim.get_aura_uptimes_map();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -495,7 +495,7 @@ TEST_F(Sim_fixture, test_hit_effects_stat_boost_long_duration)
     auto proc_data = sim.get_proc_data();
     auto aura_uptimes = sim.get_aura_uptimes_map();
 
-    double miss_chance = (8 * 0.8 + 20.0) / 100.0;
+    double miss_chance = (8 + 19) / 100.0;
     double dodge_chance = 6.5 / 100.0;
     double hit_chance = (1 - miss_chance - dodge_chance);
 
@@ -555,4 +555,35 @@ TEST_F(Sim_fixture, test_hit_effects_stat_boost_long_duration_overlap)
 
     EXPECT_GT(aura_uptimes["main_hand_test_wep_mh"], 0.98 * expected_duration);
     EXPECT_GT(aura_uptimes["off_hand_test_wep_oh"], 0.98 * expected_duration);
+}
+
+TEST_F(Sim_fixture, test_deep_wounds)
+{
+    config.sim_time = 100000.0;
+    config.n_batches = 1;
+    config.main_target_initial_armor_ = 0.0;
+
+    auto mh = Weapon{"test_mh", {}, {}, 2.6, 130, 260, Weapon_socket::one_hand, Weapon_type::axe};
+    auto oh = Weapon{"test_oh", {}, {}, 1.3, 65, 130, Weapon_socket::one_hand, Weapon_type::dagger};
+    character.equip_weapon(mh, oh);
+
+    character.base_special_stats.attack_power = 1400;
+
+    Combat_simulator sim{};
+    config.talents.deep_wounds = 3;
+    config.combat.deep_wounds = true;
+    config.combat.use_whirlwind = true;
+    config.combat.use_bloodthirst = true;
+    config.combat.use_heroic_strike = true;
+    sim.set_config(config);
+    sim.simulate(character);
+
+    auto ap = character.total_special_stats.attack_power;
+    auto w = character.weapons[0];
+    auto dwTick = config.talents.deep_wounds * 0.2 * (0.5 * (w.min_damage + w.max_damage) + ap / 14 * w.swing_speed) / 4;
+
+    auto damage_sources = sim.get_damage_distribution();
+
+    EXPECT_GT(damage_sources.deep_wounds_count, 0);
+    EXPECT_NEAR(damage_sources.deep_wounds_damage / damage_sources.deep_wounds_count, dwTick, 0.1);
 }

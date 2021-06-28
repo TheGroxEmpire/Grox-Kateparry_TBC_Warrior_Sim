@@ -268,13 +268,9 @@ public:
 
     struct Hit_outcome
     {
-        Hit_outcome()
-        {
-            damage = 0;
-            hit_result = Hit_result::TBD;
-        };
+        Hit_outcome() : damage(0), hit_result(Hit_result::TBD) {}
 
-        Hit_outcome(double damage, Hit_result hit_result) : damage{damage}, hit_result{hit_result} {};
+        Hit_outcome(double damage, Hit_result hit_result) : damage{damage}, hit_result{hit_result} {}
 
         double damage;
         Hit_result hit_result;
@@ -287,9 +283,6 @@ public:
                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, double attack_power_bonus = 0,
                       bool is_extra_attack = false, bool is_sword_spec = false);
    
-    void sword_spec_hit(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                      Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, double attack_power_bonus = 0);
-
     void hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                      Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, bool is_extra_attack = false,
                      bool is_instant = true);
@@ -324,7 +317,7 @@ public:
 
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
-    Combat_simulator::Hit_outcome generate_hit(const Weapon_sim& weapon, double damage, Hit_type hit_type,
+    Combat_simulator::Hit_outcome generate_hit(const Weapon_sim& main_hand_weapon, double damage, Hit_type hit_type,
                                                Socket weapon_hand, const Special_stats& special_stats,
                                                Damage_sources& damage_sources, bool boss_target = true,
                                                bool is_overpower = false, bool can_sweep = true, bool is_whirlwind = false, bool is_melee_spell = false);
@@ -447,7 +440,6 @@ private:
     std::vector<double> hit_table_yellow_;
     std::vector<double> hit_table_yellow_spell_;
     std::vector<double> hit_table_overpower_;
-    std::vector<double> hit_table_melee_spell_;
     std::vector<double> damage_multipliers_yellow_;
     std::vector<double> hit_table_two_hand_;
     Damage_sources damage_distribution_{};
