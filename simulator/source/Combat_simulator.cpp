@@ -605,10 +605,11 @@ void Combat_simulator::manage_flurry_rampage(Hit_result hit_result, Special_stat
         }
         simulator_cout(flurry_charges, " flurry charges");
     }
-    if (use_rampage_)
+
+    if (use_rampage_ && hit_result != Hit_result::dodge && hit_result != Hit_result::miss)
     {
         double rampage_ap = 50 * (1 + config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1);
-        if(rampage_active)
+        if (rampage_active)
         {
             if (rampage_stacks < 5)
             {
@@ -715,7 +716,7 @@ void Combat_simulator::bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& 
 {
     if (config.dpr_settings.compute_dpr_bt_)
     {
-        get_uniform_random(100) < hit_table_yellow_[1] ? rage -= 6 : rage -= 30;
+        get_uniform_random(100) < hit_table_yellow_spell_[1] ? rage -= 6 : rage -= 30;
         time_keeper_.blood_thirst_cd = 6.0;
         time_keeper_.global_cd = 1.5;
         return;
@@ -848,8 +849,10 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
 {
     if (config.dpr_settings.compute_dpr_ex_)
     {
-        get_uniform_random(100) < hit_table_yellow_[1] ? rage *= 0.8 : rage -= execute_rage_cost_;
+        simulator_cout("Execute (DPR)!");
+        rage -= execute_rage_cost_;
         time_keeper_.global_cd = 1.5;
+        if (get_uniform_random(100) < hit_table_yellow_spell_[1]) return;
         rage_spent_on_execute_ += rage;
         rage = 0;
         return;
@@ -858,22 +861,20 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
     double damage = 925 + (rage - execute_rage_cost_) * 21;
     auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, 
                                     damage_sources, true, false, true, false, true);
+    rage -= execute_rage_cost_;
+    time_keeper_.global_cd = 1.5;
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
     {
-        rage *= 0.8;
         if (hit_outcome.hit_result == Hit_result::dodge && config.set_bonus_effect.warbringer_4_set)
         {
             rage += 2;
         }
+        simulator_cout("Current rage: ", int(rage));
+        return;
     }
-    else
-    {
-        rage -= execute_rage_cost_;
-        hit_effects(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
-    }
+    hit_effects(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
     rage_spent_on_execute_ += rage;
     rage = 0;
-    time_keeper_.global_cd = 1.5;
     manage_flurry_rampage(hit_outcome.hit_result, special_stats, flurry_charges, rampage_stacks, rampage_active, true);
     damage_sources.add_damage(Damage_source::execute, hit_outcome.damage, time_keeper_.time);
     rage = 0;
