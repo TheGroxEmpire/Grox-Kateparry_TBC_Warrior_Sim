@@ -587,3 +587,38 @@ TEST_F(Sim_fixture, test_deep_wounds)
     EXPECT_GT(damage_sources.deep_wounds_count, 0);
     EXPECT_NEAR(damage_sources.deep_wounds_damage / damage_sources.deep_wounds_count, dwTick, 0.1);
 }
+
+TEST_F(Sim_fixture, test_flurry_uptime)
+{
+    config.sim_time = 100000.0;
+    config.n_batches = 1;
+    config.main_target_initial_armor_ = 0.0;
+
+    auto mh = Weapon{"test_mh", {}, {}, 2.6, 260, 260, Weapon_socket::one_hand, Weapon_type::sword};
+    auto oh = Weapon{"test_oh", {}, {}, 2.6, 260, 260, Weapon_socket::one_hand, Weapon_type::sword};
+    character.equip_weapon(mh, oh);
+
+    character.total_special_stats.attack_power = 2800;
+    character.total_special_stats.critical_strike = 35;
+    character.total_special_stats.haste = 0.05; // haste should probably use % as well, for consistency
+
+    Combat_simulator sim{};
+    config.talents.flurry = 5;
+    config.talents.bloodthirst = 1;
+    config.combat.heroic_strike_rage_thresh = 60;
+    config.combat.use_heroic_strike = true;
+    config.combat.use_bloodthirst = true;
+    config.combat.use_whirlwind = true;
+    sim.set_config(config);
+    sim.simulate(character);
+
+    auto flurryUptime = sim.get_flurry_uptime();
+    auto flurryHaste = 1 + config.talents.flurry * 0.05;
+
+    auto haste = 1 + character.total_special_stats.haste;
+
+    auto dd = sim.get_damage_distribution();
+
+    EXPECT_NEAR(dd.white_oh_count / (config.sim_time / oh.swing_speed * haste), (1 - flurryUptime) + flurryUptime * flurryHaste, 0.0001);
+    EXPECT_NEAR((dd.white_mh_count + dd.heroic_strike_count) / (config.sim_time / mh.swing_speed * haste), (1 - flurryUptime) + flurryUptime * flurryHaste, 0.0001);
+}

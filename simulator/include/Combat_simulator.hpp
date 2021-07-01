@@ -281,7 +281,7 @@ public:
 
     void swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, double attack_power_bonus = 0,
-                      bool is_extra_attack = false, bool is_sword_spec = false);
+                      bool is_extra_attack = false);
    
     void hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                      Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, bool is_extra_attack = false,
@@ -387,6 +387,8 @@ public:
 
     [[nodiscard]] constexpr double get_flurry_uptime_oh() const { return flurry_uptime_oh_; }
 
+    [[nodiscard]] constexpr double get_flurry_uptime() const { return flurry_uptime_; }
+
     [[nodiscard]] constexpr double get_hs_uptime() const { return heroic_strike_uptime_; }
 
     [[nodiscard]] constexpr double get_rampage_uptime() const { return rampage_uptime_; }
@@ -463,6 +465,7 @@ private:
 
     double flurry_uptime_mh_{};
     double flurry_uptime_oh_{};
+    double flurry_uptime_{};
     double heroic_strike_uptime_{};
     double rampage_uptime_{};
 

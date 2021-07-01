@@ -966,7 +966,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
             case Hit_effect::Type::sword_spec: {
                     simulator_cout("PROC: extra hit from: ", hit_effect.name);
                     swing_weapon(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
-                                        flurry_charges, rampage_stacks, rampage_active, hit_effect.attack_power_boost, false, true);
+                                        flurry_charges, rampage_stacks, rampage_active, hit_effect.attack_power_boost, false);
                 break;
             }
             case Hit_effect::Type::damage_magic: {
@@ -1042,7 +1042,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
 
 void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
                                     double& rage, Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active,
-                                    double attack_power_bonus, bool is_extra_attack, bool is_sword_spec)
+                                    double attack_power_bonus, bool is_extra_attack)
 {
     std::vector<Hit_outcome> hit_outcomes{};
     hit_outcomes.reserve(2);
@@ -1226,12 +1226,6 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
             }
         }
     }
-
-    // Reset swing timer only if it's not extra attack or sword spec
-    if (!is_extra_attack || !is_sword_spec)
-    {
-        weapon.internal_swing_timer = weapon.swing_speed / (1 + special_stats.haste);
-    }
 }
 
 void Combat_simulator::simulate(const Character& character, size_t n_simulations, double init_mean,
@@ -1265,6 +1259,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     }
     flurry_uptime_mh_ = 0;
     flurry_uptime_oh_ = 0;
+    flurry_uptime_ = 0;
     rage_lost_stance_swap_ = 0;
     rage_lost_capped_ = 0;
     heroic_strike_uptime_ = 0;
@@ -1386,13 +1381,12 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         int mh_hits_w_flurry = 0;
         int oh_hits = 0;
         int oh_hits_w_flurry = 0;
+        double flurry_uptime = 0.0;
         int oh_hits_w_heroic = 0;
         int mh_hits_w_rampage = 0;
 
-        for (auto& wep : weapons)
-        {
-            wep.internal_swing_timer = 0.0;
-        }
+        weapons[0].internal_swing_timer = 0.0;
+        if (is_dual_wield) weapons[1].internal_swing_timer = 0.5 * (weapons[1].swing_speed / (1 + special_stats.haste)); // de-sync mh/oh swing timers
 
         // To avoid local max/min results from running a specific run time
         sim_time += averaging_interval / n_damage_batches;
@@ -1455,10 +1449,11 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         {
             double mh_dt = weapons[0].internal_swing_timer;
             double oh_dt = is_dual_wield ? weapons[1].internal_swing_timer : 1000.0;
+            double oldHaste = special_stats.haste;
             double buff_dt = buff_manager_.get_dt(time_keeper_.time);
             double slam_dt = slam_manager.time_left(time_keeper_.time);
-            double dt =
-                time_keeper_.get_dynamic_time_step(mh_dt, oh_dt, buff_dt, sim_time - time_keeper_.time, slam_dt);
+            double dt = time_keeper_.get_dynamic_time_step(mh_dt, oh_dt, buff_dt, sim_time - time_keeper_.time, slam_dt);
+            if (flurry_charges > 0) flurry_uptime += dt;
             time_keeper_.increment(dt);
             std::vector<std::string> debug_msg{};
             double ap_multiplier = config.talents.improved_berserker_stance * 0.02 + config.enable_unleashed_rage * 0.1;
@@ -1579,7 +1574,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 if (rage > 30.0 && time_keeper_.global_cd < 0.0 && time_keeper_.sweeping_strikes_cd < 0.0)
                 {
-                    simulator_cout("Sweeping strkes!");
+                    simulator_cout("Sweeping strikes!");
                     sweeping_strikes_charges_ = 10;
                     time_keeper_.sweeping_strikes_cd = 30;
                     time_keeper_.global_cd = 1.5;
@@ -1861,6 +1856,25 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                         }
                     }
                 }
+
+                // end of turn - update swing timers if necessary
+                if (mh_swing)
+                {
+                    weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
+                }
+                else if (special_stats.haste != oldHaste)
+                {
+                    weapons[0].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
+                }
+
+                if (oh_swing)
+                {
+                    weapons[1].internal_swing_timer = weapons[1].swing_speed / (1 + special_stats.haste);
+                }
+                else if (is_dual_wield && special_stats.haste != oldHaste)
+                {
+                    weapons[1].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
+                }
             }
         }
         if (deep_wounds_)
@@ -1883,6 +1897,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             heroic_strike_uptime_ =
                 Statistics::update_mean(heroic_strike_uptime_, iter + 1, double(oh_hits_w_heroic) / oh_hits);
         }
+        flurry_uptime_ = Statistics::update_mean(flurry_uptime_, iter + 1, flurry_uptime / time_keeper_.time);
         avg_rage_spent_executing_ =
             Statistics::update_mean(avg_rage_spent_executing_, iter + 1, rage_spent_on_execute_);
         if (log_data)
@@ -2021,6 +2036,10 @@ std::vector<std::string> Combat_simulator::get_aura_uptimes() const
     if (flurry_uptime_oh_ != 0.0)
     {
         aura_uptimes.emplace_back("Flurry_off_hand " + std::to_string(100 * flurry_uptime_oh_));
+    }
+    if (flurry_uptime_ != 0.0)
+    {
+        aura_uptimes.emplace_back("Flurry " + std::to_string(100 * flurry_uptime_));
     }
     if (heroic_strike_uptime_ != 0.0)
     {
