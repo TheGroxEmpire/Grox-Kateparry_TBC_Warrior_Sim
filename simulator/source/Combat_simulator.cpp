@@ -86,7 +86,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
         armor_reduction_delayed_ = 3075 - 520 * config.n_sunder_armor_stacks;
     }
 
-    flurry_haste_factor_ = (config.talents.flurry > 0) ? 0.05 + 0.05 * config.talents.flurry : 0.0;
+    flurry_haste_factor_ = 0.05 * config.talents.flurry;
     dual_wield_damage_factor_ = 0.5 + 0.025 * config.talents.dual_wield_specialization;
     cleave_bonus_damage_ = 70 * (1.0 + 0.4 * config.talents.improved_cleave);
     slam_manager.slam_cast_time_ = 1.5 - 0.5 * config.talents.improved_slam;
