@@ -15,8 +15,7 @@ TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
     sim.set_config(config);
     sim.simulate(character);
 
-    EXPECT_EQ(sim.get_flurry_uptime_mh(), 0.0);
-    EXPECT_EQ(sim.get_flurry_uptime_oh(), 0.0);
+    EXPECT_EQ(sim.get_flurry_uptime(), 0.0);
 }
 
 TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
@@ -30,10 +29,7 @@ TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
     sim.set_config(config);
     sim.simulate(character);
 
-    EXPECT_GT(sim.get_flurry_uptime_mh(), .95);
-    EXPECT_GT(sim.get_flurry_uptime_oh(), .95);
-    EXPECT_NEAR(sim.get_flurry_uptime_mh(), sim.get_flurry_uptime_oh(), 0.02);
-    EXPECT_NE(sim.get_flurry_uptime_mh(), sim.get_flurry_uptime_oh());
+    EXPECT_GT(sim.get_flurry_uptime(), .95);
 }
 
 TEST_F(Sim_fixture, test_endless_rage)
@@ -585,7 +581,7 @@ TEST_F(Sim_fixture, test_deep_wounds)
     auto damage_sources = sim.get_damage_distribution();
 
     EXPECT_GT(damage_sources.deep_wounds_count, 0);
-    EXPECT_NEAR(damage_sources.deep_wounds_damage / damage_sources.deep_wounds_count, dwTick, 0.1);
+    EXPECT_NEAR(damage_sources.deep_wounds_damage / damage_sources.deep_wounds_count, dwTick, 0.01);
 }
 
 TEST_F(Sim_fixture, test_flurry_uptime)

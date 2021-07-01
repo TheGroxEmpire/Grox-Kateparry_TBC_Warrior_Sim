@@ -1257,8 +1257,6 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     {
         dps_distribution_.reset();
     }
-    flurry_uptime_mh_ = 0;
-    flurry_uptime_oh_ = 0;
     flurry_uptime_ = 0;
     rage_lost_stance_swap_ = 0;
     rage_lost_capped_ = 0;
@@ -1377,11 +1375,10 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         bool apply_delayed_armor_reduction = false;
         bool execute_phase = false;
 
-        int mh_hits = 0;
-        int mh_hits_w_flurry = 0;
-        int oh_hits = 0;
-        int oh_hits_w_flurry = 0;
         double flurry_uptime = 0.0;
+
+        int mh_hits = 0;
+        int oh_hits = 0;
         int oh_hits_w_heroic = 0;
         int mh_hits_w_rampage = 0;
 
@@ -1536,10 +1533,6 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             if (mh_swing)
             {
                 mh_hits++;
-                if (flurry_charges > 0)
-                {
-                    mh_hits_w_flurry++;
-                }
                 if (rampage_stacks > 0)
                 {
                     mh_hits_w_rampage++;
@@ -1550,11 +1543,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             if (oh_swing)
             {
                 oh_hits++;
-                if (flurry_charges > 0)
-                {
-                    oh_hits_w_flurry++;
-                }
-                if (ability_queue_manager.heroic_strike_queued || ability_queue_manager.cleave_queued)
+                if (ability_queue_manager.is_ability_queued())
                 {
                     oh_hits_w_heroic++;
                 }
@@ -1888,12 +1877,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         double new_sample = damage_sources.sum_damage_sources() / sim_time;
         dps_distribution_.add_sample(new_sample);
         damage_distribution_ = damage_distribution_ + damage_sources;
-        flurry_uptime_mh_ = Statistics::update_mean(flurry_uptime_mh_, iter + 1, double(mh_hits_w_flurry) / mh_hits);
         rampage_uptime_ = Statistics::update_mean(rampage_uptime_, iter + 1, double(mh_hits_w_rampage) / mh_hits);
         if (weapons.size() > 1)
         {
-            flurry_uptime_oh_ =
-                Statistics::update_mean(flurry_uptime_oh_, iter + 1, double(oh_hits_w_flurry) / oh_hits);
             heroic_strike_uptime_ =
                 Statistics::update_mean(heroic_strike_uptime_, iter + 1, double(oh_hits_w_heroic) / oh_hits);
         }
@@ -2028,14 +2014,6 @@ std::vector<std::string> Combat_simulator::get_aura_uptimes() const
     {
         double uptime = aura.second / total_sim_time;
         aura_uptimes.emplace_back(aura.first + " " + std::to_string(100 * uptime));
-    }
-    if (flurry_uptime_mh_ != 0.0)
-    {
-        aura_uptimes.emplace_back("Flurry_main_hand " + std::to_string(100 * flurry_uptime_mh_));
-    }
-    if (flurry_uptime_oh_ != 0.0)
-    {
-        aura_uptimes.emplace_back("Flurry_off_hand " + std::to_string(100 * flurry_uptime_oh_));
     }
     if (flurry_uptime_ != 0.0)
     {

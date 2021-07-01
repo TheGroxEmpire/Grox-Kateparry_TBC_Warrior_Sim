@@ -383,10 +383,6 @@ public:
 
     std::vector<int>& get_hist_y() { return hist_y; }
 
-    [[nodiscard]] constexpr double get_flurry_uptime_mh() const { return flurry_uptime_mh_; }
-
-    [[nodiscard]] constexpr double get_flurry_uptime_oh() const { return flurry_uptime_oh_; }
-
     [[nodiscard]] constexpr double get_flurry_uptime() const { return flurry_uptime_; }
 
     [[nodiscard]] constexpr double get_hs_uptime() const { return heroic_strike_uptime_; }
@@ -463,8 +459,6 @@ private:
     bool recompute_mitigation_{false};
     int number_of_extra_targets_{};
 
-    double flurry_uptime_mh_{};
-    double flurry_uptime_oh_{};
     double flurry_uptime_{};
     double heroic_strike_uptime_{};
     double rampage_uptime_{};
