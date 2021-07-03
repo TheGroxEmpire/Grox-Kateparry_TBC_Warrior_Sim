@@ -15,33 +15,6 @@ constexpr double rage_from_damage_taken(double damage)
     return damage * 5.0 / 2.0 / 274.7;
 }
 
-constexpr double rage_generation(double damage, Socket weapon_hand, double swing_speed, const Combat_simulator::Hit_result hit_result)
-{
-    if (hit_result == Combat_simulator::Hit_result::crit)
-    {
-        if (weapon_hand == Socket::main_hand)
-        {
-            return damage * rage_factor + (7 * swing_speed / 2);
-        }
-        else
-        {
-            return damage * rage_factor + (3.5 * swing_speed / 2);
-        }
-    }
-    else
-    {
-        if (weapon_hand == Socket::main_hand)
-        {
-            return damage * rage_factor + (3.5 * swing_speed / 2);
-        }
-        else
-        {
-            return damage * rage_factor + (1.75 * swing_speed / 2);
-        }
-    }
-    
-}
-
 constexpr double armor_mitigation(int target_armor, int target_level)
 {
     return static_cast<double>(target_armor) / static_cast<double>(target_armor + (467.5 * target_level - 22167.5));
@@ -320,7 +293,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit_mh(double damage, H
 
 Combat_simulator::Hit_outcome Combat_simulator::generate_hit_oh(double damage, bool is_whirlwind)
 {
-    if (ability_queue_manager.is_ability_queued())
+    if ((ability_queue_manager.heroic_strike_queued && !config.dpr_settings.compute_dpr_hs_) || (ability_queue_manager.cleave_queued && !config.dpr_settings.compute_dpr_cl_))
     {
         simulator_cout("Drawing outcome from OH hit table (without DW penalty)");
         double random_var = get_uniform_random(100);
@@ -797,32 +770,23 @@ void Combat_simulator::whirlwind(Weapon_sim& main_hand_weapon, Weapon_sim& off_h
     simulator_cout("Whirlwind! #targets = boss + ", number_of_extra_targets_, " adds");
     simulator_cout("Whirlwind hits: ", std::min(number_of_extra_targets_ + 1, 4), " targets");
     double mh_damage = main_hand_weapon.normalized_swing(special_stats.attack_power);
-    double oh_damage = 0;
+    double oh_damage = is_dw ? off_hand_weapon.normalized_swing(special_stats.attack_power) : 0;
     std::vector<Hit_outcome> hit_outcomes{};
-    if (is_dw)
-    {
-        oh_damage = off_hand_weapon.normalized_swing(special_stats.attack_power);
-        hit_outcomes.reserve(8);
-    }
-    else
-    {
-        hit_outcomes.reserve(4);
-    }
     for (int i = 0; i < std::min(number_of_extra_targets_ + 1, 4); i++)
     {
-        hit_outcomes.emplace_back(generate_hit(main_hand_weapon, mh_damage, Hit_type::yellow, Socket::main_hand,
+        const auto& mh_outcome = hit_outcomes.emplace_back(generate_hit(main_hand_weapon, mh_damage, Hit_type::yellow, Socket::main_hand,
                                                special_stats, damage_sources, i == 0, false, i == 0));
-        if (hit_outcomes.back().hit_result != Hit_result::dodge && hit_outcomes.back().hit_result != Hit_result::miss)
+        if (mh_outcome.hit_result != Hit_result::dodge && mh_outcome.hit_result != Hit_result::miss)
         {
             hit_effects(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
         }
         if (is_dw)
         {
-            hit_outcomes.emplace_back(generate_hit(main_hand_weapon, oh_damage, Hit_type::yellow, Socket::off_hand,
+            const auto& oh_outcome = hit_outcomes.emplace_back(generate_hit(main_hand_weapon, oh_damage, Hit_type::yellow, Socket::off_hand,
                                                special_stats, damage_sources, i == 0, false, false, true));
-            if (hit_outcomes.back().hit_result != Hit_result::dodge && hit_outcomes.back().hit_result != Hit_result::miss)
+            if (oh_outcome.hit_result != Hit_result::dodge && oh_outcome.hit_result != Hit_result::miss)
             {
-                hit_effects(off_hand_weapon, off_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
+                hit_effects(off_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
             }
         }
     }
@@ -1040,132 +1004,108 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
     }
 }
 
+double Combat_simulator::rage_generation(double damage, const Weapon_sim& weapon, const Hit_result hit_result)
+{
+    auto hit_factor = weapon.socket == Socket::main_hand ? 3.5/2 : 1.75/2;
+    if (hit_result == Hit_result::crit) hit_factor *= 2;
+    auto rage = damage * rage_factor + hit_factor * weapon.swing_speed;
+    if (config.talents.endless_rage) rage *= 1.25;
+    return rage;
+}
+
 void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
                                     double& rage, Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active,
                                     double attack_power_bonus, bool is_extra_attack)
 {
     std::vector<Hit_outcome> hit_outcomes{};
-    hit_outcomes.reserve(2);
     double swing_damage = weapon.swing(special_stats.attack_power + attack_power_bonus);
-    if (weapon.socket == Socket::off_hand)
-    {
-        swing_damage *= dual_wield_damage_factor_;
-    }
 
-    // Check if heroic strike should be performed
-    if (ability_queue_manager.heroic_strike_queued && weapon.socket == Socket::main_hand &&
-        rage >= heroic_strike_rage_cost)
+    auto white_replaced = false;
+    if (ability_queue_manager.heroic_strike_queued && weapon.socket == Socket::main_hand)
     {
-        simulator_cout("Performing Heroic Strike");
-        swing_damage += config.combat.heroic_strike_damage;
-        hit_outcomes.emplace_back(generate_hit(main_hand_weapon, swing_damage, Hit_type::yellow, weapon.socket,
-                                               special_stats, damage_sources));
-        ability_queue_manager.heroic_strike_queued = false;
-        if (config.ability_queue_ && rage > config.ability_queue_rage_thresh_)
+        if (rage >= heroic_strike_rage_cost && config.dpr_settings.compute_dpr_hs_)
         {
-            simulator_cout("Re-queue Heroic Strike!");
-            ability_queue_manager.queue_heroic_strike();
+            simulator_cout("Performing Heroic Strike (DPR)");
+            get_uniform_random(100) < hit_table_yellow_[1] ? rage -= heroic_strike_rage_cost : rage -= 0.2 * heroic_strike_rage_cost;
         }
-        if (hit_outcomes[0].hit_result == Hit_result::dodge || hit_outcomes[0].hit_result == Hit_result::miss)
+        else if (rage >= heroic_strike_rage_cost)
         {
-            rage -= 0.2 * heroic_strike_rage_cost; // Refund rage for missed/dodged heroic strikes.
-            if (hit_outcomes[0].hit_result == Hit_result::dodge && config.set_bonus_effect.warbringer_4_set)
+            simulator_cout("Performing Heroic Strike");
+            swing_damage += config.combat.heroic_strike_damage;
+            const auto& hit_outcome = hit_outcomes.emplace_back(generate_hit(main_hand_weapon, swing_damage, Hit_type::yellow, weapon.socket,
+                                                   special_stats, damage_sources));
+            if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
             {
-                rage += 2;
+                rage -= 0.2 * heroic_strike_rage_cost; // Refund rage for missed/dodged heroic strikes.
+                if (hit_outcome.hit_result == Hit_result::dodge && config.set_bonus_effect.warbringer_4_set) rage += 2;
             }
+            else
+            {
+                rage -= heroic_strike_rage_cost;
+            }
+            damage_sources.add_damage(Damage_source::heroic_strike, hit_outcome.damage, time_keeper_.time);
+            white_replaced = true;
         }
         else
         {
-            rage -= heroic_strike_rage_cost;
+            // Failed to pay rage for heroic strike
+            simulator_cout("Failed to pay rage for Heroic Strike");
         }
-        damage_sources.add_damage(Damage_source::heroic_strike, hit_outcomes[0].damage, time_keeper_.time);
+        ability_queue_manager.heroic_strike_queued = false;
         simulator_cout("Current rage: ", int(rage));
     }
-    else if (ability_queue_manager.cleave_queued && weapon.socket == Socket::main_hand && rage >= 20)
+    else if (ability_queue_manager.cleave_queued && weapon.socket == Socket::main_hand)
     {
-        simulator_cout("Performing cleave! #targets = boss + ", number_of_extra_targets_, " adds");
-        simulator_cout("Cleave hits: ", std::min(number_of_extra_targets_ + 1, 2), " targets");
-        swing_damage += cleave_bonus_damage_;
-
-        for (int i = 0; i < std::min(number_of_extra_targets_ + 1, 2); i++)
+        if (rage >= 20 && config.dpr_settings.compute_dpr_cl_)
         {
-            hit_outcomes.emplace_back(generate_hit(main_hand_weapon, swing_damage, Hit_type::yellow, weapon.socket,
-                                                   special_stats, damage_sources, i == 0));
+            simulator_cout("Performing Cleave (DPR)");
+            rage -= 20;
+        }
+        else if (rage >= 20)
+        {
+            simulator_cout("Performing Cleave! #targets = boss + ", number_of_extra_targets_, " adds");
+            simulator_cout("Cleave hits: ", std::min(number_of_extra_targets_ + 1, 2), " targets");
+            swing_damage += cleave_bonus_damage_;
+            for (int i = 0, n = number_of_extra_targets_ > 0 ? 2 : 1; i < n; i++)
+            {
+                hit_outcomes.emplace_back(generate_hit(main_hand_weapon, swing_damage, Hit_type::yellow, weapon.socket,
+                                                       special_stats, damage_sources, i == 0));
+            }
+            rage -= 20;
+            double total_damage = 0;
+            for (const auto& hit_outcome : hit_outcomes)
+            {
+                if (hit_outcome.hit_result == Hit_result::dodge && config.set_bonus_effect.warbringer_4_set) rage += 2;
+                total_damage += hit_outcome.damage;
+            }
+            damage_sources.add_damage(Damage_source::cleave, total_damage, time_keeper_.time);
+            white_replaced = true;
+        }
+        else
+        {
+            simulator_cout("Failed to pay rage for Cleave");
         }
         ability_queue_manager.cleave_queued = false;
-        if (config.ability_queue_ && rage > config.ability_queue_rage_thresh_)
-        {
-            simulator_cout("Re-queue Cleave!");
-            ability_queue_manager.queue_cleave();
-        }
-        rage -= 20;
-        double total_damage = 0;
-        for (const auto& hit_outcome : hit_outcomes)
-        {
-            total_damage += hit_outcome.damage;
-        }
-        damage_sources.add_damage(Damage_source::cleave, total_damage, time_keeper_.time);
         simulator_cout("Current rage: ", int(rage));
     }
-    else
-    {
-        if (weapon.socket == Socket::main_hand && ability_queue_manager.is_ability_queued())
-        {
-            if (ability_queue_manager.heroic_strike_queued)
-            {
-                // Failed to pay rage for heroic strike
-                simulator_cout("Failed to pay rage for heroic strike");
-                ability_queue_manager.heroic_strike_queued = false;
-            }
-            else
-            {
-                // Failed to pay rage for cleave
-                simulator_cout("Failed to pay rage for cleave");
-                ability_queue_manager.cleave_queued = false;
-            }
-        }
 
+    if (!white_replaced)
+    {
         // Otherwise do white hit
-        hit_outcomes.emplace_back(generate_hit(main_hand_weapon, swing_damage, Hit_type::white, weapon.socket,
+        const auto& hit_outcome = hit_outcomes.emplace_back(generate_hit(main_hand_weapon, swing_damage, Hit_type::white, weapon.socket,
                                                special_stats, damage_sources));
-        if (dpr_heroic_strike_queued_)
+
+        if (hit_outcome.hit_result != Hit_result::dodge && hit_outcome.hit_result != Hit_result::miss)
         {
-            rage -= heroic_strike_rage_cost;
-            dpr_heroic_strike_queued_ = false;
+            rage += rage_generation(hit_outcome.damage, weapon, hit_outcome.hit_result);
         }
-        else if (dpr_cleave_queued_)
+        else if (hit_outcome.hit_result == Hit_result::dodge)
         {
-            rage -= 20;
-            dpr_cleave_queued_ = false;
-        }
-        else
-        {
-            if (config.talents.endless_rage)
-            {
-                rage += 1.25 * 
-                rage_generation(hit_outcomes[0].damage, weapon.socket, weapon.swing_speed, hit_outcomes[0].hit_result);
-            }
-            else
-            {
-                rage += rage_generation(hit_outcomes[0].damage, weapon.socket, weapon.swing_speed, hit_outcomes[0].hit_result);
-            }
-            
-        }
-        if (hit_outcomes[0].hit_result == Hit_result::dodge)
-        {
-            if (config.talents.endless_rage)
-            {
-                rage += 1.25 *
-                    rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed, hit_outcomes[0].hit_result);
-            }
-            else
-            {
-                rage += rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon.socket, weapon.swing_speed, hit_outcomes[0].hit_result);
-            }
             if (config.set_bonus_effect.warbringer_4_set)
             {
                 rage += 2;
             }
+            rage += rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon, hit_outcome.hit_result);
             simulator_cout("Rage gained since the enemy dodged.");
         }
 
@@ -1177,11 +1117,11 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         simulator_cout("Current rage: ", int(rage));
         if (weapon.socket == Socket::main_hand)
         {
-            damage_sources.add_damage(Damage_source::white_mh, hit_outcomes[0].damage, time_keeper_.time);
+            damage_sources.add_damage(Damage_source::white_mh, hit_outcome.damage, time_keeper_.time);
         }
         else
         {
-            damage_sources.add_damage(Damage_source::white_oh, hit_outcomes[0].damage, time_keeper_.time);
+            damage_sources.add_damage(Damage_source::white_oh, hit_outcome.damage, time_keeper_.time);
         }
     }
 
@@ -1742,7 +1682,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     if (time_keeper_.whirlwind_cd < 0.0 && rage > config.combat.whirlwind_rage_thresh && rage > 25 - (5 * config.set_bonus_effect.warbringer_2_set) &&
                         time_keeper_.global_cd < 0 && use_ww)
                     {
-                        if(weapons[0].weapon_socket == Weapon_socket::two_hand)
+                        if (weapons[0].weapon_socket == Weapon_socket::two_hand)
                         {
                             whirlwind(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
                         }
@@ -1815,15 +1755,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 {
                     if (rage > config.combat.cleave_rage_thresh && !ability_queue_manager.cleave_queued)
                     {
-                        if (config.dpr_settings.compute_dpr_cl_)
-                        {
-                            dpr_cleave_queued_ = true;
-                        }
-                        else
-                        {
-                            ability_queue_manager.queue_cleave();
-                            simulator_cout("Cleave activated");
-                        }
+                        ability_queue_manager.queue_cleave();
+                        simulator_cout("Cleave activated");
                     }
                 }
                 else
@@ -1833,37 +1766,30 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     {
                         if (config.combat.use_heroic_strike)
                         {
-                            if (config.dpr_settings.compute_dpr_hs_)
-                            {
-                                dpr_heroic_strike_queued_ = true;
-                            }
-                            else
-                            {
-                                ability_queue_manager.queue_heroic_strike();
-                                simulator_cout("Heroic strike activated");
-                            }
+                            ability_queue_manager.queue_heroic_strike();
+                            simulator_cout("Heroic strike activated");
                         }
                     }
                 }
+            }
 
-                // end of turn - update swing timers if necessary
-                if (mh_swing)
-                {
-                    weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
-                }
-                else if (special_stats.haste != oldHaste)
-                {
-                    weapons[0].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
-                }
+            // end of turn - update swing timers if necessary
+            if (mh_swing)
+            {
+                weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
+            }
+            else if (special_stats.haste != oldHaste)
+            {
+                weapons[0].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
+            }
 
-                if (oh_swing)
-                {
-                    weapons[1].internal_swing_timer = weapons[1].swing_speed / (1 + special_stats.haste);
-                }
-                else if (is_dual_wield && special_stats.haste != oldHaste)
-                {
-                    weapons[1].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
-                }
+            if (oh_swing)
+            {
+                weapons[1].internal_swing_timer = weapons[1].swing_speed / (1 + special_stats.haste);
+            }
+            else if (is_dual_wield && special_stats.haste != oldHaste)
+            {
+                weapons[1].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
             }
         }
         if (deep_wounds_)

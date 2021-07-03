@@ -79,8 +79,6 @@ struct Combat_simulator_config
     bool multi_target_mode_{};
     bool first_global_sunder_{};
 
-    bool ability_queue_{};
-    double ability_queue_rage_thresh_{};
     double berserking_haste_{};
     double unleashed_rage_start_{};
 
@@ -317,6 +315,8 @@ public:
 
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
+    double rage_generation(double damage, const Weapon_sim& weapon, Hit_result hit_result);
+
     Combat_simulator::Hit_outcome generate_hit(const Weapon_sim& main_hand_weapon, double damage, Hit_type hit_type,
                                                Socket weapon_hand, const Special_stats& special_stats,
                                                Damage_sources& damage_sources, bool boss_target = true,
@@ -475,8 +475,6 @@ private:
     double p_unbridled_wrath_{};
     double flurry_haste_factor_{};
     double dual_wield_damage_factor_{};
-    bool dpr_heroic_strike_queued_{false};
-    bool dpr_cleave_queued_{false};
 
     double tactical_mastery_rage_{0};
     bool deep_wounds_{false};

@@ -125,10 +125,6 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     {
         take_periodic_damage_ = true;
     }
-    if (String_helpers::find_string(input.options, "ability_queue"))
-    {
-        ability_queue_ = true;
-    }
 
     enable_bloodrage = true;
     {
@@ -163,7 +159,6 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         periodic_damage_interval_ = fv.find("periodic_damage_interval_dd");
         periodic_damage_amount_ = fv.find("periodic_damage_amount_dd");
         execute_phase_percentage_ = fv.find("execute_phase_percentage_dd");
-        ability_queue_rage_thresh_ = fv.find("re_queue_abilities_dd");
         berserking_haste_ = fv.find("berserking_haste_dd");
         unleashed_rage_start_ = fv.find("unleashed_rage_dd");
     }
