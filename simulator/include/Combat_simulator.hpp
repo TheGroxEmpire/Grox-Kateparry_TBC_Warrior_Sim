@@ -97,11 +97,13 @@ struct Combat_simulator_config
     {
         bool use_bt_in_exec_phase{false};
         bool use_ms_in_exec_phase{false};
+        bool use_ww_in_exec_phase{false};
         bool use_sl_in_exec_phase{false};
         bool use_hs_in_exec_phase{false};
         double whirlwind_rage_thresh{};
         double overpower_rage_thresh{};
         double whirlwind_bt_cooldown_thresh{};
+        double bt_whirlwind_cooldown_thresh{};
         double overpower_bt_cooldown_thresh{};
         double overpower_ww_cooldown_thresh{};
         double heroic_strike_rage_thresh{};

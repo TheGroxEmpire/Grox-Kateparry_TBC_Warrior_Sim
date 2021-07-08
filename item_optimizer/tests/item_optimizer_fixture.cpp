@@ -49,6 +49,7 @@ std::vector<std::string> get_float_options_string()
             "hamstring_cd_thresh_dd",
             "hamstring_thresh_dd",
             "initial_rage_dd",
+            "bt_whirlwind_cooldown_thresh_dd"
             "whirlwind_bt_cooldown_thresh_dd",
             "overpower_rage_thresh_dd",
             "overpower_bt_cooldown_thresh_dd",

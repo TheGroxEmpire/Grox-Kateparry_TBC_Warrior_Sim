@@ -41,6 +41,10 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
     {
         combat.use_ms_in_exec_phase = true;
     }
+    if (String_helpers::find_string(input.options, "use_ww_in_exec_phase"))
+    {
+        combat.use_ww_in_exec_phase = true;
+    }
     if (String_helpers::find_string(input.options, "use_sl_in_exec_phase"))
     {
         combat.use_sl_in_exec_phase = true;
@@ -137,6 +141,7 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         combat.hamstring_thresh_dd = fv.find("hamstring_thresh_dd");
         combat.initial_rage = fv.find("initial_rage_dd");
         combat.whirlwind_bt_cooldown_thresh = fv.find("whirlwind_bt_cooldown_thresh_dd");
+        combat.bt_whirlwind_cooldown_thresh = fv.find("bt_whirlwind_cooldown_thresh_dd");
         combat.overpower_rage_thresh = fv.find("overpower_rage_thresh_dd");
         combat.overpower_bt_cooldown_thresh = fv.find("overpower_bt_cooldown_thresh_dd");
         combat.overpower_ww_cooldown_thresh = fv.find("overpower_ww_cooldown_thresh_dd");
