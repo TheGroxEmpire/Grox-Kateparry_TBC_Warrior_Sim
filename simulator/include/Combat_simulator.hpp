@@ -240,30 +240,30 @@ public:
 
         void reset()
         {
-            slam_queued_ = false;
-            slam_queue_time_stamp_ = 0.0;
+            slam_casting_ = false;
+            slam_cast_time_stamp_ = 0.0;
         };
 
-        bool is_slam_queued() { return slam_queued_; }
+        bool is_slam_casting() { return slam_casting_; }
 
-        void queue_slam(double time_stamp)
+        void cast_slam(double time_stamp)
         {
-            slam_queued_ = true;
-            slam_queue_time_stamp_ = time_stamp;
+            slam_casting_ = true;
+            slam_cast_time_stamp_ = time_stamp;
         }
 
-        void un_queue_slam() { slam_queued_ = false; }
+        void finish_slam() { slam_casting_ = false; }
 
         double time_left(double current_time)
         {
-            return slam_queued_ ? slam_cast_time_ - (current_time - slam_queue_time_stamp_) : 100.0;
+            return slam_casting_ ? slam_cast_time_ - (current_time - slam_cast_time_stamp_) : 100.0;
         }
 
         double slam_cast_time_ = 0.0;
 
     private:
-        bool slam_queued_{false};
-        double slam_queue_time_stamp_ = 0.0;
+        bool slam_casting_{false};
+        double slam_cast_time_stamp_ = 0.0;
     };
 
     struct Hit_outcome

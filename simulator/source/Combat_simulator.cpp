@@ -604,15 +604,14 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, double rage, double& swing
     }
     if (use_sl)
     {
-        if (swing_time_left > config.combat.slam_spam_max_time)
+        if (mh_swing || swing_time_left > config.combat.slam_spam_max_time)
         {
             if ((mh_swing && rage > config.combat.slam_rage_dd) || rage > config.combat.slam_spam_rage)
             {
-                simulator_cout("Starting to channel slam.", " Latency: ", config.combat.slam_latency,"s");
-                slam_manager.queue_slam(time_keeper_.time + config.combat.slam_latency);
+                simulator_cout("Starting to cast slam.", " Latency: ", config.combat.slam_latency,"s");
+                slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
                 time_keeper_.global_cd = 1.5 + config.combat.slam_latency;
-                // We have started 'channeling' so set a value for the swing time for now which is larger than GCD
-                swing_time_left = 1.6 + config.combat.slam_latency;
+                swing_time_left = config.sim_time;
                 return true;
             }
         }
@@ -1169,6 +1168,29 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     }
 }
 
+void update_swing_timers(Weapon_sim& mh, Weapon_sim& oh, double oldHaste, double haste)
+{
+    if (mh.internal_swing_timer <= 0)
+    {
+        mh.internal_swing_timer = mh.swing_speed / (1 + haste);
+    }
+    else if (haste != oldHaste)
+    {
+        mh.internal_swing_timer *= (1 + oldHaste) / (1 + haste);
+    }
+
+    if (oh.socket != Socket::off_hand) return;
+
+    if (oh.internal_swing_timer <= 0)
+    {
+        oh.internal_swing_timer = oh.swing_speed / (1 + haste);
+    }
+    else if (haste != oldHaste)
+    {
+        oh.internal_swing_timer *= (1 + oldHaste) / (1 + haste);
+    }
+}
+
 void Combat_simulator::simulate(const Character& character, size_t n_simulations, double init_mean,
                                 double init_variance, size_t init_simulations)
 {
@@ -1525,7 +1547,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 if (weapons[0].weapon_socket == Weapon_socket::two_hand && config.combat.use_slam && config.combat.use_sl_in_exec_phase)
                 {
-                    if (!slam_manager.is_slam_queued() && time_keeper_.global_cd < 0.0)
+                    if (!slam_manager.is_slam_casting() && time_keeper_.global_cd < 0.0)
                     {
                         if (start_cast_slam(mh_swing, rage, weapons[0].internal_swing_timer))
                         {
@@ -1535,8 +1557,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     else if (slam_manager.time_left(time_keeper_.time) <= 0.0)
                     {
                         slam(weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
-                        slam_manager.un_queue_slam();
-                        weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
+                        slam_manager.finish_slam();
+                        weapons[0].internal_swing_timer = 0;
+                        update_swing_timers(weapons[0], is_dual_wield ? weapons[1] : weapons[0], oldHaste, special_stats.haste);
                         if (time_keeper_.global_cd < 0.0)
                         {
                             if (start_cast_slam(mh_swing, rage, weapons[0].internal_swing_timer))
@@ -1547,6 +1570,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     }
                     else
                     {
+                        update_swing_timers(weapons[0], is_dual_wield ? weapons[1] : weapons[0], oldHaste, special_stats.haste);
                         continue;
                     }
                 }
@@ -1592,13 +1616,13 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     if (time_keeper_.whirlwind_cd < 0.0 && rage > config.combat.whirlwind_rage_thresh && rage > 25 - (5 * config.set_bonus_effect.warbringer_2_set) &&
                         time_keeper_.global_cd < 0 && use_ww)
                     {
-                        if(weapons[0].weapon_socket == Weapon_socket::two_hand)
+                        if (is_dual_wield)
                         {
-                            whirlwind(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
+                            whirlwind(weapons[0], weapons[1], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, true);
                         }
                         else
                         {
-                            whirlwind(weapons[0], weapons[1], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, 1);
+                            whirlwind(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
                         }
                         
                     }
@@ -1631,7 +1655,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 if (weapons[0].weapon_socket == Weapon_socket::two_hand && config.combat.use_slam)
                 {
-                    if (!slam_manager.is_slam_queued() && time_keeper_.global_cd < 0.0)
+                    if (!slam_manager.is_slam_casting() && time_keeper_.global_cd < 0.0)
                     {
                         if (start_cast_slam(mh_swing, rage, weapons[0].internal_swing_timer))
                         {
@@ -1641,8 +1665,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     else if (slam_manager.time_left(time_keeper_.time) <= 0.0)
                     {
                         slam(weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
-                        slam_manager.un_queue_slam();
-                        weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
+                        slam_manager.finish_slam();
+                        weapons[0].internal_swing_timer = 0;
+                        update_swing_timers(weapons[0], is_dual_wield ? weapons[1] : weapons[0], oldHaste, special_stats.haste);
                         if (time_keeper_.global_cd < 0.0)
                         {
                             if (start_cast_slam(mh_swing, rage, weapons[0].internal_swing_timer))
@@ -1653,6 +1678,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     }
                     else
                     {
+                        update_swing_timers(weapons[0], is_dual_wield ? weapons[1] : weapons[0], oldHaste, special_stats.haste);
                         continue;
                     }
                 }
@@ -1732,13 +1758,13 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     if (time_keeper_.whirlwind_cd < 0.0 && rage > config.combat.whirlwind_rage_thresh && rage > 25 - (5 * config.set_bonus_effect.warbringer_2_set) &&
                         time_keeper_.global_cd < 0 && use_ww)
                     {
-                        if (weapons[0].weapon_socket == Weapon_socket::two_hand)
+                        if (is_dual_wield)
                         {
-                            whirlwind(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
+                            whirlwind(weapons[0], weapons[1], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, true);
                         }
                         else
                         {
-                            whirlwind(weapons[0], weapons[1], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, 1);
+                            whirlwind(weapons[0], weapons[0], special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active);
                         }
                         
                     }
@@ -1824,23 +1850,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
 
             // end of turn - update swing timers if necessary
-            if (mh_swing)
-            {
-                weapons[0].internal_swing_timer = weapons[0].swing_speed / (1 + special_stats.haste);
-            }
-            else if (special_stats.haste != oldHaste)
-            {
-                weapons[0].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
-            }
-
-            if (oh_swing)
-            {
-                weapons[1].internal_swing_timer = weapons[1].swing_speed / (1 + special_stats.haste);
-            }
-            else if (is_dual_wield && special_stats.haste != oldHaste)
-            {
-                weapons[1].internal_swing_timer *= (1 + oldHaste) / (1 + special_stats.haste);
-            }
+            update_swing_timers(weapons[0], is_dual_wield ? weapons[1] : weapons[0], oldHaste, special_stats.haste);
         }
         if (deep_wounds_)
         {
