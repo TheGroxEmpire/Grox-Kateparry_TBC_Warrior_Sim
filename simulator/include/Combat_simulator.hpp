@@ -268,12 +268,75 @@ public:
 
     struct Hit_outcome
     {
-        Hit_outcome() : damage(0), hit_result(Hit_result::TBD) {}
-
-        Hit_outcome(double damage, Hit_result hit_result) : damage{damage}, hit_result{hit_result} {}
+        Hit_outcome() : damage(0), hit_result(Hit_result::TBD), rageDamage(0) {}
+        Hit_outcome(double damage, Hit_result hit_result) : damage(damage), hit_result(hit_result), rageDamage(damage) {}
+        Hit_outcome(double damage, Hit_result hit_result, double rageDamage) : damage(damage), hit_result(hit_result), rageDamage(rageDamage) {}
 
         double damage;
         Hit_result hit_result;
+        double rageDamage;
+    };
+
+    class Damage_multipliers
+    {
+    public:
+        Damage_multipliers(double glance_multiplier, double crit_multiplier, double hit_multiplier)
+                : glance_multiplier_(glance_multiplier), crit_multiplier_(crit_multiplier), hit_multiplier_(hit_multiplier)
+        {
+        }
+
+        Damage_multipliers() = default;
+
+        [[nodiscard]] double glance() const { return glance_multiplier_; }
+        [[nodiscard]] double crit() const { return crit_multiplier_; }
+        [[nodiscard]] double hit() const { return hit_multiplier_; }
+
+    private:
+        double glance_multiplier_;
+        double crit_multiplier_;
+        double hit_multiplier_;
+    };
+
+    class Hit_table
+    {
+    public:
+        Hit_table(std::string name, double miss, double dodge, double glance, double crit, const Damage_multipliers& dm)
+                : name_(std::move(name)), miss_(miss), dodge_(miss + dodge), glance_(miss + dodge + glance), crit_(miss + dodge + glance + crit), dm_(dm)
+        {
+        }
+
+        Hit_table() = default;
+
+        [[nodiscard]] const std::string& name() const { return name_; }
+
+        [[nodiscard]] bool isMissOrDodge() const { return rand() * 100.0 / RAND_MAX < dodge_; }
+
+        [[nodiscard]] double miss() const { return miss_; }
+        [[nodiscard]] double dodge() const { return dodge_ - miss_; }
+        [[nodiscard]] double glance() const { return glance_ - dodge_; }
+        [[nodiscard]] double crit() const { return crit_ <= 100 ? crit_ - glance_ : 100 - glance_; }
+        [[nodiscard]] double hit() const { return crit_ <= 100 ? 100 - crit_ : 0; }
+
+        [[nodiscard]] double glancing_penalty() const { return dm_.glance(); }
+
+        [[nodiscard]] Hit_outcome generate_hit(double damage) const
+        {
+            auto roll = rand() * 100.0 / RAND_MAX;
+            if (roll < miss_) return Hit_outcome(0, Hit_result::miss);
+            if (roll < dodge_) return Hit_outcome(0, Hit_result::dodge, damage * dm_.hit());
+            if (roll < glance_) return Hit_outcome(damage * dm_.glance(), Hit_result::glancing);
+            if (roll < crit_) return Hit_outcome(damage * dm_.crit(), Hit_result::crit);
+            return Hit_outcome(damage * dm_.hit(), Hit_result::hit);
+        }
+    private:
+        std::string name_;
+
+        double miss_;
+        double dodge_;
+        double glance_;
+        double crit_;
+
+        Damage_multipliers dm_;
     };
 
     void manage_flurry_rampage(Hit_result hit_result, Special_stats& special_stats, int& flurry_charges, int& rampage_stacks, bool rampage_active = false,
@@ -322,12 +385,11 @@ public:
     Combat_simulator::Hit_outcome generate_hit(const Weapon_sim& main_hand_weapon, double damage, Hit_type hit_type,
                                                Socket weapon_hand, const Special_stats& special_stats,
                                                Damage_sources& damage_sources, bool boss_target = true,
-                                               bool is_overpower = false, bool can_sweep = true, bool is_whirlwind = false, bool is_melee_spell = false);
+                                               bool is_overpower = false, bool can_sweep = true, bool is_whirlwind = false);
 
     Combat_simulator::Hit_outcome generate_hit_oh(double damage, bool is_whirlwind = false);
 
-    Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false, 
-                                                  bool is_melee_spell = false);
+    Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false);
 
     void compute_hit_tables(const Special_stats& special_stats, const Weapon_sim& weapon);
 
@@ -337,9 +399,11 @@ public:
 
     [[nodiscard]] const std::vector<double>& get_hit_probabilities_white_oh() const;
 
-    [[nodiscard]] const std::vector<double>& get_hit_probabilities_white_2h() const;
+    [[nodiscard]] const std::vector<double>& get_hit_probabilities_white_oh_queued() const;
 
-    [[nodiscard]] const std::vector<double>& get_hit_probabilities_yellow() const;
+    [[nodiscard]] const std::vector<double>& get_hit_probabilities_yellow_mh() const;
+
+    [[nodiscard]] const std::vector<double>& get_hit_probabilities_yellow_oh() const;
 
     [[nodiscard]] double get_glancing_penalty_mh() const;
 
@@ -436,11 +500,11 @@ private:
     std::vector<double> damage_multipliers_white_mh_;
     std::vector<double> hit_table_white_oh_;
     std::vector<double> damage_multipliers_white_oh_;
-    std::vector<double> hit_table_yellow_;
-    std::vector<double> hit_table_yellow_spell_;
+    std::vector<double> hit_table_yellow_mh_;
+    std::vector<double> hit_table_yellow_oh_;
     std::vector<double> hit_table_overpower_;
     std::vector<double> damage_multipliers_yellow_;
-    std::vector<double> hit_table_two_hand_;
+    std::vector<double> hit_table_white_oh_queued_;
     Damage_sources damage_distribution_{};
     Time_keeper time_keeper_{};
     Buff_manager buff_manager_{};

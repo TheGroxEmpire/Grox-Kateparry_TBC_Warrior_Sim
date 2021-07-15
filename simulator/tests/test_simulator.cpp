@@ -633,6 +633,21 @@ deep wounds   = 50.1407
 ----------------------
 total         = 784.141 / 786.763
 rage lost 12509.3
+
+after yellow hit table fixes:
+
+took 8486 ms
+
+white (mh)    = 282.8
+mortal strike = 83.5754
+whirlwind     = 43.1117
+slam          = 286.858
+heroic strike = 1.00548
+deep wounds   = 48.7256
+----------------------
+total         = 768.48 / 771.05
+rage lost 12686.2
+
  */
 TEST_F(Sim_fixture, test_2h)
 {
@@ -713,6 +728,22 @@ deep wounds   = 38.3068
 ----------------------
 total         = 878.257 / 881.195
 rage lost 8530.75
+
+after yellow hit table fixes
+
+took 15786 ms
+
+white (mh)    = 211.725
+white (oh)    = 173.002
+heroic strike = 99.6991
+bloodthirst   = 166.751
+whirlwind     = 99.0064
+execute       = 83.641
+deep wounds   = 38.209
+----------------------
+total         = 872.033 / 874.95
+rage lost 8811.75
+
  */
 TEST_F(Sim_fixture, test_fury)
 {

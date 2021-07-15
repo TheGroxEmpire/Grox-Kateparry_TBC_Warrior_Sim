@@ -525,10 +525,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         simulator.compute_hit_tables(character.total_special_stats, Weapon_sim(wep, character.total_special_stats));
     }
     const bool is_two_handed = !character.is_dual_wield();
-    const auto yellow_ht = simulator.get_hit_probabilities_yellow();
+    const auto yellow_ht = simulator.get_hit_probabilities_yellow_mh();
     const auto white_mh_ht = simulator.get_hit_probabilities_white_mh();
     const auto white_oh_ht = simulator.get_hit_probabilities_white_oh();
-    const auto white_oh_ht_2h = simulator.get_hit_probabilities_white_2h();
+    const auto white_oh_ht_2h = simulator.get_hit_probabilities_white_oh_queued();
     double n_simulations_base = config.n_batches;
 
     simulator.simulate(character, 0, true);

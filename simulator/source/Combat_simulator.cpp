@@ -256,8 +256,7 @@ void Combat_simulator::cout_damage_parse(Combat_simulator::Hit_type hit_type, So
     }
 }
 
-Combat_simulator::Hit_outcome Combat_simulator::generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower, 
-                                                                bool is_melee_spell)
+Combat_simulator::Hit_outcome Combat_simulator::generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower)
 {
     if (hit_type == Hit_type::white)
     {
@@ -271,13 +270,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit_mh(double damage, H
     {
         simulator_cout("Drawing outcome from yellow table");
         double random_var = get_uniform_random(100);
-        if (is_melee_spell)
-        {
-            int outcome = std::lower_bound(hit_table_yellow_spell_.begin(), hit_table_yellow_spell_.end(), random_var) -
-                          hit_table_yellow_spell_.begin();
-            return {damage * damage_multipliers_yellow_[outcome], Hit_result(outcome)};
-        }
-        else if (is_overpower)
+        if (is_overpower)
         {
             int outcome = std::lower_bound(hit_table_overpower_.begin(), hit_table_overpower_.end(), random_var) -
                           hit_table_overpower_.begin();
@@ -285,8 +278,8 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit_mh(double damage, H
         }
         else
         {
-            int outcome = std::lower_bound(hit_table_yellow_.begin(), hit_table_yellow_.end(), random_var) -
-                          hit_table_yellow_.begin();
+            int outcome = std::lower_bound(hit_table_yellow_mh_.begin(), hit_table_yellow_mh_.end(), random_var) -
+                          hit_table_yellow_mh_.begin();
             return {damage * damage_multipliers_yellow_[outcome], Hit_result(outcome)};
         }
     }
@@ -298,24 +291,21 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit_oh(double damage, b
     {
         simulator_cout("Drawing outcome from OH hit table (without DW penalty)");
         double random_var = get_uniform_random(100);
-        int outcome = std::lower_bound(hit_table_two_hand_.begin(), hit_table_two_hand_.end(), random_var) -
-                      hit_table_two_hand_.begin();
+        int outcome = std::lower_bound(hit_table_white_oh_queued_.begin(), hit_table_white_oh_queued_.end(), random_var) - hit_table_white_oh_queued_.begin();
         return {damage * damage_multipliers_white_oh_[outcome], Hit_result(outcome)};
     }
     else if (is_whirlwind)
     {
         simulator_cout("Drawing outcome from OH yellow hit table (Whirlwind)");
         double random_var = get_uniform_random(100);
-        int outcome = std::lower_bound(hit_table_yellow_.begin(), hit_table_yellow_.end(), random_var) -
-                          hit_table_yellow_.begin();
-            return {damage * damage_multipliers_yellow_[outcome], Hit_result(outcome)};
+        int outcome = std::lower_bound(hit_table_yellow_oh_.begin(), hit_table_yellow_oh_.end(), random_var) - hit_table_yellow_oh_.begin();
+        return {damage * damage_multipliers_yellow_[outcome], Hit_result(outcome)};
     }
     else
     {
         simulator_cout("Drawing outcome from OH hit table");
         double random_var = get_uniform_random(100);
-        int outcome = std::lower_bound(hit_table_white_oh_.begin(), hit_table_white_oh_.end(), random_var) -
-                      hit_table_white_oh_.begin();
+        int outcome = std::lower_bound(hit_table_white_oh_.begin(), hit_table_white_oh_.end(), random_var) - hit_table_white_oh_.begin();
         return {damage * damage_multipliers_white_oh_[outcome], Hit_result(outcome)};
     }
 }
@@ -324,13 +314,12 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(const Weapon_sim& m
                                                              Combat_simulator::Hit_type hit_type, Socket weapon_hand,
                                                              const Special_stats& special_stats,
                                                              Damage_sources& damage_sources, bool boss_target,
-                                                             bool is_overpower, bool can_sweep, bool is_whirlwind, 
-                                                             bool is_melee_spell)
+                                                             bool is_overpower, bool can_sweep, bool is_whirlwind)
 {
     Combat_simulator::Hit_outcome hit_outcome;
     if (weapon_hand == Socket::main_hand)
     {
-        hit_outcome = generate_hit_mh(damage, hit_type, is_overpower, is_melee_spell);
+        hit_outcome = generate_hit_mh(damage, hit_type, is_overpower);
         if (boss_target)
         {
             hit_outcome.damage *= armor_reduction_factor_ * (1 + special_stats.damage_mod_physical);
@@ -466,23 +455,21 @@ void Combat_simulator::compute_hit_tables(const Special_stats& special_stats, co
     if (weapon.socket == Socket::main_hand)
     {
         hit_table_white_mh_ = create_hit_table(miss, dodge, glance, crit);
-        damage_multipliers_white_mh_ =
-            create_multipliers((100.0 - glance_dr) / 100.0, 0.0, special_stats.crit_multiplier);
+        damage_multipliers_white_mh_ = create_multipliers((100.0 - glance_dr) / 100.0, 0.0, special_stats.crit_multiplier);
 
-        hit_table_yellow_spell_ = create_hit_table_yellow(sw_miss, dodge, crit, true);
-        hit_table_yellow_ = create_hit_table_yellow(sw_miss, dodge, crit, false);
-        hit_table_overpower_ =
-            create_hit_table_yellow(sw_miss, 0, crit + 25 * config.talents.overpower - 3.0, false);
+        hit_table_yellow_mh_ = create_hit_table_yellow(sw_miss, dodge, crit, true);
+        hit_table_overpower_ = create_hit_table_yellow(sw_miss, 0, crit + 25 * config.talents.overpower, true);
         damage_multipliers_yellow_ =
             create_multipliers(1.0, 0.1 * config.talents.impale, special_stats.crit_multiplier);
     }
     else
     {
         hit_table_white_oh_ = create_hit_table(miss, dodge, glance, crit);
-        damage_multipliers_white_oh_ =
-            create_multipliers((100.0 - glance_dr) / 100.0, 0.0, special_stats.crit_multiplier);
+        damage_multipliers_white_oh_ = create_multipliers((100.0 - glance_dr) / 100.0, 0.0, special_stats.crit_multiplier);
 
-        hit_table_two_hand_ = create_hit_table(sw_miss, dodge, glance, crit);
+        hit_table_white_oh_queued_ = create_hit_table(sw_miss, dodge, glance, crit);
+
+        hit_table_yellow_oh_ = create_hit_table_yellow(sw_miss, dodge, crit, true);
     }
 }
 
@@ -555,7 +542,7 @@ void Combat_simulator::slam(Weapon_sim& main_hand_weapon, Special_stats& special
 {
     if (config.dpr_settings.compute_dpr_sl_)
     {
-        get_uniform_random(100) < hit_table_yellow_[1] ? rage -= 3 : rage -= 15;
+        get_uniform_random(100) < hit_table_yellow_mh_[1] ? rage -= 3 : rage -= 15;
         time_keeper_.global_cd = 1.5;
         return;
     }
@@ -586,7 +573,7 @@ void Combat_simulator::mortal_strike(Weapon_sim& main_hand_weapon, Special_stats
 {
     if (config.dpr_settings.compute_dpr_ms_)
     {
-        get_uniform_random(100) < hit_table_yellow_[1] ? rage -= 6 : rage -= 30;
+        get_uniform_random(100) < hit_table_yellow_mh_[1] ? rage -= 6 : rage -= 30;
         time_keeper_.mortal_strike_cd = 6.0 - (config.talents.improved_mortal_strike * 0.2);
         time_keeper_.global_cd = 1.5;
         return;
@@ -620,7 +607,7 @@ void Combat_simulator::bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& 
 {
     if (config.dpr_settings.compute_dpr_bt_)
     {
-        get_uniform_random(100) < hit_table_yellow_spell_[1] ? rage -= 6 : rage -= 30;
+        get_uniform_random(100) < hit_table_yellow_mh_[1] ? rage -= 6 : rage -= 30;
         time_keeper_.blood_thirst_cd = 6.0;
         time_keeper_.global_cd = 1.5;
         return;
@@ -629,7 +616,7 @@ void Combat_simulator::bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& 
     // simulator_cout("(DEBUG) AP: ", special_stats.attack_power);
     double damage = special_stats.attack_power * 0.45;
     auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, 
-                                    damage_sources, true, false, true, false, true);
+                                    damage_sources, true, false, true, false);
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
     {
         rage -= 6;
@@ -747,7 +734,7 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
         simulator_cout("Execute (DPR)!");
         rage -= execute_rage_cost_;
         time_keeper_.global_cd = 1.5;
-        if (get_uniform_random(100) < hit_table_yellow_spell_[1]) return;
+        if (get_uniform_random(100) < hit_table_yellow_mh_[1]) return;
         rage_spent_on_execute_ += rage;
         rage = 0;
         return;
@@ -755,7 +742,7 @@ void Combat_simulator::execute(Weapon_sim& main_hand_weapon, Special_stats& spec
     simulator_cout("Execute!");
     double damage = 925 + (rage - execute_rage_cost_) * 21;
     auto hit_outcome = generate_hit(main_hand_weapon, damage, Hit_type::yellow, Socket::main_hand, special_stats, 
-                                    damage_sources, true, false, true, false, true);
+                                    damage_sources, true, false, true, false);
     rage -= execute_rage_cost_;
     time_keeper_.global_cd = 1.5;
     if (hit_outcome.hit_result == Hit_result::dodge || hit_outcome.hit_result == Hit_result::miss)
@@ -781,7 +768,7 @@ void Combat_simulator::hamstring(Weapon_sim& main_hand_weapon, Special_stats& sp
 {
     if (config.dpr_settings.compute_dpr_ha_)
     {
-        get_uniform_random(100) < hit_table_yellow_[1] ? rage -= 2 : rage -= 10;
+        get_uniform_random(100) < hit_table_yellow_mh_[1] ? rage -= 2 : rage -= 10;
         time_keeper_.global_cd = 1.5;
         return;
     }
@@ -957,7 +944,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         if (rage >= heroic_strike_rage_cost && config.dpr_settings.compute_dpr_hs_)
         {
             simulator_cout("Performing Heroic Strike (DPR)");
-            get_uniform_random(100) < hit_table_yellow_[1] ? rage -= heroic_strike_rage_cost : rage -= 0.2 * heroic_strike_rage_cost;
+            get_uniform_random(100) < hit_table_yellow_mh_[1] ? rage -= heroic_strike_rage_cost : rage -= 0.2 * heroic_strike_rage_cost;
         }
         else if (rage >= heroic_strike_rage_cost)
         {
@@ -1901,14 +1888,14 @@ const std::vector<double>& Combat_simulator::get_hit_probabilities_white_oh() co
     return hit_table_white_oh_;
 }
 
-const std::vector<double>& Combat_simulator::get_hit_probabilities_white_2h() const
+const std::vector<double>& Combat_simulator::get_hit_probabilities_white_oh_queued() const
 {
-    return hit_table_two_hand_;
+    return hit_table_white_oh_queued_;
 }
 
-const std::vector<double>& Combat_simulator::get_hit_probabilities_yellow() const
+const std::vector<double>& Combat_simulator::get_hit_probabilities_yellow_mh() const
 {
-    return hit_table_yellow_;
+    return hit_table_yellow_mh_;
 }
 
 double Combat_simulator::get_glancing_penalty_mh() const
