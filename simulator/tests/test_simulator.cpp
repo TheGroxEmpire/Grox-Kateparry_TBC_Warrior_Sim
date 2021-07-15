@@ -619,50 +619,173 @@ TEST_F(Sim_fixture, test_flurry_uptime)
     EXPECT_NEAR((dd.white_mh_count + dd.heroic_strike_count) / (config.sim_time / mh.swing_speed * haste), (1 - flurryUptime) + flurryUptime * flurryHaste, 0.0001);
 }
 
+/*
+results on master:
 
+took 8112 ms
+
+white (mh)    = 283.418
+mortal strike = 86.3654
+whirlwind     = 44.3856
+slam          = 296.372
+heroic strike = 1.04357
+deep wounds   = 50.1407
+----------------------
+total         = 784.141 / 786.763
+rage lost 12509.3
+ */
 TEST_F(Sim_fixture, test_2h)
 {
-    config.sim_time = 18000.0;
-    config.n_batches = 1;
-    config.main_target_initial_armor_ = 0.0;
+    config.sim_time = 5 * 60;
+    config.n_batches = 25000;
+    config.main_target_initial_armor_ = 6200.0;
 
-    auto mh = Weapon{"test_mh", {}, {}, 3.8, 380, 380, Weapon_socket::two_hand, Weapon_type::axe};
+    auto mh = Weapon{"test_mh", {}, {}, 3.8, 500, 500, Weapon_socket::two_hand, Weapon_type::mace};
     character.equip_weapon(mh);
 
     character.total_special_stats.attack_power = 2800;
-    character.total_special_stats.critical_strike = 40;
+    character.total_special_stats.critical_strike = 35;
+    character.total_special_stats.hit = 3;
     character.total_special_stats.haste = 0.05; // haste should probably use % as well, for consistency
+    character.total_special_stats.expertise = 5;
+    character.total_special_stats.axe_expertise = 5;
+    character.total_special_stats.crit_multiplier = 0.03;
 
     Combat_simulator sim{};
     config.talents.flurry = 3;
     config.talents.mortal_strike = 1;
     config.talents.improved_slam = 2;
+    config.talents.deep_wounds = 3;
+    config.talents.anger_management = true;
+    config.talents.unbridled_wrath = 5;
     config.combat.use_mortal_strike = true;
     config.combat.use_slam = true;
     config.combat.slam_rage_dd = 15; // this must not be < slam_rage_cost, afaik, but this isn't enforced; what does "dd" stand for?
-    config.combat.slam_spam_rage = 70; // default 100 aka (almost) never
+    config.combat.slam_spam_rage = 100; // default 100 aka never
     config.combat.slam_spam_max_time = 1.5; // rather slam_min_swing_remaining, but this should (simpler) be slam_max_swing_passed
     config.combat.slam_latency = 0.2;
     config.combat.use_whirlwind = true;
+    config.combat.use_heroic_strike = true;
+    config.combat.heroic_strike_rage_thresh = 80;
+    config.execute_phase_percentage_ = 20;
+    config.combat.use_sl_in_exec_phase = true;
+    config.combat.use_ms_in_exec_phase = true;
+    config.combat.deep_wounds = true;
     sim.set_config(config);
+
+    auto start = std::chrono::steady_clock::now();
     sim.simulate(character);
-
-    auto flurryUptime = sim.get_flurry_uptime();
-    auto flurryHaste = 1 + config.talents.flurry * 0.05;
-
-    auto haste = 1 + character.total_special_stats.haste;
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+    std::cout << std::endl;
 
     auto dd = sim.get_damage_distribution();
 
-    auto f = 1 / config.sim_time;
+    auto f = 1 / (config.sim_time * config.n_batches);
 
-    std::cout << "white (mh) - " << f * dd.white_mh_damage << std::endl;
-    if (dd.white_oh_count > 0) std::cout << "white (oh) - " << f * dd.white_oh_damage << std::endl;
-    std::cout << "mortal strike - " << f * dd.mortal_strike_damage << std::endl;
-    std::cout << "whirlwind - " << f * dd.whirlwind_damage << std::endl;
-    std::cout << "slam - " << f * dd.slam_damage << std::endl;
-    if (dd.heroic_strike_count > 0) std::cout << "heroic strike - " << f * dd.heroic_strike_damage << std::endl;
-    std::cout << "total - " << sim.get_dps_mean() << std::endl;
+    std::cout << "white (mh)    = " << f * dd.white_mh_damage << std::endl;
+    if (dd.white_oh_count > 0) std::cout << "white (oh)    = " << f * dd.white_oh_damage << std::endl;
+    if (dd.mortal_strike_count > 0) std::cout << "mortal strike = " << f * dd.mortal_strike_damage << std::endl;
+    if (dd.whirlwind_count > 0) std::cout << "whirlwind     = " << f * dd.whirlwind_damage << std::endl;
+    if (dd.slam_count > 0) std::cout << "slam          = " << f * dd.slam_damage << std::endl;
+    if (dd.heroic_strike_count > 0) std::cout << "heroic strike = " << f * dd.heroic_strike_damage << std::endl;
+    if (dd.deep_wounds_count > 0) std::cout << "deep wounds   = " << f * dd.deep_wounds_damage << std::endl;
+    if (dd.item_hit_effects_count > 0) std::cout << "hit effects   = " << f * dd.item_hit_effects_damage << std::endl;
+    std::cout << "----------------------" << std::endl;
+    std::cout << "total         = " << f * dd.sum_damage_sources() << " / " << sim.get_dps_mean() << std::endl;
 
-    EXPECT_NEAR((dd.white_mh_count + dd.heroic_strike_count) / ((config.sim_time - dd.slam_count * (1.5 - config.talents.improved_slam * 0.5 + config.combat.slam_latency)) / mh.swing_speed * haste), (1 - flurryUptime) + flurryUptime * flurryHaste, 0.01);
+    std::cout << "rage lost " << sim.get_rage_lost_capped() << std::endl;
+    EXPECT_EQ(0, 0);
+}
+
+/*
+results on master:
+
+took 14402 ms
+
+white (mh)    = 211.653
+white (oh)    = 173.392
+heroic strike = 102.595
+bloodthirst   = 167.043
+whirlwind     = 101.591
+execute       = 83.6768
+deep wounds   = 38.3068
+----------------------
+total         = 878.257 / 881.195
+rage lost 8530.75
+ */
+TEST_F(Sim_fixture, test_fury)
+{
+    config.sim_time = 5 * 60;
+    config.n_batches = 25000;
+    config.main_target_initial_armor_ = 6200.0;
+
+    auto mh = Weapon{"test_mh", {}, {}, 2.7, 270, 270, Weapon_socket::one_hand, Weapon_type::axe};
+    auto oh = Weapon{"test_oh", {}, {}, 2.6, 260, 260, Weapon_socket::one_hand, Weapon_type::sword};
+    character.equip_weapon(mh, oh);
+
+    character.total_special_stats.attack_power = 2800;
+    character.total_special_stats.critical_strike = 35;
+    character.total_special_stats.hit = 3;
+    character.total_special_stats.haste = 0.05; // haste should probably use % as well, for consistency
+    character.total_special_stats.crit_multiplier = 0.03;
+    character.total_special_stats.expertise = 5;
+    character.total_special_stats.axe_expertise = 5;
+
+    config.talents.flurry = 5;
+    config.talents.rampage = true;
+    config.combat.rampage_use_thresh = 3;
+    config.talents.dual_wield_specialization = 5;
+    config.talents.deep_wounds = 3;
+    config.combat.deep_wounds = true;
+    config.talents.improved_heroic_strike = 3;
+    config.talents.improved_whirlwind = 1;
+    config.talents.impale = 2;
+    config.talents.unbridled_wrath = 5;
+    config.talents.weapon_mastery = 2;
+    config.talents.bloodthirst = 1;
+    config.talents.anger_management = true;
+    config.combat.heroic_strike_rage_thresh = 60;
+    config.combat.use_heroic_strike = true;
+    /*
+    config.multi_target_mode_ = true;
+    config.combat.cleave_if_adds = true;
+    config.combat.cleave_rage_thresh = 60;
+    config.number_of_extra_targets = 4;
+    config.extra_target_duration = config.sim_time;
+    config.extra_target_initial_armor_ = config.main_target_initial_armor_;
+    config.extra_target_level = config.main_target_level;
+    */
+    config.combat.use_bt_in_exec_phase = true;
+    config.combat.use_bloodthirst = true;
+    config.combat.use_whirlwind = true;
+    config.execute_phase_percentage_ = 20;
+
+    sim.set_config(config);
+
+    auto start = std::chrono::steady_clock::now();
+    sim.simulate(character);
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+    std::cout << std::endl;
+
+    auto dd = sim.get_damage_distribution();
+
+    auto f = 1.0 / (config.sim_time * config.n_batches);
+
+    std::cout << "white (mh)    = " << f * dd.white_mh_damage << std::endl;
+    if (dd.white_oh_count > 0) std::cout << "white (oh)    = " << f * dd.white_oh_damage << std::endl;
+    if (dd.heroic_strike_count > 0) std::cout << "heroic strike = " << f * dd.heroic_strike_damage << std::endl;
+    if (dd.cleave_count > 0) std::cout << "cleave        = " << f * dd.cleave_damage << std::endl;
+    if (dd.bloodthirst_count > 0) std::cout << "bloodthirst   = " << f * dd.bloodthirst_damage << std::endl;
+    if (dd.whirlwind_count > 0) std::cout << "whirlwind     = " << f * dd.whirlwind_damage << std::endl;
+    if (dd.execute_count > 0) std::cout << "execute       = " << f * dd.execute_damage << std::endl;
+    if (dd.deep_wounds_count > 0) std::cout << "deep wounds   = " << f * dd.deep_wounds_damage << std::endl;
+    if (dd.item_hit_effects_count > 0) std::cout << "hit effects   = " << f * dd.item_hit_effects_damage << std::endl;
+    std::cout << "----------------------" << std::endl;
+    std::cout << "total         = " << f * dd.sum_damage_sources() << " / " << sim.get_dps_mean() << std::endl;
+
+    std::cout << "rage lost " << sim.get_rage_lost_capped() << std::endl;
+
+    EXPECT_EQ(0, 0);
 }

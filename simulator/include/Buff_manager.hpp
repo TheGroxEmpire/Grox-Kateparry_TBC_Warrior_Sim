@@ -73,11 +73,11 @@ public:
         use_effect_order = use_effects_order;
         deep_wounds_damage = 0.0;
         deep_wounds_timestamps.clear();
-        need_to_recompute_hittables = true;
+        need_to_recompute_hit_tables = true;
         tactical_mastery_rage_ = tactical_mastery_rage;
     };
 
-    double get_dt(double sim_time)
+    [[nodiscard]] double get_dt(double sim_time) const
     {
         double dt = 1e10;
         dt = std::min(dt, next_event);
@@ -100,18 +100,22 @@ public:
         int stacks = 1;
         for (auto it = stat_gains.begin(); it != stat_gains.end();)
         {
+            const auto& name = it->first;
+            auto& buff = it->second;
+
             if (!performance_mode && current_time > 0.0)
             {
-                aura_uptime[it->first] += dt;
+                aura_uptime[name] += dt;
             }
-            it->second.duration_left -= dt;
-            if (it->second.duration_left < 0.0)
+
+            buff.duration_left -= dt;
+            if (buff.duration_left < 0.0)
             {
                 if (debug)
                 {
-                    debug_msg.emplace_back(it->first + " fades.");
+                    debug_msg.emplace_back(name + " fades.");
                 }
-                if (it->first == "battle_stance")
+                if (name == "battle_stance")
                 {
                     if (rage > tactical_mastery_rage_)
                     {
@@ -120,32 +124,32 @@ public:
                     }
                 }
 
-                if (it->second.is_independent_stacks == true)
+                if (buff.is_independent_stacks)
                 {
                     stacks = 0;
-                    for (auto& hit_effects_mh : (*hit_effects_mh))
+                    for (auto& hit_effect_mh : (*hit_effects_mh))
                     {
-                        if (it->first == hit_effects_mh.name)
+                        if (name == hit_effect_mh.name)
                         {
-                            stacks = hit_effects_mh.stacks_counter;
-                            hit_effects_mh.stacks_counter = 0;
+                            stacks = hit_effect_mh.stacks_counter;
+                            hit_effect_mh.stacks_counter = 0;
                             break;
                         }
                     }
                     if (!(stacks > 0))
                     {
-                        for (auto& hit_effects_oh : (*hit_effects_oh))
+                        for (auto& hit_effect_oh : (*hit_effects_oh))
                         {
-                            if (it->first == hit_effects_oh.name)
+                            if (name == hit_effect_oh.name)
                             {
-                                stacks = hit_effects_oh.stacks_counter;
-                                hit_effects_oh.stacks_counter = 0;
+                                stacks = hit_effect_oh.stacks_counter;
+                                hit_effect_oh.stacks_counter = 0;
                                 break;
                             }
-                        } 
+                        }
                     }
                 }
-                else if (it->second.is_shared_stacks == true)
+                else if (buff.is_shared_stacks)
                 {
                     stacks = arpen_stacks_counter;
                     arpen_stacks_counter = 0;
@@ -167,26 +171,26 @@ public:
                     //         hit_effects_oh.stacks_counter = 0;
                     //         break;
                     //     }
-                    // } 
+                    // }
                 }
 
                 for (int i = 0; i < stacks; i++)
                 {
-                    (*simulation_special_stats) -= it->second.special_stats;
+                    (*simulation_special_stats) -= buff.special_stats;
                 }
-                it = stat_gains.erase(it);
-                // if (it->second.special_stats.gear_armor_pen > 0.0)
+                // if (it->second.special_stats.gear_armor_pen > 0)
                 // {
                 //     need_to_recompute_mitigation = true;
                 // }
-                if (it->second.special_stats.hit > 0.0 || it->second.special_stats.critical_strike > 0.0)
+                if (buff.special_stats.hit > 0 || buff.special_stats.critical_strike > 0 || buff.special_stats.expertise > 0)
                 {
-                    need_to_recompute_hittables = true;
+                    need_to_recompute_hit_tables = true;
                 }
+                it = stat_gains.erase(it);
             }
             else
             {
-                next_event = std::min(next_event, it->second.duration_left);
+                next_event = std::min(next_event, buff.duration_left);
                 ++it;
             }
         }
@@ -194,41 +198,37 @@ public:
 
     void increment_hit_gains(double current_time, double dt, bool debug, std::vector<std::string>& debug_msg)
     {
-        size_t i = 0;
-        while (i < hit_gains.size())
+        for (auto it = hit_gains.begin(); it != hit_gains.end();)
         {
+            auto& buff = *it;
             if (!performance_mode && current_time > 0.0)
             {
-                aura_uptime[hit_gains[i].id] += dt;
+                aura_uptime[buff.id] += dt;
             }
-            hit_gains[i].duration_left -= dt;
-            if (hit_gains[i].duration_left < 0.0)
+            buff.duration_left -= dt;
+            if (buff.duration_left < 0.0)
             {
                 if (debug)
                 {
-                    debug_msg.emplace_back(hit_gains[i].id + " fades.");
+                    debug_msg.emplace_back(buff.id + " fades.");
                 }
-                for (size_t j = 0; j < (*hit_effects_mh).size(); j++)
+
+                for (auto jt = hit_effects_mh->begin(); jt != hit_effects_mh->end();)
                 {
-                    if (hit_gains[i].id == (*hit_effects_mh)[j].name)
-                    {
-                        (*hit_effects_mh).erase((*hit_effects_mh).begin() + j);
-                    }
+                    jt->name == buff.id ? jt = hit_effects_mh->erase(jt) : ++jt;
                 }
-                for (size_t j = 0; j < (*hit_effects_oh).size(); j++)
+                for (auto jt = hit_effects_oh->begin(); jt != hit_effects_oh->end();)
                 {
-                    if (hit_gains[i].id == (*hit_effects_oh)[j].name)
-                    {
-                        (*hit_effects_oh).erase((*hit_effects_oh).begin() + j);
-                    }
+                    jt->name == buff.id ? jt = hit_effects_oh->erase(jt) : ++jt;
                 }
-                hit_gains.erase(hit_gains.begin() + i);
+
                 reset_armor_reduction = true;
+                it = hit_gains.erase(it);
             }
             else
             {
-                next_event = std::min(next_event, hit_gains[i].duration_left);
-                ++i;
+                next_event = std::min(next_event, buff.duration_left);
+                ++it;
             }
         }
     }
@@ -244,7 +244,7 @@ public:
         }
         if (!use_effect_order.empty() && current_time > use_effect_order.back().first - margin)
         {
-            Use_effect& use_effect = use_effect_order.back().second;
+            auto& use_effect = use_effect_order.back().second;
             if (!use_effect.triggers_gcd || (global_cooldown < 0.0))
             {
                 if (debug)
@@ -295,156 +295,118 @@ public:
 
     void increment_over_time_buffs(double current_time, double& rage, bool debug, std::vector<std::string>& debug_msg)
     {
-        size_t i = 0;
-        while (i < over_time_buffs.size())
+        for (auto it = over_time_buffs.begin(); it != over_time_buffs.end();)
         {
-            if ((int(current_time) - over_time_buffs[i].init_time) / over_time_buffs[i].interval >=
-                over_time_buffs[i].current_ticks)
+            auto& buff = *it;
+            if ((int(current_time) - buff.init_time) / buff.interval >= buff.current_ticks)
             {
-                rage += over_time_buffs[i].rage_gain;
-                (*simulation_special_stats) += over_time_buffs[i].special_stats;
+                rage += buff.rage_gain;
                 rage = std::min(100.0, rage);
-                over_time_buffs[i].current_ticks++;
-                if (over_time_buffs[i].damage > 0.0)
+                (*simulation_special_stats) += buff.special_stats;
+                buff.current_ticks++;
+                if (buff.damage > 0.0)
                 {
-                    deep_wounds_damage += over_time_buffs[i].damage;
+                    deep_wounds_damage += buff.damage;
                     deep_wounds_timestamps.push_back(current_time);
                 }
                 if (debug)
                 {
-                    if (over_time_buffs[i].rage_gain > 0)
+                    if (buff.rage_gain > 0)
                     {
-                        debug_msg.emplace_back("Over time effect: " + over_time_buffs[i].id +
+                        debug_msg.emplace_back("Over time effect: " + buff.id +
                                                " tick. Current rage: " + std::to_string(int(rage)));
                     }
-                    else if (over_time_buffs[i].damage > 0)
+                    else if (buff.damage > 0)
                     {
-                        debug_msg.emplace_back("Over time effect: " + over_time_buffs[i].id +
-                                               " tick. Damage: " + std::to_string(int(over_time_buffs[i].damage)));
+                        debug_msg.emplace_back("Over time effect: " + buff.id +
+                                               " tick. Damage: " + std::to_string(int(buff.damage)));
                     }
                     else
                     {
-                        debug_msg.emplace_back("Over time effect: " + over_time_buffs[i].id + " tick.");
+                        debug_msg.emplace_back("Over time effect: " + buff.id + " tick.");
                     }
                 }
             }
-            if (over_time_buffs[i].current_ticks == over_time_buffs[i].total_ticks)
+            if (buff.current_ticks == buff.total_ticks)
             {
                 if (debug)
                 {
-                    debug_msg.emplace_back("Over time effect: " + over_time_buffs[i].id + " fades.");
+                    debug_msg.emplace_back("Over time effect: " + buff.id + " fades.");
                 }
-                over_time_buffs.erase(over_time_buffs.begin() + i);
-                if (over_time_buffs.empty())
-                {
-                    min_interval = 100000;
-                }
-                else
-                {
-                    for (const auto& over_time_buff : over_time_buffs)
-                    {
-                        min_interval = std::min(over_time_buff.interval, min_interval);
-                    }
-                }
+                it = over_time_buffs.erase(it);
             }
             else
             {
-                i++;
+                ++it;
             }
+        }
+
+        min_interval = 100000;
+        for (const auto& buff : over_time_buffs)
+        {
+            min_interval = std::min(buff.interval, min_interval);
         }
     }
 
-    void increment_icd(double dt)
+    void increment_icd(double dt) const
     {
-        size_t i = 0;
-        while(i < (*hit_effects_mh).size())
+        for (auto& hit_effect_mh : *hit_effects_mh)
         {
-            (*hit_effects_mh)[i].time_counter -= dt;
-            i++;
+            hit_effect_mh.time_counter -= dt;
         }
-        i = 0;
-        while(i < (*hit_effects_oh).size())
+        for (auto& hit_effect_oh : *hit_effects_oh)
         {
-            (*hit_effects_oh)[i].time_counter -= dt;
-            i++;
+            hit_effect_oh.time_counter -= dt;
         }
     }
 
-    void reset_icd(const Hit_effect& hit_effect)
+    void reset_icd(const Hit_effect& hit_effect) const
     {
-        // hit_effect.time_counter = hit_effect.cooldown;
-        size_t i = 0;
-        while(i < (*hit_effects_mh).size())
+        for (auto& hit_effect_mh : *hit_effects_mh)
         {
-            if (hit_effect.name == (*hit_effects_mh)[i].name)
+            if (hit_effect_mh.name == hit_effect.name)
             {
-                (*hit_effects_mh)[i].time_counter = hit_effect.cooldown;
+                hit_effect_mh.time_counter = hit_effect.cooldown;
                 break;
-            }
-            else
-            {
-                i++;
             }
         }
-        i = 0;
-        while(i < (*hit_effects_oh).size())
+        for (auto& hit_effect_oh : *hit_effects_oh)
         {
-            if (hit_effect.name == (*hit_effects_oh)[i].name)
+            if (hit_effect_oh.name == hit_effect.name)
             {
-                (*hit_effects_oh)[i].time_counter = hit_effect.cooldown;
+                hit_effect_oh.time_counter = hit_effect.cooldown;
                 break;
-            }
-            else
-            {
-                i++;
             }
         }
     }
 
     void modify_arpen_stacks(Hit_effect& hit_effect, Socket weapon_hand, bool at_max_stacks = false)
     {
-        size_t i = 0;
-        int armor_reduction = 0;
+        Special_stats no_reduction = {};
+        Special_stats armor_reduction = {};
+        armor_reduction.gear_armor_pen = hit_effect.armor_reduction;
+
         need_to_recompute_mitigation = true;
         if (weapon_hand == Socket::main_hand)
         {
-            while(i < (*hit_effects_mh).size())
+            for (auto& hit_effect_mh : *hit_effects_mh)
             {
-                if (hit_effect.name == (*hit_effects_mh)[i].name && !(at_max_stacks))
+                if (hit_effect_mh.name == hit_effect.name)
                 {
-                    armor_reduction = hit_effect.armor_reduction;
-                    add((*hit_effects_mh)[i].name, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, armor_reduction}, (*hit_effects_mh)[i].duration, false, true);
+                    add(hit_effect_mh.name, at_max_stacks ? no_reduction : armor_reduction, hit_effect_mh.duration, false, true);
                     break;
-                }
-                else if (hit_effect.name == (*hit_effects_mh)[i].name)
-                {
-                    add((*hit_effects_mh)[i].name, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, (*hit_effects_mh)[i].duration, false, true);
-                    break;
-                }
-                else
-                {
-                    i++;
                 }
             }
         }
         else
         {
-            while(i < (*hit_effects_oh).size())
+            for (auto& hit_effect_oh : *hit_effects_oh)
             {
-                if (hit_effect.name == (*hit_effects_oh)[i].name && !(at_max_stacks))
+                if (hit_effect_oh.name == hit_effect.name)
                 {
-                    armor_reduction = hit_effect.armor_reduction;
-                    add((*hit_effects_oh)[i].name, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, armor_reduction}, (*hit_effects_oh)[i].duration, false, true);
+                    armor_reduction.gear_armor_pen = hit_effect.armor_reduction;
+                    add(hit_effect_oh.name, at_max_stacks ? no_reduction : armor_reduction, hit_effect_oh.duration, false, true);
                     break;
-                }   
-                else if (hit_effect.name == (*hit_effects_oh)[i].name)
-                {
-                    add((*hit_effects_oh)[i].name, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, armor_reduction}, (*hit_effects_oh)[i].duration, false, true);
-                    break;
-                }
-                else
-                {
-                    i++;
                 }
             }
         }
@@ -469,17 +431,17 @@ public:
         if (!kv_pair.second)
         {
             kv_pair.first->second.duration_left = duration_left;
-            if (!(is_independent_stacks) && !(is_shared_stacks))
+            if (!is_independent_stacks && !is_shared_stacks)
             {
                 return;
             }
         }
         (*simulation_special_stats) += special_stats;
-        if (special_stats.hit > 0.0 || special_stats.critical_strike > 0.0)
+        if (special_stats.hit > 0 || special_stats.critical_strike > 0 || special_stats.expertise > 0)
         {
-            need_to_recompute_hittables = true;
+            need_to_recompute_hit_tables = true;
         }
-        // if (special_stats.gear_armor_pen > 0.0)
+        // if (special_stats.gear_armor_pen > 0)
         // {
         //     need_to_recompute_mitigation = true;
         // }
@@ -504,7 +466,7 @@ public:
             {
                 if (over_time_buff.id == "Deep_wounds")
                 {
-                    over_time_buff.damage = std::max(over_time_effect.damage, over_time_buff.damage);
+                    over_time_buff.damage = over_time_effect.damage;
                     over_time_buff.total_ticks =
                         (over_time_effect.duration + init_time - over_time_buff.init_time) / over_time_buff.interval;
                     return;
@@ -523,7 +485,7 @@ public:
         return it != stat_gains.end();
     }
 
-    bool need_to_recompute_hittables{false};
+    bool need_to_recompute_hit_tables{false};
     bool reset_armor_reduction{false};
     bool need_to_recompute_mitigation{false};
     bool performance_mode{false};
