@@ -522,7 +522,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
     for (const auto& wep : character.weapons)
     {
-        simulator.compute_hit_table(character.total_special_stats, wep.socket, wep.weapon_socket, wep.type);
+        simulator.compute_hit_tables(character.total_special_stats, Weapon_sim(wep, character.total_special_stats));
     }
     const bool is_two_handed = !character.is_dual_wield();
     const auto yellow_ht = simulator.get_hit_probabilities_yellow();

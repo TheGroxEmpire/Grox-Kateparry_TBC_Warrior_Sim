@@ -6,8 +6,7 @@
 class Weapon_sim
 {
 public:
-    Weapon_sim(double swing_speed, double min_damage, double max_damage, Socket socket, Weapon_type skill_type,
-               Weapon_socket weapon_socket, std::vector<Hit_effect> hit_effects);
+    Weapon_sim(const Weapon& weapon, const Special_stats& special_stats);
 
     constexpr bool time_for_swing(double dt)
     {

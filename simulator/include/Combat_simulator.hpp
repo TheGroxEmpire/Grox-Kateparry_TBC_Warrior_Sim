@@ -329,8 +329,7 @@ public:
     Combat_simulator::Hit_outcome generate_hit_mh(double damage, Hit_type hit_type, bool is_overpower = false, 
                                                   bool is_melee_spell = false);
 
-    void compute_hit_table(const Special_stats& special_stats, Socket weapon_hand,
-                           Weapon_socket weapon_socket, Weapon_type weapon_type);
+    void compute_hit_tables(const Special_stats& special_stats, const Weapon_sim& weapon);
 
     std::vector<std::pair<double, Use_effect>> get_use_effect_order(const Character& character);
 

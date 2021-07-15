@@ -32,7 +32,8 @@ void Distribution::add_sample(const double sample)
 
 void Distribution::reset()
 {
-    n_samples_ = mean_ = variance_ = min_ = max_ = 0;
+    n_samples_ = 0;
+    mean_ = variance_ = min_ = max_ = 0;
 }
 
 double Distribution::std_() const

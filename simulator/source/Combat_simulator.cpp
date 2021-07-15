@@ -410,148 +410,79 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(const Weapon_sim& m
     return hit_outcome;
 }
 
-void Combat_simulator::compute_hit_table(const Special_stats& special_stats, Socket weapon_hand,
-                                         Weapon_socket weapon_socket, Weapon_type weapon_type)
+void Combat_simulator::compute_hit_tables(const Special_stats& special_stats, const Weapon_sim& weapon)
 {
-    int level_difference = config.main_target_level - 70;
-    int target_defence_level = config.main_target_level * 5;
-    int skill_diff = target_defence_level - 350;
-    int base_skill_diff = level_difference * 5;
+    auto miss = 8.0;
+    auto hit_suppression = 1.0;
+    auto dodge = 6.5;
+    auto glance = 24.0;
+    auto glance_dr = 25.0;
+    auto crit_suppression = 4.8;
 
-    // Crit chance
-    double crit_chance;
-    if (level_difference == 3)
+    if (config.main_target_level == 72)
     {
-        crit_chance = special_stats.critical_strike - base_skill_diff * 0.2 - 1.8; // 1.8 flat aura modifier
+        miss = 6.0;
+        hit_suppression = 0.0;
+        dodge = 6.0;
+        glance = 18.0;
+        glance_dr = 15.0;
+        crit_suppression = 2.0;
     }
-    else if (level_difference > 0)
+    else if (config.main_target_level == 71)
     {
-        crit_chance = special_stats.critical_strike - base_skill_diff * 0.2;
+        miss = 5.5;
+        hit_suppression = 0.0;
+        dodge = 5.5;
+        glance = 12.0;
+        glance_dr = 5.0;
+        crit_suppression = 1.0;
     }
-    else
+    else if (config.main_target_level == 70)
     {
-        crit_chance = special_stats.critical_strike + base_skill_diff * 0.04;
-    }
-    crit_chance = std::max(crit_chance, 0.0);
-
-    // Miss chance
-    double base_miss_chance;
-    int hit_penalty = 0;
-    if (skill_diff > 10)
-    {
-        base_miss_chance = 5.0 + skill_diff * 0.2;
-        hit_penalty = 1;
-    }
-    else if (skill_diff > 0)
-    {
-        base_miss_chance = 5.0 + skill_diff * 0.1;
-    }
-    else
-    {
-        base_miss_chance = 5.0;
-    }
-    double dw_miss_chance =
-        (weapon_socket == Weapon_socket::two_hand) ? base_miss_chance : (base_miss_chance + 19.0);
-    double corrected_hit = special_stats.hit - hit_penalty;
-    double miss_chance = dw_miss_chance - std::max(corrected_hit, 0.0);
-    miss_chance = std::max(miss_chance, 0.0);
-    double two_hand_miss_chance = std::max(base_miss_chance - corrected_hit, 0.0);
-
-    // Dodge chance
-    double dodge_chance;
-    if (weapon_type == Weapon_type::sword)
-    {
-        if (level_difference > 0)
-        {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - config.talents.weapon_mastery -
-            (int(special_stats.expertise + special_stats.sword_expertise) * 0.25), 0.0);
-        }
-        else
-        {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - config.talents.weapon_mastery -
-            (int(special_stats.expertise + special_stats.sword_expertise) * 0.25), 0.0);
-        }
-    }
-    else if (weapon_type == Weapon_type::mace)
-    {
-        if (level_difference > 0)
-        {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - config.talents.weapon_mastery -
-            (int(special_stats.expertise + special_stats.mace_expertise) * 0.25), 0.0);
-        }
-        else
-        {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - config.talents.weapon_mastery -
-            (int(special_stats.expertise + special_stats.mace_expertise) * 0.25), 0.0);
-        }
-    }
-    else if (weapon_type == Weapon_type::axe)
-    {
-        if (level_difference > 0)
-        {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) - config.talents.weapon_mastery -
-            (int(special_stats.expertise + special_stats.axe_expertise) * 0.25), 0.0);
-        }
-        else
-        {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) - config.talents.weapon_mastery -
-            (int(special_stats.expertise + special_stats.axe_expertise) * 0.25), 0.0);
-        }
-    }
-    else
-    {
-        if (level_difference > 0)
-        {
-            dodge_chance = std::max(std::max(5 + skill_diff * 0.1, 5.0) -
-            (int(special_stats.expertise) * 0.25), 0.0);
-        }
-        else
-        {
-            dodge_chance = std::max(std::max(5 - base_skill_diff * 0.04, 0.0) -
-            (int(special_stats.expertise) * 0.25), 0.0);
-        }
-    }
-    // Glancing blows
-    double glancing_chance = 0.0;
-    if (level_difference > 0)
-    {
-        glancing_chance = 6 + level_difference * 6;
+        miss = 5.0;
+        hit_suppression = 0.0;
+        dodge = 5.0;
+        glance = 6.0;
+        glance_dr = 5.0;
+        crit_suppression = 0.0;
     }
 
-    double glancing_penalty;
-    if (level_difference == 3)
-    {
-        glancing_penalty = 25.0;
-    }
-    else if (level_difference == 2)
-    {
-        glancing_penalty = 15;
-    }
-    else
-    {
-        glancing_penalty = 5.0;
-    }
+    auto sw_miss = std::max(miss - std::max(special_stats.hit - hit_suppression, 0.0), 0.0);
+    auto dw_miss = std::max(miss + 19.0 - std::max(special_stats.hit - hit_suppression, 0.0), 0.0);
+    miss = weapon.weapon_socket == Weapon_socket::two_hand ? sw_miss : dw_miss;
 
-    if (weapon_hand == Socket::main_hand)
+    auto expertise = special_stats.expertise;
+    if (weapon.weapon_type == Weapon_type::axe) expertise += special_stats.axe_expertise;
+    if (weapon.weapon_type == Weapon_type::mace) expertise += special_stats.mace_expertise;
+    if (weapon.weapon_type == Weapon_type::sword) expertise += special_stats.sword_expertise;
+
+    dodge = std::max(dodge - (int)expertise * 0.25 - config.talents.weapon_mastery, 0.0);
+
+    auto crit = std::max(special_stats.critical_strike - crit_suppression, 0.0);
+
+    // just using the EJ-approved crit formula here ;)
+    //auto yellow_crit_dm = 1 + (2 * (1 + special_stats.crit_multiplier) - 1) * (1 + 0.1 * config.talents.impale);
+
+    if (weapon.socket == Socket::main_hand)
     {
-        hit_table_white_mh_ = create_hit_table(miss_chance, dodge_chance, glancing_chance, crit_chance);
+        hit_table_white_mh_ = create_hit_table(miss, dodge, glance, crit);
         damage_multipliers_white_mh_ =
-            create_multipliers((100.0 - glancing_penalty) / 100.0, 0.0, special_stats.crit_multiplier);
+            create_multipliers((100.0 - glance_dr) / 100.0, 0.0, special_stats.crit_multiplier);
 
-        hit_table_yellow_spell_ = create_hit_table_yellow(two_hand_miss_chance, dodge_chance, crit_chance, true);
-        hit_table_yellow_ = create_hit_table_yellow(two_hand_miss_chance, dodge_chance, crit_chance, false);
+        hit_table_yellow_spell_ = create_hit_table_yellow(sw_miss, dodge, crit, true);
+        hit_table_yellow_ = create_hit_table_yellow(sw_miss, dodge, crit, false);
         hit_table_overpower_ =
-            create_hit_table_yellow(two_hand_miss_chance, 0, crit_chance + 25 * config.talents.overpower - 3.0, false);
+            create_hit_table_yellow(sw_miss, 0, crit + 25 * config.talents.overpower - 3.0, false);
         damage_multipliers_yellow_ =
             create_multipliers(1.0, 0.1 * config.talents.impale, special_stats.crit_multiplier);
     }
     else
     {
-        hit_table_white_oh_ = create_hit_table(miss_chance, dodge_chance, glancing_chance, crit_chance);
+        hit_table_white_oh_ = create_hit_table(miss, dodge, glance, crit);
         damage_multipliers_white_oh_ =
-            create_multipliers((100.0 - glancing_penalty) / 100.0, 0.0, special_stats.crit_multiplier);
+            create_multipliers((100.0 - glance_dr) / 100.0, 0.0, special_stats.crit_multiplier);
 
-        hit_table_two_hand_ = create_hit_table(two_hand_miss_chance, dodge_chance, glancing_chance, crit_chance);
+        hit_table_two_hand_ = create_hit_table(sw_miss, dodge, glance, crit);
     }
 }
 
@@ -1229,10 +1160,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     std::vector<Weapon_sim> weapons;
     for (const auto& wep : character.weapons)
     {
-        weapons.emplace_back(wep.swing_speed, wep.min_damage, wep.max_damage, wep.socket, wep.type, wep.weapon_socket,
-                             wep.hit_effects);
-        weapons.back().compute_weapon_damage(wep.buff.bonus_damage + starting_special_stats.bonus_damage);
-        compute_hit_table(starting_special_stats, wep.socket, wep.weapon_socket, wep.type);
+        auto weapon = weapons.emplace_back(wep, starting_special_stats);
+        compute_hit_tables(starting_special_stats, weapon);
     }
 
     // TODO can move this to armory::compute_total_stats method
@@ -1429,13 +1358,13 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 break;
             }
 
-            if (buff_manager_.need_to_recompute_hittables)
+            if (buff_manager_.need_to_recompute_hit_tables)
             {
                 for (const auto& weapon : weapons)
                 {
-                    compute_hit_table(special_stats, weapon.socket, weapon.weapon_socket, weapon.weapon_type);
+                    compute_hit_tables(special_stats, weapon);
                 }
-                buff_manager_.need_to_recompute_hittables = false;
+                buff_manager_.need_to_recompute_hit_tables = false;
             }
 
             if (buff_manager_.need_to_recompute_mitigation)

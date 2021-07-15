@@ -27,7 +27,7 @@ public:
     double variance_;
     double max_;
     double min_;
-    int64_t n_samples_;
+    int n_samples_;
 };
 
 #endif // WOW_SIMULATOR_DISTRIBUTION_HPP
