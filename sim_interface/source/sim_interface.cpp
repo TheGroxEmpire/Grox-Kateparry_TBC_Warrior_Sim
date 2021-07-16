@@ -524,11 +524,12 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     {
         simulator.compute_hit_tables(character.total_special_stats, Weapon_sim(wep, character.total_special_stats));
     }
-    const bool is_two_handed = !character.is_dual_wield();
-    const auto yellow_ht = simulator.get_hit_probabilities_yellow_mh();
+    const bool is_dual_wield = character.is_dual_wield();
+    const auto yellow_mh_ht = simulator.get_hit_probabilities_yellow_mh();
+    const auto yellow_oh_ht = simulator.get_hit_probabilities_yellow_oh();
     const auto white_mh_ht = simulator.get_hit_probabilities_white_mh();
     const auto white_oh_ht = simulator.get_hit_probabilities_white_oh();
-    const auto white_oh_ht_2h = simulator.get_hit_probabilities_white_oh_queued();
+    const auto white_oh_ht_queued = simulator.get_hit_probabilities_white_oh_queued();
     double n_simulations_base = config.n_batches;
 
     simulator.simulate(character, 0, true);
@@ -578,58 +579,45 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                  String_helpers::string_with_precision(
                      simulator.get_rage_lost_capped() / double(simulator.get_n_simulations()), 3) +
                  "</b><br>";
-    rage_info += "</b>Rage lost when changing stace: <b>" +
+    rage_info += "</b>Rage lost when changing stance: <b>" +
                  String_helpers::string_with_precision(
                      simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()), 3) +
                  "</b><br>";
 
     std::string extra_info_string = "<b>Fight stats vs. target:</b> <br/>";
     extra_info_string += "<b>Hit:</b> <br/>";
-    extra_info_string += String_helpers::percent_to_str("Yellow hits", yellow_ht[0], "chance to miss");
-    extra_info_string += String_helpers::percent_to_str("Main-hand, white hits", white_mh_ht[0], "chance to miss");
-    if (!is_two_handed)
+    extra_info_string += String_helpers::percent_to_str("Yellow hits", yellow_mh_ht.miss(), "chance to miss");
+    extra_info_string += String_helpers::percent_to_str("Main-hand, white hits", white_mh_ht.miss(), "chance to miss");
+    if (is_dual_wield)
     {
-        extra_info_string += String_helpers::percent_to_str("off-hand, white hits", white_oh_ht[0], "chance to miss");
+        extra_info_string += String_helpers::percent_to_str("Off-hand, white hits", white_oh_ht.miss(), "chance to miss");
         extra_info_string +=
-            String_helpers::percent_to_str("off-hand, while ability queued", white_oh_ht_2h[0], "chance to miss");
+            String_helpers::percent_to_str("Off-hand, while ability queued", white_oh_ht_queued.miss(), "chance to miss");
     }
 
     extra_info_string += "<b>Crit chance:</b> <br/>";
-    double white_mh_crit = std::min(white_mh_ht[3], 100.0) - white_mh_ht[2];
-    double left_to_crit_cap_white_mh = std::max(100.0 - white_mh_ht.back(), 0.0);
-    double yellow_crit = std::min(yellow_ht[3], 100.0) - yellow_ht[2];
-    extra_info_string +=
-        String_helpers::percent_to_str("Yellow", yellow_crit, "chance to crit per cast",
-                                       100 - yellow_crit * (1 + yellow_ht[1] / 100.0), "left to crit-cap");
-    extra_info_string += String_helpers::percent_to_str("White main hand", white_mh_crit, "chance to crit",
-                                                        left_to_crit_cap_white_mh, "left to crit-cap");
+    extra_info_string += String_helpers::percent_to_str("Yellow main-hand", yellow_mh_ht.crit(), "chance to crit per cast");
+    extra_info_string += String_helpers::percent_to_str("White main-hand", white_mh_ht.crit(), "chance to crit",
+                                                        white_mh_ht.hit(), "left to crit-cap");
 
-    if (!is_two_handed)
+    if (is_dual_wield)
     {
-        double white_oh_crit = std::min(white_oh_ht[3], 100.0) - white_oh_ht[2];
-        double left_to_crit_cap_white_oh = std::max(100.0 - white_oh_ht.back(), 0.0);
-
-        extra_info_string += String_helpers::percent_to_str("White off hand", white_oh_crit, "chance to crit",
-                                                            left_to_crit_cap_white_oh, "left to crit-cap");
+        extra_info_string += String_helpers::percent_to_str("Yellow off-hand", yellow_oh_ht.crit(), "chance to crit per cast");
+        extra_info_string += String_helpers::percent_to_str("White off-hand", white_oh_ht.crit(), "chance to crit",
+                                                            white_oh_ht.hit(), "left to crit-cap");
     }
     extra_info_string += "<b>Glancing blows:</b><br/>";
-    double glancing_probability = white_mh_ht[2] - white_mh_ht[1];
-    double glancing_penalty_mh = 100 * simulator.get_glancing_penalty_mh();
     extra_info_string +=
-        String_helpers::percent_to_str("Chance to occur", glancing_probability, "(based on level difference)");
+        String_helpers::percent_to_str("Chance to occur", white_mh_ht.glance(), "(based on level difference)");
     extra_info_string +=
-        String_helpers::percent_to_str("Glancing damage main-hand", glancing_penalty_mh, "(based on skill difference)");
-    if (!is_two_handed)
-    {
-        double glancing_penalty_oh = 100 * simulator.get_glancing_penalty_oh();
-        extra_info_string += String_helpers::percent_to_str("Glancing damage off-hand", glancing_penalty_oh,
-                                                            "(based on skill difference)");
-    }
+        String_helpers::percent_to_str("Glancing damage", white_mh_ht.glancing_penalty(), "(based on level difference)");
     extra_info_string += "<b>Other:</b><br/>";
-    double dodge_chance = yellow_ht[1] - yellow_ht[0];
-    extra_info_string += String_helpers::percent_to_str("Target dodge chance", dodge_chance, "(based on skill difference and expertise)") + "<br>"
-                                                                                                              "<"
-                                                                                                              "br>";
+    extra_info_string += String_helpers::percent_to_str("Main-hand dodge chance", yellow_mh_ht.dodge(), "(based on level difference and expertise)");
+    if (is_dual_wield)
+    {
+        extra_info_string += String_helpers::percent_to_str("Off-hand dodge chance", yellow_oh_ht.dodge(), "(based on level difference and expertise)");
+    }
+    extra_info_string += "<br><br>";
 
     std::string dpr_info = "<br>(Hint: Ability damage per rage computations can be turned on under 'Simulation "
                            "settings')";
@@ -857,7 +845,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Overpower", config,
                               &Combat_simulator_config::talents_t::overpower, 2);
 
-        if (config.combat.use_slam && is_two_handed)
+        if (config.combat.use_slam && is_dual_wield)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Improved Slam", config,
                                   &Combat_simulator_config::talents_t::improved_slam, 2);
@@ -887,7 +875,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         compute_talent_weight(simulator_talent, character, talents_info, "Endless Rage", config,
                               &Combat_simulator_config::talents_t::endless_rage);
 
-        if (!is_two_handed)
+        if (!is_dual_wield)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Dual Wield Specialization", config,
                                   &Combat_simulator_config::talents_t::dual_wield_specialization, 5);
@@ -966,7 +954,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         }
         if (String_helpers::find_string(input.options, "wep_strengths"))
         {
-            if (is_two_handed)
+            if (is_dual_wield)
             {
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
                                   cumulative_simulations, simulator, dps_mean, dps_sample_std, Weapon_socket::two_hand);
@@ -1093,7 +1081,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                                           std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
                                           std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
             }
-            if (stat_weight == "oh_speed" && !is_two_handed)
+            if (stat_weight == "oh_speed" && !is_dual_wield)
             {
                 Character char_plus = character;
                 Character char_minus = character;

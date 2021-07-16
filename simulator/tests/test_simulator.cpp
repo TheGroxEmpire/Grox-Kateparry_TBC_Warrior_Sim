@@ -744,6 +744,19 @@ deep wounds   = 38.209
 total         = 872.033 / 874.95
 rage lost 8811.75
 
+took 15413 ms
+
+white (mh)    = 211.509
+white (oh)    = 173.097
+heroic strike = 99.7399
+bloodthirst   = 166.799
+whirlwind     = 100.103
+execute       = 83.5759
+deep wounds   = 38.1976
+----------------------
+total         = 873.022 / 875.943
+rage lost 8540.98
+
  */
 TEST_F(Sim_fixture, test_fury)
 {
