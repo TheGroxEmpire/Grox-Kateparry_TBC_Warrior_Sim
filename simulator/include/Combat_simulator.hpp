@@ -382,7 +382,7 @@ public:
 
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
-    double rage_generation(double damage, const Weapon_sim& weapon, Hit_result hit_result);
+    [[nodiscard]] double rage_generation(const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const;
 
     void cout_damage_parse(const Weapon_sim& weapon, const Hit_table& hit_table, const Combat_simulator::Hit_outcome& hit_outcome);
 

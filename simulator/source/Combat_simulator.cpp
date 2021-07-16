@@ -863,11 +863,11 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
     }
 }
 
-double Combat_simulator::rage_generation(double damage, const Weapon_sim& weapon, const Hit_result hit_result)
+double Combat_simulator::rage_generation(const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const
 {
     auto hit_factor = weapon.socket == Socket::main_hand ? 3.5/2 : 1.75/2;
-    if (hit_result == Hit_result::crit) hit_factor *= 2;
-    auto rage = damage * rage_factor + hit_factor * weapon.swing_speed;
+    if (hit_outcome.hit_result == Hit_result::crit) hit_factor *= 2;
+    auto rage = hit_outcome.rageDamage * rage_factor + hit_factor * weapon.swing_speed;
     if (config.talents.endless_rage) rage *= 1.25;
     return rage;
 }
@@ -964,7 +964,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         const auto& hit_outcome = generate_hit(main_hand_weapon, swing_damage, weapon, hit_table, special_stats, damage_sources);
         if (hit_outcome.hit_result != Hit_result::dodge && hit_outcome.hit_result != Hit_result::miss)
         {
-            rage += rage_generation(hit_outcome.rageDamage, weapon, hit_outcome.hit_result);
+            rage += rage_generation(hit_outcome, weapon);
             hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, is_extra_attack,
                         false);
             unbridledWrathAndMaceSpec(weapon, rage);
@@ -975,7 +975,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
             {
                 rage += 2;
             }
-            rage += rage_generation(hit_outcome.rageDamage, weapon, hit_outcome.hit_result);
+            rage += rage_generation(hit_outcome, weapon);
             simulator_cout("Rage gained since the enemy dodged.");
         }
         manage_flurry_rampage(hit_outcome.hit_result, special_stats, flurry_charges, rampage_stacks, rampage_active);
