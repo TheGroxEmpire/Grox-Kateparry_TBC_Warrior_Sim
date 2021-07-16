@@ -964,7 +964,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         const auto& hit_outcome = generate_hit(main_hand_weapon, swing_damage, weapon, hit_table, special_stats, damage_sources);
         if (hit_outcome.hit_result != Hit_result::dodge && hit_outcome.hit_result != Hit_result::miss)
         {
-            rage += rage_generation(hit_outcome.damage, weapon, hit_outcome.hit_result);
+            rage += rage_generation(hit_outcome.rageDamage, weapon, hit_outcome.hit_result);
             hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, rampage_active, is_extra_attack,
                         false);
             unbridledWrathAndMaceSpec(weapon, rage);
@@ -975,7 +975,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
             {
                 rage += 2;
             }
-            rage += rage_generation(swing_damage * armor_reduction_factor_ * (1 + special_stats.damage_mod_physical), weapon, hit_outcome.hit_result);
+            rage += rage_generation(hit_outcome.rageDamage, weapon, hit_outcome.hit_result);
             simulator_cout("Rage gained since the enemy dodged.");
         }
         manage_flurry_rampage(hit_outcome.hit_result, special_stats, flurry_charges, rampage_stacks, rampage_active);

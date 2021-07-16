@@ -95,10 +95,7 @@ TEST_F(Sim_fixture, test_that_with_infinite_rage_all_hits_are_heroic_strike)
     double tolerance = 1.0 / character.weapons[0].swing_speed;
     EXPECT_NEAR(distrib.heroic_strike_count / double(config.n_batches), expected_swings_per_simulation, tolerance);
 
-    // subtract 'config.n_batches' since each simulation starts with both weapons swinging, which means that one hit per
-    // simulation cant be HS influenced
-    double hs_uptime_expected = double(distrib.white_oh_count - config.n_batches) / distrib.white_oh_count;
-    EXPECT_FLOAT_EQ(hs_uptime, hs_uptime_expected);
+    EXPECT_FLOAT_EQ(hs_uptime, 1);
 }
 
 TEST_F(Sim_fixture, test_dps_return_matches_heristic_values)
@@ -647,9 +644,8 @@ deep wounds   = 48.7256
 ----------------------
 total         = 768.48 / 771.05
 rage lost 12686.2
-
  */
-TEST_F(Sim_fixture, test_2h)
+TEST_F(Sim_fixture, test_arms)
 {
     config.sim_time = 5 * 60;
     config.n_batches = 25000;
@@ -686,6 +682,7 @@ TEST_F(Sim_fixture, test_2h)
     config.combat.use_sl_in_exec_phase = true;
     config.combat.use_ms_in_exec_phase = true;
     config.combat.deep_wounds = true;
+    config.talents.mace_specialization = 0;
     sim.set_config(config);
 
     auto start = std::chrono::steady_clock::now();
@@ -729,20 +726,7 @@ deep wounds   = 38.3068
 total         = 878.257 / 881.195
 rage lost 8530.75
 
-after yellow hit table fixes
-
-took 15786 ms
-
-white (mh)    = 211.725
-white (oh)    = 173.002
-heroic strike = 99.6991
-bloodthirst   = 166.751
-whirlwind     = 99.0064
-execute       = 83.641
-deep wounds   = 38.209
-----------------------
-total         = 872.033 / 874.95
-rage lost 8811.75
+after yellow hit table fixes, including separate yellow_oh table and ww oh-fix
 
 took 15413 ms
 
@@ -757,6 +741,20 @@ deep wounds   = 38.1976
 total         = 873.022 / 875.943
 rage lost 8540.98
 
+ after too-much-rage-on-oh-dodge fix
+
+ took 9738 ms
+
+white (mh)    = 212.632
+white (oh)    = 173.029
+heroic strike = 98.5237
+bloodthirst   = 166.584
+whirlwind     = 100.028
+execute       = 83.4919
+deep wounds   = 38.1934
+----------------------
+total         = 872.482 / 875.399
+rage lost 8721.51
  */
 TEST_F(Sim_fixture, test_fury)
 {
