@@ -339,10 +339,12 @@ public:
         Damage_multipliers dm_;
     };
 
-    void manage_flurry_rampage(Hit_result hit_result, Special_stats& special_stats, int& flurry_charges, int& rampage_stacks,
-                       bool is_ability = false);
+    void maybe_gain_flurry(Hit_result hit_result, int& flurry_charges, Special_stats& special_stats) const;
+    void maybe_remove_flurry(int& flurry_charges, Special_stats& special_stats) const;
 
-    void unbridledWrathAndMaceSpec(const Weapon_sim& weapon, double &rage);
+    void maybe_add_rampage_stack(Hit_result hit_result, int& rampage_stacks, Special_stats& special_stats);
+
+    void unbridled_wrath_and_mace_spec(const Weapon_sim& weapon, double &rage);
 
     void swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, double attack_power_bonus = 0,

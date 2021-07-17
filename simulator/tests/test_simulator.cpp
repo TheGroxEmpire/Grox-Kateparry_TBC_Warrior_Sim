@@ -631,7 +631,7 @@ deep wounds   = 50.1407
 total         = 784.141 / 786.763
 rage lost 12509.3
 
-after yellow hit table fixes:
+after yellow hit table changes:
 
 took 8486 ms
 
@@ -726,7 +726,7 @@ deep wounds   = 38.3068
 total         = 878.257 / 881.195
 rage lost 8530.75
 
-after yellow hit table fixes, including separate yellow_oh table and ww oh-fix
+after yellow hit table changes, including whirlwind bug fixes:
 
 took 15413 ms
 
@@ -741,9 +741,9 @@ deep wounds   = 38.1976
 total         = 873.022 / 875.943
 rage lost 8540.98
 
- after too-much-rage-on-oh-dodge fix
+after too-much-rage-on-oh-dodge fix:
 
- took 9738 ms
+took 9738 ms
 
 white (mh)    = 212.632
 white (oh)    = 173.029
@@ -777,6 +777,7 @@ TEST_F(Sim_fixture, test_fury)
     config.talents.flurry = 5;
     config.talents.rampage = true;
     config.combat.rampage_use_thresh = 3;
+    config.combat.use_rampage = false;
     config.talents.dual_wield_specialization = 5;
     config.talents.deep_wounds = 3;
     config.combat.deep_wounds = true;
