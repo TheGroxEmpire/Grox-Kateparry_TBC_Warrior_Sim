@@ -26,8 +26,6 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     config = new_config;
 
     heroic_strike_rage_cost = 15 - config.talents.improved_heroic_strike;
-    p_unbridled_wrath_ = 3 * config.talents.unbridled_wrath;
-    p_mace_spec_ = 0.3 * config.talents.mace_specialization;
     execute_rage_cost_ = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
 
     armor_reduction_from_spells_ = 0.0;
@@ -41,7 +39,6 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
 
     flurry_haste_factor_ = 0.05 * config.talents.flurry;
 
-    dual_wield_damage_factor_ = 0.5 + 0.025 * config.talents.dual_wield_specialization;
     cleave_bonus_damage_ = 70 * (1.0 + 0.4 * config.talents.improved_cleave);
     slam_manager.slam_cast_time_ = 1.5 - 0.5 * config.talents.improved_slam;
 
@@ -419,10 +416,10 @@ void Combat_simulator::maybe_add_rampage_stack(Hit_result hit_result, int& rampa
     simulator_cout(rampage_stacks, " rampage stacks");
 }
 
-void Combat_simulator::unbridled_wrath_and_mace_spec(const Weapon_sim& weapon, double &rage)
+void Combat_simulator::unbridled_wrath(const Weapon_sim& weapon, double &rage)
 {
-    // Unbridled wrath
-    if (get_uniform_random(1) < (p_unbridled_wrath_ * weapon.swing_speed / 60))
+    if (config.talents.unbridled_wrath > 0 &&
+        get_uniform_random(60) < config.talents.unbridled_wrath * 3.0 * weapon.swing_speed)
     {
         rage += 1;
         if (rage > 100.0)
@@ -431,17 +428,6 @@ void Combat_simulator::unbridled_wrath_and_mace_spec(const Weapon_sim& weapon, d
             rage = 100.0;
         }
         simulator_cout("Unbridled wrath. Current rage: ", int(rage));
-    }
-    // Mace specialization
-    if (get_uniform_random(1) < (p_mace_spec_ * weapon.swing_speed / 60) && weapon.weapon_type == Weapon_type::mace)
-    {
-        rage += 7;
-        if (rage > 100.0)
-        {
-            rage_lost_capped_ += rage - 100.0;
-            rage = 100.0;
-        }
-        simulator_cout("Mace specialization. Current rage: ", int(rage));
     }
 }
 
@@ -726,6 +712,17 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
 {
     maybe_add_rampage_stack(Hit_result::hit, rampage_stacks, special_stats);
 
+    if (config.talents.mace_specialization > 0 && weapon.weapon_type == Weapon_type::mace && get_uniform_random(60) < config.talents.mace_specialization * 0.3 * weapon.swing_speed)
+    {
+        rage += 7;
+        if (rage > 100.0)
+        {
+            rage_lost_capped_ += rage - 100.0;
+            rage = 100.0;
+        }
+        simulator_cout("Mace specialization. Current rage: ", int(rage));
+    }
+
     for (auto& hit_effect : weapon.hit_effects)
     {
         double r = get_uniform_random(1);
@@ -746,7 +743,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
             proc_data_[hit_effect.name]++;
             switch (hit_effect.type)
             {
-            case Hit_effect::Type::extra_hit:
+            case Hit_effect::Type::extra_hit: {
                 if (!is_extra_attack)
                 {
                     simulator_cout("PROC: extra hit from: ", hit_effect.name);
@@ -759,8 +756,9 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
                     proc_data_[hit_effect.name]--;
                 }
                 break;
-            case Hit_effect::Type::windfury_hit:
-                if (!is_extra_attack  && !is_instant)
+            }
+            case Hit_effect::Type::windfury_hit: {
+                if (!is_extra_attack && !is_instant)
                 {
                     simulator_cout("PROC: extra hit from: ", hit_effect.name);
                     swing_weapon(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
@@ -772,6 +770,7 @@ void Combat_simulator::hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_wea
                     proc_data_[hit_effect.name]--;
                 }
                 break;
+            }
             case Hit_effect::Type::sword_spec: {
                     simulator_cout("PROC: extra hit from: ", hit_effect.name);
                     swing_weapon(main_hand_weapon, main_hand_weapon, special_stats, rage, damage_sources,
@@ -891,7 +890,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
             {
                 rage -= heroic_strike_rage_cost;
                 maybe_gain_flurry(hit_outcome.hit_result, flurry_charges, special_stats);
-                unbridled_wrath_and_mace_spec(weapon, rage);
+                unbridled_wrath(weapon, rage);
                 hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, is_extra_attack,
                             false);
             }
@@ -927,7 +926,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
                 if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
                 {
                     maybe_gain_flurry(hit_outcome.hit_result, flurry_charges, special_stats);
-                    unbridled_wrath_and_mace_spec(weapon, rage);
+                    unbridled_wrath(weapon, rage);
                     hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, is_extra_attack,
                                 false);
                 }
@@ -956,7 +955,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         {
             rage += rage_generation(hit_outcome, weapon);
             maybe_gain_flurry(hit_outcome.hit_result, flurry_charges, special_stats);
-            unbridled_wrath_and_mace_spec(weapon, rage);
+            unbridled_wrath(weapon, rage);
             hit_effects(weapon, main_hand_weapon, special_stats, rage, damage_sources, flurry_charges, rampage_stacks, is_extra_attack,
                         false);
         }
@@ -1667,12 +1666,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
             // end of turn - update swing timers if necessary
             update_swing_timers(weapons[0], is_dual_wield ? weapons[1] : weapons[0], oldHaste, special_stats.haste);
-
-            if (flurry_charges < 0 || flurry_charges > 3 || rampage_stacks < 0 || rampage_stacks > 5) {
-                std::cout << "flurry_charges = " << flurry_charges << ", rampage_stacks = " << rampage_stacks << std::endl;
-                return;
-            }
         }
+        // end of batch
+
         if (deep_wounds_)
         {
             double dw_average_damage = buff_manager_.deep_wounds_damage / buff_manager_.deep_wounds_timestamps.size();

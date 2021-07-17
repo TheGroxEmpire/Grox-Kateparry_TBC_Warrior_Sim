@@ -644,6 +644,20 @@ deep wounds   = 48.7256
 ----------------------
 total         = 768.48 / 771.05
 rage lost 12686.2
+
+different rand() sequence after mace spec fix:
+
+took 6994 ms
+
+white (mh)    = 282.709
+mortal strike = 83.4979
+whirlwind     = 43.0987
+slam          = 286.997
+heroic strike = 0.981576
+deep wounds   = 48.7078
+----------------------
+total         = 768.312 / 770.882
+rage lost 12012.1
  */
 TEST_F(Sim_fixture, test_arms)
 {
@@ -755,6 +769,21 @@ deep wounds   = 38.1934
 ----------------------
 total         = 872.482 / 875.399
 rage lost 8721.51
+
+ different rand() sequence after mace spec fix:
+
+took 9671 ms
+
+white (mh)    = 212.512
+white (oh)    = 173.113
+heroic strike = 98.4273
+bloodthirst   = 166.721
+whirlwind     = 99.9492
+execute       = 83.4121
+deep wounds   = 38.2024
+----------------------
+total         = 872.337 / 875.255
+rage lost 8648.78
  */
 TEST_F(Sim_fixture, test_fury)
 {

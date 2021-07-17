@@ -344,7 +344,7 @@ public:
 
     void maybe_add_rampage_stack(Hit_result hit_result, int& rampage_stacks, Special_stats& special_stats);
 
-    void unbridled_wrath_and_mace_spec(const Weapon_sim& weapon, double &rage);
+    void unbridled_wrath(const Weapon_sim& weapon, double &rage);
 
     void swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, double attack_power_bonus = 0,
@@ -526,10 +526,7 @@ private:
     double avg_rage_spent_executing_{};
     double rage_lost_stance_swap_{};
     double rage_lost_capped_{};
-    double p_mace_spec_{};
-    double p_unbridled_wrath_{};
     double flurry_haste_factor_{};
-    double dual_wield_damage_factor_{};
 
     double tactical_mastery_rage_{0};
     bool deep_wounds_{false};
