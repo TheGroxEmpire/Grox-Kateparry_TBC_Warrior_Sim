@@ -339,41 +339,41 @@ public:
         Damage_multipliers dm_;
     };
 
-    void manage_flurry_rampage(Hit_result hit_result, Special_stats& special_stats, int& flurry_charges, int& rampage_stacks, bool rampage_active = false,
+    void manage_flurry_rampage(Hit_result hit_result, Special_stats& special_stats, int& flurry_charges, int& rampage_stacks,
                        bool is_ability = false);
 
     void unbridledWrathAndMaceSpec(const Weapon_sim& weapon, double &rage);
 
     void swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                      Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, double attack_power_bonus = 0,
+                      Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, double attack_power_bonus = 0,
                       bool is_extra_attack = false);
    
     void hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                     Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, bool is_extra_attack = false,
+                     Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool is_extra_attack = false,
                      bool is_instant = true);
 
     void overpower(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false);
+                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
 
     bool start_cast_slam(bool mh_swing, double rage, double& swing_time_left);
 
     void slam(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage, Damage_sources& damage_sources,
-              int& flurry_charges, int& rampage_stacks, bool rampage_active = false);
+              int& flurry_charges, int& rampage_stacks);
 
     void mortal_strike(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false);
+                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
 
     void bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                     Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false);
+                     Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
 
     void whirlwind(Weapon_sim& main_hand_weapon, Weapon_sim& off_hand_weapon, Special_stats& special_stats, double& rage,
-                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false, bool is_dw = false);
+                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool is_dw = false);
 
     void execute(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                 Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false);
+                 Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
 
     void hamstring(Weapon_sim& main_hand_weapon, Special_stats& special_stats, double& rage,
-                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool rampage_active = false);
+                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
 
     void simulate(const Character& character, size_t n_simulations, double init_mean, double init_variance,
                   size_t init_simulations);
