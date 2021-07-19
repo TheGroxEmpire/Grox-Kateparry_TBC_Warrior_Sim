@@ -86,7 +86,7 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     if (config.enable_blood_fury)
     {
         use_effects_all_.emplace_back(
-            Use_effect{"Blood_fury", Use_effect::Effect_socket::unique, {}, {0, 0, 282}, 0, 15, 120, true});
+            Use_effect{"Blood_fury", Use_effect::Effect_socket::unique, {}, {0, 0, 282}, 0, 15, 120, false});
     }
 
     if (config.essence_of_the_red_)

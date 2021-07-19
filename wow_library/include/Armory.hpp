@@ -63,19 +63,19 @@ struct Buffs
                               120, false}}};
     Buff drums_of_battle{"drums_of_battle", {}, {}, 0, {},
                          {{"drums_of_battle", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .05},
-                          0, 30, 120, true}}};
+                          0, 30, 120, false}}};
     Buff bloodlust{"bloodlust", {}, {}, 0, {},
                          {{"bloodlust", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .3},
-                          0, 40, 600, true}}};
+                          0, 40, 600, false}}};
     Buff haste_potion{"haste_potion", {}, {}, 0, {},
                          {{"haste_potion", Use_effect::Effect_socket::unique, {}, {0, 0, 0, 0, .25},
-                          0, 15, 120, true}}};
+                          0, 15, 120, false}}};
     Buff insane_strength_potion{"insane_strength_potion", {}, {}, 0, {},
                          {{"insane_strength_potion", Use_effect::Effect_socket::unique, {120, 0.0}, {},
-                          0, 15, 120, true}}};
+                          0, 15, 120, false}}};
     Buff heroic_potion{"heroic_potion", {}, {}, 0, {},
                          {{"heroic_potion", Use_effect::Effect_socket::unique, {70, 0.0}, {},
-                          0, 15, 120, true}}};
+                          0, 15, 120, false}}};
 
     Weapon_buff dense_stone{"dense_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 8};
     // Adamantite stone for wep damage and for crit

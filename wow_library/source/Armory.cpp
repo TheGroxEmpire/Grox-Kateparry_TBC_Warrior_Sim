@@ -1156,25 +1156,25 @@ void Armory::add_gems_to_character(Character& character, const std::vector<std::
         character.add_gem(gems.hit_12);
     }
 
-    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 crit +3 str");
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 crit_+3_str");
     for (i = 0; i < gem_counter; i++)
     {
         character.add_gem(gems.crit_3_str_3);
     }
 
-    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit +4 str");
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit_+4_str");
     for (i = 0; i < gem_counter; i++)
     {
         character.add_gem(gems.crit_4_str_4);
     }
 
-    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit +5 str");
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+4 crit_+5_str");
     for (i = 0; i < gem_counter; i++)
     {
         character.add_gem(gems.crit_4_str_5);
     }
 
-    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+5 crit +5 str");
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+5 crit_+5_str");
     for (i = 0; i < gem_counter; i++)
     {
         character.add_gem(gems.crit_5_str_5);
