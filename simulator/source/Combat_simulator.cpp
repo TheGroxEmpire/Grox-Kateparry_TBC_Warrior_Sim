@@ -854,7 +854,7 @@ double Combat_simulator::rage_generation(const Hit_outcome& hit_outcome, const W
 {
     auto hit_factor = weapon.socket == Socket::main_hand ? 3.5/2 : 1.75/2;
     if (hit_outcome.hit_result == Hit_result::crit) hit_factor *= 2;
-    auto rage = hit_outcome.rageDamage * rage_factor + hit_factor * weapon.swing_speed;
+    auto rage = hit_outcome.rage_damage * rage_factor + hit_factor * weapon.swing_speed;
     if (config.talents.endless_rage) rage *= 1.25;
     return rage;
 }
@@ -870,6 +870,7 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
     auto white_replaced = false;
     if (ability_queue_manager.heroic_strike_queued && weapon.socket == Socket::main_hand)
     {
+        ability_queue_manager.heroic_strike_queued = false;
         if (rage >= heroic_strike_rage_cost && config.dpr_settings.compute_dpr_hs_)
         {
             simulator_cout("Performing Heroic Strike (DPR)");
@@ -902,11 +903,11 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
             // Failed to pay rage for heroic strike
             simulator_cout("Failed to pay rage for Heroic Strike");
         }
-        ability_queue_manager.heroic_strike_queued = false;
         simulator_cout("Current rage: ", int(rage));
     }
     else if (ability_queue_manager.cleave_queued && weapon.socket == Socket::main_hand)
     {
+        ability_queue_manager.cleave_queued = false;
         if (rage >= 20 && config.dpr_settings.compute_dpr_cl_)
         {
             simulator_cout("Performing Cleave (DPR)");
@@ -939,16 +940,14 @@ void Combat_simulator::swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_we
         {
             simulator_cout("Failed to pay rage for Cleave");
         }
-        ability_queue_manager.cleave_queued = false;
         simulator_cout("Current rage: ", int(rage));
     }
 
     if (!white_replaced)
     {
-        // Otherwise do white hit
-        auto isQueued = (ability_queue_manager.heroic_strike_queued && !config.dpr_settings.compute_dpr_hs_) || (ability_queue_manager.cleave_queued && !config.dpr_settings.compute_dpr_cl_);
+        auto is_queued = (ability_queue_manager.heroic_strike_queued && !config.dpr_settings.compute_dpr_hs_) || (ability_queue_manager.cleave_queued && !config.dpr_settings.compute_dpr_cl_);
 
-        auto hit_table = weapon.socket == Socket::main_hand ? hit_table_white_mh_ : isQueued ? hit_table_white_oh_queued_ : hit_table_white_oh_;
+        auto hit_table = weapon.socket == Socket::main_hand ? hit_table_white_mh_ : is_queued ? hit_table_white_oh_queued_ : hit_table_white_oh_;
 
         const auto& hit_outcome = generate_hit(main_hand_weapon, swing_damage, weapon, hit_table, special_stats, damage_sources);
         if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
