@@ -845,7 +845,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Overpower", config,
                               &Combat_simulator_config::talents_t::overpower, 2);
 
-        if (config.combat.use_slam && is_dual_wield)
+        if (config.combat.use_slam && !is_dual_wield)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Improved Slam", config,
                                   &Combat_simulator_config::talents_t::improved_slam, 2);
@@ -875,7 +875,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         compute_talent_weight(simulator_talent, character, talents_info, "Endless Rage", config,
                               &Combat_simulator_config::talents_t::endless_rage);
 
-        if (!is_dual_wield)
+        if (is_dual_wield)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Dual Wield Specialization", config,
                                   &Combat_simulator_config::talents_t::dual_wield_specialization, 5);
@@ -957,15 +957,14 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             if (is_dual_wield)
             {
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  cumulative_simulations, simulator, dps_mean, dps_sample_std, Weapon_socket::two_hand);
+                                  cumulative_simulations, simulator, dps_mean, dps_sample_std, Weapon_socket::main_hand);
+                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
+                                  cumulative_simulations, simulator, dps_mean, dps_sample_std, Weapon_socket::off_hand);
             }
             else
             {
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  cumulative_simulations, simulator, dps_mean, dps_sample_std,
-                                  Weapon_socket::main_hand);
-                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  cumulative_simulations, simulator, dps_mean, dps_sample_std, Weapon_socket::off_hand);
+                                  cumulative_simulations, simulator, dps_mean, dps_sample_std, Weapon_socket::two_hand);
             }
         }
         item_strengths_string += "<br><br>";
@@ -1081,7 +1080,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                                           std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
                                           std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
             }
-            if (stat_weight == "oh_speed" && !is_dual_wield)
+            if (stat_weight == "oh_speed" && is_dual_wield)
             {
                 Character char_plus = character;
                 Character char_minus = character;
