@@ -610,7 +610,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     extra_info_string +=
         String_helpers::percent_to_str("Chance to occur", white_mh_ht.glance(), "(based on level difference)");
     extra_info_string +=
-        String_helpers::percent_to_str("Glancing damage", white_mh_ht.glancing_penalty(), "(based on level difference)");
+        String_helpers::percent_to_str("Glancing damage", 100 * white_mh_ht.glancing_penalty(), "(based on level difference)");
     extra_info_string += "<b>Other:</b><br/>";
     extra_info_string += String_helpers::percent_to_str("Main-hand dodge chance", yellow_mh_ht.dodge(), "(based on level difference and expertise)");
     if (is_dual_wield)
