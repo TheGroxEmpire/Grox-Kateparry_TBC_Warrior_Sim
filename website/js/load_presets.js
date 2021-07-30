@@ -127,7 +127,7 @@ function load_p1armsbis() {
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "off_hand", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
-    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+8 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
+    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+4 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
     "+8 crit", "+4 crit_+4_str", "boots_gem3_dd",  "main_hand_gem1_dd", "main_hand_gem2_dd", "main_hand_gem3_dd", "off_hand_gem1_dd", "off_hand_gem2_dd", "off_hand_gem3_dd", 
     "ranged_gem1_dd", "ranged_gem2_dd", "ranged_gem3_dd"];
     select_prebis(selected_items, selected_weapons, selected_enchants, selected_gems);
@@ -146,7 +146,7 @@ function load_p1furybis() {
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
-    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+8 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
+    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+4 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
     "+8 crit", "+4 crit_+4_str", "boots_gem3_dd",  "main_hand_gem1_dd", "main_hand_gem2_dd", "main_hand_gem3_dd", "off_hand_gem1_dd", "off_hand_gem2_dd", "off_hand_gem3_dd", 
     "ranged_gem1_dd", "ranged_gem2_dd", "ranged_gem3_dd"];
     select_prebis(selected_items, selected_weapons, selected_enchants, selected_gems);
@@ -197,7 +197,7 @@ function load_p1armsbismult() {
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "off_hand", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
-    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+8 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
+    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+4 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
     "+8 crit", "+4 crit_+4_str", "boots_gem3_dd",  "main_hand_gem1_dd", "main_hand_gem2_dd", "main_hand_gem3_dd", "off_hand_gem1_dd", "off_hand_gem2_dd", "off_hand_gem3_dd", 
     "ranged_gem1_dd", "ranged_gem2_dd", "ranged_gem3_dd"];
     select_prebis_mult(selected_items, selected_weapons, selected_enchants, selected_gems);
@@ -214,7 +214,7 @@ function load_p1furybismult() {
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
-    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+8 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
+    "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+8 crit", "+4 crit", "+4 crit", "+4 crit_+4_str", "wrists_gem3_dd", "+4 crit_+4_str", "+4 crit", "belt_gem3_dd", "+8 crit", "+4 crit_+4_str", "hands_gem3_dd", 
     "+8 crit", "+4 crit_+4_str", "boots_gem3_dd",  "main_hand_gem1_dd", "main_hand_gem2_dd", "main_hand_gem3_dd", "off_hand_gem1_dd", "off_hand_gem2_dd", "off_hand_gem3_dd", 
     "ranged_gem1_dd", "ranged_gem2_dd", "ranged_gem3_dd"];
     select_prebis_mult(selected_items, selected_weapons, selected_enchants, selected_gems);

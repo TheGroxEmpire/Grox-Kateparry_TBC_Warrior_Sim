@@ -130,7 +130,7 @@ struct Armory
                 {"mask_of_the_deceiver", Attributes{0.0, 32.0}, Special_stats{0.0, 1.0145846544071022, 64.0, 0, 0.0}, Socket::head}, 
                 {"cowl_of_beastly_rage", Attributes{29.0, 26.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::head}, 
                 {"warbringer_battle-helm", Attributes{45.0, 0.0}, Special_stats{1.0869565217391306, 0.8877615726062144, 0.0, 0, 0.0}, Socket::head, Set::warbringer},
-                {"wastewalker_helm", Attributes{0.0, 0.0}, Special_stats{0.996376811594203, 1.14140773620799, 56.0, 0, 0.0}, Socket::head}, 
+                {"wastewalker_helm", Attributes{0.0, 0.0}, Special_stats{0.996376811594203, 1.14140773620799, 56.0, 0, 0.0}, Socket::head, Set::wastewalker}, 
                 {"helm_of_the_claw", Attributes{0.0, 25.0}, Special_stats{0.0, 0.8877615726062144, 66.0, 0, 0.0}, Socket::head}, 
                 {"helm_of_assassination", Attributes{0.0, 0.0}, Special_stats{1.1322463768115942, 0.0, 66.0, 0, 0.0}, Socket::head}, 
                 {"gladiators_plate_helm", Attributes{30.0, 0.0}, Special_stats{1.2681159420289856, 0.0, 0.0, 0, 0.0}, Socket::head}, 
@@ -191,7 +191,7 @@ struct Armory
                 {"warbringer_shoulderplates", Attributes{32.0, 22.0}, Special_stats{0.0, 0.8243500317057705, 0.0, 0, 0.0}, Socket::shoulder, Set::warbringer}, 
                 {"gladiators_plate_shoulders", Attributes{22.0, 0.0}, Special_stats{1.0416666666666667, 0.0, 0.0, 0, 0.0}, Socket::shoulder}, 
                 {"mantle_of_perenolde", Attributes{0.0, 0.0}, Special_stats{1.0416666666666667, 1.4584654407102093, 20.0, 0, 0.0}, Socket::shoulder}, 
-                {"wastewalker_shoulderpads", Attributes{0.0, 25.0}, Special_stats{0.0, 1.0145846544071022, 34.0, 0, 0.0}, Socket::shoulder}, 
+                {"wastewalker_shoulderpads", Attributes{0.0, 25.0}, Special_stats{0.0, 1.0145846544071022, 34.0, 0, 0.0}, Socket::shoulder, Set::wastewalker}, 
                 {"expedition_scouts_epaulets", Attributes{0.0, 25.0}, Special_stats{0.0, 1.5218769816106532, 50.0, 0, 0.0}, Socket::shoulder}, 
                 {"talbuk_hide_shoulders", Attributes{0.0, 20.0}, Special_stats{0.0, 0.9511731135066582, 70.0, 0, 0.0}, Socket::shoulder}, 
                 {"spaulders_of_slaughter", Attributes{30.0, 0.0}, Special_stats{1.2228260869565217, 0.0, 0.0, 0, 0.0}, Socket::shoulder}, 
@@ -443,7 +443,7 @@ struct Armory
 
     std::vector<Armor> trinket_t
             {
-                {"dragonspine_trophy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 40.0, 0, 0.0}, Socket::trinket, Set::none, {{"dragonspine_trophy", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .206}, 0, 10, 20, 0, 0, 1, 0, 0, 2}}}, 
+                {"dragonspine_trophy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 40.0, 0, 0.0}, Socket::trinket, Set::none, {{"dragonspine_trophy", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .206}, 0, 10, 20, 0, 0, 1, 0, 0, 1}}}, 
                 {"bloodlust_brooch", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 72.0, 0, 0.0}, Socket::trinket, Set::none, {}, {{"bloodlust_brooch", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 278}, 0, 20, 120, true}}}, 
                 {"hourglass_of_the_unraveller", Attributes{0.0, 0.0}, Special_stats{1.4492753623188408, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::none, {{"hourglass_of_the_unraveller", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 300}, 0, 10, 45, .1}}}, 
                 {"abacus_of_violent_odds", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 64.0, 0, 0.0}, Socket::trinket, Set::none, {}, {{"abacus_of_violent_odds", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 0, 0, .16}, 0, 10, 120, true}}}, 
