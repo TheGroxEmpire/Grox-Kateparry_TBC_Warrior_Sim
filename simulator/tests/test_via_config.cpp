@@ -126,26 +126,30 @@ TEST_F(Sim_fixture, test_via_config)
     {
         std::cout << ds << std::endl;
     }
+    std::cout << std::endl;
 
     std::cout << "aura_uptimes" << std::endl;
     for (const auto& s : sim_output.aura_uptimes)
     {
         std::cout << s << std::endl;
     }
+    std::cout << std::endl;
 
     std::cout << "mean_dps" << std::endl;
     for (const auto& v : sim_output.mean_dps)
     {
         std::cout << v << std::endl;
     }
+    std::cout << std::endl;
 
     std::cout << "std_dps" << std::endl;
     for (const auto& v : sim_output.std_dps)
     {
         std::cout << v << std::endl;
     }
+    std::cout << std::endl;
 
-    std::cout << "" << std::endl;
+    std::cout << "stat_weights" << std::endl;
     for (const auto& v : sim_output.stat_weights)
     {
         std::cout << v << std::endl;
