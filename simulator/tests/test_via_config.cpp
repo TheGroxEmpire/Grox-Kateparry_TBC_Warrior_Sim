@@ -5,6 +5,8 @@
 
 #include <fstream>
 #include <regex>
+#include <chrono>
+#include <filesystem>
 
 TEST_F(Sim_fixture, test_via_config)
 {

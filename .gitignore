@@ -4,3 +4,4 @@ node_modules
 *.cpp.o
 website/emscripten/
 .vscode/settings.json
+/build

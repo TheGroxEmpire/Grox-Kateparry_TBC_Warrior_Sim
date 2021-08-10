@@ -4,6 +4,8 @@
 #include "Statistics.hpp"
 #include "simulation_fixture.cpp"
 
+#include <chrono>
+
 TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
 {
     config.talents.flurry = 5;
