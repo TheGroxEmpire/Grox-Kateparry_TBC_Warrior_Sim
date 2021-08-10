@@ -1,0 +1,630 @@
+helmet_dd warbringer_battle-helm
+neck_dd choker_of_vile_intent
+shoulder_dd warbringer_shoulderplates
+back_dd vengeance_wrap
+chest_dd warbringer_breastplate
+wrists_dd bladespire_warbands
+hands_dd gauntlets_of_martial_perfection
+belt_dd girdle_of_the_endless_pit
+legs_dd skulkers_greaves
+boots_dd ironstriders_of_urgency
+ring1_dd ring_of_a_thousand_marks
+ring2_dd shapeshifters_signet
+trinket1_dd bloodlust_brooch
+trinket2_dd dragonspine_trophy
+ranged_dd mamas_insurance
+main_hand_dd dragonmaw
+off_hand_dd spiteblade
+two_hand_dd none
+beast_lord_helm false
+cobrascale_hood false
+conquerors_crown false
+cowl_of_beastly_rage false
+cowl_of_defiance false
+doomplate_warhelm false
+earthwardens_coif false
+exorcists_leather_helm false
+exorcists_linked_helm false
+exorcists_plate_helm false
+exorcists_scaled_helm false
+gladiators_plate_helm false
+gnomish_battle_goggles false
+grand_marshal_plate_helm false
+helm_of_assassination false
+helm_of_desolation false
+helm_of_endless_rage false
+helm_of_the_claw false
+hope_bearer_helm false
+lionheart_helm false
+malefic_mask_of_the_shadows false
+mask_of_the_deceiver false
+mask_of_veiled_death false
+maulgars_warhelm false
+moonglade_cowl false
+overlords_helmet_of_second_sight false
+ragesteel_helm false
+stalkers_helmet_of_second_sight false
+stealthers_helmet_of_second_sight false
+thundering_greathelm false
+warbringer_battle-helm false
+warbringer_greathelm false
+warhelm_of_the_bold false
+warpstalker_helm false
+wastewalker_helm false
+adamantite_chain_of_the_unbroken false
+blood_guards_necklace_of_ferocity false
+bone_chain_necklace false
+choker_of_vile_intent false
+haramads_bargain false
+insignia_of_the_maghari_hero false
+mithril_chain_of_heroism false
+natashas_choker false
+necklace_of_trophies false
+saberclaw_talisman false
+stormrages_talisman_of_seething false
+the_savages_choker false
+traitors_noose false
+veterans_pendant_of_triumph false
+worgen_claw_necklace false
+bladed_shoulderpads_of_the_merciless false
+conquerors_spaulders false
+doomplate_shoulderguards false
+expedition_scouts_epaulets false
+gladiators_plate_shoulders false
+high_warlord_plate_shoulders false
+mantle_of_perenolde false
+ragesteel_shoulders false
+ripfiend_shoulderplates false
+shoulderpads_of_assassination false
+spaulders_of_slaughter false
+talbuk_hide_shoulders false
+warbringer_shoulderplates false
+wastewalker_shoulderpads false
+black_iron_battlecloak false
+blood_knight_war_cloak false
+capacitus_cloak_of_calibration false
+cloak_of_impulsiveness false
+cloak_of_malice false
+cloak_of_the_craft false
+cloak_of_the_fallen_god false
+cloak_of_the_inciter false
+cloak_of_the_pit_stalker false
+consortium_cloak_of_the_quick false
+dawnstrikes_cloak false
+delicate_green_poncho false
+drape_of_the_dark_reavers false
+farstrider_wildercloak false
+netherfury_cape false
+nomads_woven_cloak false
+royal_cloak_of_arathi_kings false
+sergeants_heavy_cloak false
+shroud_of_dominion false
+shroud_of_frenzy false
+vengeance_wrap false
+blackened_chestplate false
+breastplate_of_kings false
+bulwark_of_kings false
+chestguard_of_exile false
+chestguard_of_no_remorse false
+chestguard_of_the_conniver false
+chestguard_of_the_dark_stalker false
+chestplate_of_adal false
+crimsonforge_breastplate false
+doomplate_chestguard false
+durotans_battle_harness false
+ebon_netherscale_breastplate false
+ghoul_skin_tunic false
+gladiators_plate_chestpiece false
+high_warlords_plate_chestpiece false
+maghari_scouts_tunic false
+nether_chain_shirt false
+plated_abomination_ribcage false
+primalstrike_vest false
+ragesteel_breastplate false
+terrorweave_tunic false
+the_exarchs_protector false
+tunic_of_assassination false
+twisting_nether_chain_shirt false
+vest_of_vengeance false
+warbringer_breastplate false
+wastewalker_tunic false
+aged_leather_bindings false
+amber_bands_of_the_aggressor false
+armwraps_of_disdain false
+bands_of_syth false
+black_felsteel_bracers false
+bladespire_warbands false
+bracers_of_maliciousness false
+demolishers_bracers false
+ebon_netherscale_bracers false
+felstalker_bracers false
+hive_defiler_wristguards false
+marshals_leather_bracers false
+marshals_linked_bracers false
+marshals_plate_bracers false
+marshals_scaled_bracers false
+nightfall_wristguards false
+nightstalkers_wristguards false
+primalstrike_bracers false
+spymistress_wristguards false
+stalkers_war_bands false
+wristguards_of_vengeance false
+cobrascale_gloves false
+deft_handguards false
+doomplate_gauntlets false
+edgemasters_handguards false
+fel_leather_gloves false
+felfury_gauntlets false
+fists_of_the_unrelenting false
+flesh_handlers_gauntlets false
+gauntlets_of_annihilation false
+gauntlets_of_cruel_intention false
+gauntlets_of_martial_perfection false
+gauntlets_of_the_dragonslayer false
+gauntlets_of_the_skullsplitter false
+gauntlets_of_the_vanquisher false
+gladiators_plate_gauntlets false
+gloves_of_dexterous_manipulation false
+gloves_of_enforcement false
+gloves_of_quickening false
+gloves_of_the_unbound false
+grips_of_deftness false
+handgrips_of_assassination false
+high_warlords_plate_gauntlets false
+ironblade_gauntlets false
+liars_tongue_gloves false
+ogre_defilers_handguards false
+predatory_gloves false
+ragesteel_gloves false
+warbringer_gauntlets false
+wastewalker_gloves false
+windstrike_gloves false
+belt_of_never_ending_agony false
+belt_of_the_raven_lord false
+deathforge_girdle false
+dunewind_sash false
+ebon_netherscale_belt false
+evas_strap false
+felstalker_belt false
+girdle_of_ferocity false
+girdle_of_gallantry false
+girdle_of_siege false
+girdle_of_the_deathdealer false
+girdle_of_the_endless_pit false
+girdle_of_the_mentor false
+girdle_of_the_prowler false
+girdle_of_treachery false
+gronn_stitched_girdle false
+liars_cord false
+marshals_linked_girdle false
+marshals_plate_belt false
+marshals_scaled_belt false
+muscle_toning_belt false
+onslaught_girdle false
+primalstrike_belt false
+rubium_war_girdle false
+rune_engraded_belt false
+shattraths_champion_belt false
+socrethars_girdle false
+terror_pit_girdle false
+bloodlord_legplates false
+clefthoof_hide_leggings false
+doomplate_legguards false
+elekk_hide_leggings false
+fel_leather_leggings false
+forestwalker_kilt false
+gladiators_plate_legguards false
+greaves_of_the_iron_guardian false
+high_warlords_plate_legguards false
+inklings_leggings false
+leggings_of_apocalypse false
+leggings_of_assassination false
+legguards_of_the_shattered_hand false
+legplates_of_carnage false
+maghari_huntsmans_leggings false
+maghari_warlords_legplates false
+mennus_scaled_leggings false
+midnight_legguards false
+midrealm_leggings false
+oilcloth_breeches false
+retainers_leggings false
+rip_flayer_leggings false
+scaled_greaves_of_the_marksman false
+shattrath_leggings false
+skulkers_greaves false
+titanic_leggings false
+vanquishers_legplates false
+warbringer_greaves false
+wastewalker_leggings false
+wyrmscale_greaves false
+boots_of_the_shadow_flame false
+boots_of_the_shifting_sands false
+boots_of_the_unjust false
+chromatic_boots false
+clocktocks_jumpers false
+eaglecrest_warboots false
+edgewalker_longboots false
+farahlite_studded_boots false
+fel_leather_boots false
+felboar_hide_shoes false
+feroucious_swift_kickers false
+fiend_slayer_boots false
+generals_plate_greaves false
+generals_scaled_greaves false
+ironstriders_of_urgency false
+obsidian_clodstompers false
+rapscallion_boots false
+shatari_wrought_greaves false
+the_masters_treads false
+vortex_walking_boots false
+zierhuts_lost_treads false
+acrobats_mark_of_the_shatar false
+adals_command false
+aggressors_mark_of_the_shatar false
+band_of_anguish false
+band_of_reanimation false
+band_of_the_exorcist false
+band_of_unnatural_forces false
+band_of_ursol false
+garonas_signet_ring false
+kaylaans_signet false
+master_dragonslayers_ring false
+mithril_band_of_the_unscarred false
+overseers_signet false
+protectorate_assassins_ring false
+quick_strike_ring false
+ravenclaw_band false
+reaverss_ring false
+ring_of_a_thousand_marks false
+ring_of_arathi_warlords false
+ring_of_reciprocity false
+ring_of_the_recalcitrant false
+ring_of_the_shadow_deeps false
+ring_of_umbral_doom false
+shaffars_band_of_brutality false
+shapeshifters_signet false
+slayers_mark_of_the_redemption false
+violet_signet_of_the_master_assassin false
+weathered_band_of_the_swamplord false
+abacus_of_violent_odds false
+ancient_draenei_war_talisman false
+badge_of_the_swarmguard false
+bladefists_breadth false
+bloodlust_brooch false
+core_of_arkelos false
+dragonspine_trophy false
+drake_fang_talisman false
+fetish_of_the_fallen false
+figurine_felsteel_boar false
+figurine_nightseye_panther false
+hourglass_of_the_unraveller false
+icon_of_unyeilding_courage false
+kiss_of_the_spider false
+mark_of_the_champion false
+ogre_maulers_badge false
+romulos_poison_vial false
+slayers_crest false
+terokkar_tablet_of_precision false
+barrel_blade_longrifle false
+emberhawk_crossbow false
+felsteel_whisper_knives false
+gladiators_war_edge false
+hemets_elekk_gun false
+larvae_of_the_great_worm false
+mamas_insurance false
+marksmans_bow false
+nerubian_slavemaker false
+steelhawk_crossbow false
+sunfury_bow_of_the_phoenix false
+telescropic_sharprifle false
+wolfslayer_sniper_rifle false
+wrathfire_hand_cannon false
+wrathtide_longbow false
+xavian_stiletto false
+none false
+blinkstrike false
+edge_of_the_cosmos false
+felsteel_longblade false
+gladiators_quickblade false
+gladiators_slicer false
+gressil_dawn_of_ruin false
+high_warlords_quickblade false
+high_warlords_slicer false
+hope_ender false
+kings_defender false
+latros_shifting_sword false
+phosphorescent_blade false
+spiteblade false
+the_hungering_cold false
+the_sun_eater false
+vindicators_brand false
+none false
+black_planar_edge false
+bogreaver false
+fel_edged_battleaxe false
+firebrand_battleaxe false
+gladiators_cleaver false
+high_warlords_cleaver false
+high_warlords_hacker false
+the_decapitator false
+the_harvester_of_souls false
+the_planar_edge false
+warbringer false
+none false
+guile_of_khoraazi false
+malchazeen false
+retainers_blade false
+the_night_blade false
+none false
+blackout_truncheon false
+bloodskull_destroyer false
+dragonmaw false
+drakefist_hammer false
+fools_bane false
+runic_hammer false
+terokks_nightmace false
+none false
+big_bad_wolfs_paw false
+claw_of_the_watcher false
+demonblood_eviscerator false
+reflex_blades false
+the_bladefist false
+none false
+bonereavers_edge false
+despair false
+endbringer false
+gladiators_greatsword false
+illidari-bane_claymore false
+illidari-bane_claymore_demons false
+khorium_champion false
+lionheart_blade false
+lionheart_champion false
+lionheart_executioner false
+quantum_blade false
+none false
+apexis_cleaver false
+axe_of_the_gronn_lords false
+blackened_spear false
+bloodmoon false
+crow_wing_reaper false
+crystalforged_war_axe false
+ethereum_nexus_reaver false
+felsteel_reaper false
+gladiators_decapitator false
+glaive_of_the_pit false
+gorehowl false
+hellscreams_will false
+legacy false
+lunar_crescent false
+mooncleaver false
+reaver_of_the_infinites false
+severance false
+singing_crystal_axe false
+sonic_spear false
+terokks_quill false
+trident_of_the_outcast_tribe false
+none false
+deep_thunder false
+might_of_menethil false
+stormherald false
+thunder false
+helmet_ench_dd ferocity
+shoulder_ench_dd naxxramas
+back_ench_dd +12 agility
+chest_ench_dd +6 stats
+wrist_ench_dd +12 strength
+hands_ench_dd +15 strength
+legs_ench_dd nethercobra
+boots_ench_dd cats_swiftness
+main_hand_ench_dd mongoose
+off_hand_ench_dd mongoose
+ring_1_ench_dd ring_1
+ring_2_ench_dd ring_2
+helmet_gem1_dd +8 crit
+helmet_gem2_dd agi critDmg
+helmet_gem3_dd helmet_gem3_dd
+neck_gem1_dd neck_gem1_dd
+neck_gem2_dd neck_gem2_dd
+neck_gem3_dd neck_gem3_dd
+shoulder_gem1_dd +8 crit
+shoulder_gem2_dd +4 crit
+shoulder_gem3_dd shoulder_gem3_dd
+back_gem1_dd +4 crit_+4_str
+back_gem2_dd back_gem2_dd
+back_gem3_dd back_gem3_dd
+chest_gem1_dd +8 crit
+chest_gem2_dd +8 crit
+chest_gem3_dd +8 crit
+legs_gem1_dd +8 crit
+legs_gem2_dd +8 crit
+legs_gem3_dd +4 crit
+wrists_gem1_dd +4 crit
+wrists_gem2_dd +4 crit_+4_str
+wrists_gem3_dd wrists_gem3_dd
+belt_gem1_dd +4 crit_+4_str
+belt_gem2_dd +4 crit
+belt_gem3_dd belt_gem3_dd
+hands_gem1_dd +8 crit
+hands_gem2_dd +4 crit_+4_str
+hands_gem3_dd hands_gem3_dd
+boots_gem1_dd +8 crit
+boots_gem2_dd +4 crit_+4_str
+boots_gem3_dd boots_gem3_dd
+main_hand_gem1_dd main_hand_gem1_dd
+main_hand_gem2_dd main_hand_gem2_dd
+main_hand_gem3_dd main_hand_gem3_dd
+off_hand_gem1_dd off_hand_gem1_dd
+off_hand_gem2_dd off_hand_gem2_dd
+off_hand_gem3_dd off_hand_gem3_dd
+ranged_gem1_dd ranged_gem1_dd
+ranged_gem2_dd ranged_gem2_dd
+ranged_gem3_dd ranged_gem3_dd
+battle_shout battle_shout
+blessing_of_kings blessing_of_kings
+blessing_of_might blessing_of_might
+gift_of_the_wild gift_of_the_wild
+leader_of_the_pack 
+trueshot_aura trueshot_aura
+windfury_totem windfury_totem
+strength_of_earth_totem 
+grace_of_air_totem 
+improved_seal_of_the_crusader 
+blood_frenzy blood_frenzy
+improved_sanctity_aura 
+heroic_presence 
+improved_faerie_fire 
+trueshot_aura trueshot_aura
+elixir_mongoose elixir_mongoose
+blessed_sunfruit 
+roasted_clefthoof roasted_clefthoof
+juju_power 
+elixir_of_giants 
+winterfall_firewater 
+juju_might 
+roids 
+dense_stone_main_hand 
+elemental_stone_main_hand 
+dense_stone_off_hand 
+elemental_stone_off_hand 
+consecrated_sharpening_stone_main_hand 
+consecrated_sharpening_stone_off_hand 
+adamantite_stone_main_hand 
+adamantite_stone_off_hand adamantite_stone_off_hand
+improved_weapon_totems 
+enhancing_totems 
+elixir_of_major_agility 
+elixir_of_mastery_bloodberry_elixir 
+blessed_sunfruit 
+spicy_hot_talbuk 
+grilled_mudfish 
+ravager_dog 
+charred_bear_kabobs 
+elixir_of_major_strength 
+elixir_of_brute_force 
+fel_strength_elixir 
+onslaught_elixir 
+elixir_of_demonslaying 
+flask_of_relentless_assault 
+unstable_flask_of_the_bandit 
+unstable_flask_of_the_beast 
+unstable_flask_of_the_soldier 
+scroll_of_strength_v 
+scroll_of_agility_v 
+n_simulations_dd 50000
+n_simulations_stat_dd 20000
+n_simulations_talent_dd 5000
+opponent_level_dd 73
+boss_armor_dd 7700
+fight_time_dd 60
+sunder_armor_dd 5
+heroic_strike_rage_thresh_dd 70
+cleave_rage_thresh_dd 50
+whirlwind_rage_thresh_dd 0
+bt_whirlwind_cooldown_thresh_dd 0
+whirlwind_bt_cooldown_thresh_dd 0
+overpower_rage_thresh_dd 50
+overpower_bt_cooldown_thresh_dd 3
+overpower_ww_cooldown_thresh_dd 3
+hamstring_cd_thresh_dd 2
+initial_rage_dd 0
+hamstring_thresh_dd 70
+max_optimize_time_dd 90
+number_of_extra_targets_dd 2
+extra_target_armor_dd 7000
+extra_target_level_dd 70
+periodic_damage_interval_dd 2
+periodic_damage_amount_dd 300
+execute_phase_percentage_dd 15
+re_queue_abilities_dd 70
+stat_weight_mh_speed_dd 0.5
+stat_weight_oh_speed_dd 0.5
+slam_spam_max_time_dd 1.5
+slam_latency_dd 0
+slam_spam_rage_dd 100
+slam_rage_dd 15
+berserking_haste_dd 10
+full_polarity_dd 190
+extra_target_duration_dd 100
+battle_squawk_dd 5
+rampage_use_thresh_dd 5
+ferocious_inspiration_dd 3
+unleashed_rage_dd 5
+improved_heroic_strike_talent 3
+deflection_talent 2
+improved_rend_talent 0
+improved_charge_talent 0
+iron_will_talent 3
+improved_thunder_clap_talent 3
+improved_overpower_talent 0
+anger_management_talent 1
+deep_wounds_talent 3
+two_handed_weapon_specialization_talent 0
+impale_talent 2
+poleaxe_specialization_talent 0
+death_wish_talent 0
+mace_specialization_talent 0
+sword_specialization_talent 0
+improved_intercept_talent 0
+improved_hamstring_talent 0
+improved_disciplines_talent 0
+blood_frenzy_talent 0
+mortal_strike_talent 0
+second_wind_talent 0
+improved_mortal_strike_talent 0
+endless_rage_talent 0
+booming_voice_talent 0
+cruelty_talent 5
+improved_demoralizing_shout_talent 0
+unbridled_wrath_talent 5
+improved_cleave_talent 0
+peircing_howl_talent 0
+blood_craze_talent 0
+commanding_presence_talent 5
+dual_wield_specialization_talent 5
+improved_execute_talent 0
+enrage_talent 5
+improved_slam_talent 0
+sweeping_strikes_talent 1
+weapon_mastery_talent 2
+improved_berserker_rage_talent 0
+flurry_talent 5
+precision_talent 3
+bloodthirst_talent 1
+improved_whirlwind_talent 1
+improved_berserker_stance_talent 5
+rampage_talent 1
+improved_bloodrage_talent 0
+tactical_mastery_talent 0
+anticipation_talent 0
+shield_specialization_talent 0
+toughness_talent 0
+last_stand_talent 0
+improved_shield_block_talent 0
+improved_revenge_talent 0
+defiance_talent 0
+improved_sunder_armor_talent 0
+improved_disarm_talent 0
+improved_taunt_talent 0
+improved_shield_wall_talent 0
+concussion_blow_talent 0
+improved_shield_bash_talent 0
+shield_mastery_talent 0
+one_handed_weapon_specialization_talent 0
+improved_defensive_stance_talent 0
+shield_slam_talent 0
+focused_rage_talent 0
+vitality_talent 0
+devastate_talent 0
+faerie_fire faerie_fire
+curse_of_recklessness curse_of_recklessness
+death_wish death_wish
+use_rampage use_rampage
+use_bloodthirst use_bloodthirst
+use_whirlwind use_whirlwind
+use_heroic_strike use_heroic_strike
+deep_wounds deep_wounds
+first_global_sunder first_global_sunder
+use_slam use_slam
+use_mortal_strike use_mortal_strike
+use_sweeping_strikes use_sweeping_strikes
+race_dd human
