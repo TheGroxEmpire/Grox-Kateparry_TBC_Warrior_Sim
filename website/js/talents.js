@@ -165,6 +165,34 @@ function load_talent_standard_arms() {
     calcTotalTalents();
 }
 
+function load_talent_dual_wield_arms() {
+    load_talent_clear();
+    document.getElementById("improved_heroic_strike_talent").setAttribute("data-count", "3");
+    document.getElementById("deflection_talent").setAttribute("data-count", "4");
+    document.getElementById("iron_will_talent").setAttribute("data-count", "5");
+    document.getElementById("improved_thunder_clap_talent").setAttribute("data-count", "3");
+    document.getElementById("anger_management_talent").setAttribute("data-count", "1");
+    document.getElementById("deep_wounds_talent").setAttribute("data-count", "3");
+    document.getElementById("impale_talent").setAttribute("data-count", "2");
+    document.getElementById("sword_specialization_talent").setAttribute("data-count", "5");
+    document.getElementById("death_wish_talent").setAttribute("data-count", "1");
+    document.getElementById("improved_disciplines_talent").setAttribute("data-count", "3");
+    document.getElementById("death_wish_talent").setAttribute("data-count", "1");
+    document.getElementById("blood_frenzy_talent").setAttribute("data-count", "2");
+    document.getElementById("mortal_strike_talent").setAttribute("data-count", "1");
+    document.getElementById("cruelty_talent").setAttribute("data-count", "5");
+    document.getElementById("unbridled_wrath_talent").setAttribute("data-count", "5");
+    document.getElementById("commanding_presence_talent").setAttribute("data-count", "5");
+    document.getElementById("dual_wield_specialization_talent").setAttribute("data-count", "2");
+    document.getElementById("weapon_mastery_talent").setAttribute("data-count", "2");
+    document.getElementById("enrage_talent").setAttribute("data-count", "5");
+    document.getElementById("sweeping_strikes_talent").setAttribute("data-count", "1");
+    document.getElementById("flurry_talent").setAttribute("data-count", "3");
+
+    displayTalentBootup();
+    calcTotalTalents();
+}
+
 function recursiveChildCall(node, n_talent_points) {
     for (let i = 0; i < node.childNodes.length; i++) {
         let child = node.childNodes[i];
