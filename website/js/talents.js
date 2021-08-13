@@ -168,7 +168,7 @@ function load_talent_standard_arms() {
 function load_talent_dual_wield_arms() {
     load_talent_clear();
     document.getElementById("improved_heroic_strike_talent").setAttribute("data-count", "3");
-    document.getElementById("deflection_talent").setAttribute("data-count", "4");
+    document.getElementById("deflection_talent").setAttribute("data-count", "3");
     document.getElementById("iron_will_talent").setAttribute("data-count", "5");
     document.getElementById("improved_thunder_clap_talent").setAttribute("data-count", "3");
     document.getElementById("anger_management_talent").setAttribute("data-count", "1");
@@ -178,6 +178,7 @@ function load_talent_dual_wield_arms() {
     document.getElementById("death_wish_talent").setAttribute("data-count", "1");
     document.getElementById("improved_disciplines_talent").setAttribute("data-count", "3");
     document.getElementById("death_wish_talent").setAttribute("data-count", "1");
+    document.getElementById("improved_intercept_talent").setAttribute("data-count", "1");
     document.getElementById("blood_frenzy_talent").setAttribute("data-count", "2");
     document.getElementById("mortal_strike_talent").setAttribute("data-count", "1");
     document.getElementById("cruelty_talent").setAttribute("data-count", "5");
