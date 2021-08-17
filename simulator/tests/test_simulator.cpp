@@ -666,91 +666,7 @@ void print_results(const std::string name, const Combat_simulator& sim, bool pri
 
 /*
 >> results on master:
-
-took 6994 ms
-
-white (mh)    = 282.709
-mortal strike = 83.4979
-whirlwind     = 43.0987
-slam          = 286.997
-heroic strike = 0.981576
-deep wounds   = 48.7078
-----------------------
-total         = 768.312 / 770.882
-rage lost 12012.1
-
->> after heroic strike fix & rampage/overpower changes:
-
-took 6163 ms
-
-white (mh)    = 282.746
-mortal strike = 83.5375
-whirlwind     = 43.15
-slam          = 287.001
-heroic strike = 0.961978
-deep wounds   = 48.7231
-----------------------
-total         = 768.415 / 770.985
-rage lost 12138.6
-
->> after over_time_buff / deep wound changes:
-
-took 5492 ms
-
-white (mh)    = 282.709 (15.7341x)
-slam          = 286.883 (14.0663x)
-mortal strike = 83.4875 (4.18832x)
-whirlwind     = 43.1253 (2.55086x)
-deep wounds   = 42.0281 (13.3422x)
-execute       = 22.3852 (1.22389x)
-heroic strike = 0.964171 (0.04656x)
-----------------------
-total         = 761.583 / 764.131
-rage lost 11748
-
->> after sim_time changes (new format)
-
-took 3884 ms
-
-white (mh)    = 283.65 (15.79x)
-slam          = 287.80 (14.11x)
-mortal strike = 83.80 (4.20x)
-whirlwind     = 43.22 (2.56x)
-deep wounds   = 42.16 (13.38x)
-execute       = 22.49 (1.23x)
-heroic strike = 0.97 (0.05x)
-----------------------
-total         = 764.08
-
-rage lost 0.10 per minute
-
-Deep_wounds 88.15%
-Anger Management 100.00%
-
->> after haste and attack speed split
-
-took 2157 ms
-
-white (mh)    = 283.57 (15.78x)
-slam          = 287.85 (14.12x)
-mortal strike = 83.64 (4.19x)
-whirlwind     = 43.19 (2.55x)
-deep wounds   = 42.16 (13.38x)
-execute       = 22.60 (1.24x)
-heroic strike = 1.04 (0.05x)
-----------------------
-total         = 764.05
-
-rage lost 0.09 per minute
-
-Deep_wounds 88.15%
-Anger Management 100.00%
-
-after slam bugfix
-
-took 1860 ms
-
-test_arms
+took 2052 ms
 
 white (mh)    = 282.19 (15.71x)
 mortal strike = 83.10 (4.17x)
@@ -762,8 +678,8 @@ deep wounds   = 42.59 (13.52x)
 ----------------------
 total         = 761.00
 
-deep_wound 88.14%
-anger_management 100.00%
+>> results on cleanup:
+took 1953 ms
 */
 TEST_F(Sim_fixture, test_arms)
 {
@@ -813,71 +729,6 @@ TEST_F(Sim_fixture, test_arms)
 
 /*
 >>> results on master:
-
-took 9671 ms
-
-white (mh)    = 212.512
-white (oh)    = 173.113
-heroic strike = 98.4273
-bloodthirst   = 166.721
-whirlwind     = 99.9492
-execute       = 83.4121
-deep wounds   = 38.2024
-----------------------
-total         = 872.337 / 875.255
-rage lost 8648.78
-
->>> after heroic strike fix & rampage/overpower changes:
-
-took 9223 ms
-
-white (mh)    = 212.676
-white (oh)    = 172.942
-heroic strike = 95.3933
-bloodthirst   = 166.764
-whirlwind     = 100.027
-execute       = 83.2502
-deep wounds   = 38.1973
-----------------------
-total         = 869.249 / 872.157
-rage lost 8478.46
-
->>> after over_time_buffs / deep wound changes:
-
-took 8160 ms
-
-white (mh)    = 212.649 (21.3161x)
-white (oh)    = 172.938 (28.3863x)
-bloodthirst   = 166.533 (8.36789x)
-whirlwind     = 99.9227 (5.24548x)
-heroic strike = 95.4492 (6.11997x)
-execute       = 83.3244 (4.31656x)
-deep wounds   = 19.9497 (9.8517x)
-----------------------
-total         = 850.766 / 853.611
-rage lost 8702.61
-
->>> after sim_time changes (new format)
-
-took 5846 ms
-
-white (mh)    = 213.40 (21.40x)
-white (oh)    = 173.72 (28.48x)
-bloodthirst   = 167.18 (8.39x)
-whirlwind     = 100.28 (5.26x)
-heroic strike = 95.51 (6.13x)
-execute       = 84.09 (4.35x)
-deep wounds   = 20.01 (9.88x)
-----------------------
-total         = 854.19
-
-rage lost 0.07 per minute
-
-Deep_wounds 98.31%
-Anger Management 100.00%
-
->>> after haste/attack speed split
-
 took 3433 ms
 
 white (mh)    = 213.53 (21.40x)
@@ -890,10 +741,8 @@ deep wounds   = 20.00 (9.88x)
 ----------------------
 total         = 854.86
 
-rage lost 0.07 per minute
-
-Deep_wounds 98.31%
-Anger Management 100.00%
+>>> results on cleanup:
+took 3024 ms
 */
 TEST_F(Sim_fixture, test_fury)
 {
@@ -952,66 +801,7 @@ TEST_F(Sim_fixture, test_fury)
 }
 
 /*
->>> baseline, after deep wound fixes
-
-took 14558 ms
-
-white (mh)    = 277.576 (25.2471x)
-white (oh)    = 200.944 (29.9224x)
-bloodthirst   = 189.134 (8.5567x)
-whirlwind     = 106.055 (5.17051x)
-heroic strike = 164.315 (9.8308x)
-execute       = 97.9637 (4.66646x)
-deep wounds   = 18.6281 (8.6935x)
-----------------------
-total         = 1054.62 / 1058.14
-rage lost 576971
-
->>> after lazy add and other perf work
-
-took 8139 ms
-
-white (mh)    = 277.931 (25.263x)
-white (oh)    = 201.414 (29.951x)
-bloodthirst   = 189.787 (8.56638x)
-whirlwind     = 106.299 (5.17456x)
-heroic strike = 164.903 (9.85761x)
-execute       = 98.0892 (4.67223x)
-deep wounds   = 18.5604 (8.66152x)
-----------------------
-total         = 1056.98 / 1060.52
-rage lost 584443
-
->>> more perf work, sim_time update, new layout
-
-took 7802 ms
-
-white (mh)    = 278.81 (25.35x)
-white (oh)    = 202.05 (30.05x)
-bloodthirst   = 190.20 (8.59x)
-whirlwind     = 106.61 (5.19x)
-heroic strike = 165.30 (9.88x)
-execute       = 98.79 (4.70x)
-deep wounds   = 18.61 (8.69x)
-----------------------
-total         = 1060.36
-
-rage lost 4.64 per minute
-
-Deep_wounds 98.85%
-Anger Management 100.00%
-mongoose_oh 25.62%
-mongoose_mh 38.86%
-dragonmaw 28.01%
-
-dragonmaw 2.02 procs/min
-mongoose_mh 2.03 procs/min
-windfury_totem 4.82 procs/min
-mongoose_oh 1.20 procs/min
-sword_specialization 1.38 procs/min
-
->>> after haste/attack speed split, and other stuff ;)
-
+>>> master
 took 5167 ms
 
 white (mh)    = 276.48 (25.16x)
@@ -1024,20 +814,8 @@ deep wounds   = 18.83 (8.71x)
 ----------------------
 total         = 1058.50
 
-rage lost 4.54 per minute
-
-Anger Management 100.00%
-windfury_attack 2.50%
-mongoose_oh 25.53%
-Deep_wounds 98.84%
-mongoose_mh 38.64%
-dragonmaw 27.90%
-
-dragonmaw 2.01 procs/min
-mongoose_mh 2.01 procs/min
-windfury_totem 8.95 procs/min
-mongoose_oh 1.19 procs/min
-sword_specialization 1.38 procs/min
+>>> cleanup
+took 4586 ms
 */
 TEST_F(Sim_fixture, test_procs)
 {
@@ -1050,7 +828,7 @@ TEST_F(Sim_fixture, test_procs)
     executioner.special_stats_boost.gear_armor_pen = 840;
 
     Special_stats mongoose_buff;
-    mongoose_buff.attack_speed = 0.02;
+    mongoose_buff.haste = 0.02;
 
     auto doomplate_4pc = Hit_effect{"doomplate_4pc", Hit_effect::Type::stat_boost, {}, {0, 0, 160}, 0, 15, 0, 0.02, 0, 0, 1, 0};
 
@@ -1062,7 +840,7 @@ TEST_F(Sim_fixture, test_procs)
     character.buffs.emplace_back(armory.buffs.haste_potion);
     character.buffs.emplace_back(armory.buffs.bloodlust);
 
-    armory.compute_total_stats(character);
+    //armory.compute_total_stats(character);
 
     auto mh = Weapon{"test_mh", {}, {}, 2.7, 270, 270, Weapon_socket::one_hand, Weapon_type::axe};
     //mh.hit_effects.emplace_back(executioner);
@@ -1089,6 +867,7 @@ TEST_F(Sim_fixture, test_procs)
     character.total_special_stats.expertise = 5;
     character.total_special_stats.axe_expertise = 5;
 
+    /*
     Special_stats mult;
     mult.ap_multiplier = 0.1;
     character.total_special_stats += mult;
@@ -1099,6 +878,7 @@ TEST_F(Sim_fixture, test_procs)
     config.enable_bloodrage = true;
     config.enable_blood_fury = true;
     config.enable_unleashed_rage = true;
+    */
 
     config.talents.flurry = 5;
     config.talents.rampage = true;
@@ -1135,9 +915,6 @@ TEST_F(Sim_fixture, test_procs)
     config.combat.overpower_rage_thresh = 25;
 
     sim.set_config(config);
-
-    time_simulate(sim, character);
-    print_results(test_info_->name(), sim, true);
 
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);
