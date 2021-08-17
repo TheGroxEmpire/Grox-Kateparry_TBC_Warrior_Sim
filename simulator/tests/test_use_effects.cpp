@@ -16,46 +16,46 @@ bool is_ascending(const Use_effects::Schedule& schedule)
 TEST(TestSuite, test_use_effect_time_function)
 {
     Use_effect use_effect1{};
-    use_effect1.duration = 20;
+    use_effect1.duration = 20000;
     Use_effect use_effect2{};
-    use_effect2.duration = 30;
+    use_effect2.duration = 30000;
     Use_effects::Schedule schedule{};
-    schedule.emplace_back(0.0, use_effect1);
-    double time = Use_effects::is_time_available(schedule, 0.0, use_effect2.duration);
-    EXPECT_TRUE(time == 20.0);
-    time = Use_effects::is_time_available(schedule, 10.0, use_effect2.duration);
-    EXPECT_TRUE(time == 20.0);
-    time = Use_effects::is_time_available(schedule, 20.0, use_effect2.duration);
-    EXPECT_TRUE(time == 20.0);
+    schedule.emplace_back(0, use_effect1);
+    int time = Use_effects::is_time_available(schedule, 0, use_effect2.duration);
+    EXPECT_TRUE(time == 20000);
+    time = Use_effects::is_time_available(schedule, 10000, use_effect2.duration);
+    EXPECT_TRUE(time == 20000);
+    time = Use_effects::is_time_available(schedule, 20000, use_effect2.duration);
+    EXPECT_TRUE(time == 20000);
 
-    schedule.emplace_back(40.0, use_effect1);
-    time = Use_effects::get_next_available_time(schedule, 0.0, use_effect2.duration);
-    EXPECT_TRUE(time == 60.0);
+    schedule.emplace_back(40000, use_effect1);
+    time = Use_effects::get_next_available_time(schedule, 0, use_effect2.duration);
+    EXPECT_TRUE(time == 60000);
 }
 
 TEST(TestSuite, test_use_effect_ordering)
 {
     Use_effect use_effect1{};
     use_effect1.name = "should_not_fit";
-    use_effect1.duration = 30;
-    use_effect1.cooldown = 100;
+    use_effect1.duration = 30000;
+    use_effect1.cooldown = 100000;
     use_effect1.combat_buff.special_stats_boost = {12, 0, 0};
     use_effect1.effect_socket = Use_effect::Effect_socket::shared;
 
     Use_effect use_effect2{};
-    use_effect2.duration = 30;
-    use_effect2.cooldown = 80;
+    use_effect2.duration = 30000;
+    use_effect2.cooldown = 80000;
     use_effect2.combat_buff.special_stats_boost = {12, 0, 40};
     use_effect2.effect_socket = Use_effect::Effect_socket::shared;
 
     Use_effect use_effect3{};
-    use_effect3.duration = 30;
-    use_effect3.cooldown = 80;
+    use_effect3.duration = 30000;
+    use_effect3.cooldown = 80000;
     use_effect3.combat_buff.special_stats_boost = {12, 0, 100};
     use_effect3.effect_socket = Use_effect::Effect_socket::shared;
 
     std::vector<Use_effect> use_effects{use_effect1, use_effect2, use_effect3};
-    auto schedule = Use_effects::compute_schedule(use_effects, Special_stats{}, 580, 1500, 0, 0);
+    auto schedule = Use_effects::compute_schedule(use_effects, Special_stats{}, 580000, 1500);
     for (const auto& effect : schedule)
     {
         EXPECT_TRUE(effect.second.get().name != "should_not_fit");
@@ -80,8 +80,8 @@ TEST(TestSuite, test_use_effects)
     use_effects.emplace_back(use1.use_effects[0]);
     use_effects.emplace_back(use2.use_effects[0]);
     use_effects.emplace_back(use3.use_effects[0]);
-    double sim_time = 320.0;
-    auto schedule = Use_effects::compute_schedule(use_effects, Special_stats{}, sim_time, 1500, 0, 0);
+    int sim_time = 320000;
+    auto schedule = Use_effects::compute_schedule(use_effects, Special_stats{}, sim_time, 1500);
     EXPECT_TRUE(is_ascending(schedule));
     int ic = 0;
     int bk = 0;

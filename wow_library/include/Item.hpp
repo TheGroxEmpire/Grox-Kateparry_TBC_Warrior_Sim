@@ -117,8 +117,8 @@ struct Over_time_effect
         special_stats(special_stats),
         rage_gain(rage_gain),
         damage(damage),
-        interval(interval),
-        duration(duration) {};
+        interval(1000 * interval),
+        duration(1000 * duration) {};
 
     std::string name{};
     Special_stats special_stats{}; // unused (?)
@@ -164,8 +164,8 @@ public:
         attribute_boost(attribute_boost),
         special_stats_boost(special_stats_boost),
         damage(damage),
-        duration(duration),
-        cooldown(cooldown),
+        duration(static_cast<int>(1000 * duration)),
+        cooldown(static_cast<int>(1000 * cooldown)),
         probability(probability),
         attack_power_boost(attack_power_boost), // unused
         max_charges(max_charges),
@@ -203,8 +203,8 @@ public:
     Attributes attribute_boost{};
     Special_stats special_stats_boost{};
     double damage{};
-    double duration{};
-    double cooldown{};
+    int duration{};
+    int cooldown{};
     double probability{};
     double attack_power_boost{}; // unused; was in use for windfury_totem only
     int max_charges{1}; // used to be "n_targets", and unused; now used for charges (for windfury attack or flurry)
@@ -213,7 +213,7 @@ public:
     bool affects_both_weapons{}; // unused
     int max_stacks{1};
 
-    double time_counter{}; // "next_ready", aka cooldown end
+    int time_counter{}; // "next_ready", aka cooldown end
 
     int procs{}; // statistics
 
@@ -242,8 +242,8 @@ public:
         name(name),
         effect_socket(effect_socket),
         rage_boost(rage_boost),
-        duration(duration),
-        cooldown(cooldown),
+        duration(static_cast<int>(1000 * duration)),
+        cooldown(static_cast<int>(1000 * cooldown)),
         triggers_gcd(triggers_gcd),
         hit_effects(std::move(hit_effects)),
         over_time_effects(std::move(over_time_effects)),
@@ -258,8 +258,8 @@ public:
     std::string name{};
     Effect_socket effect_socket{};
     double rage_boost{};
-    double duration{};
-    double cooldown{};
+    int duration{};
+    int cooldown{};
     bool triggers_gcd{};
     std::vector<Hit_effect> hit_effects{};
     std::vector<Over_time_effect> over_time_effects{};

@@ -105,6 +105,7 @@ struct Combat_simulator_config
         double overpower_rage_thresh{};
         double whirlwind_bt_cooldown_thresh{};
         double bt_whirlwind_cooldown_thresh{};
+        double ms_whirlwind_cooldown_thresh{};
         double overpower_bt_cooldown_thresh{};
         double overpower_ww_cooldown_thresh{};
         double heroic_strike_rage_thresh{};
@@ -138,7 +139,6 @@ struct Combat_simulator_config
     struct dpr_t
     {
         bool compute_dpr_sl_{false};
-        bool compute_dpr_sl_no_latency_{false};
         bool compute_dpr_ms_{false};
         bool compute_dpr_bt_{false};
         bool compute_dpr_op_{false};
@@ -244,13 +244,13 @@ public:
 
     struct Slam_manager
     {
-        explicit Slam_manager(double slam_cast_time) : slam_cast_time_(slam_cast_time) { }
+        explicit Slam_manager(int slam_cast_time) : slam_cast_time_(slam_cast_time) { }
 
         [[nodiscard]] bool is_slam_casting() const { return is_casting_; }
 
-        [[nodiscard]] double next_finish() const { return next_finish_; }
+        [[nodiscard]] int next_finish() const { return next_finish_; }
 
-        void cast_slam(double time_stamp)
+        void cast_slam(int time_stamp)
         {
             is_casting_ = true;
             next_finish_ = time_stamp + slam_cast_time_;
@@ -259,19 +259,20 @@ public:
         void finish_slam()
         {
             is_casting_ = false;
-            next_finish_ = std::numeric_limits<double>::max();
+            next_finish_ = std::numeric_limits<int>::max();
         }
 
         [[nodiscard]] bool ready(double current_time) const
         {
-            return next_finish_ < current_time;
+            assert(next_finish_ >= current_time);
+            return next_finish_ == current_time;
         }
 
 
     private:
-        double slam_cast_time_;
+        int slam_cast_time_;
         bool is_casting_{false};
-        double next_finish_{std::numeric_limits<double>::max()};
+        int next_finish_{std::numeric_limits<int>::max()};
     };
 
     struct Hit_outcome
@@ -525,7 +526,7 @@ private:
     Time_keeper time_keeper_{};
     Buff_manager buff_manager_{};
     Ability_queue_manager ability_queue_manager{};
-    Slam_manager slam_manager{1.5};
+    Slam_manager slam_manager{1500};
     double rage{};
 
     Logger logger_{};

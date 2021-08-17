@@ -4,8 +4,7 @@
 
 namespace Use_effects
 {
-double is_time_available(const Schedule& schedule, double check_time,
-                         double duration)
+int is_time_available(const Schedule& schedule, int check_time, int duration)
 {
     for (const auto& pair : schedule)
     {
@@ -21,8 +20,7 @@ double is_time_available(const Schedule& schedule, double check_time,
     return check_time;
 }
 
-double get_next_available_time(const Schedule& schedule, double check_time,
-                               double duration)
+int get_next_available_time(const Schedule& schedule, int check_time, int duration)
 {
     while (true)
     {
@@ -35,10 +33,8 @@ double get_next_available_time(const Schedule& schedule, double check_time,
     }
 }
 
-Schedule compute_schedule(std::vector<Use_effect>& use_effects,
-                          const Special_stats& special_stats, double sim_time,
-                          double total_ap, int number_of_targets,
-                          double extra_target_duration)
+Schedule compute_schedule(std::vector<Use_effect>& use_effects, const Special_stats& special_stats,
+                          int sim_time, double total_ap)
 {
     Schedule schedule;
     std::vector<Use_effect_ref> shared_effects{};
@@ -56,40 +52,34 @@ Schedule compute_schedule(std::vector<Use_effect>& use_effects,
         }
     }
 
-    if (number_of_targets > 0)
-    {
-    }
-    else
-    {
-        auto sorted_shared_use_effects = sort_use_effects_by_power_ascending(shared_effects, special_stats, total_ap);
+    auto sorted_shared_use_effects = sort_use_effects_by_power_ascending(shared_effects, special_stats, total_ap);
 
-        for (auto& use_effect : sorted_shared_use_effects)
+    for (auto& use_effect : sorted_shared_use_effects)
+    {
+        int test_time = 0;
+        for (int i = 0; i < 10; i++)
         {
-            double test_time = 0.0 * extra_target_duration;
-            for (int i = 0; i < 10; i++)
+            test_time = get_next_available_time(schedule, test_time, use_effect.get().duration);
+            if (test_time >= sim_time)
             {
-                test_time = get_next_available_time(schedule, test_time, use_effect.get().duration);
-                if (test_time >= sim_time)
-                {
-                    break;
-                }
-                schedule.emplace_back(test_time, use_effect);
-                test_time += use_effect.get().cooldown;
+                break;
             }
+            schedule.emplace_back(test_time, use_effect);
+            test_time += use_effect.get().cooldown;
         }
+    }
 
-        for (auto& use_effect : unique_effects)
+    for (auto& use_effect : unique_effects)
+    {
+        int test_time = 0;
+        for (int i = 0; i < 10; i++)
         {
-            double test_time = 0.0;
-            for (int i = 0; i < 10; i++)
+            if (test_time >= sim_time)
             {
-                if (test_time >= sim_time)
-                {
-                    break;
-                }
-                schedule.emplace_back(test_time, use_effect);
-                test_time += use_effect.get().cooldown;
+                break;
             }
+            schedule.emplace_back(test_time, use_effect);
+            test_time += use_effect.get().cooldown;
         }
     }
 
@@ -132,10 +122,10 @@ std::vector<Use_effect_ref> sort_use_effects_by_power_ascending(std::vector<Use_
 }
 
 double get_use_effect_ap_equivalent(const Use_effect& use_effect, const Special_stats& special_stats, double total_ap,
-                                    double sim_time)
+                                    int sim_time)
 {
     double ap_during_active = estimate_power(use_effect, special_stats, total_ap);
-    return ap_during_active * std::min(use_effect.duration / sim_time, 1.0);
+    return ap_during_active * std::min(use_effect.duration / static_cast<double>(sim_time), 1.0);
 }
 
 } // namespace Use_effects

@@ -828,7 +828,7 @@ TEST_F(Sim_fixture, test_procs)
     executioner.special_stats_boost.gear_armor_pen = 840;
 
     Special_stats mongoose_buff;
-    mongoose_buff.haste = 0.02;
+    mongoose_buff.attack_speed = 0.02;
 
     auto doomplate_4pc = Hit_effect{"doomplate_4pc", Hit_effect::Type::stat_boost, {}, {0, 0, 160}, 0, 15, 0, 0.02, 0, 0, 1, 0};
 
@@ -840,7 +840,7 @@ TEST_F(Sim_fixture, test_procs)
     character.buffs.emplace_back(armory.buffs.haste_potion);
     character.buffs.emplace_back(armory.buffs.bloodlust);
 
-    //armory.compute_total_stats(character);
+    armory.compute_total_stats(character);
 
     auto mh = Weapon{"test_mh", {}, {}, 2.7, 270, 270, Weapon_socket::one_hand, Weapon_type::axe};
     //mh.hit_effects.emplace_back(executioner);
@@ -867,7 +867,6 @@ TEST_F(Sim_fixture, test_procs)
     character.total_special_stats.expertise = 5;
     character.total_special_stats.axe_expertise = 5;
 
-    /*
     Special_stats mult;
     mult.ap_multiplier = 0.1;
     character.total_special_stats += mult;
@@ -878,7 +877,6 @@ TEST_F(Sim_fixture, test_procs)
     config.enable_bloodrage = true;
     config.enable_blood_fury = true;
     config.enable_unleashed_rage = true;
-    */
 
     config.talents.flurry = 5;
     config.talents.rampage = true;

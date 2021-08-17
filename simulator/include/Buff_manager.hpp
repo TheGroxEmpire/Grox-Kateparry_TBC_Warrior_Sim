@@ -14,9 +14,9 @@
 
 struct Over_time_buff
 {
-    static constexpr double inactive = -1;
+    static constexpr int inactive = -1;
 
-    Over_time_buff(const Over_time_effect& effect, double current_time) :
+    Over_time_buff(const Over_time_effect& effect, int current_time) :
         name(effect.name),
         rage_gain(effect.rage_gain),
         damage(effect.damage),
@@ -33,19 +33,19 @@ struct Over_time_buff
     double damage;
     Special_stats special_stats;
 
-    double interval;
+    int interval;
 
-    double next_tick;
-    double next_fade;
+    int next_tick;
+    int next_fade;
 
     // statistics
-    double uptime;
-    double last_gain;
+    long uptime;
+    int last_gain;
 };
 
 struct Combat_buff
 {
-    Combat_buff(const Hit_effect& hit_effect, const Special_stats& multipliers, double current_time) :
+    Combat_buff(const Hit_effect& hit_effect, const Special_stats& multipliers, int current_time) :
         name(hit_effect.name),
         special_stats_boost(hit_effect.to_special_stats(multipliers)),
         stacks(1),
@@ -58,26 +58,26 @@ struct Combat_buff
     const Special_stats special_stats_boost;
     int stacks;
 
-    double next_fade;
+    int next_fade;
     int charges; // alternative way of removing buffs
 
     // statistics
-    double uptime;
-    double last_gain;
+    long uptime;
+    int last_gain;
 };
 
 struct Hit_aura
 {
-    static constexpr double inactive = -1;
+    static constexpr int inactive = -1;
 
-    Hit_aura(std::string name, double current_time, double duration) :
+    Hit_aura(std::string name, int current_time, int duration) :
         name(std::move(name)),
         next_fade(current_time + duration),
         hit_effect_mh(nullptr),
         hit_effect_oh(nullptr) { }
 
     std::string name;
-    double next_fade;
+    int next_fade;
 
     Hit_effect* hit_effect_mh; // disabled on next_fade
     Hit_effect* hit_effect_oh;
@@ -92,24 +92,24 @@ public:
     void reset(Special_stats& special_stats, Damage_sources& damage_sources);
     void reset_statistics();
 
-    void update_aura_uptimes(double current_time);
+    void update_aura_uptimes(int current_time);
     [[nodiscard]] std::unordered_map<std::string, double> get_aura_uptimes_map() const;
 
-    [[nodiscard]] double next_event(double current_time) const
+    [[nodiscard]] int next_event(int current_time) const
     {
-        auto next_event = std::numeric_limits<double>::max();
-        if (min_combat_buff >= current_time && min_combat_buff < next_event) next_event = min_combat_buff;
-        if (min_over_time_buff >= current_time && min_over_time_buff < next_event) next_event = min_over_time_buff;
-        if (min_hit_aura >= current_time && min_hit_aura < next_event) next_event = min_hit_aura;
-        if (min_use_effect >= current_time && min_use_effect < next_event) next_event = min_use_effect;
+        auto next_event = std::numeric_limits<int>::max();
+        if (min_combat_buff > current_time && min_combat_buff < next_event) next_event = min_combat_buff;
+        if (min_over_time_buff > current_time && min_over_time_buff < next_event) next_event = min_over_time_buff;
+        if (min_hit_aura > current_time && min_hit_aura < next_event) next_event = min_hit_aura;
+        if (min_use_effect > current_time && min_use_effect < next_event) next_event = min_use_effect;
         return next_event;
     }
 
     void increment(Time_keeper& time_keeper, Logger& logger);
 
-    void remove_charge(const Hit_effect& hit_effect, double current_time, Logger& logger);
+    void remove_charge(const Hit_effect& hit_effect, int current_time, Logger& logger);
 
-    void start_cooldown(const Hit_effect& hit_effect, double current_time) const
+    void start_cooldown(const Hit_effect& hit_effect, int current_time) const
     {
         if (hit_effect.cooldown == 0) return;
 
@@ -117,7 +117,7 @@ public:
         {
             if (hit_effect_mh.name == hit_effect.name)
             {
-                hit_effect_mh.time_counter = current_time + hit_effect.cooldown;
+                hit_effect_mh.time_counter = current_time + static_cast<int>(hit_effect.cooldown * 1000);
                 break;
             }
         }
@@ -131,40 +131,40 @@ public:
         }
     }
 
-    void add_combat_buff(Hit_effect& hit_effect, double current_time);
-    void add_hit_aura(const std::string& name, Hit_effect& hit_effect, double duration_left, double current_time);
-    void add_over_time_buff(Over_time_effect& over_time_effect, double current_time);
+    void add_combat_buff(Hit_effect& hit_effect, int current_time);
+    void add_hit_aura(const std::string& name, Hit_effect& hit_effect, int duration, int current_time);
+    void add_over_time_buff(Over_time_effect& over_time_effect, int current_time);
 
     bool need_to_recompute_hit_tables{};
     bool need_to_recompute_mitigation{};
 
 private:
-    void increment_combat_buffs(double current_time, Logger& logger);
-    void increment_over_time_buffs(double current_time, Logger& logger);
-    void increment_hit_auras(double current_time, Logger& logger);
-    void increment_use_effects(double current_time, Time_keeper& time_keeper, Logger& logger);
+    void increment_combat_buffs(int current_time, Logger& logger);
+    void increment_over_time_buffs(int current_time, Logger& logger);
+    void increment_hit_auras(int current_time, Logger& logger);
+    void increment_use_effects(int current_time, Time_keeper& time_keeper, Logger& logger);
 
     void do_fade_buff(Combat_buff& buff, Logger& logger);
 
     void gain_stats(const Special_stats& ssb);
-    void do_add_combat_buff(Hit_effect& hit_effect, double current_time);
-    void do_add_over_time_buff(const Over_time_effect& over_time_effect, double current_time);
+    void do_add_combat_buff(Hit_effect& hit_effect, int current_time);
+    void do_add_over_time_buff(const Over_time_effect& over_time_effect, int current_time);
 
     Special_stats* simulation_special_stats{};
     Damage_sources* simulation_damage_sources{};
     Rage_manager* rage_manager{};
 
     size_t use_effect_index{};
-    double min_use_effect{std::numeric_limits<double>::max()};
+    int min_use_effect{std::numeric_limits<int>::max()};
 
     std::vector<Combat_buff> combat_buffs{};
-    double min_combat_buff{std::numeric_limits<double>::max()};
+    int min_combat_buff{std::numeric_limits<int>::max()};
 
     std::vector<Over_time_buff> over_time_buffs{};
-    double min_over_time_buff{std::numeric_limits<double>::max()};
+    int min_over_time_buff{std::numeric_limits<int>::max()};
 
     std::vector<Hit_aura> hit_auras{};
-    double min_hit_aura{std::numeric_limits<double>::max()};
+    int min_hit_aura{std::numeric_limits<int>::max()};
 
     std::vector<Hit_effect>* hit_effects_mh{};
     std::vector<Hit_effect>* hit_effects_oh{};

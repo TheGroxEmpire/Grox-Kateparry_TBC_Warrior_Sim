@@ -26,11 +26,11 @@ enum class Damage_source
 
 struct Damage_instance
 {
-    Damage_instance(Damage_source source, double damage, double time_stamp)
+    Damage_instance(Damage_source source, double damage, int time_stamp)
         : damage_source(source), damage(damage), time_stamp(time_stamp){};
     Damage_source damage_source;
     double damage{};
-    double time_stamp{};
+    int time_stamp{};
 };
 
 struct Damage_sources
@@ -55,7 +55,7 @@ struct Damage_sources
                execute_count + deep_wounds_count + item_hit_effects_count + sweeping_strikes_count;
     }
 
-    void add_damage(Damage_source source, double damage, double time_stamp);
+    void add_damage(Damage_source source, double damage, int time_stamp);
 
     double white_mh_damage{};
     double white_oh_damage{};

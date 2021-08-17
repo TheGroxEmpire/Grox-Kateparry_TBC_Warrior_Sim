@@ -51,6 +51,17 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     use_bloodthirst_ = config.talents.bloodthirst && config.combat.use_bloodthirst;
     use_mortal_strike_ = config.talents.mortal_strike && config.combat.use_mortal_strike;
     use_sweeping_strikes_ = config.talents.sweeping_strikes && config.combat.use_sweeping_strikes && config.multi_target_mode_;
+
+    // convert some cooldown thresholds from seconds to milliseconds
+    config.combat.whirlwind_bt_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.whirlwind_bt_cooldown_thresh));
+    config.combat.bt_whirlwind_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.bt_whirlwind_cooldown_thresh));
+    config.combat.ms_whirlwind_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.ms_whirlwind_cooldown_thresh));
+    config.combat.overpower_bt_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.overpower_bt_cooldown_thresh));
+    config.combat.overpower_ww_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.overpower_ww_cooldown_thresh));
+    config.combat.hamstring_cd_thresh = static_cast<int>(std::round(1000 * config.combat.hamstring_cd_thresh));
+    config.combat.slam_latency = static_cast<int>(std::round(1000 * config.combat.slam_latency));
+    config.combat.slam_spam_max_time = static_cast<int>(std::round(1000 * config.combat.slam_spam_max_time));
+    config.combat.rampage_use_thresh = static_cast<int>(std::round(1000 * config.combat.rampage_use_thresh));
 }
 
 std::string Combat_simulator::hit_result_to_string(const Hit_result& hit_result)
@@ -394,7 +405,7 @@ void Combat_simulator::unbridled_wrath(const Weapon_sim& weapon)
 
 bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
 {
-    if (use_rampage_ && time_keeper_.rampage_cd() <= 3)
+    if (use_rampage_ && time_keeper_.rampage_cd() <= 3000)
     {
         return false;
     }
@@ -403,9 +414,9 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
     {
         if ((mh_swing && rage > config.combat.slam_rage_dd) || rage > config.combat.slam_spam_rage)
         {
-            logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, "s");
-            slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
-            time_keeper_.global_cast(1.5 + config.combat.slam_latency);
+            logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, " ms");
+            slam_manager.cast_slam(time_keeper_.time + static_cast<int>(config.combat.slam_latency));
+            time_keeper_.global_cast(1500 + static_cast<int>(config.combat.slam_latency));
             return true;
         }
     }
@@ -417,7 +428,7 @@ void Combat_simulator::slam(Sim_state& state)
     if (config.dpr_settings.compute_dpr_sl_)
     {
         spend_rage(hit_table_yellow_mh_.isMissOrDodge() ? 3 : 15);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.global_cast(1500);
         return;
     }
     logger_.print("Slam!");
@@ -446,8 +457,8 @@ void Combat_simulator::mortal_strike(Sim_state& state)
     if (config.dpr_settings.compute_dpr_ms_)
     {
         spend_rage(hit_table_yellow_mh_.isMissOrDodge() ? 0.2 * mortal_strike_rage_cost_ : mortal_strike_rage_cost_);
-        time_keeper_.mortal_strike_cast(6.0 - config.talents.improved_mortal_strike * 0.2);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.mortal_strike_cast(6000 - config.talents.improved_mortal_strike * 200);
+        time_keeper_.global_cast(1500);
         return;
     }
     logger_.print("Mortal Strike!");
@@ -467,8 +478,8 @@ void Combat_simulator::mortal_strike(Sim_state& state)
         maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
         hit_effects(state, state.main_hand_weapon);
     }
-    time_keeper_.mortal_strike_cast(6.0 - config.talents.improved_mortal_strike * 0.2);
-    time_keeper_.global_cast(1.5);
+    time_keeper_.mortal_strike_cast(6000 - config.talents.improved_mortal_strike * 200);
+    time_keeper_.global_cast(1500);
     state.damage_sources.add_damage(Damage_source::mortal_strike, hit_outcome.damage, time_keeper_.time);
     logger_.print("Current rage: ", int(rage));
 }
@@ -478,8 +489,8 @@ void Combat_simulator::bloodthirst(Sim_state& state)
     if (config.dpr_settings.compute_dpr_bt_)
     {
         spend_rage(hit_table_yellow_mh_.isMissOrDodge() ? 0.2 * bloodthirst_rage_cost_ : bloodthirst_rage_cost_);
-        time_keeper_.blood_thirst_cast(6.0);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.blood_thirst_cast(6000);
+        time_keeper_.global_cast(1500);
         return;
     }
     logger_.print("Bloodthirst!");
@@ -500,8 +511,8 @@ void Combat_simulator::bloodthirst(Sim_state& state)
         maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
         hit_effects(state, state.main_hand_weapon);
     }
-    time_keeper_.blood_thirst_cast(6.0);
-    time_keeper_.global_cast(1.5);
+    time_keeper_.blood_thirst_cast(6000);
+    time_keeper_.global_cast(1500);
     state.damage_sources.add_damage(Damage_source::bloodthirst, hit_outcome.damage, time_keeper_.time);
     logger_.print("Current rage: ", int(rage));
 }
@@ -513,8 +524,8 @@ void Combat_simulator::overpower(Sim_state& state)
         swap_stance();
         spend_rage(5);
         buff_manager_.add_combat_buff(battle_stance_, time_keeper_.time);
-        time_keeper_.overpower_cast(5.0);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.overpower_cast(5000);
+        time_keeper_.global_cast(1500);
         return;
     }
     logger_.print("Changed stance: Battle Stance.");
@@ -533,8 +544,8 @@ void Combat_simulator::overpower(Sim_state& state)
     {
         buff_manager_.add_combat_buff(destroyer_2_set_, time_keeper_.time);
     }
-    time_keeper_.overpower_cast(5.0);
-    time_keeper_.global_cast(1.5);
+    time_keeper_.overpower_cast(5000);
+    time_keeper_.global_cast(1500);
     state.damage_sources.add_damage(Damage_source::overpower, hit_outcome.damage, time_keeper_.time);
     logger_.print("Current rage: ", int(rage));
 }
@@ -544,8 +555,8 @@ void Combat_simulator::whirlwind(Sim_state& state)
     if (config.dpr_settings.compute_dpr_ww_)
     {
         spend_rage(whirlwind_rage_cost_);
-        time_keeper_.whirlwind_cast(10 - config.talents.improved_whirlwind);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.whirlwind_cast(10000 - config.talents.improved_whirlwind * 1000);
+        time_keeper_.global_cast(1500);
         return;
     }
     logger_.print("Whirlwind! #targets = boss + ", number_of_extra_targets_, " adds");
@@ -581,8 +592,8 @@ void Combat_simulator::whirlwind(Sim_state& state)
             }
         }
     }
-    time_keeper_.whirlwind_cast(10 - config.talents.improved_whirlwind);
-    time_keeper_.global_cast(1.5);
+    time_keeper_.whirlwind_cast(10000 - config.talents.improved_whirlwind * 1000);
+    time_keeper_.global_cast(1500);
     state.damage_sources.add_damage(Damage_source::whirlwind, total_damage, time_keeper_.time);
     logger_.print("Current rage: ", int(rage));
 }
@@ -593,7 +604,7 @@ void Combat_simulator::execute(Sim_state& state)
     {
         logger_.print("Execute (DPR)!");
         spend_rage(execute_rage_cost_);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.global_cast(1500);
         if (hit_table_yellow_mh_.isMissOrDodge()) return;
         spend_all_rage();
         return;
@@ -602,7 +613,7 @@ void Combat_simulator::execute(Sim_state& state)
     double damage = 925 + (rage - execute_rage_cost_) * 21;
     auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     spend_rage(execute_rage_cost_);
-    time_keeper_.global_cast(1.5);
+    time_keeper_.global_cast(1500);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
         if (hit_outcome.hit_result == Hit_result::dodge && config.set_bonus_effect.warbringer_4_set)
@@ -624,13 +635,13 @@ void Combat_simulator::hamstring(Sim_state& state)
     if (config.dpr_settings.compute_dpr_ha_)
     {
         spend_rage(hit_table_yellow_mh_.isMissOrDodge() ? 2 : 10);
-        time_keeper_.global_cast(1.5);
+        time_keeper_.global_cast(1500);
         return;
     }
     logger_.print("Hamstring!");
     double damage = 63;
     auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
-    time_keeper_.global_cast(1.5);
+    time_keeper_.global_cast(1500);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
         spend_rage(2);
@@ -683,7 +694,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Weapon_sim& weapon, Hit_typ
 
             hit_effect.procs++;
             logger_.print("PROC: extra hit from: ", hit_effect.name);
-            windfury_attack_.duration = hit_type == Hit_type::next_melee ? 1.5 : 0.01;
+            windfury_attack_.duration = hit_type == Hit_type::next_melee ? 1500 : 10;
             buff_manager_.add_combat_buff(windfury_attack_, time_keeper_.time);
             swing_weapon(state, state.main_hand_weapon, Extra_attack_type::none);
             break;
@@ -880,30 +891,35 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
     }
 }
 
-void update_swing_timers(Sim_state& state, double current_time, double oldHaste)
+void update_swing_timers(Sim_state& state, int current_time, double oldHaste)
 {
     auto& mh = state.main_hand_weapon;
     auto haste = state.special_stats.haste;
-    //TODO(vigo) check for == current_time circumstances
-    if (mh.next_swing <= current_time)
+
+    assert(mh.next_swing >= current_time);
+
+    if (mh.next_swing == current_time)
     {
-        mh.next_swing = current_time + mh.swing_speed / (1 + haste);
+        mh.next_swing = static_cast<int>(std::round(current_time + 1000 * mh.swing_speed / (1 + haste)));
     }
     else if (haste != oldHaste)
     {
-        mh.next_swing = current_time + (mh.next_swing - current_time) * (1 + oldHaste) / (1 + haste);
+        mh.next_swing = static_cast<int>(std::round(current_time + (mh.next_swing - current_time) * (1 + oldHaste) / (1 + haste)));
     }
 
     if (!state.is_dual_wield) return;
 
     auto& oh = state.off_hand_weapon;
-    if (oh.next_swing <= current_time)
+
+    assert(oh.next_swing >= current_time);
+
+    if (oh.next_swing == current_time)
     {
-        oh.next_swing = current_time + oh.swing_speed / (1 + haste);
+        oh.next_swing = static_cast<int>(std::round(current_time + 1000 * oh.swing_speed / (1 + haste)));
     }
     else if (haste != oldHaste)
     {
-        oh.next_swing = current_time + (oh.next_swing - current_time) * (1 + oldHaste) / (1 + haste);
+        oh.next_swing = static_cast<int>(std::round(current_time + (oh.next_swing - current_time) * (1 + oldHaste) / (1 + haste)));
     }
 }
 
@@ -979,8 +995,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
     const bool is_dual_wield = character.is_dual_wield();
 
-    const double sim_time = config.sim_time;
-    const double time_execute_phase = sim_time * (100.0 - config.execute_phase_percentage_) / 100.0;
+    const int sim_time = static_cast<int>(1000 * config.sim_time);
+    const int time_execute_phase = static_cast<int>(sim_time * (100.0 - config.execute_phase_percentage_) / 100.0);
 
     add_use_effects(character);
     add_over_time_effects();
@@ -1007,7 +1023,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     for (int iter = init_iteration; iter < n_damage_batches + init_iteration; iter++)
     {
         ability_queue_manager.reset();
-        slam_manager = Slam_manager(1.5 - 0.5 * config.talents.improved_slam);
+        slam_manager = Slam_manager(1500 - 500 * config.talents.improved_slam);
         rage = config.combat.initial_rage;
 
         Sim_state state(
@@ -1033,7 +1049,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         int mh_hits_w_rampage = 0;
 
         state.main_hand_weapon.next_swing = 0;
-        if (state.is_dual_wield) state.off_hand_weapon.next_swing = 0.5 * (state.off_hand_weapon.swing_speed / (1 + state.special_stats.haste)); // de-sync mh/oh swing timers
+        if (state.is_dual_wield) state.off_hand_weapon.next_swing = static_cast<int>(1000 * 0.5 * (state.off_hand_weapon.swing_speed / (1 + state.special_stats.haste))); // de-sync mh/oh swing timers
 
         // Combat configuration
         if (!config.multi_target_mode_)
@@ -1074,12 +1090,12 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
         while (time_keeper_.time < sim_time)
         {
-            double next_mh_swing = weapons[0].next_swing;
-            double next_oh_swing = is_dual_wield ? weapons[1].next_swing : -1;
-            double next_buff_event = buff_manager_.next_event(time_keeper_.time);
-            double next_slam_finish = slam_manager.next_finish();
-            double next_event = time_keeper_.get_next_event(next_mh_swing, next_oh_swing,
-                                                            next_buff_event, next_slam_finish, sim_time);
+            int next_mh_swing = weapons[0].next_swing;
+            int next_oh_swing = is_dual_wield ? weapons[1].next_swing : -1;
+            int next_buff_event = buff_manager_.next_event(time_keeper_.time);
+            int next_slam_finish = slam_manager.next_finish();
+            int next_event = time_keeper_.get_next_event(next_mh_swing, next_oh_swing,
+                                                         next_buff_event, next_slam_finish, sim_time);
             if (state.flurry_charges > 0) flurry_uptime += next_event - time_keeper_.time;
             time_keeper_.increment(next_event);
 
@@ -1141,7 +1157,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
 
             if (config.multi_target_mode_ && number_of_extra_targets_ > 0 &&
-                time_keeper_.time / sim_time > config.extra_target_duration)
+                time_keeper_.time > config.extra_target_duration * sim_time)
             {
                 logger_.print("Extra targets die.");
                 number_of_extra_targets_ = 0;
@@ -1157,11 +1173,11 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 slam(state);
                 slam_manager.finish_slam();
                 oldHaste = state.special_stats.haste;
-                state.main_hand_weapon.next_swing = time_keeper_.time + state.main_hand_weapon.swing_speed / (1 + state.special_stats.haste);
+                state.main_hand_weapon.next_swing = static_cast<int>(std::round(time_keeper_.time + 1000 * state.main_hand_weapon.swing_speed / (1 + state.special_stats.haste)));
             }
 
-            bool mh_swing = state.main_hand_weapon.next_swing < time_keeper_.time;
-            bool oh_swing = state.is_dual_wield ? state.off_hand_weapon.next_swing < time_keeper_.time : false;
+            bool mh_swing = state.main_hand_weapon.next_swing == time_keeper_.time;
+            bool oh_swing = state.is_dual_wield ? state.off_hand_weapon.next_swing == time_keeper_.time : false;
 
             if (mh_swing)
             {
@@ -1197,9 +1213,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 if (time_keeper_.sweeping_strikes_ready() && time_keeper_.global_ready() && rage >= 30)
                 {
                     logger_.print("Sweeping strikes!");
-                    time_keeper_.global_cast(1.5);
+                    time_keeper_.global_cast(1500);
                     spend_rage(30);
-                    time_keeper_.sweeping_strikes_cast(30);
+                    time_keeper_.sweeping_strikes_cast(30000);
                     sweeping_strikes_charges_ = 10;
                 }
             }
@@ -1209,7 +1225,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 if (time_keeper_.global_ready() && rage >= 15)
                 {
                     logger_.print("Sunder Armor!");
-                    time_keeper_.global_cast(1.5);
+                    time_keeper_.global_cast(1500);
                     spend_rage(15);
                     first_global_sunder = false;
                 }
@@ -1302,7 +1318,7 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
         bool ms_ww = true;
         if (config.combat.use_whirlwind)
         {
-            ms_ww = std::max(time_keeper_.whirlwind_cd(), 0.1) > config.combat.bt_whirlwind_cooldown_thresh;
+            ms_ww = std::max(time_keeper_.whirlwind_cd(), 100) > config.combat.bt_whirlwind_cooldown_thresh;
         }
         if (time_keeper_.mortal_strike_ready() && rage >= 30 && ms_ww)
                     {
@@ -1316,7 +1332,7 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
         bool bt_ww = true;
         if (config.combat.use_whirlwind)
         {
-            bt_ww = std::max(time_keeper_.whirlwind_cd(), 0.1) > config.combat.bt_whirlwind_cooldown_thresh;
+            bt_ww = std::max(time_keeper_.whirlwind_cd(), 100) > config.combat.bt_whirlwind_cooldown_thresh;
         }
         if (time_keeper_.blood_thirst_ready() && rage >= 30 && bt_ww)
                     {
@@ -1330,15 +1346,15 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
         bool use_ww = true;
         if (use_rampage_)
         {
-            use_ww = time_keeper_.rampage_cd() > 3.0;
+            use_ww = time_keeper_.rampage_cd() > 3000;
         }
         if (use_bloodthirst_)
         {
-            use_ww = std::max(time_keeper_.blood_thirst_cd(), 0.1) > config.combat.whirlwind_bt_cooldown_thresh;
+            use_ww = std::max(time_keeper_.blood_thirst_cd(), 100) > config.combat.whirlwind_bt_cooldown_thresh;
         }
         if (use_mortal_strike_)
         {
-            use_ww = std::max(time_keeper_.mortal_strike_cd(), 0.1) > config.combat.whirlwind_bt_cooldown_thresh;
+            use_ww = std::max(time_keeper_.mortal_strike_cd(), 100) > config.combat.whirlwind_bt_cooldown_thresh;
         }
         if (time_keeper_.whirlwind_ready() && rage > config.combat.whirlwind_rage_thresh && rage >= whirlwind_rage_cost_ && use_ww)
         {
@@ -1359,7 +1375,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
     // it looks like using rampage in execute phase /could/ be a dps loss
     if (use_rampage_)
     {
-        if (time_keeper_.rampage_cd() < 0.0 && state.rampage_stacks > 0)
+        if (time_keeper_.rampage_ready() && state.rampage_stacks > 0)
         {
             state.special_stats -= {0, 0, 50.0 * state.rampage_stacks};
             state.rampage_stacks = 0;
@@ -1384,8 +1400,8 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
     {
         if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && time_keeper_.can_do_rampage())
         {
-            time_keeper_.rampage_cast(30.0);
-            time_keeper_.global_cast(1.5);
+            time_keeper_.rampage_cast(30000);
+            time_keeper_.global_cast(1500);
             spend_rage(20);
             if (state.rampage_stacks == 0)
             {
@@ -1403,7 +1419,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         bool bt_ww = true;
         if (config.combat.use_whirlwind)
         {
-            bt_ww = std::max(time_keeper_.whirlwind_cd(), 0.1) > config.combat.bt_whirlwind_cooldown_thresh;
+            bt_ww = std::max(time_keeper_.whirlwind_cd(), 100) > config.combat.bt_whirlwind_cooldown_thresh;
         }
         if (time_keeper_.blood_thirst_ready() && rage >= 30 && bt_ww)
         {
@@ -1417,7 +1433,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         bool ms_ww = true;
         if (config.combat.use_whirlwind)
         {
-            ms_ww = std::max(time_keeper_.whirlwind_cd(), 0.1) > config.combat.bt_whirlwind_cooldown_thresh;
+            ms_ww = std::max(time_keeper_.whirlwind_cd(), 100) > config.combat.ms_whirlwind_cooldown_thresh;
         }
         if (time_keeper_.mortal_strike_ready() && rage >= 30 && ms_ww)
         {
@@ -1431,15 +1447,15 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         bool use_ww = true;
         if (use_rampage_)
         {
-            use_ww = time_keeper_.rampage_cd() > 3.0;
+            use_ww = time_keeper_.rampage_cd() > 3000;
         }
         if (use_bloodthirst_)
         {
-            use_ww = std::max(time_keeper_.blood_thirst_cd(), 0.1) > config.combat.whirlwind_bt_cooldown_thresh;
+            use_ww = std::max(time_keeper_.blood_thirst_cd(), 100) > config.combat.whirlwind_bt_cooldown_thresh;
         }
         if (use_mortal_strike_)
         {
-            use_ww = std::max(time_keeper_.mortal_strike_cd(), 0.1) > config.combat.whirlwind_bt_cooldown_thresh;
+            use_ww = std::max(time_keeper_.mortal_strike_cd(), 100) > config.combat.whirlwind_bt_cooldown_thresh;
         }
         if (time_keeper_.whirlwind_ready() && rage > config.combat.whirlwind_rage_thresh && rage >= whirlwind_rage_cost_ && use_ww)
         {
@@ -1453,7 +1469,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         bool use_op = true;
         if (use_rampage_)
         {
-            use_op &= time_keeper_.rampage_cd() > 3.0;
+            use_op &= time_keeper_.rampage_cd() > 3000;
         }
         if (use_bloodthirst_)
         {
@@ -1483,7 +1499,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         }
         if (use_rampage_)
         {
-            use_ham &= time_keeper_.rampage_cd() > 3.0;
+            use_ham &= time_keeper_.rampage_cd() > 3000;
         }
         if (use_bloodthirst_)
         {
@@ -1626,8 +1642,7 @@ Use_effects::Schedule Combat_simulator::compute_use_effects_schedule(const Chara
         ap_equiv = get_character_ap_equivalent(character.total_special_stats, character.weapons[0],
                                                config.sim_time, {});
     }
-    return Use_effects::compute_schedule(use_effects_, character.total_special_stats, config.sim_time, ap_equiv, 0,
-                                         0);
+    return Use_effects::compute_schedule(use_effects_, character.total_special_stats, config.sim_time, ap_equiv);
 }
 
 void Combat_simulator::init_histogram()

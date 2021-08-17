@@ -1,4 +1,4 @@
-#include "../include/damage_sources.hpp"
+#include "damage_sources.hpp"
 
 Damage_sources::Damage_sources(bool keep_history) : keep_history(keep_history)
 {
@@ -39,7 +39,7 @@ Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
     return *(this);
 }
 
-void Damage_sources::add_damage(Damage_source source, double damage, double time_stamp)
+void Damage_sources::add_damage(Damage_source source, double damage, int time_stamp)
 {
     if (keep_history)
     {

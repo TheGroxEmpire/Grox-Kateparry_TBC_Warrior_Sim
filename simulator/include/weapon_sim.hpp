@@ -20,7 +20,7 @@ public:
 
     double swing_speed;
     double normalized_swing_speed;
-    double next_swing;
+    int next_swing;
     double average_damage;
     Socket socket;
     Weapon_type weapon_type;

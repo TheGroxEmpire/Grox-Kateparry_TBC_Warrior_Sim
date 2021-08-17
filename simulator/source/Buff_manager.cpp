@@ -31,27 +31,27 @@ void Buff_manager::reset(Special_stats& special_stats, Damage_sources& damage_so
     for (auto& buff : combat_buffs)
     {
         buff.stacks = 0;
-        buff.next_fade = std::numeric_limits<double>::max();
+        buff.next_fade = std::numeric_limits<int>::max();
     }
-    min_combat_buff = std::numeric_limits<double>::max();
+    min_combat_buff = std::numeric_limits<int>::max();
 
     for (auto& buff : over_time_buffs)
     {
         buff.next_tick = Over_time_buff::inactive;
         buff.next_fade = -1; // this is used for determining whether a buff is active or not
     }
-    min_over_time_buff = std::numeric_limits<double>::max();
+    min_over_time_buff = std::numeric_limits<int>::max();
 
     for (auto& hit_aura : hit_auras)
     {
         hit_aura.next_fade = Hit_aura::inactive;
-        hit_aura.hit_effect_mh->time_counter = std::numeric_limits<double>::max();
-        hit_aura.hit_effect_oh->time_counter = std::numeric_limits<double>::max();
+        hit_aura.hit_effect_mh->time_counter = std::numeric_limits<int>::max();
+        hit_aura.hit_effect_oh->time_counter = std::numeric_limits<int>::max();
     }
-    min_hit_aura = std::numeric_limits<double>::max();
+    min_hit_aura = std::numeric_limits<int>::max();
 
     use_effect_index = 0;
-    min_use_effect = use_effects_schedule.empty() ? std::numeric_limits<double>::max() : use_effects_schedule[0].first - 1;
+    min_use_effect = use_effects_schedule.empty() ? std::numeric_limits<int>::max() : use_effects_schedule[0].first - 1;
 
     need_to_recompute_mitigation = true;
     need_to_recompute_hit_tables = true;
@@ -80,7 +80,7 @@ void Buff_manager::reset_statistics()
     }
 }
 
-void Buff_manager::update_aura_uptimes(double current_time) {
+void Buff_manager::update_aura_uptimes(int current_time) {
     for (auto& buff : combat_buffs)
     {
         if (buff.stacks > 0) buff.uptime += current_time - (buff.last_gain > 0 ? buff.last_gain : 0);
@@ -96,11 +96,11 @@ void Buff_manager::update_aura_uptimes(double current_time) {
     auto m = std::unordered_map<std::string, double>();
     for (const auto& buff : combat_buffs)
     {
-        m[buff.name] = buff.uptime;
+        m[buff.name] = buff.uptime * 0.001;
     }
     for (const auto& buff : over_time_buffs)
     {
-        m[buff.name] = buff.uptime;
+        m[buff.name] = buff.uptime * 0.001;
     }
     return m;
 }
@@ -114,7 +114,7 @@ void Buff_manager::increment(Time_keeper& time_keeper, Logger& logger)
     increment_use_effects(current_time, time_keeper, logger);
 }
 
-void Buff_manager::remove_charge(const Hit_effect& hit_effect, double current_time, Logger& logger)
+void Buff_manager::remove_charge(const Hit_effect& hit_effect, int current_time, Logger& logger)
 {
     if (hit_effect.combat_buff_idx == -1)
     {
@@ -134,7 +134,7 @@ void Buff_manager::remove_charge(const Hit_effect& hit_effect, double current_ti
 //  hit_effects could also be registered "globally" (together with their respective combat_buff,
 //  so each hit_effect would have a one-to-one connection to the corresponding buff),
 //  and would simply apply with different percentages
-void Buff_manager::add_combat_buff(Hit_effect& hit_effect, double current_time)
+void Buff_manager::add_combat_buff(Hit_effect& hit_effect, int current_time)
 {
     assert(hit_effect.max_stacks >= 1);
     assert(hit_effect.max_charges >= 1);
@@ -161,7 +161,7 @@ void Buff_manager::add_combat_buff(Hit_effect& hit_effect, double current_time)
     do_add_combat_buff(hit_effect, current_time);
 }
 
-void Buff_manager::add_hit_aura(const std::string& name, Hit_effect& hit_effect, double duration_left, double current_time)
+void Buff_manager::add_hit_aura(const std::string& name, Hit_effect& hit_effect, int duration, int current_time)
 {
     for (auto& hit_aura : hit_auras)
     {
@@ -169,20 +169,20 @@ void Buff_manager::add_hit_aura(const std::string& name, Hit_effect& hit_effect,
         {
             hit_aura.hit_effect_mh->time_counter = 0; // re-enable hit_effects, and queue fade
             hit_aura.hit_effect_oh->time_counter = 0;
-            hit_aura.next_fade = current_time + duration_left;
+            hit_aura.next_fade = current_time + duration;
             if (hit_aura.next_fade < min_hit_aura) min_hit_aura = hit_aura.next_fade;
             return;
         }
     }
 
-    auto& hit_aura = hit_auras.emplace_back(Hit_aura(name, current_time, duration_left));
+    auto& hit_aura = hit_auras.emplace_back(Hit_aura(name, current_time, duration));
     hit_effect.sanitize();
     hit_aura.hit_effect_mh = &hit_effects_mh->emplace_back(hit_effect);
     hit_aura.hit_effect_oh = &hit_effects_oh->emplace_back(hit_effect);
     if (hit_aura.next_fade < min_hit_aura) min_hit_aura = hit_aura.next_fade;
 }
 
-void Buff_manager::add_over_time_buff(Over_time_effect& over_time_effect, double current_time)
+void Buff_manager::add_over_time_buff(Over_time_effect& over_time_effect, int current_time)
 {
     if (over_time_effect.over_time_buff_idx == -1)
     {
@@ -205,55 +205,55 @@ void Buff_manager::add_over_time_buff(Over_time_effect& over_time_effect, double
 }
 
 
-void Buff_manager::increment_combat_buffs(double current_time, Logger& logger)
+void Buff_manager::increment_combat_buffs(int current_time, Logger& logger)
 {
-    if (min_combat_buff >= current_time)
+    if (current_time < min_combat_buff)
     {
         return;
     }
 
-    min_combat_buff = std::numeric_limits<double>::max();
+    min_combat_buff = std::numeric_limits<int>::max();
     for (auto& buff : combat_buffs)
     {
         if (buff.stacks == 0) // inactive
-            {
+        {
             continue;
-            }
+        }
 
-        if (buff.next_fade >= current_time) // not ready
-            {
+        if (buff.next_fade > current_time) // not ready
+        {
             if (buff.next_fade < min_combat_buff) min_combat_buff = buff.next_fade;
             continue;
-            }
+        }
 
-        assert(current_time - buff.next_fade < 1.01e-5);
+        assert(current_time == buff.next_fade);
 
         do_fade_buff(buff, logger);
     }
 }
 
-void Buff_manager::increment_over_time_buffs(double current_time, Logger& logger)
+void Buff_manager::increment_over_time_buffs(int current_time, Logger& logger)
 {
-    if (min_over_time_buff >= current_time)
+    if (current_time < min_over_time_buff)
     {
         return;
     }
 
-    min_over_time_buff = std::numeric_limits<double>::max();
+    min_over_time_buff = std::numeric_limits<int>::max();
     for (auto& buff : over_time_buffs)
     {
         if (buff.next_tick == Over_time_buff::inactive) // inactive
-            {
+        {
             continue;
-            }
+        }
 
-        if (buff.next_tick >= current_time) // not ready
-            {
+        if (buff.next_tick > current_time) // not ready
+        {
             if (buff.next_tick < min_over_time_buff) min_over_time_buff = buff.next_tick;
             continue;
-            }
+        }
 
-        assert(current_time - buff.next_tick < 1.01e-5);
+        assert(current_time == buff.next_tick);
 
         // this used to support everything at once, but no over_time_buff actually granted rage, dealt damage, and added stats.
         //  nothing does the latter, afaik
@@ -272,7 +272,7 @@ void Buff_manager::increment_over_time_buffs(double current_time, Logger& logger
             (*simulation_special_stats) += buff.special_stats;
         }
 
-        if (buff.next_fade < current_time)
+        if (buff.next_fade == current_time)
         {
             buff.next_tick = Over_time_buff::inactive;
             buff.uptime += buff.next_fade - (buff.last_gain > 0 ? buff.last_gain : 0);
@@ -286,14 +286,14 @@ void Buff_manager::increment_over_time_buffs(double current_time, Logger& logger
     }
 }
 
-void Buff_manager::increment_hit_auras(double current_time, Logger& logger)
+void Buff_manager::increment_hit_auras(int current_time, Logger& logger)
 {
-    if (min_hit_aura >= current_time)
+    if (current_time < min_hit_aura)
     {
         return;
     }
 
-    min_hit_aura = std::numeric_limits<double>::max();
+    min_hit_aura = std::numeric_limits<int>::max();
     for (auto& hit_aura : hit_auras)
     {
         if (hit_aura.next_fade == Hit_aura::inactive)
@@ -301,13 +301,13 @@ void Buff_manager::increment_hit_auras(double current_time, Logger& logger)
             continue;
         }
 
-        if (hit_aura.next_fade >= current_time)
+        if (hit_aura.next_fade > current_time)
         {
             if (hit_aura.next_fade < min_hit_aura) min_hit_aura = hit_aura.next_fade;
             continue;
         }
 
-        assert(current_time - hit_aura.next_fade < 1.01e-5);
+        assert(current_time == hit_aura.next_fade);
 
         assert(hit_aura.hit_effect_mh != nullptr);
         assert(hit_aura.hit_effect_oh != nullptr);
@@ -316,8 +316,8 @@ void Buff_manager::increment_hit_auras(double current_time, Logger& logger)
         assert(hit_aura.hit_effect_mh->combat_buff_idx >= 0);
         assert(hit_aura.hit_effect_oh->combat_buff_idx == hit_aura.hit_effect_mh->combat_buff_idx);
 
-        hit_aura.hit_effect_mh->time_counter = std::numeric_limits<double>::max(); // disable hit_effects, effectively
-        hit_aura.hit_effect_oh->time_counter = std::numeric_limits<double>::max();
+        hit_aura.hit_effect_mh->time_counter = std::numeric_limits<int>::max(); // effectively disable hit_effects
+        hit_aura.hit_effect_oh->time_counter = std::numeric_limits<int>::max();
 
         auto& buff = combat_buffs[hit_aura.hit_effect_mh->combat_buff_idx];
         buff.next_fade = hit_aura.next_fade; // for correct uptime bookkeeping
@@ -327,9 +327,9 @@ void Buff_manager::increment_hit_auras(double current_time, Logger& logger)
     }
 }
 
-void Buff_manager::increment_use_effects(double current_time, Time_keeper& time_keeper, Logger& logger)
+void Buff_manager::increment_use_effects(int current_time, Time_keeper& time_keeper, Logger& logger)
 {
-    if (min_use_effect >= current_time)
+    if (current_time < min_use_effect)
     {
         return;
     }
@@ -344,13 +344,13 @@ void Buff_manager::increment_use_effects(double current_time, Time_keeper& time_
 
     if (use_effect.rage_boost > 0 && rage_manager->get_rage() + use_effect.rage_boost > 100)
     {
-        min_use_effect = current_time + 0.5;
+        min_use_effect = current_time + 500;
         return;
     }
 
     if (use_effect.rage_boost < 0 && rage_manager->get_rage() + use_effect.rage_boost < 0)
     {
-        min_use_effect = current_time + 0.5;
+        min_use_effect = current_time + 500;
         return;
     }
 
@@ -381,7 +381,7 @@ void Buff_manager::increment_use_effects(double current_time, Time_keeper& time_
 
     if (use_effect.triggers_gcd)
     {
-        time_keeper.global_cast(1.5);
+        time_keeper.global_cast(1500);
     }
 
     use_effect_index += 1;
@@ -391,11 +391,11 @@ void Buff_manager::increment_use_effects(double current_time, Time_keeper& time_
         min_use_effect = use_effects_schedule[use_effect_index].first;
 
         const auto& ue = use_effects_schedule[use_effect_index].second.get();
-        if (ue.triggers_gcd || ue.rage_boost != 0) min_use_effect -= 1;
+        if (ue.triggers_gcd || ue.rage_boost != 0) min_use_effect -= 1000;
     }
     else
     {
-        min_use_effect = std::numeric_limits<double>::max();
+        min_use_effect = std::numeric_limits<int>::max();
     }
 }
 
@@ -430,7 +430,7 @@ void Buff_manager::gain_stats(const Special_stats& ssb)
     need_to_recompute_mitigation |= (ssb.gear_armor_pen > 0);
 }
 
-void Buff_manager::do_add_combat_buff(Hit_effect& hit_effect, double current_time)
+void Buff_manager::do_add_combat_buff(Hit_effect& hit_effect, int current_time)
 {
     auto& buff = combat_buffs[hit_effect.combat_buff_idx];
     if (buff.next_fade < current_time || buff.stacks < hit_effect.max_stacks)
@@ -445,7 +445,7 @@ void Buff_manager::do_add_combat_buff(Hit_effect& hit_effect, double current_tim
     if (buff.next_fade < min_combat_buff) min_combat_buff = buff.next_fade;
 }
 
-void Buff_manager::do_add_over_time_buff(const Over_time_effect& over_time_effect, double current_time)
+void Buff_manager::do_add_over_time_buff(const Over_time_effect& over_time_effect, int current_time)
 {
     auto& buff = over_time_buffs[over_time_effect.over_time_buff_idx];
 
