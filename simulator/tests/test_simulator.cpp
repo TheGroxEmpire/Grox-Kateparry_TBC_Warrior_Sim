@@ -1127,15 +1127,6 @@ TEST_F(Sim_fixture, test_procs)
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);
 
-    auto char_plus = character;
-    char_plus.total_special_stats += {1, 0, 0};
-
-    time_simulate(sim, char_plus);
-    print_results(test_info_->name(), sim, true);
-
-    time_simulate(sim, character);
-    print_results(test_info_->name(), sim, true);
-
     EXPECT_EQ(0, 0);
 }
 

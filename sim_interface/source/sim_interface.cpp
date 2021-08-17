@@ -8,20 +8,6 @@
 
 #include <sstream>
 
-namespace
-{
-void mod_hit_effects(std::vector<Hit_effect>& hit_effects, double factor)
-{
-    for (auto& hit_effect : hit_effects)
-    {
-        if (hit_effect.name != "windfury_totem")
-        {
-            hit_effect.probability *= factor;
-        }
-    }
-}
-} // namespace
-
 void item_upgrades(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
                    Armory& armory, std::vector<size_t> batches_per_iteration,
                    std::vector<size_t> cumulative_simulations, Combat_simulator& simulator, double dps_mean,
@@ -209,43 +195,23 @@ void item_upgrades_wep(std::string& item_strengths_string, Character character_n
 
 struct Stat_weight
 {
-    Stat_weight(double dps_plus, double std_dps_plus, double dps_minus, double std_dps_minus, double amount,
-                std::string stat)
-        : dps_plus{dps_plus}
-        , std_dps_plus{std_dps_plus}
-        , dps_minus{dps_minus}
-        , std_dps_minus{std_dps_minus}
-        , amount{amount}
-        , stat{std::move(stat)} {};
-
-    double dps_plus;
-    double std_dps_plus;
-    double dps_minus;
-    double std_dps_minus;
+    double mean;
+    double sample_std;
     double amount;
-    std::string stat;
 };
 
-Stat_weight compute_stat_weight(Combat_simulator& combat_simulator, Character& char_plus, Character& char_minus,
-                                const std::string& permuted_stat, double permute_amount, double permute_factor,
+Stat_weight compute_stat_weight(Combat_simulator& sim, Character& char_plus,
+                                double permute_amount, double permute_factor,
                                 double mean_init, double sample_std_init)
 {
-    combat_simulator.simulate(char_plus);
-    double mean_plus = combat_simulator.get_dps_mean();
-    double std_plus = std::sqrt(combat_simulator.get_dps_variance());
-    double sample_std_plus = Statistics::sample_deviation(std_plus, combat_simulator.get_n_simulations());
-
-    combat_simulator.simulate(char_minus);
-    double mean_minus = combat_simulator.get_dps_mean();
-    double std_minus = std::sqrt(combat_simulator.get_dps_variance());
-    double sample_std_minus = Statistics::sample_deviation(std_minus, combat_simulator.get_n_simulations());
+    sim.simulate(char_plus);
+    double mean_plus = sim.get_dps_mean();
+    double std_plus = std::sqrt(sim.get_dps_variance());
+    double sample_std_plus = Statistics::sample_deviation(std_plus, sim.get_n_simulations());
 
     return {(mean_plus - mean_init) / permute_factor,
             (Statistics::add_standard_deviations(sample_std_init, sample_std_plus)) / permute_factor,
-            (mean_minus - mean_init) / permute_factor,
-            (Statistics::add_standard_deviations(sample_std_init, sample_std_minus)) / permute_factor,
-            permute_amount,
-            permuted_stat};
+            permute_amount};
 }
 
 std::vector<double> get_damage_sources(const Damage_sources& damage_sources_vector)
@@ -977,138 +943,60 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     config.n_batches =
         String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_stat_dd");
     simulator.set_config(config);
+
+    auto rating_factor = 52.0 / 82;
+
     std::vector<std::string> stat_weights;
-    if (!input.stat_weights.empty())
+    for (const auto& stat_weight : input.stat_weights)
     {
+        Character char_plus = character;
+        Stat_weight sw{};
+        if (stat_weight == "strength")
         {
-            Character char_plus = character;
-            Character char_minus = character;
+            char_plus.total_special_stats += Attributes{50, 0}.to_special_stats(char_plus.total_special_stats);
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+        }
+        else if (stat_weight == "agility")
+        {
+            char_plus.total_special_stats += Attributes{0, 50}.to_special_stats(char_plus.total_special_stats);
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+        }
+        else if (stat_weight == "ap")
+        {
             char_plus.total_special_stats += {0, 0, 100};
-            char_minus.total_special_stats -= {0, 0, 100};
-            Stat_weight base_line =
-                compute_stat_weight(simulator, char_plus, char_minus, "attack power", 100, 1, dps_mean, dps_sample_std);
-            stat_weights.emplace_back(
-                "attack_power: " + std::to_string(base_line.dps_plus) + " " + std::to_string(base_line.std_dps_plus) +
-                " " + std::to_string(base_line.dps_minus) + " " + std::to_string(base_line.std_dps_minus));
+            sw = compute_stat_weight(simulator, char_plus, 10, 10, dps_mean, dps_sample_std);
         }
-
-        for (const auto& stat_weight : input.stat_weights)
+        else if (stat_weight == "crit")
         {
-            if (stat_weight == "crit")
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                char_plus.total_special_stats.critical_strike += 2;
-                char_minus.total_special_stats.critical_strike -= 2;
-                Stat_weight crit =
-                    compute_stat_weight(simulator, char_plus, char_minus, "crit", 1, 2, dps_mean, dps_sample_std);
-                stat_weights.emplace_back("1%Crit " + std::to_string(crit.dps_plus) + " " +
-                                          std::to_string(crit.std_dps_plus) + " " + std::to_string(crit.dps_minus) +
-                                          " " + std::to_string(crit.std_dps_minus));
-            }
-
-            if (stat_weight == "expertise")
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                char_plus.total_special_stats.expertise += 4;
-                char_minus.total_special_stats.expertise -= 4;
-                Stat_weight expertise =
-                    compute_stat_weight(simulator, char_plus, char_minus, "expertise", 1, 1, dps_mean, dps_sample_std);
-                stat_weights.emplace_back("1%Expertise " + std::to_string(expertise.dps_plus) + " " +
-                                          std::to_string(expertise.std_dps_plus) + " " + std::to_string(expertise.dps_minus) + " " +
-                                          std::to_string(expertise.std_dps_minus));
-            }
-
-            if (stat_weight == "hit")
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                char_plus.total_special_stats.hit += 1;
-                char_minus.total_special_stats.hit -= 1;
-                Stat_weight hit =
-                    compute_stat_weight(simulator, char_plus, char_minus, "hit", 1, 1, dps_mean, dps_sample_std);
-                stat_weights.emplace_back("1%Hit " + std::to_string(hit.dps_plus) + " " +
-                                          std::to_string(hit.std_dps_plus) + " " + std::to_string(hit.dps_minus) + " " +
-                                          std::to_string(hit.std_dps_minus));
-            }
-            if (stat_weight == "haste")
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                char_plus.total_special_stats.haste += 0.02;
-                char_minus.total_special_stats.haste -= 0.02;
-                Stat_weight hit =
-                    compute_stat_weight(simulator, char_plus, char_minus, "haste", 1, 2, dps_mean, dps_sample_std);
-                stat_weights.emplace_back("1%Haste " + std::to_string(hit.dps_plus) + " " +
-                                          std::to_string(hit.std_dps_plus) + " " + std::to_string(hit.dps_minus) + " " +
-                                          std::to_string(hit.std_dps_minus));
-            }
-            if (stat_weight == "extra_hit")
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                Hit_effect extra_hit{"stat_weight_extra_hit", Hit_effect::Type::extra_hit, {}, {}, 0, 0, 0, 0.05};
-                char_plus.weapons[0].hit_effects.emplace_back(extra_hit);
-                if (char_plus.is_dual_wield())
-                {
-                    char_plus.weapons[1].hit_effects.emplace_back(extra_hit);
-                }
-                Stat_weight hit =
-                    compute_stat_weight(simulator, char_plus, char_minus, "extra_hit", 1, 5, dps_mean, dps_sample_std);
-                stat_weights.emplace_back("1%ExtraAttack " + std::to_string(hit.dps_plus) + " " +
-                                          std::to_string(hit.std_dps_plus) + " " + std::to_string(hit.dps_minus) + " " +
-                                          std::to_string(hit.std_dps_minus));
-            }
-            if (stat_weight == "mh_speed")
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                double swing_speed_diff = String_helpers::find_value(
-                    input.float_options_string, input.float_options_val, "stat_weight_mh_speed_dd");
-                double factor_p =
-                    (char_plus.weapons[0].swing_speed + swing_speed_diff) / char_plus.weapons[0].swing_speed;
-                double factor_n =
-                    (char_plus.weapons[0].swing_speed - swing_speed_diff) / char_plus.weapons[0].swing_speed;
-                char_plus.weapons[0].min_damage *= factor_p;
-                char_plus.weapons[0].max_damage *= factor_p;
-                char_plus.weapons[0].swing_speed += swing_speed_diff;
-                mod_hit_effects(char_plus.weapons[0].hit_effects, factor_p);
-                char_minus.weapons[0].min_damage *= factor_n;
-                char_minus.weapons[0].max_damage *= factor_n;
-                char_minus.weapons[0].swing_speed -= swing_speed_diff;
-                mod_hit_effects(char_minus.weapons[0].hit_effects, factor_n);
-                Stat_weight hit = compute_stat_weight(simulator, char_plus, char_minus, "mh_speed", swing_speed_diff, 1,
-                                                      dps_mean, dps_sample_std);
-                stat_weights.emplace_back(String_helpers::string_with_precision(swing_speed_diff, 2) + "-MH-speed " +
-                                          std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
-                                          std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
-            }
-            if (stat_weight == "oh_speed" && is_dual_wield)
-            {
-                Character char_plus = character;
-                Character char_minus = character;
-                double swing_speed_diff = String_helpers::find_value(
-                    input.float_options_string, input.float_options_val, "stat_weight_oh_speed_dd");
-                double factor_p =
-                    (char_plus.weapons[1].swing_speed + swing_speed_diff) / char_plus.weapons[1].swing_speed;
-                double factor_n =
-                    (char_plus.weapons[1].swing_speed - swing_speed_diff) / char_plus.weapons[1].swing_speed;
-                char_plus.weapons[1].min_damage *= factor_p;
-                char_plus.weapons[1].max_damage *= factor_p;
-                char_plus.weapons[1].swing_speed += swing_speed_diff;
-                mod_hit_effects(char_plus.weapons[1].hit_effects, factor_p);
-                char_minus.weapons[1].min_damage *= factor_n;
-                char_minus.weapons[1].max_damage *= factor_n;
-                char_minus.weapons[1].swing_speed -= swing_speed_diff;
-                mod_hit_effects(char_minus.weapons[1].hit_effects, factor_n);
-                Stat_weight hit = compute_stat_weight(simulator, char_plus, char_minus, "oh_speed", swing_speed_diff, 1,
-                                                      dps_mean, dps_sample_std);
-                stat_weights.emplace_back(String_helpers::string_with_precision(swing_speed_diff, 2) + "-OH-speed " +
-                                          std::to_string(hit.dps_plus) + " " + std::to_string(hit.std_dps_plus) + " " +
-                                          std::to_string(hit.dps_minus) + " " + std::to_string(hit.std_dps_minus));
-            }
+            char_plus.total_special_stats.critical_strike += rating_factor / 14 * 50;
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
         }
+        else if (stat_weight == "hit")
+        {
+            char_plus.total_special_stats.hit += rating_factor / 10 * 25;
+            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, dps_mean, dps_sample_std);
+        }
+        else if (stat_weight == "expertise")
+        {
+            char_plus.total_special_stats.expertise += rating_factor / 2.5 * 25;
+            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, dps_mean, dps_sample_std);
+        }
+        else if (stat_weight == "haste")
+        {
+            char_plus.total_special_stats.haste += rating_factor / 10 * 0.01 * 50;
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+        }
+        else if (stat_weight == "arpen")
+        {
+            char_plus.total_special_stats.gear_armor_pen += 350;
+            sw = compute_stat_weight(simulator, char_plus, 10, 35, dps_mean, dps_sample_std);
+        }
+        else
+        {
+            std::cout << "stat_weight '" << stat_weight << "' is not supported, continuing" << std::endl;
+            continue;
+        }
+        stat_weights.emplace_back(stat_weight + ":" + std::to_string(sw.mean) + ":" + std::to_string(sw.sample_std));
     }
 
     std::string debug_topic{};

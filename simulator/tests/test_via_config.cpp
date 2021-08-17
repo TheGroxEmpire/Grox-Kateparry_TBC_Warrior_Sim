@@ -34,6 +34,7 @@ TEST_F(Sim_fixture, test_via_config)
     std::vector<std::string> buffs;
     std::vector<std::string> enchants;
     std::vector<std::string> gems;
+    std::vector<std::string> stat_weights;
     std::vector<std::string> options;
     std::vector<std::string> float_options_string;
     std::vector<double> float_options_val;
@@ -49,6 +50,7 @@ TEST_F(Sim_fixture, test_via_config)
     std::regex KEY_WEAPONS(R"(^(main|off|two)_hand_dd$)");
     std::regex KEY_ENCHANTS(R"(_ench_dd$)");
     std::regex KEY_GEMS(R"(_gem[123]_dd$)");
+    std::regex KEY_STAT_WEIGHTS(R"(^stat_weight_(.+)$)");
     std::regex KEY_TALENTS(R"(_talent$)");
 
     auto has_seen_talents = false;
@@ -83,6 +85,10 @@ TEST_F(Sim_fixture, test_via_config)
         {
             if (key != value) gems.emplace_back(value);
         }
+        else if (std::regex_match(key, sm, KEY_STAT_WEIGHTS))
+        {
+            if (key == value) stat_weights.emplace_back(sm[1].str());
+        }
         else if (std::regex_search(key, KEY_TALENTS))
         {
             talent_string.emplace_back(key);
@@ -105,8 +111,6 @@ TEST_F(Sim_fixture, test_via_config)
             float_options_val.emplace_back(std::stod(value));
         }
     }
-
-    std::vector<std::string> stat_weights{"crit","expertise","hit","haste"};
 
     Sim_input sim_input(race, armor, weapons,
                         buffs, enchants, gems,

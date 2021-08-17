@@ -4103,7 +4103,7 @@
             <label for="grace_of_air_totem"> Grace of Air Totem</label><br>
 
             <input type="checkbox" id="enable_unleashed_rage">
-            <label for="enable_unleashed_rage:"> Unleashed rage <input type="number" id="unleashed_rage_dd" name="quantity"
+            <label for="enable_unleashed_rage"> Unleashed rage <input type="number" id="unleashed_rage_dd" name="quantity"
                 min="0" max="30" value="5" step="1"> seconds after fight start</label><br>
 
             <input type="checkbox" id="improved_seal_of_the_crusader">
@@ -4126,8 +4126,8 @@
             <label for="improved_faerie_fire"> Improved Faerie Fire</label><br>
 
             <input type="checkbox" id="battle_squawk">
-            <label for="battle_squawk">Battle squawk:
-                <input type="number" id="battle_squawk_dd" name="quantity" min="0" max="25" value="5" step="5">% haste.
+            <label for="battle_squawk">Battle squawk:</label>
+            <input type="number" id="battle_squawk_dd" name="quantity" min="0" max="25" value="5" step="5">% haste.
         </div>
         <br><br>
         <div class="checkbox_div">
@@ -4301,7 +4301,7 @@
                 'unstable_flask_of_the_soldier'] )">
             <label for="elixir_of_brute_force"> Elixir of Brute Force</label><br>
 
-            <input type="checkbox" id="roids"onclick=
+            <input type="checkbox" id="roids" onclick=
                 "unique_checkboxes_unselect
                 ('roids', 
                 ['elixir_mongoose', 'elixir_of_major_agility', 
@@ -4371,10 +4371,10 @@
             <label for="unstable_flask_of_the_soldier"> Unstable Flask of The Soldier</label><br>
 
             <b>Scrolls:</b><br>
-            <input type="checkbox" id="scroll_of_strength_v" onclick=
+            <input type="checkbox" id="scroll_of_strength_v">
             <label for="scroll_of_strength_v"> Scroll of Strength V</label><br>
 
-            <input type="checkbox" id="scroll_of_agility_v" onclick=
+            <input type="checkbox" id="scroll_of_agility_v">
             <label for="scroll_of_agility_v"> Scroll of Agility V</label><br>
 
             <b>Food:</b><br>
@@ -4507,7 +4507,7 @@
                 ('mighty_rage_potion', 
                 ['haste_potion', 
                 'insane_strength_potion',
-                'heroic_potion'] )"
+                'heroic_potion'] )">
         <label for="mighty_rage_potion"> Use mighty rage potion</label><br>
 
         <input type="checkbox" id="haste_potion" onclick=
@@ -4515,21 +4515,21 @@
                 ('haste_potion',
                 ['mighty_rage_potion', 
                 'insane_strength_potion',
-                'heroic_potion'] )"
+                'heroic_potion'] )">
         <label for="haste_potion"> Use haste potion</label><br>
                
         <input type="checkbox" id="insane_strength_potion" onclick=
         "unique_checkboxes_unselect
                 ('insane_strength_potion',
                 ['mighty_rage_potion', 'haste_potion',
-                'heroic_potion'] )"
+                'heroic_potion'] )">
         <label for="insane_strength_potion"> Use insane strength potion</label><br>
 
         <input type="checkbox" id="heroic_potion" onclick=
         "unique_checkboxes_unselect
                 ('heroic_potion', 
                 ['haste_potion', 
-                'insane_strength_potion'] )"
+                'insane_strength_potion'] )">
         <label for="heroic_potion"> Use heroic potion</label><br>
 
         <input type="checkbox" id="drums_of_battle">
@@ -4561,7 +4561,7 @@
             <label for="use_rampage"><b> Use rampage</b></label><br>
             <div class="description" id="rampage_div">
                 <label for="rampage_use_thresh_dd">Rampage when the buff has:</label>
-                <input type="number" id="rampage_use_thresh_dd" name="quantity" min="0" max="30" value="5"
+                <input type="number" id="rampage_use_thresh_dd" name="quantity" min="0" max="30" value="5">
                 <label for="rampage_use_thresh_dd"> seconds left.</label><br>
             </div>
         </div>
@@ -4572,7 +4572,8 @@
             <label for="use_mortal_strike"><b> Use mortal strike</b></label><br>
             <div class="description" id="mortal_strike_div">
                 <label for="whirlwind_bt_cooldown_thresh_dd">Mortal strike when whirlwind CD is above:</label>
-                <input type="number" id="bt_whirlwind_cooldown_thresh_dd" name="quantity" min="0" max="10" value="0.0"
+                <!-- ms_whirlwind_cooldown_thresh_dd is probably not even implemented ;) -->
+                <input type="number" id="ms_whirlwind_cooldown_thresh_dd" name="quantity" min="0" max="10" value="0.0"
                    step="0.1"><br>
                 <input type="checkbox" id="use_ms_in_exec_phase">
                 <label for="use_ms_in_exec_phase"> Use mortal strike in execute phase</label><br>
@@ -4610,9 +4611,9 @@
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
             <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
-            <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5"step="0.1"><br>
+            <input type="number" id="slam_spam_max_time_dd" name="quantity" min="0.0" max="4.0" value="1.5" step="0.1"><br>
             <label for="slam_latency_dd">Delay slam after a melee hit (Latency) for:</label>
-            <input type="number" id="slam_latency_dd" name="quantity" min="0.0" max="4.0" value="0.0"step="0.01"> seconds<br>
+            <input type="number" id="slam_latency_dd" name="quantity" min="0.0" max="4.0" value="0.0" step="0.01"> seconds<br>
             <input type="checkbox" id="use_sl_in_exec_phase">
             <label for="use_sl_in_exec_phase"> Use slam in execute phase</label><br>    
         </div>
@@ -4765,30 +4766,29 @@
         <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
+        <input type="checkbox" id="stat_weight_strength">
+        <label for="stat_weight_strength"> +10 Strength.</label><br>
+
+        <input type="checkbox" id="stat_weight_agility">
+        <label for="stat_weight_agility"> +10 Agility.</label><br>
+
+        <input type="checkbox" id="stat_weight_ap">
+        <label for="stat_weight_ap"> +10 Attack power.</label><br>
+
         <input type="checkbox" id="stat_weight_crit">
-        <label for="stat_weight_crit"> &plusmn 1% crit (&plusmn 22.08 Crit rating).</label><br>
+        <label for="stat_weight_crit"> +10 Crit rating.</label><br>
 
         <input type="checkbox" id="stat_weight_hit">
-        <label for="stat_weight_hit"> &plusmn 1% hit (&plusmn 15.77 Hit rating).</label><br>
+        <label for="stat_weight_hit"> +10 Hit rating.</label><br>
 
         <input type="checkbox" id="stat_weight_expertise">
-        <label for="stat_weight_expertise"> &plusmn 1% expertise (&plusmn 4 Expertise).</label><br>
+        <label for="stat_weight_expertise"> +10 Expertise rating.</label><br>
 
         <input type="checkbox" id="stat_weight_haste">
-        <label for="stat_weight_haste"> &plusmn 1% haste (&plusmn 15.77 Haste rating).</label><br>
+        <label for="stat_weight_haste"> +10 Haste rating.</label><br>
 
-        <input type="checkbox" id="stat_weight_extra_hit">
-        <label for="stat_weight_extra_hit"> + 1% chance for extra attack.</label><br>
-
-        <input type="checkbox" id="stat_weight_mh_speed">
-        <label for="stat_weight_mh_speed"> &plusmn <input type="number" id="stat_weight_mh_speed_dd" name="quantity"
-                                                          min=".1" max="1.0" value="0.5" step="0.1"> seconds main-hand
-            weapon speed. (0,1s-1,0s) </label><br>
-
-        <input type="checkbox" id="stat_weight_oh_speed">
-        <label for="stat_weight_oh_speed"> &plusmn <input type="number" id="stat_weight_oh_speed_dd" name="quantity"
-                                                          min=".1" max="1.0" value="0.5" step="0.1"> seconds off-hand
-            weapon speed. (0,1s-1,0s) </label><br><br>
+        <input type="checkbox" id="stat_weight_arpen">
+        <label for="stat_weight_haste"> +10 Armor penetration.</label><br>
 
         <b>Other settings:</b><br>
         <input type="checkbox" id="compute_dpr">
@@ -4969,7 +4969,7 @@
         "overpower_ww_cooldown_thresh_dd", "hamstring_cd_thresh_dd", "initial_rage_dd", "hamstring_thresh_dd",
         "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
-        "re_queue_abilities_dd", "stat_weight_mh_speed_dd", "stat_weight_oh_speed_dd",
+        "re_queue_abilities_dd",
         "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
         "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
 
@@ -4982,8 +4982,8 @@
         "use_sweeping_strikes", "dont_use_hm_when_ss", "fungal_bloom", "full_polarity", "battle_squawk", "ferocious_inspiration",
         "drums_of_battle", "haste_potion", "bloodlust", "insane_strength_potion", "heroic_potion"];
 
-    let stat_weigths = ["stat_weight_expertise", "stat_weight_hit", "stat_weight_crit", "stat_weight_haste",
-        "stat_weight_extra_hit", "stat_weight_mh_speed", "stat_weight_oh_speed"];
+    let stat_weigths = ["stat_weight_strength", "stat_weight_agility", "stat_weight_ap", "stat_weight_crit",
+        "stat_weight_hit", "stat_weight_expertise", "stat_weight_haste", "stat_weight_arpen"];
 
     let race;
     let race_string;
@@ -5372,14 +5372,12 @@
         if (document.getElementById("talents_stat_weights").checked) {
             total_simulations += n_simulations_talent * 9;
         }
-        let need_to_add_for_ap = true;
         let stat_weight_vec = new Module.StringList();
         for (let stat_weight of stat_weigths) {
             if (document.getElementById(stat_weight).checked) {
                 console.log(stat_weight.slice(12, stat_weight.length));
                 stat_weight_vec.push_back(stat_weight.slice(12, stat_weight.length));
-                total_simulations += n_simulations_stat * 2 + n_simulations_stat * 2 * need_to_add_for_ap;
-                need_to_add_for_ap = false;
+                total_simulations += n_simulations_stat;
             }
         }
 
@@ -5464,36 +5462,14 @@
             document.getElementById("output3").innerHTML = result['messages'].get(0);
 
             let stat_weights = [];
-            if (result['stat_weights'].size() > 0) {
-                let ap_string = result['stat_weights'].get(0);
-                ap_string = ap_string.split(" ");
-                let p_val_p = parseFloat(ap_string[1]) + 1.96 * parseFloat(ap_string[2]);
-                let p_val_n = parseFloat(ap_string[1]) - 1.96 * parseFloat(ap_string[2]);
-                let n_val_p = parseFloat(ap_string[3]) - 1.96 * parseFloat(ap_string[4]);
-                let n_val_n = parseFloat(ap_string[3]) + 1.96 * parseFloat(ap_string[4]);
+            for (let i = 0; i < result.stat_weights.size(); ++i) {
+                const sws = result.stat_weights.get(i);
+                const sw = sws.split(":");
                 stat_weights.push({
-                    'name': "100 AP",
-                    'value_max': Math.max(p_val_p, p_val_n),
-                    'value_min': Math.min(p_val_p, p_val_n),
-                    'negative_value_max': Math.max(n_val_p, n_val_n),
-                    'negative_value_min': Math.min(n_val_p, n_val_n)
+                    name: sw[0],
+                    mean: parseFloat(sw[1]),
+                    ci95: 1.96 * parseFloat(sw[2]),
                 });
-                let dps_per_ap = parseFloat(ap_string[1]) / 100;
-                for (let i = 1; i < result['stat_weights'].size(); i++) {
-                    let stat_string = result['stat_weights'].get(i);
-                    stat_string = stat_string.split(" ");
-                    let p_val_p = (parseFloat(stat_string[1]) + 1.96 * parseFloat(stat_string[2])) / dps_per_ap;
-                    let p_val_n = (parseFloat(stat_string[1]) - 1.96 * parseFloat(stat_string[2])) / dps_per_ap;
-                    let n_val_p = (parseFloat(stat_string[3]) - 1.96 * parseFloat(stat_string[4])) / dps_per_ap;
-                    let n_val_n = (parseFloat(stat_string[3]) + 1.96 * parseFloat(stat_string[4])) / dps_per_ap;
-                    stat_weights.push({
-                        'name': stat_string[0],
-                        'value_max': Math.max(p_val_p, p_val_n),
-                        'value_min': Math.min(p_val_p, p_val_n),
-                        'negative_value_max': Math.max(n_val_p, n_val_n),
-                        'negative_value_min': Math.min(n_val_p, n_val_n)
-                    });
-                }
             }
 
             let string = "<b>Stat weights:</b> <br />";
@@ -5501,24 +5477,8 @@
                 string = "<b>Stat weights (Setup 1):</b> <br />";
             }
             string += "(Accuracy is based on the 'number of simulations per stat weight' value.)<br>";
-            if (result['stat_weights'].size() > 0) {
-                string += "+" + stat_weights[0]['name'] + " equivalates: <b>" + stat_weights[0]['value_min'].toFixed(2) +
-                    " &#8722 " + stat_weights[0]['value_max'].toFixed(2) + "</b> DPS. <br />";
-                if (stat_weights[0]['name'] !== '1%ExtraAttack') {
-                    string += "-" + stat_weights[0]['name'] + " equivalates: <b>" + stat_weights[0]['negative_value_min'].toFixed(2) +
-                        " &#8722 " + stat_weights[0]['negative_value_max'].toFixed(2) + "</b> DPS. <br />";
-                }
-                string += "<br />";
-
-                for (let i = 1; i < stat_weights.length; i++) {
-                    string += "+" + stat_weights[i]['name'] + " equivalates: <b>" + stat_weights[i]['value_min'].toFixed(2) +
-                        " &#8722 " + stat_weights[i]['value_max'].toFixed(2) + "</b> attack power. <br />";
-                    if (stat_weights[i]['name'] !== '1%ExtraAttack') {
-                        string += "-" + stat_weights[i]['name'] + " equivalates: <b>" + stat_weights[i]['negative_value_min'].toFixed(2) +
-                            " &#8722 " + stat_weights[i]['negative_value_max'].toFixed(2) + "</b> attack power. <br />";
-                    }
-                    string += "<br />";
-                }
+            for (const sw of stat_weights) {
+                string += "+10 " + sw.name + " equate <b>" + sw.mean.toFixed(2) + " &plusmn " + sw.ci95.toFixed(2) + "</b> dps.<br />";
             }
             document.getElementById("output2").innerHTML = string;
 
