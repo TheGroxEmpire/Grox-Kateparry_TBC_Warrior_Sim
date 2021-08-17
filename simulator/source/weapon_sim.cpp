@@ -1,11 +1,9 @@
 #include "weapon_sim.hpp"
 
-Weapon_sim::Weapon_sim(const Weapon& weapon, const Special_stats& special_stats) :
+Weapon_sim::Weapon_sim(const Weapon& weapon) :
         swing_speed(weapon.swing_speed),
         next_swing(0),
-        min_damage(weapon.min_damage + special_stats.bonus_damage),
-        max_damage(weapon.max_damage + special_stats.bonus_damage),
-        average_damage(0.5 * (weapon.min_damage + weapon.max_damage) + special_stats.bonus_damage),
+        average_damage(0.5 * (weapon.min_damage + weapon.max_damage)),
         socket(weapon.socket),
         weapon_type(weapon.type),
         weapon_socket(weapon.weapon_socket),

@@ -477,18 +477,18 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
     std::vector<std::string> use_effect_order_string{};
     {
-        auto use_effect_order = simulator.get_use_effect_order(character);
+        auto use_effect_order = simulator.compute_use_effects_schedule(character);
         for (auto it = use_effect_order.crbegin(); it != use_effect_order.crend(); ++it)
         {
             use_effect_order_string.emplace_back(
-                it->second.name + " " +
+                it->second.get().name + " " +
                 String_helpers::string_with_precision(it->first, 3) + " " +
-                String_helpers::string_with_precision(it->second.duration, 3));
+                String_helpers::string_with_precision(it->second.get().duration, 3));
         }
     }
     for (const auto& wep : character.weapons)
     {
-        simulator.compute_hit_tables(character.total_special_stats, Weapon_sim(wep, character.total_special_stats));
+        simulator.compute_hit_tables(character.total_special_stats, Weapon_sim(wep));
     }
     const bool is_dual_wield = character.is_dual_wield();
     const auto yellow_mh_ht = simulator.get_hit_probabilities_yellow_mh();
@@ -947,9 +947,9 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     auto rating_factor = 52.0 / 82;
 
     std::vector<std::string> stat_weights;
-    for (const auto& stat_weight : input.stat_weights)
-    {
-        Character char_plus = character;
+        for (const auto& stat_weight : input.stat_weights)
+            {
+                Character char_plus = character;
         Stat_weight sw{};
         if (stat_weight == "strength")
         {

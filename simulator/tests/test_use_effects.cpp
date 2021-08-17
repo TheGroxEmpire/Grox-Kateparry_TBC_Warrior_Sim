@@ -5,9 +5,9 @@
 
 namespace
 {
-bool is_ascending(const std::vector<std::pair<double, Use_effect>>& use_effects)
+bool is_ascending(const Use_effects::Schedule& schedule)
 {
-    return std::is_sorted(use_effects.begin(), use_effects.end(), [](const auto& a, const auto& b) {
+    return std::is_sorted(schedule.begin(), schedule.end(), [](const auto& a, const auto& b) {
        return a.first < b.first;
     });
 }
@@ -19,17 +19,17 @@ TEST(TestSuite, test_use_effect_time_function)
     use_effect1.duration = 20;
     Use_effect use_effect2{};
     use_effect2.duration = 30;
-    std::vector<std::pair<double, Use_effect>> use_effect_timers;
-    use_effect_timers.emplace_back(0.0, use_effect1);
-    double time = Use_effects::is_time_available(use_effect_timers, 0.0, use_effect2.duration);
+    Use_effects::Schedule schedule{};
+    schedule.emplace_back(0.0, use_effect1);
+    double time = Use_effects::is_time_available(schedule, 0.0, use_effect2.duration);
     EXPECT_TRUE(time == 20.0);
-    time = Use_effects::is_time_available(use_effect_timers, 10.0, use_effect2.duration);
+    time = Use_effects::is_time_available(schedule, 10.0, use_effect2.duration);
     EXPECT_TRUE(time == 20.0);
-    time = Use_effects::is_time_available(use_effect_timers, 20.0, use_effect2.duration);
+    time = Use_effects::is_time_available(schedule, 20.0, use_effect2.duration);
     EXPECT_TRUE(time == 20.0);
 
-    use_effect_timers.emplace_back(40.0, use_effect1);
-    time = Use_effects::get_next_available_time(use_effect_timers, 0.0, use_effect2.duration);
+    schedule.emplace_back(40.0, use_effect1);
+    time = Use_effects::get_next_available_time(schedule, 0.0, use_effect2.duration);
     EXPECT_TRUE(time == 60.0);
 }
 
@@ -39,26 +39,26 @@ TEST(TestSuite, test_use_effect_ordering)
     use_effect1.name = "should_not_fit";
     use_effect1.duration = 30;
     use_effect1.cooldown = 100;
-    use_effect1.special_stats_boost = {12, 0, 0};
+    use_effect1.combat_buff.special_stats_boost = {12, 0, 0};
     use_effect1.effect_socket = Use_effect::Effect_socket::shared;
 
     Use_effect use_effect2{};
     use_effect2.duration = 30;
     use_effect2.cooldown = 80;
-    use_effect2.special_stats_boost = {12, 0, 40};
+    use_effect2.combat_buff.special_stats_boost = {12, 0, 40};
     use_effect2.effect_socket = Use_effect::Effect_socket::shared;
 
     Use_effect use_effect3{};
     use_effect3.duration = 30;
     use_effect3.cooldown = 80;
-    use_effect3.special_stats_boost = {12, 0, 100};
+    use_effect3.combat_buff.special_stats_boost = {12, 0, 100};
     use_effect3.effect_socket = Use_effect::Effect_socket::shared;
 
     std::vector<Use_effect> use_effects{use_effect1, use_effect2, use_effect3};
-    auto order = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, 580, 1500, 0, 0);
-    for (const auto& effect : order)
+    auto schedule = Use_effects::compute_schedule(use_effects, Special_stats{}, 580, 1500, 0, 0);
+    for (const auto& effect : schedule)
     {
-        EXPECT_TRUE(effect.second.name != "should_not_fit");
+        EXPECT_TRUE(effect.second.get().name != "should_not_fit");
     }
 }
 
@@ -81,8 +81,8 @@ TEST(TestSuite, test_use_effects)
     use_effects.emplace_back(use2.use_effects[0]);
     use_effects.emplace_back(use3.use_effects[0]);
     double sim_time = 320.0;
-    auto order = Use_effects::compute_use_effect_order(use_effects, Special_stats{}, sim_time, 1500, 0, 0);
-    EXPECT_TRUE(is_ascending(order));
+    auto schedule = Use_effects::compute_schedule(use_effects, Special_stats{}, sim_time, 1500, 0, 0);
+    EXPECT_TRUE(is_ascending(schedule));
     int ic = 0;
     int bk = 0;
     int dw = 0;
@@ -90,21 +90,22 @@ TEST(TestSuite, test_use_effects)
     int br = 0;
     int bf = 0;
     int bs = 0;
-    for (const auto& effect : order)
+    for (const auto& e : schedule)
     {
-        if (effect.second.name == "icon_of_unyielding_courage")
+        const auto& ue = e.second.get();
+        if (ue.name == "icon_of_unyielding_courage")
             ic++;
-        if (effect.second.name == "bulwark_of_kings")
+        if (ue.name == "bulwark_of_kings")
             bk++;
-        if (effect.second.name == "blood_fury")
+        if (ue.name == "blood_fury")
             bf++;
-        if (effect.second.name == "berserking")
+        if (ue.name == "berserking")
             bs++;
-        if (effect.second.name == "bloodrage")
+        if (ue.name == "bloodrage")
             br++;
-        if (effect.second.name == "recklessness")
+        if (ue.name == "recklessness")
             rl++;
-        if (effect.second.name == "death_wish")
+        if (ue.name == "death_wish")
             dw++;
     }
     EXPECT_EQ(ic, 3);

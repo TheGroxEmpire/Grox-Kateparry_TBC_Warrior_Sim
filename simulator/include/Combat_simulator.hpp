@@ -2,17 +2,18 @@
 #define WOW_SIMULATOR_COMBAT_SIMULATOR_HPP
 
 #include "Buff_manager.hpp"
-#include "Rage_manager.hpp"
 #include "Character.hpp"
 #include "Distribution.hpp"
+#include "Rage_manager.hpp"
 #include "damage_sources.hpp"
 #include "find_values.hpp"
+#include "logger.hpp"
 #include "sim_input.hpp"
 #include "sim_input_mult.hpp"
+#include "sim_state.hpp"
 #include "string_helpers.hpp"
 #include "time_keeper.hpp"
 #include "weapon_sim.hpp"
-#include "logger.hpp"
 
 #include <array>
 #include <cassert>
@@ -314,6 +315,9 @@ public:
 
         Hit_table() : name_(), miss_(0), dodge_(0), glance_(0), crit_(0), dm_() {}
 
+        void alter_white_crit(double crit_delta) { crit_ += crit_delta; }
+        void alter_yellow_crit(double crit_delta) { crit_ += (100 - dodge_) / 100 * crit_delta; }
+
         [[nodiscard]] const std::string& name() const { return name_; }
 
         [[nodiscard]] bool isMissOrDodge() const { return rand() * 100.0 / RAND_MAX < dodge_; }
@@ -381,61 +385,57 @@ public:
 
     [[nodiscard]] double get_rage() const final { return rage; }
 
+    // TODO turn us into hit effects :)
     void maybe_gain_flurry(Hit_result hit_result, int& flurry_charges, Special_stats& special_stats) const;
     void maybe_remove_flurry(int& flurry_charges, Special_stats& special_stats) const;
-
     void maybe_add_rampage_stack(Hit_result hit_result, int& rampage_stacks, Special_stats& special_stats);
-
     void unbridled_wrath(const Weapon_sim& weapon);
 
-    void swing_weapon(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                      Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks,
-                      Extra_attack_type extra_attack_type = Extra_attack_type::all);
+    void swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
-    void hit_effects(Weapon_sim& weapon, Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                     Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks,
-                     Hit_type hit_type = Hit_type::spell, Extra_attack_type extra_attack_type = Extra_attack_type::all);
+    void hit_effects(Sim_state& state, Weapon_sim& weapon, Hit_type hit_type = Hit_type::spell, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
-    void overpower(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
+    void overpower(Sim_state& state);
 
     bool start_cast_slam(bool mh_swing, const Weapon_sim& weapon);
 
-    void slam(Weapon_sim& main_hand_weapon, Special_stats& special_stats, Damage_sources& damage_sources,
-              int& flurry_charges, int& rampage_stacks);
+    void slam(Sim_state& state);
 
-    void mortal_strike(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                       Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
+    void mortal_strike(Sim_state& state);
 
-    void bloodthirst(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                     Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
+    void bloodthirst(Sim_state& state);
 
-    void whirlwind(Weapon_sim& main_hand_weapon, Weapon_sim& off_hand_weapon, Special_stats& special_stats,
-                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks, bool is_dw = false);
+    void whirlwind(Sim_state& state);
 
-    void execute(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                 Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
+    void execute(Sim_state& state);
 
-    void hamstring(Weapon_sim& main_hand_weapon, Special_stats& special_stats,
-                   Damage_sources& damage_sources, int& flurry_charges, int& rampage_stacks);
+    void hamstring(Sim_state& state);
 
     void simulate(const Character& character, int n_simulations, double init_mean, double init_variance,
                   int init_simulations);
 
     void simulate(const Character& character, int init_iteration = 0, bool log_data = false, bool reset_dps = true);
 
+    void normal_phase(Sim_state& state, bool mh_swing);
+    void execute_phase(Sim_state& state, bool mh_swing);
+    void queue_next_melee();
+
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
     [[nodiscard]] double rage_generation(const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const;
 
-    void cout_damage_parse(const Weapon_sim& weapon, const Hit_table& hit_table, const Combat_simulator::Hit_outcome& hit_outcome);
+    void cout_damage_parse(const Weapon_sim& weapon, const Hit_table& hit_table, const Hit_outcome& hit_outcome);
 
-    Hit_outcome generate_hit(const Weapon_sim& main_hand_weapon, double damage, const Weapon_sim& weapon, const Hit_table& hit_table,
-                             const Special_stats& special_stats, Damage_sources& damage_sources, bool boss_target = true, bool can_sweep = true);
+    Hit_outcome generate_hit(Sim_state& state, const Weapon_sim& weapon, const Hit_table& hit_table, double damage,
+                             bool boss_target = true, bool can_sweep = true);
 
     void compute_hit_tables(const Special_stats& special_stats, const Weapon_sim& weapon);
 
-    std::vector<std::pair<double, Use_effect>> get_use_effect_order(const Character& character);
+    void add_use_effects(const Character& character);
+
+    void add_over_time_effects();
+
+    Use_effects::Schedule compute_use_effects_schedule(const Character& character);
 
     [[nodiscard]] const Hit_table& get_hit_probabilities_white_mh() const { return hit_table_white_mh_; }
 
@@ -506,19 +506,21 @@ public:
         "recklessness", Use_effect::Effect_socket::unique, {}, {100, 0, 0}, 0, 15, 900, true};
 
     const Use_effect bloodrage = {"bloodrage", Use_effect::Effect_socket::unique, {}, {}, 10, 10, 60, false,
-                                  {},          {{"Bloodrage", {}, 1, 0, 1, 10}}};
+                                  {},          {{"bloodrage", {}, 1, 0, 1, 10}}};
 
     const Over_time_effect essence_of_the_red = {"essence_of_the_red", {}, 20, 0, 1, 600};
 
     const Over_time_effect anger_management = {"anger_management", {}, 1, 0, 3, 600};
 
 private:
-    Hit_table hit_table_white_mh_;
-    Hit_table hit_table_white_oh_;
-    Hit_table hit_table_yellow_mh_;
-    Hit_table hit_table_yellow_oh_;
-    Hit_table hit_table_overpower_;
-    Hit_table hit_table_white_oh_queued_;
+    Hit_table hit_table_white_mh_{};
+    Hit_table hit_table_white_oh_{};
+    Hit_table hit_table_yellow_mh_{};
+    Hit_table hit_table_yellow_oh_{};
+    Hit_table hit_table_overpower_{};
+    Hit_table hit_table_white_oh_queued_{};
+
+    Special_stats compute_hit_table_stats_{};
 
     Time_keeper time_keeper_{};
     Buff_manager buff_manager_{};
@@ -553,7 +555,7 @@ private:
     bool use_sweeping_strikes_{};
     int sweeping_strikes_charges_{};
 
-    std::vector<Use_effect> use_effects_all_{};
+    std::vector<Use_effect> use_effects_{};
     std::vector<Over_time_effect> over_time_effects_{};
 
     Over_time_effect deep_wound_effect_{"deep_wound", {}, 0, 0, 3, 12};

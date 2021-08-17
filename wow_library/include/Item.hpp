@@ -51,7 +51,6 @@ enum class Set
     doomplate,
     warbringer,
     destroyer,
-    solarian_bs_bonus,
 };
 
 /* enum class Gem_bonus
@@ -236,36 +235,35 @@ public:
 
     Use_effect() = default;
 
-    Use_effect(std::string name, Effect_socket effect_socket, Attributes attribute_boost,
+    Use_effect(const std::string& name, Effect_socket effect_socket, Attributes attribute_boost,
                Special_stats special_stats_boost, double rage_boost, double duration, double cooldown,
                bool triggers_gcd, std::vector<Hit_effect> hit_effects = std::vector<Hit_effect>(),
-               std::vector<Over_time_effect> over_time_effects = std::vector<Over_time_effect>())
-        : name(std::move(name))
-        , effect_socket(effect_socket)
-        , attribute_boost(attribute_boost)
-        , special_stats_boost(special_stats_boost)
-        , rage_boost(rage_boost)
-        , duration(duration)
-        , cooldown(cooldown)
-        , triggers_gcd(triggers_gcd)
-        , hit_effects(std::move(hit_effects))
-        , over_time_effects(std::move(over_time_effects)){};
+               std::vector<Over_time_effect> over_time_effects = std::vector<Over_time_effect>()) :
+        name(name),
+        effect_socket(effect_socket),
+        rage_boost(rage_boost),
+        duration(duration),
+        cooldown(cooldown),
+        triggers_gcd(triggers_gcd),
+        hit_effects(std::move(hit_effects)),
+        over_time_effects(std::move(over_time_effects)),
+        combat_buff({name, Hit_effect::Type::stat_boost, attribute_boost, special_stats_boost, 0, duration, 0, 0})
+    {}
 
     [[nodiscard]] Special_stats to_special_stats(const Special_stats& multipliers) const
     {
-        return special_stats_boost + attribute_boost.to_special_stats(multipliers);
+        return combat_buff.to_special_stats(multipliers);
     }
 
     std::string name{};
     Effect_socket effect_socket{};
-    Attributes attribute_boost{};
-    Special_stats special_stats_boost{};
     double rage_boost{};
     double duration{};
     double cooldown{};
     bool triggers_gcd{};
     std::vector<Hit_effect> hit_effects{};
     std::vector<Over_time_effect> over_time_effects{};
+    Hit_effect combat_buff{};
 };
 
 struct Enchant

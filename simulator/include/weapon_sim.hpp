@@ -6,23 +6,21 @@
 class Weapon_sim
 {
 public:
-    Weapon_sim(const Weapon& weapon, const Special_stats& special_stats);
+    explicit Weapon_sim(const Weapon& weapon);
 
-    [[nodiscard]] double swing(double attack_power) const
+    [[nodiscard]] double swing(const Special_stats& special_stats) const
     {
-        return average_damage + attack_power * swing_speed / 14;
+        return average_damage + special_stats.bonus_damage + special_stats.attack_power * swing_speed / 14;
     }
 
-    [[nodiscard]] double normalized_swing(double attack_power) const
+    [[nodiscard]] double normalized_swing(const Special_stats& special_stats) const
     {
-        return average_damage + attack_power * normalized_swing_speed / 14;
+        return average_damage + special_stats.bonus_damage + special_stats.attack_power * normalized_swing_speed / 14;
     }
 
-    const double swing_speed;
+    double swing_speed;
     double normalized_swing_speed;
     double next_swing;
-    double min_damage;
-    double max_damage;
     double average_damage;
     Socket socket;
     Weapon_type weapon_type;

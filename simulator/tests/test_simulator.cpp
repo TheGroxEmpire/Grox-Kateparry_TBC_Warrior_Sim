@@ -745,6 +745,25 @@ rage lost 0.09 per minute
 
 Deep_wounds 88.15%
 Anger Management 100.00%
+
+after slam bugfix
+
+took 1860 ms
+
+test_arms
+
+white (mh)    = 282.19 (15.71x)
+mortal strike = 83.10 (4.17x)
+whirlwind     = 43.00 (2.55x)
+slam          = 286.54 (14.05x)
+heroic strike = 1.04 (0.05x)
+execute       = 22.53 (1.23x)
+deep wounds   = 42.59 (13.52x)
+----------------------
+total         = 761.00
+
+deep_wound 88.14%
+anger_management 100.00%
 */
 TEST_F(Sim_fixture, test_arms)
 {
@@ -787,7 +806,6 @@ TEST_F(Sim_fixture, test_arms)
     sim.set_config(config);
 
     time_simulate(sim, character);
-
     print_results(test_info_->name(), sim, true);
 
     EXPECT_EQ(0, 0);
@@ -1023,7 +1041,7 @@ sword_specialization 1.38 procs/min
 */
 TEST_F(Sim_fixture, test_procs)
 {
-    config.sim_time = 120;
+    config.sim_time = 5 * 60;
     config.n_batches = 25000;
     config.main_target_initial_armor_ = 6200.0;
 
@@ -1117,9 +1135,6 @@ TEST_F(Sim_fixture, test_procs)
     config.combat.overpower_rage_thresh = 25;
 
     sim.set_config(config);
-
-    time_simulate(sim, character);
-    print_results(test_info_->name(), sim, true);
 
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);

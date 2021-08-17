@@ -340,12 +340,6 @@ void Armory::compute_total_stats(Character& character) const
                         character.set_bonus_effect.destroyer_2_set = true;
                     }
                 }
-                // TODO(vigo) it's a lot simpler to check for presence of "solarians_sapphire" directly
-                // PS: Solarian has a set on it. This is a workaround to have solarian giving BS AP bonus
-                if (set_bonus.name == "solarian_bs_bonus")
-                {
-                    character.set_bonus_effect.solarian_bs_bonus = true;
-                }
             }
         }
 
@@ -389,13 +383,13 @@ void Armory::compute_total_stats(Character& character) const
             {
                 use_effect.duration = 180.0;
             }
-            if (character.set_bonus_effect.solarian_bs_bonus)
+            if (character.has_item("solarians_sapphire"))
             {
-                use_effect.special_stats_boost.attack_power += 70;
+                use_effect.combat_buff.special_stats_boost.attack_power += 70;
             }
             if (character.talents.commanding_presence_talent > 0)
             {
-                use_effect.special_stats_boost.attack_power *=
+                use_effect.combat_buff.special_stats_boost.attack_power *=
                     1.0 + 0.05 * character.talents.commanding_presence_talent;
             }
             break;

@@ -557,7 +557,7 @@ struct Armory
                                                                                   64},        Socket::trinket, Set::none, {}, {{"slayers_crest",             Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 260}, 0, 20, 120, true}}},
                 
                 // Phase 2
-                {"solarians_sapphire", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::solarian_bs_bonus}, 
+                {"solarians_sapphire", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::none},
                 {"tsunami_talisman", Attributes{0.0, 0.0}, Special_stats{1.7210144927536233, 0.6341154090044389, 0.0, 0, 0.0}, Socket::trinket, Set::none, {{"tsunami_talisman", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 340}, 0, 10, 45, .1}}}, 
                 //{"darkmoon_card_crusade", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 120}, Socket::trinket}, 
             };
@@ -762,7 +762,6 @@ struct Armory
             {"warbringer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  4, Set::warbringer},
             {"destroyer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  2, Set::destroyer},
             {"destroyer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  4, Set::destroyer},
-            {"solarian_bs_bonus",           Attributes{0, 0}, Special_stats{0, 0, 0},  1, Set::solarian_bs_bonus},
     };
 
     [[nodiscard]] std::vector<Armor> get_items_in_socket(Socket socket) const;
