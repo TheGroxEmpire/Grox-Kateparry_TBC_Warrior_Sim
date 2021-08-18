@@ -1001,16 +1001,16 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     add_use_effects(character);
     add_over_time_effects();
 
-    auto use_effect_order = compute_use_effects_schedule(character);
+    auto use_effect_schedule = compute_use_effects_schedule(character);
 
     auto empty_hit_effects = std::vector<Hit_effect>();
     if (is_dual_wield)
     {
-        buff_manager_.initialize(weapons[0].hit_effects,weapons[1].hit_effects, use_effect_order, this);
+        buff_manager_.initialize(weapons[0].hit_effects,weapons[1].hit_effects, use_effect_schedule, this);
     }
     else
     {
-        buff_manager_.initialize(weapons[0].hit_effects,empty_hit_effects, use_effect_order, this);
+        buff_manager_.initialize(weapons[0].hit_effects,empty_hit_effects, use_effect_schedule, this);
     }
 
     if (reset_dps)
@@ -1062,7 +1062,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         }
 
         // Check if the simulator should use any use effects before the fight
-        for (const auto& ue : use_effect_order)
+        for (const auto& ue : use_effect_schedule)
         {
             if (ue.first >= 0) break;
 
@@ -1631,18 +1631,20 @@ void Combat_simulator::add_over_time_effects()
 
 Use_effects::Schedule Combat_simulator::compute_use_effects_schedule(const Character& character)
 {
+    const auto sim_time = static_cast<int>(std::round(config.sim_time * 1000));
+
     double ap_equiv;
     if (character.is_dual_wield())
     {
         ap_equiv = get_character_ap_equivalent(character.total_special_stats, character.weapons[0],
-                                               character.weapons[1], config.sim_time, {});
+                                               character.weapons[1], sim_time, {});
     }
     else
     {
         ap_equiv = get_character_ap_equivalent(character.total_special_stats, character.weapons[0],
-                                               config.sim_time, {});
+                                               sim_time, {});
     }
-    return Use_effects::compute_schedule(use_effects_, character.total_special_stats, config.sim_time, ap_equiv);
+    return Use_effects::compute_schedule(use_effects_, character.total_special_stats, sim_time, ap_equiv);
 }
 
 void Combat_simulator::init_histogram()

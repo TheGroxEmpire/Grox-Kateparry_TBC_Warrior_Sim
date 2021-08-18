@@ -38,7 +38,6 @@ void Buff_manager::reset(Special_stats& special_stats, Damage_sources& damage_so
     for (auto& buff : over_time_buffs)
     {
         buff.next_tick = Over_time_buff::inactive;
-        buff.next_fade = -1; // this is used for determining whether a buff is active or not
     }
     min_over_time_buff = std::numeric_limits<int>::max();
 
@@ -96,11 +95,11 @@ void Buff_manager::update_aura_uptimes(int current_time) {
     auto m = std::unordered_map<std::string, double>();
     for (const auto& buff : combat_buffs)
     {
-        m[buff.name] = buff.uptime * 0.001;
+        m[buff.name] = static_cast<double>(buff.uptime) * 0.001;
     }
     for (const auto& buff : over_time_buffs)
     {
-        m[buff.name] = buff.uptime * 0.001;
+        m[buff.name] = static_cast<double>(buff.uptime) * 0.001;
     }
     return m;
 }
@@ -253,7 +252,8 @@ void Buff_manager::increment_over_time_buffs(int current_time, Logger& logger)
             continue;
         }
 
-        assert(current_time == buff.next_tick);
+        // if over_time_buffs start pre-combat (bloodrage), next_tick might be < 0, and can't be scheduled correctly
+        assert(current_time == (buff.next_tick > 0 ? buff.next_tick : 0));
 
         // this used to support everything at once, but no over_time_buff actually granted rage, dealt damage, and added stats.
         //  nothing does the latter, afaik
@@ -449,7 +449,7 @@ void Buff_manager::do_add_over_time_buff(const Over_time_effect& over_time_effec
 {
     auto& buff = over_time_buffs[over_time_effect.over_time_buff_idx];
 
-    if (buff.next_fade < current_time) {
+    if (buff.next_tick == Over_time_buff::inactive) {
         buff.last_gain = current_time;
     }
 
