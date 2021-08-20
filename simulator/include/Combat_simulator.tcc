@@ -169,6 +169,7 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         unleashed_rage_start_ = fv.find("unleashed_rage_dd");
     }
     {
+        // TODO(vigo) add /all/ talents here, and handle talents at _one_ spot
         Find_values<int> fv(input.talent_string, input.talent_val);
         talents.improved_heroic_strike = fv.find("improved_heroic_strike_talent");
         talents.overpower = fv.find("improved_overpower_talent");
