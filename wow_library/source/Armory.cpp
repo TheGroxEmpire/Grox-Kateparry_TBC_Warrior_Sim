@@ -1472,8 +1472,9 @@ void Armory::add_talents_to_character(Character& character, const std::vector<st
     {
         if (!character.is_dual_wield())
         {
-            double amount = double(val) / 100.0;
-            character.talent_special_stats += Special_stats{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, amount};
+            Special_stats ss;
+            ss.damage_mod_physical = val * 0.01;
+            character.talent_special_stats += ss;
         }
     }
     val = fv.find("poleaxe_specialization_talent");
