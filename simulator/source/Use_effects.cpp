@@ -2,9 +2,7 @@
 
 #include <algorithm>
 
-namespace Use_effects
-{
-int is_time_available(const Schedule& schedule, int check_time, int duration)
+int Use_effects::is_time_available(const Schedule& schedule, int check_time, int duration)
 {
     for (const auto& pair : schedule)
     {
@@ -20,11 +18,11 @@ int is_time_available(const Schedule& schedule, int check_time, int duration)
     return check_time;
 }
 
-int get_next_available_time(const Schedule& schedule, int check_time, int duration)
+int Use_effects::get_next_available_time(const Schedule& schedule, int check_time, int duration)
 {
     while (true)
     {
-        double next_available = is_time_available(schedule, check_time, duration);
+        auto next_available = is_time_available(schedule, check_time, duration);
         if (next_available == check_time)
         {
             return next_available;
@@ -33,7 +31,7 @@ int get_next_available_time(const Schedule& schedule, int check_time, int durati
     }
 }
 
-Schedule compute_schedule(std::vector<Use_effect>& use_effects, const Special_stats& special_stats,
+Use_effects::Schedule Use_effects::compute_schedule(std::vector<Use_effect>& use_effects, const Special_stats& special_stats,
                           int sim_time, double total_ap)
 {
     Schedule schedule;
@@ -112,7 +110,7 @@ double estimate_power(const Use_effect& use_effect, const Special_stats& special
     return use_effect_ap_boost + use_effect_haste_boost + use_effect_armor_boost;
 }
 
-std::vector<Use_effect_ref> sort_use_effects_by_power_ascending(std::vector<Use_effect_ref>& shared_effects,
+std::vector<Use_effects::Use_effect_ref> Use_effects::sort_use_effects_by_power_ascending(std::vector<Use_effect_ref>& shared_effects,
                                                                 const Special_stats& special_stats, double total_ap)
 {
     std::sort(shared_effects.begin(), shared_effects.end(), [special_stats,total_ap](const auto& a, const auto& b) {
@@ -121,11 +119,9 @@ std::vector<Use_effect_ref> sort_use_effects_by_power_ascending(std::vector<Use_
     return shared_effects;
 }
 
-double get_use_effect_ap_equivalent(const Use_effect& use_effect, const Special_stats& special_stats, double total_ap,
+double Use_effects::get_use_effect_ap_equivalent(const Use_effect& use_effect, const Special_stats& special_stats, double total_ap,
                                     int sim_time)
 {
     double ap_during_active = estimate_power(use_effect, special_stats, total_ap);
     return ap_during_active * std::min(use_effect.duration / static_cast<double>(sim_time), 1.0);
 }
-
-} // namespace Use_effects

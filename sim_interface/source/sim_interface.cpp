@@ -8,6 +8,46 @@
 
 #include <sstream>
 
+void print_results(const Combat_simulator& sim, bool print_uptimes_and_procs)
+{
+    auto dd = sim.get_damage_distribution();
+
+    auto f = 1.0 / (sim.config.sim_time * sim.config.n_batches);
+    auto g = 60 * f;
+
+    std::cout << std::fixed << std::setprecision(2);
+    std::cout << "white (mh)    = " << f * dd.white_mh_damage << " (" << g * dd.white_mh_count << "x)" << std::endl;
+    if (dd.white_oh_count > 0) std::cout << "white (oh)    = " << f * dd.white_oh_damage << " (" << g * dd.white_oh_count << "x)" << std::endl;
+    if (dd.mortal_strike_count > 0) std::cout << "mortal strike = " << f * dd.mortal_strike_damage << " (" << g * dd.mortal_strike_count << "x)" << std::endl;
+    if (dd.cleave_count > 0) std::cout << "cleave        = " << f * dd.cleave_damage << " (" << g * dd.cleave_count << "x)" << std::endl;
+    if (dd.bloodthirst_count > 0) std::cout << "bloodthirst   = " << f * dd.bloodthirst_damage << " (" << g * dd.bloodthirst_count << "x)" << std::endl;
+    if (dd.whirlwind_count > 0) std::cout << "whirlwind     = " << f * dd.whirlwind_damage << " (" << g * dd.whirlwind_count << "x)" << std::endl;
+    if (dd.slam_count > 0) std::cout << "slam          = " << f * dd.slam_damage << " (" << g * dd.slam_count << "x)" << std::endl;
+    if (dd.heroic_strike_count > 0) std::cout << "heroic strike = " << f * dd.heroic_strike_damage << " (" << g * dd.heroic_strike_count << "x)" << std::endl;
+    if (dd.execute_count > 0) std::cout << "execute       = " << f * dd.execute_damage << " (" << g * dd.execute_count << "x)" << std::endl;
+    if (dd.deep_wounds_count > 0) std::cout << "deep wounds   = " << f * dd.deep_wounds_damage << " (" << g * dd.deep_wounds_count << "x)" << std::endl;
+    if (dd.overpower_count > 0) std::cout << "overpower     = " << f * dd.overpower_damage << " (" << g * dd.overpower_count << "x)" << std::endl;
+    if (dd.item_hit_effects_count > 0) std::cout << "hit effects   = " << f * dd.item_hit_effects_damage << " (" << g * dd.item_hit_effects_count << "x)" << std::endl;
+    std::cout << "----------------------" << std::endl;
+    std::cout << "total         = " << f * dd.sum_damage_sources() << std::endl;
+    std::cout << std::endl;
+
+    if (print_uptimes_and_procs)
+    {
+        for (const auto& e : sim.get_aura_uptimes_map()) {
+            std::cout << e.first << " " << 100 * f * e.second << "%" << std::endl;
+        }
+        std::cout << std::endl;
+        for (const auto& e : sim.get_proc_data()) {
+            std::cout << e.first << " " << g * e.second << " procs/min" << std::endl;
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::setprecision(6);
+}
+
+
 void item_upgrades(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
                    Armory& armory, std::vector<size_t> batches_per_iteration,
                    std::vector<size_t> cumulative_simulations, Combat_simulator& simulator, double dps_mean,
@@ -475,12 +515,12 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     Combat_simulator simulator{};
     simulator.set_config(config);
 
-    std::vector<std::string> use_effect_order_string{};
+    std::vector<std::string> use_effects_schedule_string{};
     {
-        auto use_effect_order = simulator.compute_use_effects_schedule(character);
-        for (auto it = use_effect_order.crbegin(); it != use_effect_order.crend(); ++it)
+        auto use_effects_schedule = simulator.compute_use_effects_schedule(character);
+        for (auto it = use_effects_schedule.crbegin(); it != use_effects_schedule.crend(); ++it)
         {
-            use_effect_order_string.emplace_back(
+            use_effects_schedule_string.emplace_back(
                 it->second.get().name + " " +
                 String_helpers::string_with_precision(it->first, 3) + " " +
                 String_helpers::string_with_precision(it->second.get().duration, 3));
@@ -500,21 +540,22 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
     simulator.simulate(character, 0, true);
 
+    print_results(simulator, true);
+
     const double dps_mean = simulator.get_dps_mean();
-    const double dps_sample_std =
-        Statistics::sample_deviation(std::sqrt(simulator.get_dps_variance()), config.n_batches);
+    const double dps_sample_std = Statistics::sample_deviation(std::sqrt(simulator.get_dps_variance()), config.n_batches);
     std::vector<double> mean_dps_vec{dps_mean};
     std::vector<double> sample_std_dps_vec{dps_sample_std};
 
-    const auto hist_x = simulator.get_hist_x();
-    const auto hist_y = simulator.get_hist_y();
+    const auto& hist_x = simulator.get_hist_x();
+    const auto& hist_y = simulator.get_hist_y();
 
-    const auto dmg_dist = simulator.get_damage_distribution();
-    const std::vector<double> dps_dist_raw = get_damage_sources(dmg_dist);
+    const auto& dmg_dist = simulator.get_damage_distribution();
+    const std::vector<double>& dps_dist_raw = get_damage_sources(dmg_dist);
 
     std::vector<std::string> aura_uptimes = simulator.get_aura_uptimes();
     std::vector<std::string> proc_statistics = simulator.get_proc_statistics();
-    auto damage_time_lapse_raw = simulator.get_damage_time_lapse();
+    const auto& damage_time_lapse_raw = simulator.get_damage_time_lapse();
     std::vector<std::string> time_lapse_names;
     std::vector<std::vector<double>> damage_time_lapse;
     std::vector<double> dps_dist;
@@ -1063,7 +1104,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             time_lapse_names,
             damage_time_lapse,
             aura_uptimes,
-            use_effect_order_string,
+            use_effects_schedule_string,
             proc_statistics,
             stat_weights,
             {item_strengths_string + extra_info_string + rage_info + dpr_info + talents_info, debug_topic},

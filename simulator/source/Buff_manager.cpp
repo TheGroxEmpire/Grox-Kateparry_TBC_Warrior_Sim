@@ -314,7 +314,7 @@ void Buff_manager::increment_hit_auras(int current_time, Logger& logger)
 
         // or have a specialized add_combat_buff() here, probably
         assert(hit_aura.hit_effect_mh->combat_buff_idx >= 0);
-        assert(hit_aura.hit_effect_oh->combat_buff_idx == hit_aura.hit_effect_mh->combat_buff_idx);
+        assert(hit_aura.hit_effect_oh->combat_buff_idx == -1 || hit_aura.hit_effect_oh->combat_buff_idx == hit_aura.hit_effect_mh->combat_buff_idx);
 
         hit_aura.hit_effect_mh->time_counter = std::numeric_limits<int>::max(); // effectively disable hit_effects
         hit_aura.hit_effect_oh->time_counter = std::numeric_limits<int>::max();

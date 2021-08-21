@@ -106,7 +106,7 @@ TEST_F(Sim_fixture, test_via_config)
         else
         {
             options.emplace_back(key);
-            if (key == value) continue; // bools
+            if (key == value || value == "true") continue; // bools
             float_options_string.emplace_back(key);
             float_options_val.emplace_back(std::stod(value));
         }
