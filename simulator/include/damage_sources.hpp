@@ -27,11 +27,14 @@ enum class Damage_source
 struct Damage_instance
 {
     Damage_instance(Damage_source source, double damage, int time_stamp)
-        : damage_source(source), damage(damage), time_stamp(time_stamp){};
+        : damage_source(source), damage(damage), time_stamp(time_stamp) {}
+
     Damage_source damage_source;
-    double damage{};
-    int time_stamp{};
+    double damage;
+    int time_stamp;
 };
+
+std::ostream& operator<<(std::ostream& os, Damage_source damage_source);
 
 struct Damage_sources
 {

@@ -1090,8 +1090,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
         while (time_keeper_.time < sim_time)
         {
-            int next_mh_swing = weapons[0].next_swing;
-            int next_oh_swing = is_dual_wield ? weapons[1].next_swing : -1;
+            int next_mh_swing = state.main_hand_weapon.next_swing;
+            int next_oh_swing = state.is_dual_wield ? state.off_hand_weapon.next_swing : -1;
             int next_buff_event = buff_manager_.next_event(time_keeper_.time);
             int next_slam_finish = slam_manager.next_finish();
             int next_event = time_keeper_.get_next_event(next_mh_swing, next_oh_swing,
@@ -1259,23 +1259,22 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
         buff_manager_.update_aura_uptimes(sim_time);
 
-        double new_sample = state.damage_sources.sum_damage_sources() / sim_time;
-        dps_distribution_.add_sample(new_sample);
+        double dps_sample = state.damage_sources.sum_damage_sources() * 1000 / sim_time;
+        dps_distribution_.add_sample(dps_sample);
         damage_distribution_ = damage_distribution_ + state.damage_sources;
 
         rampage_uptime_ = Statistics::update_mean(rampage_uptime_, iter + 1, double(mh_hits_w_rampage) / mh_hits);
         if (is_dual_wield)
         {
-            oh_queued_uptime_ =
-                Statistics::update_mean(oh_queued_uptime_, iter + 1, double(oh_hits_w_queued) / oh_hits);
+            oh_queued_uptime_ = Statistics::update_mean(oh_queued_uptime_, iter + 1, double(oh_hits_w_queued) / oh_hits);
         }
         flurry_uptime_ = Statistics::update_mean(flurry_uptime_, iter + 1, flurry_uptime / time_keeper_.time);
-        avg_rage_spent_executing_ =
-            Statistics::update_mean(avg_rage_spent_executing_, iter + 1, rage_spent_on_execute_);
+        avg_rage_spent_executing_ = Statistics::update_mean(avg_rage_spent_executing_, iter + 1, rage_spent_on_execute_);
+
         if (log_data)
         {
             add_damage_source_to_time_lapse(state.damage_sources.damage_instances);
-            hist_y[static_cast<int>(new_sample / hist_resolution)]++;
+            hist_y[static_cast<int>(dps_sample / histogram_dps_resolution)]++;
         }
     }
 
@@ -1649,11 +1648,13 @@ Use_effects::Schedule Combat_simulator::compute_use_effects_schedule(const Chara
 
 void Combat_simulator::init_histogram()
 {
-    for (int i = 0; i < 1000; i++)
+    const int n = 1000;
+    hist_x.reserve(n);
+    for (int i = 0; i < n; i++)
     {
-        hist_x.push_back(static_cast<int>(i * hist_resolution));
-        hist_y.push_back(0);
+        hist_x.push_back(i * histogram_dps_resolution);
     }
+    hist_y.assign(n, 0);
 }
 
 void Combat_simulator::normalize_timelapse()
@@ -1722,16 +1723,18 @@ std::vector<std::string> Combat_simulator::get_proc_statistics() const
 
 void Combat_simulator::reset_time_lapse()
 {
-    std::vector<double> history(static_cast<size_t>(std::ceil(config.sim_time / time_lapse_resolution)));
+    const auto sim_time = std::round(config.sim_time * 1000);
+    std::vector<double> history(static_cast<size_t>(sim_time / time_lapse_resolution + 1));
     damage_time_lapse_.assign(static_cast<size_t>(Damage_source::size), history);
 }
 
-void Combat_simulator::add_damage_source_to_time_lapse(std::vector<Damage_instance>& damage_instances)
+void Combat_simulator::add_damage_source_to_time_lapse(const std::vector<Damage_instance>& damage_instances)
 {
     for (const auto& damage_instance : damage_instances)
     {
         auto first_idx = static_cast<size_t>(damage_instance.damage_source);
         auto second_idx = static_cast<size_t>(damage_instance.time_stamp / time_lapse_resolution);
+        assert(second_idx >= 0 && second_idx < damage_time_lapse_[first_idx].size());
         damage_time_lapse_[first_idx][second_idx] += damage_instance.damage;
     }
 }

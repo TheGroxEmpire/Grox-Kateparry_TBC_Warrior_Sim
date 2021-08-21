@@ -1,5 +1,12 @@
 #include "damage_sources.hpp"
 
+std::ostream& operator<<(std::ostream& os, Damage_source damage_source)
+{
+    static std::string m[] = {"white_mh", "white_oh", "bloodthirst", "execute", "heroic_strike", "cleave",
+                              "whirlwind", "hamstring", "deep_wound", "item_hit_effects", "overpower", "slam", "mortal_strike", "sweeping_strikes"};
+    return os << m[static_cast<size_t>(damage_source)];
+}
+
 Damage_sources::Damage_sources(bool keep_history) : keep_history(keep_history)
 {
     if (keep_history) damage_instances.reserve(500);

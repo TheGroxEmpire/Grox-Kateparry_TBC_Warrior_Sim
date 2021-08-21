@@ -448,7 +448,7 @@ public:
 
     [[nodiscard]] const Hit_table& get_hit_probabilities_yellow_oh() const { return hit_table_yellow_oh_; }
 
-    void add_damage_source_to_time_lapse(std::vector<Damage_instance>& damage_instances);
+    void add_damage_source_to_time_lapse(const std::vector<Damage_instance>& damage_instances);
 
     [[nodiscard]] std::vector<std::string> get_aura_uptimes() const;
 
@@ -582,8 +582,8 @@ private:
 
     std::unordered_map<std::string, int> proc_data_{};
 
-    static constexpr double time_lapse_resolution = 0.5;
-    static constexpr double hist_resolution = 20;
+    static constexpr int time_lapse_resolution = 500; // time lapse bucket size (in ms)
+    static constexpr int histogram_dps_resolution = 20; // histogram bucket size (in dps)
 
     std::vector<std::vector<double>> damage_time_lapse_{};
     std::vector<int> hist_x{};

@@ -117,7 +117,7 @@ public:
         {
             if (hit_effect_mh.name == hit_effect.name)
             {
-                hit_effect_mh.time_counter = current_time + static_cast<int>(hit_effect.cooldown * 1000);
+                hit_effect_mh.time_counter = current_time + hit_effect.cooldown;
                 break;
             }
         }
