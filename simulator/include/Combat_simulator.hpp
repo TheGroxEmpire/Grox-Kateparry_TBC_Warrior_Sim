@@ -421,6 +421,8 @@ public:
     void execute_phase(Sim_state& state, bool mh_swing);
     void queue_next_melee();
 
+    void update_swing_timers(Sim_state& state, double oldHaste);
+
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
     [[nodiscard]] double rage_generation(const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const;
@@ -514,6 +516,9 @@ public:
     const Over_time_effect anger_management = {"anger_management", {}, 1, 0, 3, 600};
 
 private:
+    [[nodiscard]] static int to_millis(double seconds) { return Time_keeper::to_millis(seconds); }
+    [[nodiscard]] int from_offset(double offset) const { return time_keeper_.from_offset(offset); }
+
     Hit_table hit_table_white_mh_{};
     Hit_table hit_table_white_oh_{};
     Hit_table hit_table_yellow_mh_{};

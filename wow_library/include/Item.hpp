@@ -5,6 +5,9 @@
 
 #include <cassert>
 #include <utility>
+#include <cmath>
+
+[[nodiscard]] static int to_millis(double s) { return static_cast<int>(std::rint(1000 * s)); }
 
 enum class Socket
 {
@@ -107,6 +110,7 @@ struct Gem
     Special_stats special_stats{};
 }; */
 
+
 struct Over_time_effect
 {
     Over_time_effect() = default;
@@ -164,8 +168,8 @@ public:
         attribute_boost(attribute_boost),
         special_stats_boost(special_stats_boost),
         damage(damage),
-        duration(static_cast<int>(1000 * duration)),
-        cooldown(static_cast<int>(1000 * cooldown)),
+        duration(to_millis(duration)),
+        cooldown(to_millis(cooldown)),
         probability(probability),
         attack_power_boost(attack_power_boost), // unused
         max_charges(max_charges),
@@ -242,8 +246,8 @@ public:
         name(name),
         effect_socket(effect_socket),
         rage_boost(rage_boost),
-        duration(static_cast<int>(1000 * duration)),
-        cooldown(static_cast<int>(1000 * cooldown)),
+        duration(to_millis(duration)),
+        cooldown(to_millis(cooldown)),
         triggers_gcd(triggers_gcd),
         hit_effects(std::move(hit_effects)),
         over_time_effects(std::move(over_time_effects)),

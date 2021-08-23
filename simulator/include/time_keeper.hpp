@@ -1,11 +1,14 @@
 #ifndef WOW_SIMULATOR_TIME_KEEPER_HPP
 #define WOW_SIMULATOR_TIME_KEEPER_HPP
+
 #include <limits>
+#include <cmath>
 
 class Time_keeper
 {
 public:
-    Time_keeper() = default;
+    [[nodiscard]] static int to_millis(double s) { return static_cast<int>(std::rint(1000 * s)); }
+    [[nodiscard]] int from_offset(double offset) const { return static_cast<int>(std::rint(time + offset)); }
 
     void increment(int next_event)
     {

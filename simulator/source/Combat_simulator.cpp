@@ -53,15 +53,15 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     use_sweeping_strikes_ = config.talents.sweeping_strikes && config.combat.use_sweeping_strikes && config.multi_target_mode_;
 
     // convert some cooldown thresholds from seconds to milliseconds
-    config.combat.whirlwind_bt_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.whirlwind_bt_cooldown_thresh));
-    config.combat.bt_whirlwind_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.bt_whirlwind_cooldown_thresh));
-    config.combat.ms_whirlwind_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.ms_whirlwind_cooldown_thresh));
-    config.combat.overpower_bt_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.overpower_bt_cooldown_thresh));
-    config.combat.overpower_ww_cooldown_thresh = static_cast<int>(std::round(1000 * config.combat.overpower_ww_cooldown_thresh));
-    config.combat.hamstring_cd_thresh = static_cast<int>(std::round(1000 * config.combat.hamstring_cd_thresh));
-    config.combat.slam_latency = static_cast<int>(std::round(1000 * config.combat.slam_latency));
-    config.combat.slam_spam_max_time = static_cast<int>(std::round(1000 * config.combat.slam_spam_max_time));
-    config.combat.rampage_use_thresh = static_cast<int>(std::round(1000 * config.combat.rampage_use_thresh));
+    config.combat.whirlwind_bt_cooldown_thresh = to_millis(config.combat.whirlwind_bt_cooldown_thresh);
+    config.combat.bt_whirlwind_cooldown_thresh = to_millis(config.combat.bt_whirlwind_cooldown_thresh);
+    config.combat.ms_whirlwind_cooldown_thresh = to_millis(config.combat.ms_whirlwind_cooldown_thresh);
+    config.combat.overpower_bt_cooldown_thresh = to_millis(config.combat.overpower_bt_cooldown_thresh);
+    config.combat.overpower_ww_cooldown_thresh = to_millis(config.combat.overpower_ww_cooldown_thresh);
+    config.combat.hamstring_cd_thresh = to_millis(config.combat.hamstring_cd_thresh);
+    config.combat.slam_latency = to_millis(config.combat.slam_latency);
+    config.combat.slam_spam_max_time = to_millis(config.combat.slam_spam_max_time);
+    config.combat.rampage_use_thresh = to_millis(config.combat.rampage_use_thresh);
 }
 
 std::string Combat_simulator::hit_result_to_string(const Hit_result& hit_result)
@@ -673,7 +673,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Weapon_sim& weapon, Hit_typ
 
     for (auto& hit_effect : weapon.hit_effects)
     {
-        if (hit_effect.time_counter >= time_keeper_.time)
+        if (hit_effect.time_counter > time_keeper_.time)
         {
             // on cooldown
             continue;
@@ -891,20 +891,21 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
     }
 }
 
-void update_swing_timers(Sim_state& state, int current_time, double oldHaste)
+void Combat_simulator::update_swing_timers(Sim_state& state, double oldHaste)
 {
     auto& mh = state.main_hand_weapon;
     auto haste = state.special_stats.haste;
+    auto current_time = time_keeper_.time;
 
     assert(mh.next_swing >= current_time);
 
     if (mh.next_swing == current_time)
     {
-        mh.next_swing = static_cast<int>(std::round(current_time + 1000 * mh.swing_speed / (1 + haste)));
+        mh.next_swing = from_offset(1000 * mh.swing_speed / (1 + haste));
     }
     else if (haste != oldHaste)
     {
-        mh.next_swing = static_cast<int>(std::round(current_time + (mh.next_swing - current_time) * (1 + oldHaste) / (1 + haste)));
+        mh.next_swing = from_offset((mh.next_swing - current_time) * (1 + oldHaste) / (1 + haste));
     }
 
     if (!state.is_dual_wield) return;
@@ -915,11 +916,11 @@ void update_swing_timers(Sim_state& state, int current_time, double oldHaste)
 
     if (oh.next_swing == current_time)
     {
-        oh.next_swing = static_cast<int>(std::round(current_time + 1000 * oh.swing_speed / (1 + haste)));
+        oh.next_swing = from_offset(1000 * oh.swing_speed / (1 + haste));
     }
     else if (haste != oldHaste)
     {
-        oh.next_swing = static_cast<int>(std::round(current_time + (oh.next_swing - current_time) * (1 + oldHaste) / (1 + haste)));
+        oh.next_swing = from_offset((oh.next_swing - current_time) * (1 + oldHaste) / (1 + haste));
     }
 }
 
@@ -995,8 +996,8 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
     const bool is_dual_wield = character.is_dual_wield();
 
-    const int sim_time = static_cast<int>(1000 * config.sim_time);
-    const int time_execute_phase = static_cast<int>(sim_time * (100.0 - config.execute_phase_percentage_) / 100.0);
+    const int sim_time = to_millis(config.sim_time);
+    const int time_execute_phase = to_millis(config.sim_time * (100.0 - config.execute_phase_percentage_) / 100.0);
 
     add_use_effects(character);
     add_over_time_effects();
@@ -1049,7 +1050,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         int mh_hits_w_rampage = 0;
 
         state.main_hand_weapon.next_swing = 0;
-        if (state.is_dual_wield) state.off_hand_weapon.next_swing = static_cast<int>(1000 * 0.5 * (state.off_hand_weapon.swing_speed / (1 + state.special_stats.haste))); // de-sync mh/oh swing timers
+        if (state.is_dual_wield) state.off_hand_weapon.next_swing = to_millis(0.5 * state.off_hand_weapon.swing_speed / (1 + state.special_stats.haste)); // de-sync mh/oh swing timers
 
         // Combat configuration
         if (!config.multi_target_mode_)
@@ -1099,11 +1100,6 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             if (state.flurry_charges > 0) flurry_uptime += next_event - time_keeper_.time;
             time_keeper_.increment(next_event);
 
-            if (time_keeper_.time > sim_time)
-            {
-                break;
-            }
-
             double oldHaste = state.special_stats.haste;
 
             buff_manager_.increment(time_keeper_, logger_);
@@ -1126,7 +1122,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                 buff_manager_.need_to_recompute_mitigation = false;
             }
 
-            if (!apply_delayed_armor_reduction && time_keeper_.time > 6.0 && config.exposed_armor)
+            if (!apply_delayed_armor_reduction && time_keeper_.time >= 6000 && config.exposed_armor)
             {
                 apply_delayed_armor_reduction = true;
                 recompute_mitigation_ = true;
@@ -1157,7 +1153,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
 
             if (config.multi_target_mode_ && number_of_extra_targets_ > 0 &&
-                time_keeper_.time > config.extra_target_duration * sim_time)
+                time_keeper_.time >= config.extra_target_duration * sim_time)
             {
                 logger_.print("Extra targets die.");
                 number_of_extra_targets_ = 0;
@@ -1167,13 +1163,13 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             {
                 if (!slam_manager.ready(time_keeper_.time))
                 {
-                    continue;
+                    continue; // the swing timer is effectively stopped while slam is casting
                 }
 
                 slam(state);
                 slam_manager.finish_slam();
-                oldHaste = state.special_stats.haste;
-                state.main_hand_weapon.next_swing = static_cast<int>(std::round(time_keeper_.time + 1000 * state.main_hand_weapon.swing_speed / (1 + state.special_stats.haste)));
+                state.main_hand_weapon.next_swing = from_offset(1000 * state.main_hand_weapon.swing_speed / (1 + state.special_stats.haste));
+                oldHaste = state.special_stats.haste; // keep update_swing_timer() from applying haste changes again (they're already in)
             }
 
             bool mh_swing = state.main_hand_weapon.next_swing == time_keeper_.time;
@@ -1201,7 +1197,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
             if (!in_execute_phase)
             {
-                if (time_keeper_.time > time_execute_phase)
+                if (time_keeper_.time >= time_execute_phase)
                 {
                     logger_.print("------------ Execute phase! ------------");
                     in_execute_phase = true;
@@ -1253,7 +1249,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
 
             // end of turn - update swing timers if necessary
-            update_swing_timers(state, time_keeper_.time, oldHaste);
+            update_swing_timers(state, oldHaste);
         }
         // end of batch
 
@@ -1297,6 +1293,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     }
 }
 
+// about 1/3 of all calls are cut short by the gcd check; a rage check is only effective for the execute-phase
 void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
 {
     if (!time_keeper_.global_ready()) return;
@@ -1630,7 +1627,7 @@ void Combat_simulator::add_over_time_effects()
 
 Use_effects::Schedule Combat_simulator::compute_use_effects_schedule(const Character& character)
 {
-    const auto sim_time = static_cast<int>(std::round(config.sim_time * 1000));
+    const auto sim_time = to_millis(config.sim_time);
 
     double ap_equiv;
     if (character.is_dual_wield())
@@ -1723,7 +1720,7 @@ std::vector<std::string> Combat_simulator::get_proc_statistics() const
 
 void Combat_simulator::reset_time_lapse()
 {
-    const auto sim_time = std::round(config.sim_time * 1000);
+    const auto sim_time = to_millis(config.sim_time);
     std::vector<double> history(static_cast<size_t>(sim_time / time_lapse_resolution + 1));
     damage_time_lapse_.assign(static_cast<size_t>(Damage_source::size), history);
 }
