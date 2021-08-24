@@ -38,10 +38,6 @@ std::ostream& operator<<(std::ostream& os, Damage_source damage_source);
 
 struct Damage_sources
 {
-    explicit Damage_sources(bool keep_history);
-
-    ~Damage_sources() = default;
-
     Damage_sources& operator+(const Damage_sources& rhs);
 
     [[nodiscard]] double sum_damage_sources() const
@@ -58,7 +54,7 @@ struct Damage_sources
                execute_count + deep_wounds_count + item_hit_effects_count + sweeping_strikes_count;
     }
 
-    void add_damage(Damage_source source, double damage, int time_stamp);
+    void add_damage(Damage_source source, double damage);
 
     double white_mh_damage{};
     double white_oh_damage{};
@@ -89,9 +85,6 @@ struct Damage_sources
     int hamstring_count{};
     int deep_wounds_count{};
     int item_hit_effects_count{};
-
-    bool keep_history{};
-    std::vector<Damage_instance> damage_instances{};
 };
 
 #endif // WOW_SIMULATOR_DAMAGE_SOURCES_HPP

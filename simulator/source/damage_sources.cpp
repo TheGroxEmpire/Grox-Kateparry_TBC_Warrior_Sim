@@ -7,11 +7,6 @@ std::ostream& operator<<(std::ostream& os, Damage_source damage_source)
     return os << m[static_cast<size_t>(damage_source)];
 }
 
-Damage_sources::Damage_sources(bool keep_history) : keep_history(keep_history)
-{
-    if (keep_history) damage_instances.reserve(500);
-}
-
 Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
 {
     whirlwind_damage = whirlwind_damage + rhs.whirlwind_damage;
@@ -46,13 +41,8 @@ Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
     return *(this);
 }
 
-void Damage_sources::add_damage(Damage_source source, double damage, int time_stamp)
+void Damage_sources::add_damage(Damage_source source, double damage)
 {
-    if (keep_history)
-    {
-        damage_instances.emplace_back(source, damage, time_stamp);
-    }
-
     switch (source)
     {
     case Damage_source::white_mh:

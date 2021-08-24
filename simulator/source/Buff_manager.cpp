@@ -13,10 +13,9 @@ void Buff_manager::initialize(std::vector<Hit_effect>& hit_effects_mh_input, std
     rage_manager = rage_manager_input;
 }
 
-void Buff_manager::reset(Special_stats& special_stats, Damage_sources& damage_sources)
+void Buff_manager::reset(Sim_state& state)
 {
-    simulation_special_stats = &special_stats;
-    simulation_damage_sources = &damage_sources;
+    sim_state = &state;
 
     for (auto& he : *hit_effects_mh)
     {
@@ -150,7 +149,7 @@ void Buff_manager::add_combat_buff(Hit_effect& hit_effect, int current_time)
             }
         }
 
-        auto& buff = combat_buffs.emplace_back(hit_effect, *simulation_special_stats, current_time);
+        auto& buff = combat_buffs.emplace_back(hit_effect, sim_state->special_stats, current_time);
         gain_stats(buff.special_stats_boost);
         if (buff.next_fade < min_combat_buff) min_combat_buff = buff.next_fade;
         hit_effect.combat_buff_idx = static_cast<int>(combat_buffs.size()) - 1;
@@ -264,12 +263,12 @@ void Buff_manager::increment_over_time_buffs(int current_time, Logger& logger)
         }
         else if (buff.damage > 0)
         {
-            simulation_damage_sources->add_damage(Damage_source::deep_wounds, buff.damage, current_time);
+            sim_state->add_damage(Damage_source::deep_wounds, buff.damage, current_time);
             logger.print("Over time effect: ", buff.name, " tick. Damage: ", int(buff.damage));
         }
         else
         {
-            (*simulation_special_stats) += buff.special_stats;
+            sim_state->special_stats += buff.special_stats;
         }
 
         if (buff.next_fade == current_time)
@@ -405,7 +404,7 @@ void Buff_manager::do_fade_buff(Combat_buff& buff, Logger& logger)
     const auto& ssb = buff.special_stats_boost;
     for (int i = 0; i < buff.stacks; i++)
     {
-        (*simulation_special_stats) -= ssb;
+        sim_state->special_stats -= ssb;
     }
     buff.stacks = 0;
     buff.charges = 0;
@@ -425,7 +424,7 @@ void Buff_manager::do_fade_buff(Combat_buff& buff, Logger& logger)
 
 void Buff_manager::gain_stats(const Special_stats& ssb)
 {
-    (*simulation_special_stats) += ssb;
+    sim_state->special_stats += ssb;
     need_to_recompute_hit_tables |= (ssb.hit > 0 || ssb.critical_strike > 0 || ssb.expertise > 0);
     need_to_recompute_mitigation |= (ssb.gear_armor_pen > 0);
 }

@@ -1,6 +1,8 @@
 #ifndef WOW_SIMULATOR_LOGGER_HPP
 #define WOW_SIMULATOR_LOGGER_HPP
 
+#include "time_keeper.hpp"
+
 class Logger
 {
 public:

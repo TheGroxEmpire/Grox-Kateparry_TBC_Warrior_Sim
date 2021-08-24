@@ -61,7 +61,7 @@ struct Combat_simulator_config
 
     int main_target_level{};
     int main_target_initial_armor_{};
-    int extra_target_level{};
+    int extra_target_level{}; // TODO(vigo) this isn't actually supported (would need a second set of hit tables)
     int number_of_extra_targets{};
     double extra_target_duration{};
     int extra_target_initial_armor_{};
@@ -71,7 +71,6 @@ struct Combat_simulator_config
     bool faerie_fire_feral_active{false};
 
     bool take_periodic_damage_{};
-    bool can_trigger_enrage_{};
     int periodic_damage_amount_{};
     int periodic_damage_interval_{};
     bool essence_of_the_red_{};
@@ -108,8 +107,7 @@ struct Combat_simulator_config
         double ms_whirlwind_cooldown_thresh{};
         double overpower_bt_cooldown_thresh{};
         double overpower_ww_cooldown_thresh{};
-        double heroic_strike_rage_thresh{};
-        double hs_rage_thresh_exec_phase{};
+        double heroic_strike_rage_thresh{}; // this is now used for execute phase as well
         double cleave_rage_thresh{};
         double heroic_strike_damage{};
         bool cleave_if_adds{false};
@@ -570,7 +568,7 @@ private:
     Hit_effect windfury_attack_{"windfury_attack", Hit_effect::Type::stat_boost, {}, {0, 0, 445}, 0, 1.5, 0, 0, 0, 2};
 
     // statistics
-    Damage_sources damage_distribution_{false};
+    Damage_sources damage_distribution_{};
     Distribution dps_distribution_{};
 
     double flurry_uptime_{};

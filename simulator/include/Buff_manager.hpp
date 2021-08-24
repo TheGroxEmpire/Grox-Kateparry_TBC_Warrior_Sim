@@ -2,13 +2,13 @@
 #define WOW_SIMULATOR_BUFF_MANAGER_HPP
 
 #include "Attributes.hpp"
-#include "Rage_manager.hpp"
 #include "Item.hpp"
+#include "Rage_manager.hpp"
 #include "Use_effects.hpp"
-
-#include "time_keeper.hpp"
 #include "damage_sources.hpp"
 #include "logger.hpp"
+#include "sim_state.hpp"
+#include "time_keeper.hpp"
 
 #include <unordered_map>
 
@@ -89,7 +89,7 @@ public:
     void initialize(std::vector<Hit_effect>& hit_effects_mh_input, std::vector<Hit_effect>& hit_effects_oh_input,
                     Use_effects::Schedule& use_effects_schedule_input, Rage_manager* rage_manager_input);
 
-    void reset(Special_stats& special_stats, Damage_sources& damage_sources);
+    void reset(Sim_state& state);
     void reset_statistics();
 
     void update_aura_uptimes(int current_time);
@@ -150,8 +150,7 @@ private:
     void do_add_combat_buff(Hit_effect& hit_effect, int current_time);
     void do_add_over_time_buff(const Over_time_effect& over_time_effect, int current_time);
 
-    Special_stats* simulation_special_stats{};
-    Damage_sources* simulation_damage_sources{};
+    Sim_state* sim_state{};
     Rage_manager* rage_manager{};
 
     size_t use_effect_index{};

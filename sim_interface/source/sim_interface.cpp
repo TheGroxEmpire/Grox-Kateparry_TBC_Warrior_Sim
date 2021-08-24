@@ -539,9 +539,6 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     double n_simulations_base = config.n_batches;
 
     simulator.simulate(character, 0, true);
-
-    std::cout << character.total_attributes << character.total_special_stats << std::endl;
-
     print_results(simulator, true);
 
     const double dps_mean = simulator.get_dps_mean();
