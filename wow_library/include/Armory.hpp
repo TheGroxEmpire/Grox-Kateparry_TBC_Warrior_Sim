@@ -665,8 +665,8 @@ struct Armory
                 {"severance", Attributes{43.0, 0.0}, Special_stats{1.268115942, 0.0, 0.0}, 3.6, 235.0, 354.0, Weapon_socket::two_hand, Weapon_type::axe},
 
                 // Phase 2
-                {"bloodmoon", Attributes{0.0, 0.0}, Special_stats{2.536231884057971, 0.0, 112.0, 0, 0.0}, 0.0, 0.0, 0.0, Weapon_socket::two_hand, Weapon_type::axe}, 
-                {"merciless_gladiators_decapitator", Attributes{0.0, 0.0}, Special_stats{1.9021739130434785, 1.14140773620799, 84.0, 0, 0.0}, 0.0, 0.0, 0.0, Weapon_socket::two_hand, Weapon_type::axe}, 
+                {"bloodmoon", Attributes{0.0, 0.0}, Special_stats{2.536231884057971, 0.0, 112.0, 0, 0.0}, 3.7, 375, 564, Weapon_socket::two_hand, Weapon_type::axe},
+                {"merciless_gladiators_decapitator", Attributes{0.0, 0.0}, Special_stats{1.9021739130434785, 1.14140773620799, 84.0, 0, 0.0}, 3.6, 365, 549, Weapon_socket::two_hand, Weapon_type::axe},
             };
 
     std::vector<Weapon> two_handed_maces_t

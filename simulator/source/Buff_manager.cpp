@@ -85,7 +85,7 @@ void Buff_manager::update_aura_uptimes(int current_time) {
     }
     for (auto& buff : over_time_buffs)
     {
-        if (buff.next_fade > current_time) buff.uptime += current_time - (buff.last_gain > 0 ? buff.last_gain : 0);
+        if (buff.next_tick != Over_time_buff::inactive) buff.uptime += current_time - (buff.last_gain > 0 ? buff.last_gain : 0);
     }
 }
 
