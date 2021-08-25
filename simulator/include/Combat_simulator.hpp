@@ -468,9 +468,9 @@ public:
 
     [[nodiscard]] const Distribution& get_dps_distribution() const { return dps_distribution_; }
 
-    [[nodiscard]] double get_dps_mean() const { return dps_distribution_.mean_; }
+    [[nodiscard]] double get_dps_mean() const { return dps_distribution_.mean(); }
 
-    [[nodiscard]] double get_dps_variance() const { return dps_distribution_.variance_; }
+    [[nodiscard]] double get_dps_variance() const { return dps_distribution_.variance(); }
 
     [[nodiscard]] int get_n_simulations() const { return config.n_batches; }
 

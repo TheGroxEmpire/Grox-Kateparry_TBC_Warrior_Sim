@@ -2,45 +2,32 @@
 
 #include "Statistics.hpp"
 
-#include <ostream>
-
-namespace
-{
-double expected_samples_to_observe(double z_value)
-{
-    double p_val = Statistics::normalCDF(z_value);
-    return 1.0 / (1.0 - p_val);
-}
-} // namespace
 
 void Distribution::add_sample(const double sample)
 {
-    if (n_samples_ == 0)
-    {
-        max_ = min_ = sample;
-    }
-    n_samples_++;
-    if (sample > max_)
-    {
-        max_ = sample;
-    }
-    else if (sample < min_)
-    {
-        min_ = sample;
-    }
-    variance_ = Statistics::update_variance(variance_, mean_, n_samples_, sample);
-    mean_ = Statistics::update_mean(mean_, n_samples_, sample);
+    // from https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm
+    n_samples_ += 1;
+    auto delta = sample - mean_;
+    mean_ += delta / n_samples_;
+    auto delta2 = sample - mean_;
+    m2_ += delta * delta2;
 }
 
 void Distribution::reset()
 {
-    n_samples_ = 0;
-    mean_ = variance_ = min_ = max_ = 0;
+    prepare(0, 0, 0);
+}
+
+void Distribution::prepare(int n_samples, double mean, double variance)
+{
+    n_samples_ = n_samples;
+    mean_ = mean;
+    m2_ = variance * n_samples;
 }
 
 double Distribution::std_() const
 {
-    return std::sqrt(variance_);
+    return std::sqrt(m2_ / n_samples_);
 }
 
 double Distribution::std_of_the_mean() const
@@ -61,24 +48,7 @@ std::pair<double, double> Distribution::confidence_interval_of_the_mean(double p
     return std::pair<double, double>{mean_ - val * std_, mean_ + val * std_};
 }
 
-bool Distribution::is_normal_distributed() const
-{
-    if (n_samples_ < 5)
-    {
-        return false;
-    }
-    double st_dev = std_();
-    double z_min = (mean_ - min_) / st_dev;
-    double n_samples_nominal_min = expected_samples_to_observe(z_min);
-
-    double z_max = (max_ - mean_) / st_dev;
-    double n_samples_nominal_max = expected_samples_to_observe(z_max);
-
-    return n_samples_ > std::max(n_samples_nominal_min, n_samples_nominal_max);
-}
-
 std::ostream& operator<<(std::ostream& os, const Distribution& d) {
-    os << d.mean_ << " +/- " << d.variance_ << ", [" << d.min_ << ", " << d.max_ << "], " << d.n_samples_ << " samples";
-    return os;
+    return os << d.mean() << " +/- " << d.variance() << " / " << d.sample_variance() << " for " << d.samples() << " samples";
 }
 
