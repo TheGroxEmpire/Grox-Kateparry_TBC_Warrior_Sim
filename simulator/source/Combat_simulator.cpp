@@ -932,6 +932,8 @@ void Combat_simulator::simulate(const Character& character, int n_simulations, d
     simulate(character, init_simulations, false, false);
 }
 
+// TODO(vigo) pass in a "target function", most likely a "bool (*func)(Combat_simulator& sim)", or a functor equivalent
+// also consider passing in both Combat_simulator_config and Character
 void Combat_simulator::simulate(const Character& character, int init_iteration, bool log_data, bool reset_dps)
 {
     if (log_data)
