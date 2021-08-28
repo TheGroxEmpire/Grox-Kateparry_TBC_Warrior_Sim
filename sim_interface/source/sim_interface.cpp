@@ -60,8 +60,7 @@ void compute_item_upgrade(const Character& character_new, const std::vector<int>
     auto total_batches = 0;
     for (int batches : batches_per_iteration)
     {
-        simulator.simulate(character_new, batches, simulator.get_dps_mean(),
-                           simulator.get_dps_variance(), total_batches);
+        simulator.simulate(character_new, batches, Distribution(simulator.get_dps_mean(), simulator.get_dps_variance(), total_batches));
 
         total_batches += batches;
 
@@ -403,45 +402,21 @@ std::string get_character_stat(const Character& character)
 
 void compute_talent_weight(Combat_simulator& combat_simulator, const Character& character, std::string& talents_info,
                            const std::string& talent_name, Combat_simulator_config config,
-                           int Combat_simulator_config::talents_t::*talent, int n_points)
+                           int Character::talents_t::*talent, int n_points)
 {
-    config.talents.*talent = 0;
-    combat_simulator.set_config(config);
-    combat_simulator.simulate(character, 0);
+    auto copy = character;
+    copy.talents.*talent = 0;
+    combat_simulator.simulate(copy, 0);
     double dps_without = combat_simulator.get_dps_mean();
     double var_without = combat_simulator.get_dps_variance();
 
-    config.talents.*talent = n_points;
-    combat_simulator.set_config(config);
-    combat_simulator.simulate(character, 0);
+    copy.talents.*talent = n_points;
+    combat_simulator.simulate(copy, 0);
     double dps_with = combat_simulator.get_dps_mean();
     double var_with = combat_simulator.get_dps_variance();
 
     double delta_dps = (dps_with - dps_without) / n_points;
     double std_dps = std::sqrt(var_without + var_with) / n_points / std::sqrt(config.n_batches);
-    talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" +
-                    String_helpers::string_with_precision(delta_dps, 4) + " &plusmn " +
-                    String_helpers::string_with_precision(std_dps, 3) + " DPS</b><br>";
-}
-
-void compute_talent_weight(Combat_simulator& combat_simulator, const Character& character, std::string& talents_info,
-                           const std::string& talent_name, Combat_simulator_config config,
-                           bool Combat_simulator_config::talents_t::*talent)
-{
-    config.talents.*talent = false;
-    combat_simulator.set_config(config);
-    combat_simulator.simulate(character, 0);
-    double dps_without = combat_simulator.get_dps_mean();
-    double var_without = combat_simulator.get_dps_variance();
-
-    config.talents.*talent = true;
-    combat_simulator.set_config(config);
-    combat_simulator.simulate(character, 0);
-    double dps_with = combat_simulator.get_dps_mean();
-    double var_with = combat_simulator.get_dps_variance();
-
-    double delta_dps = dps_with - dps_without;
-    double std_dps = std::sqrt(var_without + var_with) / std::sqrt(config.n_batches);
     talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" +
                     String_helpers::string_with_precision(delta_dps, 4) + " &plusmn " +
                     String_helpers::string_with_precision(std_dps, 3) + " DPS</b><br>";
@@ -454,56 +429,57 @@ void compute_talent_weights(const Sim_input& input, const Character& character, 
     config.n_batches = static_cast<int>(
         String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_talent_dd"));
     Combat_simulator simulator_talent{};
+    simulator_talent.set_config(config);
 
     talents_info = "<br><b>Value per 1 talent point:</b>";
     if (!config.combat.cleave_if_adds)
     {
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Heroic Strike", config,
-                              &Combat_simulator_config::talents_t::improved_heroic_strike, 3);
+                              &Character::talents_t::improved_heroic_strike, 3);
     }
     else
     {
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Cleave", config,
-                              &Combat_simulator_config::talents_t::improved_cleave, 3);
+                              &Character::talents_t::improved_cleave, 3);
     }
 
     compute_talent_weight(simulator_talent, character, talents_info, "Improved Overpower", config,
-                          &Combat_simulator_config::talents_t::overpower, 2);
+                          &Character::talents_t::improved_overpower, 2);
 
     if (config.combat.use_slam && !is_dual_wield)
     {
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Slam", config,
-                              &Combat_simulator_config::talents_t::improved_slam, 2);
+                              &Character::talents_t::improved_slam, 2);
     }
 
     compute_talent_weight(simulator_talent, character, talents_info, "Improved Execute", config,
-                          &Combat_simulator_config::talents_t::improved_execute, 2);
+                          &Character::talents_t::improved_execute, 2);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Unbridled Wrath", config,
-                          &Combat_simulator_config::talents_t::unbridled_wrath, 5);
+                          &Character::talents_t::unbridled_wrath, 5);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Flurry", config,
-                          &Combat_simulator_config::talents_t::flurry, 5);
+                          &Character::talents_t::flurry, 5);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Impale", config,
-                          &Combat_simulator_config::talents_t::impale, 2);
+                          &Character::talents_t::impale, 2);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Anger Management", config,
-                          &Combat_simulator_config::talents_t::anger_management);
+                          &Character::talents_t::anger_management, 1);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Death wish", config,
-                          &Combat_simulator_config::talents_t::death_wish);
+                          &Character::talents_t::death_wish, 1);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Rampage", config,
-                          &Combat_simulator_config::talents_t::rampage);
+                          &Character::talents_t::rampage, 1);
 
     compute_talent_weight(simulator_talent, character, talents_info, "Endless Rage", config,
-                          &Combat_simulator_config::talents_t::endless_rage);
+                          &Character::talents_t::endless_rage, 1);
 
     if (is_dual_wield)
     {
         compute_talent_weight(simulator_talent, character, talents_info, "Dual Wield Specialization", config,
-                              &Combat_simulator_config::talents_t::dual_wield_specialization, 5);
+                              &Character::talents_t::dual_wield_specialization, 5);
     }
 }
 
@@ -521,7 +497,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         double avg_bt_casts = static_cast<double>(dmg_dist.bloodthirst_count) / n_simulations_base;
         if (avg_bt_casts >= 1.0)
         {
-            double bloodthirst_rage = 30 - 5 * character.set_bonus_effect.destroyer_4_set;
+            double bloodthirst_rage = 30 - 5 * character.has_set_bonus(Set::destroyer, 4);
             config.dpr_settings.compute_dpr_bt_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
@@ -542,7 +518,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         double avg_ms_casts = static_cast<double>(dmg_dist.mortal_strike_count) / n_simulations_base;
         if (avg_ms_casts >= 1.0)
         {
-            double mortal_strike_rage = 30 - 5 * character.set_bonus_effect.destroyer_4_set;
+            double mortal_strike_rage = 30 - 5 * character.has_set_bonus(Set::destroyer, 4);
             config.dpr_settings.compute_dpr_ms_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
@@ -563,7 +539,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         double avg_ww_casts = static_cast<double>(dmg_dist.whirlwind_count) / n_simulations_base;
         if (avg_ww_casts >= 1.0)
         {
-            double whirlwind_rage = 25 - 5 * character.set_bonus_effect.warbringer_2_set;
+            double whirlwind_rage = 25 - 5 * character.has_set_bonus(Set::warbringer, 2);
             config.dpr_settings.compute_dpr_ww_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
@@ -593,7 +569,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             double avg_mh_dmg =
                 static_cast<double>(dmg_dist.white_mh_damage) / static_cast<double>(dmg_dist.white_mh_count);
             double avg_mh_rage_lost = avg_mh_dmg * 3.75 / 274.7 + (3.5 * character.weapons[0].swing_speed / 2);
-            double sl_cast_time = 1.5 - 0.5 * config.talents.improved_slam + config.combat.slam_latency;
+            double sl_cast_time = 1.5 - 0.5 * character.talents.improved_slam + config.combat.slam_latency;
             double dmg_per_hit = dmg_tot / avg_sl_casts;
             double dmg_per_rage = dmg_per_hit / (15.0 + avg_mh_rage_lost * sl_cast_time / character.weapons[0].swing_speed);
             dpr_info += "<b>Slam</b>: <br>Damage per cast: <b>" +
@@ -608,7 +584,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         double avg_hs_casts = static_cast<double>(dmg_dist.heroic_strike_count) / n_simulations_base;
         if (avg_hs_casts >= 1.0)
         {
-            double heroic_strike_rage = 15 - config.talents.improved_heroic_strike;
+            double heroic_strike_rage = 15 - character.talents.improved_heroic_strike;
             config.dpr_settings.compute_dpr_hs_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
@@ -703,7 +679,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
         double dmg_tot = delta_dps * config.sim_time;
         double dmg_per_hit = dmg_tot / avg_ex_casts;
-        double execute_rage_cost = 15 - static_cast<int>(2.51 * config.talents.improved_execute);
+        double execute_rage_cost = std::vector<int>{15, 13, 10}[character.talents.improved_execute];
         double execute_cost = simulator.get_avg_rage_spent_executing() / avg_ex_casts + execute_rage_cost;
         double dmg_per_rage = dmg_per_hit / execute_cost;
         dpr_info += "<b>Execute</b>: <br>Damage per cast: <b>" +
@@ -857,7 +833,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
     for (const auto& wep : character.weapons)
     {
-        simulator.compute_hit_tables(character.total_special_stats, Weapon_sim(wep));
+        simulator.compute_hit_tables(character, character.total_special_stats, Weapon_sim(wep));
     }
     const bool is_dual_wield = character.is_dual_wield();
     const auto yellow_mh_ht = simulator.get_hit_probabilities_yellow_mh();
@@ -968,6 +944,16 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     {
         compute_talent_weights(input, character, is_dual_wield, config, talents_info);
     }
+#ifdef TEST_VIA_CONFIG
+    if (talents_info.find("Value per 1 talent point") != std::string::npos)
+    {
+        for (size_t ppos = 0, pos = talents_info.find("<br>", ppos); pos != std::string::npos; ppos = pos + 4, pos = talents_info.find("<br>", ppos))
+        {
+            std::cout << talents_info.substr(ppos, pos - ppos) << std::endl;
+        }
+    }
+    std::cout << std::endl;
+#endif
 
     if (input.compare_armor.size() == 15 && input.compare_weapons.size() == 2)
     {

@@ -163,33 +163,4 @@ void Combat_simulator_config::get_combat_simulator_config(const T& input)
         berserking_haste_ = fv.find("berserking_haste_dd");
         unleashed_rage_start_ = fv.find("unleashed_rage_dd");
     }
-    {
-        // TODO(vigo) add /all/ talents here, and handle talents at _one_ spot
-        Find_values<int> fv(input.talent_string, input.talent_val);
-        talents.improved_heroic_strike = fv.find("improved_heroic_strike_talent");
-        talents.overpower = fv.find("improved_overpower_talent");
-        talents.unbridled_wrath = fv.find("unbridled_wrath_talent");
-        talents.mace_specialization = fv.find("mace_specialization_talent");
-        talents.flurry = fv.find("flurry_talent");
-        talents.anger_management = fv.find("anger_management_talent");
-        talents.impale = fv.find("impale_talent");
-        talents.improved_execute = fv.find("improved_execute_talent");
-        talents.dual_wield_specialization = fv.find("dual_wield_specialization_talent");
-        talents.improved_cleave = fv.find("improved_cleave_talent");
-        talents.improved_slam = fv.find("improved_slam_talent");
-        talents.death_wish = fv.find("death_wish_talent");
-        talents.tactical_mastery = fv.find("tactical_mastery_talent");
-        talents.deep_wounds = fv.find("deep_wounds_talent");
-        talents.bloodthirst = fv.find("bloodthirst_talent");
-        talents.mortal_strike = fv.find("mortal_strike_talent");
-        talents.sweeping_strikes = fv.find("sweeping_strikes_talent");
-        talents.improved_disciplines = fv.find("improved_disciplines_talent"); 
-        talents.improved_mortal_strike = fv.find("improved_mortal_strike_talent");
-        talents.endless_rage = fv.find("endless_rage_talent");
-        talents.weapon_mastery = fv.find("weapon_mastery_talent");
-        talents.precision = fv.find("precision_talent");
-        talents.improved_whirlwind = fv.find("improved_whirlwind_talent");
-        talents.improved_berserker_stance = fv.find("improved_berserker_stance_talent");
-        talents.rampage = fv.find("rampage_talent");
-    }
 }

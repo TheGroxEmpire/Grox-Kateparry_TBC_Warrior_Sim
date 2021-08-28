@@ -243,8 +243,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     }
 
     debug_message += "Starting optimizer! Current combinations:" + std::to_string(keepers.size()) + "<br>";
-    std::vector<size_t> batches_per_iteration = {20};
-    std::vector<size_t> cumulative_simulations = {0};
+    std::vector<int> batches_per_iteration = {20};
+    std::vector<int> cumulative_simulations = {0};
     for (int i = 0; i < 40; i++)
     {
         batches_per_iteration.push_back(batches_per_iteration.back() * 1.2);
@@ -272,8 +272,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         for (auto& keeper : keepers)
         {
             Character character = item_optimizer.construct(keeper.index);
-            simulator.simulate(character, batches_per_iteration[i], keeper.mean_dps, keeper.variance,
-                               cumulative_simulations[i]);
+            simulator.simulate(character, batches_per_iteration[i], Distribution{keeper.mean_dps, keeper.variance, cumulative_simulations[i]});
             keeper.mean_dps = simulator.get_dps_mean();
             keeper.variance = simulator.get_dps_variance();
             if (keeper.mean_dps > best_dps)

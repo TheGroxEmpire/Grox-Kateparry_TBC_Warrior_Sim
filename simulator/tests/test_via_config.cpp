@@ -160,4 +160,15 @@ TEST_F(Sim_fixture, test_via_config)
     {
         std::cout << v << std::endl;
     }
+
+    /*
+    std::cout << "messages" << std::endl;
+    for (const auto& m : sim_output.extra_stats)
+    {
+        for (size_t ppos = 0, pos = m.find("<br>", ppos); pos != std::string::npos; ppos = pos + 4, pos = m.find("<br>", ppos))
+        {
+            std::cout << m.substr(ppos, pos - ppos) << std::endl;
+        }
+    }
+    */
 }

@@ -2,16 +2,18 @@
 #define COMBAT_SIMULATOR_SIM_STATE_HPP
 
 #include "weapon_sim.hpp"
+#include "Character.hpp"
 
 struct Sim_state
 {
     Sim_state(Weapon_sim& main_hand_weapon, Weapon_sim& off_hand_weapon, bool is_dual_wield,
-              Special_stats special_stats,
+              Special_stats special_stats, const Character::talents_t& talents,
               std::vector<Damage_instance>& damage_instances, bool log_damage_instances) :
         main_hand_weapon(main_hand_weapon),
         off_hand_weapon(off_hand_weapon),
         is_dual_wield(is_dual_wield),
         special_stats(special_stats),
+        talents(talents),
         damage_sources(),
         damage_instances(damage_instances),
         log_damage_instances(log_damage_instances),
@@ -25,6 +27,7 @@ struct Sim_state
     Weapon_sim& off_hand_weapon;
     const bool is_dual_wield;
     Special_stats special_stats;
+    const Character::talents_t& talents;
     Damage_sources damage_sources;
     std::vector<Damage_instance>& damage_instances;
     const bool log_damage_instances;

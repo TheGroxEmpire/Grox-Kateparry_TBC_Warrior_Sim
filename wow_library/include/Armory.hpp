@@ -772,32 +772,32 @@ struct Armory
 
     [[nodiscard]] Weapon find_weapon(Weapon_socket weapon_socket, const std::string &name) const;
 
-    [[nodiscard]] Attributes get_enchant_attributes(Socket socket, Enchant::Type type) const;
+    [[nodiscard]] static Attributes get_enchant_attributes(Socket socket, Enchant::Type type);
 
-    [[nodiscard]] Special_stats get_enchant_special_stats(Socket socket, Enchant::Type type) const;
+    [[nodiscard]] static Special_stats get_enchant_special_stats(Socket socket, Enchant::Type type);
 
-    Hit_effect enchant_hit_effect(Weapon &weapon, Enchant::Type type) const;
+    [[nodiscard]] static Hit_effect enchant_hit_effect(Weapon &weapon, Enchant::Type type);
 
-    void clean_weapon(Weapon &weapon) const;
+    static void clean_weapon(Weapon &weapon);
 
     void compute_total_stats(Character &character) const;
 
-    [[nodiscard]] bool check_if_armor_valid(const std::vector<Armor> &armor) const;
+    [[nodiscard]] static bool check_if_armor_valid(const std::vector<Armor> &armor);
 
-    bool check_if_weapons_valid(std::vector<Weapon> &weapons) const;
+    [[nodiscard]] static bool check_if_weapons_valid(std::vector<Weapon> &weapons);
 
-    void change_weapon(std::vector<Weapon> &current_weapons, const Weapon &equip_weapon, const Socket &socket) const;
+    static void change_weapon(std::vector<Weapon> &current_weapons, const Weapon &equip_weapon, const Socket &socket);
 
-    void change_armor(std::vector<Armor> &armor_vec, const Armor &armor, bool first_misc_slot = true) const;
+    static void change_armor(std::vector<Armor> &armor_vec, const Armor &armor, bool first_misc_slot = true);
 
-    void add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec) const;
+    static void add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec);
 
     void add_gems_to_character(Character& character, const std::vector<std::string>& gem_vec) const;
 
     void add_buffs_to_character(Character& character, const std::vector<std::string>& buffs_vec) const;
 
-    void add_talents_to_character(Character& character, const std::vector<std::string>& talent_string,
-                                  const std::vector<int>& talent_val) const;
+    static void add_talents_to_character(Character& character, const std::vector<std::string>& talent_string,
+                                  const std::vector<int>& talent_val);
 
     Buffs buffs;
 

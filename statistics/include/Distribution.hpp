@@ -8,11 +8,9 @@ class Distribution
 {
 public:
     Distribution() = default;
+    Distribution(double mean, double variance, int samples) : n_samples_(samples), mean_(mean), m2_(variance * samples) {}
 
     void add_sample(double sample);
-
-    void reset();
-    void prepare(int n_samples, double mean, double variance);
 
     [[nodiscard]] double std_() const;
     [[nodiscard]] double std_of_the_mean() const;

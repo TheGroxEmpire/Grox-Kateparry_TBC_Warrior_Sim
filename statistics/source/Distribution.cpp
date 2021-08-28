@@ -13,18 +13,6 @@ void Distribution::add_sample(const double sample)
     m2_ += delta * delta2;
 }
 
-void Distribution::reset()
-{
-    prepare(0, 0, 0);
-}
-
-void Distribution::prepare(int n_samples, double mean, double variance)
-{
-    n_samples_ = n_samples;
-    mean_ = mean;
-    m2_ = variance * n_samples;
-}
-
 double Distribution::std_() const
 {
     return std::sqrt(m2_ / n_samples_);

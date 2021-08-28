@@ -120,15 +120,12 @@ public:
     {
         for (const auto& wep : weapons)
         {
-            if (wep.type == weapon_type)
-            {
-                return true;
-            }
+            if (wep.type == weapon_type) return true;
         }
         return false;
     }
 
-    bool has_item(const std::string& item_name)
+    [[nodiscard]] bool has_item(const std::string& item_name) const
     {
         for (const auto& a : armor)
         {
@@ -162,39 +159,96 @@ public:
     {
         for (const auto& wep : weapons)
         {
-            if (wep.socket == socket)
-            {
-                return wep;
-            }
+            if (wep.socket == socket) return wep;
         }
         std::cout << "Error did not find item in socket: " << socket << "\n";
         return weapons[0];
     }
 
-    struct
+    [[nodiscard]] bool has_set_bonus(Set set, int pieces) const
     {
-        bool booming_voice_talent{false};
-        int commanding_presence_talent{0};
-        int improved_berserker_stance{0};
-        int sword_specialization{0};
-        int mace_specialization{0};
-        int one_handed_weapon_specialization{0};
-    } talents;
+        for (const auto& sb : set_bonuses)
+        {
+            if (sb.set == set && sb.pieces == pieces) return true;
+        }
+        return false;
+    }
 
-    struct
+    struct talents_t
     {
-        bool warbringer_2_set{false};
-        bool warbringer_4_set{false};
-        bool destroyer_2_set{false};
-        bool destroyer_4_set{false};
-        bool solarian_bs_bonus{false};
-    } set_bonus_effect;
+        int improved_heroic_strike{};
+        //int deflection{};
+        //int improved_rend{};
+        //int improved_charge{};
+        //int iron_will{};
+        //int improved_thunder_clap{};
+        int improved_overpower{};
+        int anger_management{};
+        int deep_wounds{};
+        int two_handed_weapon_specialization{};
+        int impale{};
+        int poleaxe_specialization{};
+        int death_wish{};
+        int mace_specialization{};
+        int sword_specialization{};
+        //int improved_intercept{};
+        //int improved_hamstring{};
+        int improved_disciplines{};
+        //int blood_frenzy{};
+        int mortal_strike{};
+        //int second_wind{};
+        int improved_mortal_strike{};
+        int endless_rage{};
+        int booming_voice{};
+        int cruelty{};
+        //int improved_demoralizing_shout{};
+        int unbridled_wrath{};
+        int improved_cleave{};
+        //int peircing_howl{};
+        //int blood_craze{};
+        int commanding_presence{};
+        int dual_wield_specialization{};
+        int improved_execute{};
+        //int enrage{};
+        int improved_slam{};
+        int sweeping_strikes{};
+        int weapon_mastery{};
+        //int improved_berserker_rage{};
+        int flurry{};
+        int precision{};
+        int bloodthirst{};
+        int improved_whirlwind{};
+        int improved_berserker_stance{};
+        int rampage{};
+        //int improved_bloodrage{};
+        int tactical_mastery{};
+        //int anticipation{};
+        //int shield_specialization{};
+        //int toughness{};
+        //int last_stand{};
+        //int improved_shield_block{};
+        //int improved_revenge{};
+        int defiance{};
+        //int improved_sunder_armor{};
+        //int improved_disarm{};
+        //int improved_taunt{};
+        //int improved_shield_wall{};
+        //int concussion_blow{};
+        //int improved_shield_bash{};
+        //int shield_mastery{};
+        int one_handed_weapon_specialization{};
+        //int improved_defensive_stance{};
+        //int shield_slam{};
+        //int focused_rage{};
+        //int vitality{};
+        //int devastate{};
+    } talents;
 
     Attributes base_attributes;
     Attributes total_attributes;
     Special_stats base_special_stats;
     Special_stats total_special_stats;
-    Special_stats talent_special_stats;
+    Special_stats talent_special_stats; // currently unused
     std::vector<Armor> armor;
     std::vector<Weapon> weapons;
     std::vector<Buff> buffs;

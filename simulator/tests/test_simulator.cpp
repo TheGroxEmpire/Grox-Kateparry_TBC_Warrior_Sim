@@ -8,7 +8,7 @@
 
 TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
 {
-    config.talents.flurry = 5;
+    character.talents.flurry = 5;
     config.sim_time = 500.0;
     config.main_target_level = 70;
 
@@ -22,7 +22,7 @@ TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
 
 TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
 {
-    config.talents.flurry = 5;
+    character.talents.flurry = 5;
     config.sim_time = 500.0;
     config.main_target_level = 70;
 
@@ -47,7 +47,7 @@ TEST_F(Sim_fixture, test_endless_rage)
     double rage_normal = sim.get_rage_lost_capped();
 
     Combat_simulator sim{};
-    config.talents.endless_rage = true;
+    character.talents.endless_rage = true;
     sim.set_config(config);
     sim.simulate(character);
 
@@ -60,7 +60,7 @@ TEST_F(Sim_fixture, test_endless_rage)
 
 TEST_F(Sim_fixture, test_bloodthirst_count)
 {
-    config.talents.bloodthirst = 1;
+    character.talents.bloodthirst = 1;
     config.combat.use_bloodthirst = true;
     config.essence_of_the_red_ = true;
     config.combat.initial_rage = 100;
@@ -81,7 +81,7 @@ TEST_F(Sim_fixture, test_that_with_infinite_rage_all_hits_are_heroic_strike)
     config.combat.initial_rage = 100;
     config.combat.first_hit_heroic_strike = true;
     config.combat.use_heroic_strike = true;
-    config.talents.improved_heroic_strike = 3;
+    character.talents.improved_heroic_strike = 3;
     config.sim_time = 500.0;
 
     character.total_special_stats.attack_power = 10000;
@@ -563,7 +563,7 @@ TEST_F(Sim_fixture, test_deep_wounds)
     character.base_special_stats.attack_power = 1400;
 
     Combat_simulator sim{};
-    config.talents.deep_wounds = 3;
+    character.talents.deep_wounds = 3;
     config.combat.deep_wounds = true;
     config.combat.use_whirlwind = true;
     config.combat.use_bloodthirst = true;
@@ -573,7 +573,7 @@ TEST_F(Sim_fixture, test_deep_wounds)
 
     auto ap = character.total_special_stats.attack_power;
     auto w = character.weapons[0];
-    auto dwTick = config.talents.deep_wounds * 0.2 * (0.5 * (w.min_damage + w.max_damage) + ap / 14 * w.swing_speed) / 4;
+    auto dwTick = character.talents.deep_wounds * 0.2 * (0.5 * (w.min_damage + w.max_damage) + ap / 14 * w.swing_speed) / 4;
 
     auto damage_sources = sim.get_damage_distribution();
 
@@ -596,8 +596,8 @@ TEST_F(Sim_fixture, test_flurry_uptime)
     character.total_special_stats.haste = 0.05; // haste should probably use % as well, for consistency
 
     Combat_simulator sim{};
-    config.talents.flurry = 5;
-    config.talents.bloodthirst = 1;
+    character.talents.flurry = 5;
+    character.talents.bloodthirst = 1;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     config.combat.use_bloodthirst = true;
@@ -606,7 +606,7 @@ TEST_F(Sim_fixture, test_flurry_uptime)
     sim.simulate(character);
 
     auto flurryUptime = sim.get_flurry_uptime();
-    auto flurryHaste = 1 + config.talents.flurry * 0.05;
+    auto flurryHaste = 1 + character.talents.flurry * 0.05;
 
     auto haste = 1 + character.total_special_stats.haste;
 
@@ -699,12 +699,12 @@ TEST_F(Sim_fixture, test_arms)
     character.total_special_stats.crit_multiplier = 0.03;
 
     Combat_simulator sim{};
-    config.talents.flurry = 3;
-    config.talents.mortal_strike = 1;
-    config.talents.improved_slam = 2;
-    config.talents.deep_wounds = 3;
-    config.talents.anger_management = true;
-    config.talents.unbridled_wrath = 5;
+    character.talents.flurry = 3;
+    character.talents.mortal_strike = 1;
+    character.talents.improved_slam = 2;
+    character.talents.deep_wounds = 3;
+    character.talents.anger_management = true;
+    character.talents.unbridled_wrath = 5;
     config.combat.use_mortal_strike = true;
     config.combat.use_slam = true;
     config.combat.slam_rage_dd = 15; // this must not be < slam_rage_cost, afaik, but this isn't enforced; what does "dd" stand for?
@@ -718,7 +718,7 @@ TEST_F(Sim_fixture, test_arms)
     config.combat.use_sl_in_exec_phase = true;
     config.combat.use_ms_in_exec_phase = true;
     config.combat.deep_wounds = true;
-    config.talents.mace_specialization = 0;
+    character.talents.mace_specialization = 0;
     sim.set_config(config);
 
     time_simulate(sim, character);
@@ -762,20 +762,20 @@ TEST_F(Sim_fixture, test_fury)
     character.total_special_stats.expertise = 5;
     character.total_special_stats.axe_expertise = 5;
 
-    config.talents.flurry = 5;
-    config.talents.rampage = true;
+    character.talents.flurry = 5;
+    character.talents.rampage = true;
     config.combat.rampage_use_thresh = 3;
     config.combat.use_rampage = false;
-    config.talents.dual_wield_specialization = 5;
-    config.talents.deep_wounds = 3;
+    character.talents.dual_wield_specialization = 5;
+    character.talents.deep_wounds = 3;
     config.combat.deep_wounds = true;
-    config.talents.improved_heroic_strike = 3;
-    config.talents.improved_whirlwind = 1;
-    config.talents.impale = 2;
-    config.talents.unbridled_wrath = 5;
-    config.talents.weapon_mastery = 2;
-    config.talents.bloodthirst = 1;
-    config.talents.anger_management = true;
+    character.talents.improved_heroic_strike = 3;
+    character.talents.improved_whirlwind = 1;
+    character.talents.impale = 2;
+    character.talents.unbridled_wrath = 5;
+    character.talents.weapon_mastery = 2;
+    character.talents.bloodthirst = 1;
+    character.talents.anger_management = true;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     /*
@@ -872,26 +872,26 @@ TEST_F(Sim_fixture, test_procs)
     character.total_special_stats += mult;
 
     // hello, use effects ;)
-    config.talents.death_wish = true;
+    character.talents.death_wish = true;
     config.combat.use_death_wish = true;
     config.enable_bloodrage = true;
     config.enable_blood_fury = true;
     config.enable_unleashed_rage = true;
 
-    config.talents.flurry = 5;
-    config.talents.rampage = true;
+    character.talents.flurry = 5;
+    character.talents.rampage = true;
     config.combat.rampage_use_thresh = 3;
     config.combat.use_rampage = true;
-    config.talents.dual_wield_specialization = 5;
-    config.talents.deep_wounds = 3;
+    character.talents.dual_wield_specialization = 5;
+    character.talents.deep_wounds = 3;
     config.combat.deep_wounds = true;
-    config.talents.improved_heroic_strike = 3;
-    config.talents.improved_whirlwind = 1;
-    config.talents.impale = 2;
-    config.talents.unbridled_wrath = 5;
-    config.talents.weapon_mastery = 2;
-    config.talents.bloodthirst = 1;
-    config.talents.anger_management = true;
+    character.talents.improved_heroic_strike = 3;
+    character.talents.improved_whirlwind = 1;
+    character.talents.impale = 2;
+    character.talents.unbridled_wrath = 5;
+    character.talents.weapon_mastery = 2;
+    character.talents.bloodthirst = 1;
+    character.talents.anger_management = true;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     /*

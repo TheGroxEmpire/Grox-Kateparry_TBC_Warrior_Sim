@@ -67,23 +67,6 @@ Combat_simulator_config get_config_with_everything_deactivated()
     config.execute_phase_percentage_ = 0.0;
     config.berserking_haste_ = 0.0;
 
-    config.talents.improved_heroic_strike = 0;
-    config.talents.overpower = 0;
-    config.talents.unbridled_wrath = 0;
-    config.talents.flurry = 0;
-    config.talents.anger_management = false;
-    config.talents.impale = 0;
-    config.talents.improved_execute = 0;
-    config.talents.dual_wield_specialization = 0;
-    config.talents.improved_cleave = 0;
-    config.talents.improved_slam = 0;
-    config.talents.death_wish = false;
-    config.talents.tactical_mastery = 0;
-    config.talents.deep_wounds = 0;
-    config.talents.bloodthirst = 0;
-    config.talents.mortal_strike = 0;
-    config.talents.sweeping_strikes = 0;
-
     config.n_batches = 10;
 
     config.seed = 110000;

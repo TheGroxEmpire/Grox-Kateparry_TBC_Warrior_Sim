@@ -65,10 +65,10 @@ struct Combat_simulator_config
     int number_of_extra_targets{};
     double extra_target_duration{};
     int extra_target_initial_armor_{};
-    int n_sunder_armor_stacks = 0;
-    bool exposed_armor{false};
-    bool curse_of_recklessness_active{false};
-    bool faerie_fire_feral_active{false};
+    int n_sunder_armor_stacks{};
+    bool exposed_armor{};
+    bool curse_of_recklessness_active{};
+    bool faerie_fire_feral_active{};
 
     bool take_periodic_damage_{};
     int periodic_damage_amount_{};
@@ -84,22 +84,22 @@ struct Combat_simulator_config
     double unleashed_rage_start_{};
 
     // Simulator settings
-    bool enable_bloodrage{false};
-    bool enable_recklessness{false};
-    bool enable_blood_fury{false};
-    bool enable_berserking{false};
-    bool enable_unleashed_rage{false};
+    bool enable_bloodrage{};
+    bool enable_recklessness{};
+    bool enable_blood_fury{};
+    bool enable_berserking{};
+    bool enable_unleashed_rage{};
 
-    bool display_combat_debug{false};
+    bool display_combat_debug{};
     int seed{};
 
     struct combat_t
     {
-        bool use_bt_in_exec_phase{false};
-        bool use_ms_in_exec_phase{false};
-        bool use_ww_in_exec_phase{false};
-        bool use_sl_in_exec_phase{false};
-        bool use_hs_in_exec_phase{false};
+        bool use_bt_in_exec_phase{};
+        bool use_ms_in_exec_phase{};
+        bool use_ww_in_exec_phase{};
+        bool use_sl_in_exec_phase{};
+        bool use_hs_in_exec_phase{};
         double whirlwind_rage_thresh{};
         double overpower_rage_thresh{};
         double whirlwind_bt_cooldown_thresh{};
@@ -110,79 +110,42 @@ struct Combat_simulator_config
         double heroic_strike_rage_thresh{}; // this is now used for execute phase as well
         double cleave_rage_thresh{};
         double heroic_strike_damage{};
-        bool cleave_if_adds{false};
-        bool use_hamstring{false};
-        bool use_slam{false};
-        bool use_bloodthirst{false};
-        bool use_rampage{false};
-        bool use_mortal_strike{false};
-        bool use_sweeping_strikes{false};
-        bool use_whirlwind{false};
-        bool use_overpower{false};
-        bool use_heroic_strike{false};
+        bool cleave_if_adds{};
+        bool use_hamstring{};
+        bool use_slam{};
+        bool use_bloodthirst{};
+        bool use_rampage{};
+        bool use_mortal_strike{};
+        bool use_sweeping_strikes{};
+        bool use_whirlwind{};
+        bool use_overpower{};
+        bool use_heroic_strike{};
         double hamstring_cd_thresh{};
-        bool dont_use_hm_when_ss{false};
+        bool dont_use_hm_when_ss{};
         double slam_latency{};
         double rampage_use_thresh{};
         double hamstring_thresh_dd{};
         double initial_rage{};
-        bool deep_wounds{false};
-        bool first_hit_heroic_strike{false};
-        double slam_spam_rage{false};
-        double slam_spam_max_time{false};
-        double slam_rage_dd{false};
-        bool use_death_wish{false};
+        bool deep_wounds{};
+        bool first_hit_heroic_strike{};
+        double slam_spam_rage{};
+        double slam_spam_max_time{};
+        double slam_rage_dd{};
+        bool use_death_wish{};
     } combat;
 
     struct dpr_t
     {
-        bool compute_dpr_sl_{false};
-        bool compute_dpr_ms_{false};
-        bool compute_dpr_bt_{false};
-        bool compute_dpr_op_{false};
-        bool compute_dpr_ww_{false};
-        bool compute_dpr_ex_{false};
-        bool compute_dpr_ha_{false};
-        bool compute_dpr_hs_{false};
-        bool compute_dpr_cl_{false};
+        bool compute_dpr_sl_{};
+        bool compute_dpr_ms_{};
+        bool compute_dpr_bt_{};
+        bool compute_dpr_op_{};
+        bool compute_dpr_ww_{};
+        bool compute_dpr_ex_{};
+        bool compute_dpr_ha_{};
+        bool compute_dpr_hs_{};
+        bool compute_dpr_cl_{};
     } dpr_settings;
-
-    struct talents_t
-    {
-        bool death_wish{false};
-        bool anger_management{false};
-        bool endless_rage{false};
-        bool rampage{false};
-        int improved_heroic_strike = 0;
-        int flurry = 0;
-        int unbridled_wrath = 0;
-        int mace_specialization = 0;
-        int impale = 0;
-        int overpower = 0;
-        int improved_execute = 0;
-        int dual_wield_specialization = 0;
-        int improved_cleave = 0;
-        int improved_slam = 0;
-        int tactical_mastery = 0;
-        int deep_wounds = 0;
-        int bloodthirst = 0;
-        int mortal_strike = 0;
-        int sweeping_strikes = 0;
-        int improved_disciplines = 0;
-        int improved_mortal_strike = 0;
-        int weapon_mastery = 0;
-        int precision = 0;
-        int improved_whirlwind = 0;
-        int improved_berserker_stance = 0;
-    } talents;
-
-    struct set_bonus_effect_t
-    {
-        bool warbringer_2_set{false};
-        bool warbringer_4_set{false};
-        bool destroyer_2_set{false};
-        bool destroyer_4_set{false};
-    } set_bonus_effect;
 };
 
 class Combat_simulator : Rage_manager
@@ -388,7 +351,7 @@ public:
     void maybe_gain_flurry(Hit_result hit_result, int& flurry_charges, Special_stats& special_stats) const;
     void maybe_remove_flurry(int& flurry_charges, Special_stats& special_stats) const;
     void maybe_add_rampage_stack(Hit_result hit_result, int& rampage_stacks, Special_stats& special_stats);
-    void unbridled_wrath(const Weapon_sim& weapon);
+    void unbridled_wrath(Sim_state& state, const Weapon_sim& weapon);
 
     void swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
@@ -410,8 +373,7 @@ public:
 
     void hamstring(Sim_state& state);
 
-    void simulate(const Character& character, int n_simulations, double init_mean, double init_variance,
-                  int init_simulations);
+    void simulate(const Character& character, int n_simulations, const Distribution& init_distribution);
 
     void simulate(const Character& character, int init_iteration = 0, bool log_data = false, bool reset_dps = true);
 
@@ -423,18 +385,18 @@ public:
 
     static double get_uniform_random(double r_max) { return rand() * r_max / RAND_MAX; }
 
-    [[nodiscard]] double rage_generation(const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const;
+    [[nodiscard]] double rage_generation(Sim_state& state, const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const;
 
     void cout_damage_parse(const Weapon_sim& weapon, const Hit_table& hit_table, const Hit_outcome& hit_outcome);
 
     Hit_outcome generate_hit(Sim_state& state, const Weapon_sim& weapon, const Hit_table& hit_table, double damage,
                              bool boss_target = true, bool can_sweep = true);
 
-    void compute_hit_tables(const Special_stats& special_stats, const Weapon_sim& weapon);
+    void compute_hit_tables(const Character& character, const Special_stats& special_stats, const Weapon_sim& weapon);
 
+    Special_stats add_talent_effects(const Character& character);
     void add_use_effects(const Character& character);
-
-    void add_over_time_effects();
+    void add_over_time_effects(const Character& character);
 
     Use_effects::Schedule compute_use_effects_schedule(const Character& character);
 
@@ -469,25 +431,18 @@ public:
     [[nodiscard]] const Distribution& get_dps_distribution() const { return dps_distribution_; }
 
     [[nodiscard]] double get_dps_mean() const { return dps_distribution_.mean(); }
-
     [[nodiscard]] double get_dps_variance() const { return dps_distribution_.variance(); }
-
     [[nodiscard]] int get_n_simulations() const { return config.n_batches; }
-
     [[nodiscard]] double get_rage_lost_stance() const { return rage_lost_stance_swap_; }
-
     [[nodiscard]] double get_rage_lost_capped() const { return rage_lost_capped_; }
 
     [[nodiscard]] double get_avg_rage_spent_executing() const { return avg_rage_spent_executing_; }
 
     [[nodiscard]] const std::vector<int>& get_hist_x() const { return hist_x; }
-
     [[nodiscard]] const std::vector<int>& get_hist_y() const { return hist_y; }
 
     [[nodiscard]] double get_flurry_uptime() const { return flurry_uptime_; }
-
     [[nodiscard]] double get_hs_uptime() const { return oh_queued_uptime_; }
-
     [[nodiscard]] double get_rampage_uptime() const { return rampage_uptime_; }
 
     void init_histogram();
@@ -557,10 +512,15 @@ private:
     bool use_rampage_{};
     bool use_mortal_strike_{};
     bool use_sweeping_strikes_{};
+    bool have_flurry_{};
+
     int sweeping_strikes_charges_{};
 
     std::vector<Use_effect> use_effects_{};
     std::vector<Over_time_effect> over_time_effects_{};
+
+    bool has_warbringer_4_set_{};
+    bool has_destroyer_2_set_{};
 
     Over_time_effect deep_wound_effect_{"deep_wound", {}, 0, 0, 3, 12};
     Hit_effect battle_stance_{"battle_stance", Hit_effect::Type::stat_boost, {}, {-3.0, 0, 0}, 0, 1.5, 0, 0};
