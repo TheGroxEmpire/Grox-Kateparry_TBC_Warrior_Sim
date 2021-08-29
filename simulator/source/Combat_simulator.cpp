@@ -39,7 +39,7 @@ Special_stats Combat_simulator::add_talent_effects(const Character& character)
     }
 
     heroic_strike_rage_cost_ = 15 - character.talents.improved_heroic_strike;
-    execute_rage_cost_ = std::vector<int>{ 15, 13, 10 }[character.talents.improved_execute];
+    execute_rage_cost_ = std::vector<int>{15, 13, 10}[character.talents.improved_execute];
     whirlwind_rage_cost_ = 25;
     mortal_strike_rage_cost_ = 30;
     bloodthirst_rage_cost_ = 30;
@@ -178,17 +178,6 @@ void Combat_simulator::set_config(const Combat_simulator_config& new_config)
     {
         armor_reduction_delayed_ = 3075 - 520 * config.n_sunder_armor_stacks;
     }
-
-    // convert some cooldown thresholds from seconds to milliseconds
-    config.combat.whirlwind_bt_cooldown_thresh = to_millis(config.combat.whirlwind_bt_cooldown_thresh);
-    config.combat.bt_whirlwind_cooldown_thresh = to_millis(config.combat.bt_whirlwind_cooldown_thresh);
-    config.combat.ms_whirlwind_cooldown_thresh = to_millis(config.combat.ms_whirlwind_cooldown_thresh);
-    config.combat.overpower_bt_cooldown_thresh = to_millis(config.combat.overpower_bt_cooldown_thresh);
-    config.combat.overpower_ww_cooldown_thresh = to_millis(config.combat.overpower_ww_cooldown_thresh);
-    config.combat.hamstring_cd_thresh = to_millis(config.combat.hamstring_cd_thresh);
-    config.combat.slam_latency = to_millis(config.combat.slam_latency);
-    config.combat.slam_spam_max_time = to_millis(config.combat.slam_spam_max_time);
-    config.combat.rampage_use_thresh = to_millis(config.combat.rampage_use_thresh);
 }
 
 std::string Combat_simulator::hit_result_to_string(const Hit_result& hit_result)
@@ -434,7 +423,7 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
 
     if (mh_swing || weapon.next_swing - time_keeper_.time > config.combat.slam_spam_max_time)
     {
-        if ((mh_swing && rage > config.combat.slam_rage_dd) || rage > config.combat.slam_spam_rage)
+        if ((mh_swing && rage > config.combat.slam_rage_thresh) || rage > config.combat.slam_spam_rage)
         {
             logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, " ms");
             slam_manager.cast_slam(time_keeper_.time + static_cast<int>(config.combat.slam_latency));
@@ -1185,7 +1174,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
 
             if (config.multi_target_mode_ && number_of_extra_targets_ > 0 &&
-                time_keeper_.time >= config.extra_target_duration * sim_time)
+                time_keeper_.time >= sim_time * config.extra_target_percentage / 100)
             {
                 logger_.print("Extra targets die.");
                 number_of_extra_targets_ = 0;
@@ -1542,7 +1531,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         {
             use_ham &= time_keeper_.whirlwind_cd() > config.combat.hamstring_cd_thresh;
         }
-        if (rage > config.combat.hamstring_thresh_dd && rage >= 10 && use_ham)
+        if (rage > config.combat.hamstring_rage_thresh && rage >= 10 && use_ham)
         {
             hamstring(state);
             return;

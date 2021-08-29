@@ -44,16 +44,18 @@ struct Combat_simulator_config
             }
         }
         seed = 110000;
-    };
+    }
 
     explicit Combat_simulator_config(const Sim_input_mult& input)
     {
         get_combat_simulator_config(input);
         seed = clock();
-    };
+    }
 
     template <typename T>
     void get_combat_simulator_config(const T& input);
+
+    [[nodiscard]] static int to_millis(double seconds) { return Time_keeper::to_millis(seconds); }
 
     // Combat settings
     int n_batches{};
@@ -61,9 +63,8 @@ struct Combat_simulator_config
 
     int main_target_level{};
     int main_target_initial_armor_{};
-    int extra_target_level{}; // TODO(vigo) this isn't actually supported (would need a second set of hit tables)
     int number_of_extra_targets{};
-    double extra_target_duration{};
+    double extra_target_percentage{};
     int extra_target_initial_armor_{};
     int n_sunder_armor_stacks{};
     bool exposed_armor{};
@@ -124,13 +125,13 @@ struct Combat_simulator_config
         bool dont_use_hm_when_ss{};
         double slam_latency{};
         double rampage_use_thresh{};
-        double hamstring_thresh_dd{};
+        double hamstring_rage_thresh{};
         double initial_rage{};
         bool deep_wounds{};
         bool first_hit_heroic_strike{};
         double slam_spam_rage{};
         double slam_spam_max_time{};
-        double slam_rage_dd{};
+        double slam_rage_thresh{};
         bool use_death_wish{};
     } combat;
 
@@ -429,10 +430,11 @@ public:
     [[nodiscard]] const Damage_sources& get_damage_distribution() const { return damage_distribution_; }
 
     [[nodiscard]] const Distribution& get_dps_distribution() const { return dps_distribution_; }
-
     [[nodiscard]] double get_dps_mean() const { return dps_distribution_.mean(); }
     [[nodiscard]] double get_dps_variance() const { return dps_distribution_.variance(); }
-    [[nodiscard]] int get_n_simulations() const { return config.n_batches; }
+    [[nodiscard]] double get_var_of_the_mean() const { return dps_distribution_.var_of_the_mean(); }
+    [[nodiscard]] double get_std_of_the_mean() const { return dps_distribution_.std_of_the_mean(); }
+
     [[nodiscard]] double get_rage_lost_stance() const { return rage_lost_stance_swap_; }
     [[nodiscard]] double get_rage_lost_capped() const { return rage_lost_capped_; }
 

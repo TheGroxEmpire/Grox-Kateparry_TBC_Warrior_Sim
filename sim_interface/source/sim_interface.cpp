@@ -10,6 +10,8 @@
 
 #include <sstream>
 
+static const double q95 = Statistics::find_cdf_quantile(0.95, 0.01);
+
 #ifdef TEST_VIA_CONFIG
 void print_results(const Combat_simulator& sim, bool print_uptimes_and_procs)
 {
@@ -52,40 +54,44 @@ void print_results(const Combat_simulator& sim, bool print_uptimes_and_procs)
 #endif
 
 void compute_item_upgrade(const Character& character_new, const std::vector<int>& batches_per_iteration,
-                          Combat_simulator& simulator, double dps_mean, double dps_sample_std,
-                          const std::string& item_name, const std::vector<size_t>& stronger_indexes, double quantile,
+                          Combat_simulator& simulator, const Distribution& base_dps,
+                          const std::string& item_name, const std::vector<size_t>& stronger_indexes,
                           size_t i, std::string& item_strengths_string, bool& found_upgrade,
                           std::string& item_downgrades_string)
 {
-    auto total_batches = 0;
+
+    auto mean = 0.0;
+    auto variance = 0.0;
+    auto samples = 0;
+
     for (int batches : batches_per_iteration)
     {
-        simulator.simulate(character_new, batches, Distribution(simulator.get_dps_mean(), simulator.get_dps_variance(), total_batches));
-
-        total_batches += batches;
+        simulator.simulate(character_new, batches, Distribution(mean, variance, samples));
 
         const auto& d = simulator.get_dps_distribution();
-        const auto mean = d.mean();
+        mean = d.mean();
+        variance = d.variance();
+        samples = d.samples();
         const auto std_of_the_mean = d.std_of_the_mean();
 
-        if (mean - std_of_the_mean * quantile >= dps_mean && d.samples() > 5000)
+        if (mean - std_of_the_mean * q95 >= base_dps.mean() && samples > 5000)
         {
             found_upgrade = true;
-            double dps_increase = mean - dps_mean;
-            double dps_increase_std = Statistics::add_standard_deviations(std_of_the_mean, dps_sample_std);
+            double dps_increase = mean - base_dps.mean();
+            double dps_increase_std = std::sqrt(d.var_of_the_mean() + base_dps.var_of_the_mean());
             item_strengths_string += "<br><b>Up</b>grade: <b>" + item_name + "</b> ( +<b>" +
                                      String_helpers::string_with_precision(dps_increase, 2) + " &plusmn " +
-                                     String_helpers::string_with_precision(dps_increase_std, 2) + "</b> DPS).";
+                                     String_helpers::string_with_precision(dps_increase_std * q95, 2) + "</b> DPS).";
             break;
         }
 
-        if (mean + std_of_the_mean * quantile <= dps_mean && d.samples() > 500)
+        if (mean + std_of_the_mean * q95 <= base_dps.mean() && samples > 500)
         {
-            double dps_decrease = mean - dps_mean;
-            double dps_decrease_std = Statistics::add_standard_deviations(std_of_the_mean, dps_sample_std);
+            double dps_decrease = mean - base_dps.mean();
+            double dps_decrease_std = std::sqrt(d.var_of_the_mean() + base_dps.var_of_the_mean());
             item_downgrades_string += "<br><b>Down</b>grade: <b>" + item_name + "</b> ( <b>" +
                                       String_helpers::string_with_precision(dps_decrease, 3) + " &plusmn " +
-                                      String_helpers::string_with_precision(dps_decrease_std, 2) + "</b> DPS).";
+                                      String_helpers::string_with_precision(dps_decrease_std * q95, 2) + "</b> DPS).";
             if (String_helpers::does_vector_contain(stronger_indexes, i))
             {
                 found_upgrade = true;
@@ -98,33 +104,19 @@ void compute_item_upgrade(const Character& character_new, const std::vector<int>
 
 void item_upgrades(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
                    Armory& armory, const std::vector<int>& batches_per_iteration, Combat_simulator& simulator,
-                   double dps_mean, double dps_sample_std, Socket socket, const Special_stats& special_stats,
+                   const Distribution& base_dps, Socket socket, const Special_stats& special_stats,
                    bool first_item)
 {
     std::string dummy;
     std::string current{"Current "};
+    auto current_armor = character_new.get_item_from_socket(socket, first_item);
     item_strengths_string += current;
     item_strengths_string =
-        item_strengths_string + socket + ": <b>" + character_new.get_item_from_socket(socket, first_item).name + "</b>";
+        item_strengths_string + socket + ": <b>" + current_armor.name + "</b>";
     auto armor_vec = armory.get_items_in_socket(socket);
     auto items = (socket != Socket::trinket) ?
                      item_optimizer.remove_weaker_items(armor_vec, character_new.total_special_stats, dummy, 3) :
                      armor_vec;
-
-    {
-        size_t i = 0;
-        while (i < items.size())
-        {
-            if (character_new.has_item(items[i].name))
-            {
-                items.erase(items.begin() + i);
-            }
-            else
-            {
-                i++;
-            }
-        }
-    }
 
     Armor item_in_socket = character_new.get_item_from_socket(socket, first_item);
     Special_stats item_special_stats = item_in_socket.special_stats;
@@ -148,16 +140,16 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
         }
     }
 
-    double quantile = Statistics::find_cdf_quantile(0.99, 0.01);
     std::string best_armor_name{};
     bool found_upgrade = false;
     std::string item_downgrades_string{};
     for (size_t i = 0; i < items.size(); i++)
     {
-        armory.change_armor(character_new.armor, items[i], first_item);
+        if (items[i].name == current_armor.name) continue;
+        Armory::change_armor(character_new.armor, items[i], first_item);
         armory.compute_total_stats(character_new);
-        compute_item_upgrade(character_new, batches_per_iteration, simulator, dps_mean, dps_sample_std, items[i].name,
-                             stronger_indexes, quantile, i, item_strengths_string, found_upgrade,
+        compute_item_upgrade(character_new, batches_per_iteration, simulator, base_dps, items[i].name,
+                             stronger_indexes, i, item_strengths_string, found_upgrade,
                              item_downgrades_string);
     }
     if (!found_upgrade)
@@ -175,45 +167,32 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
 
 void item_upgrades_wep(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
                        Armory& armory, const std::vector<int>& batches_per_iteration, Combat_simulator& simulator,
-                       double dps_mean, double dps_sample_std, Weapon_socket weapon_socket)
+                       const Distribution& base_dps, Weapon_socket weapon_socket)
 {
     std::string dummy;
     Socket socket = ((weapon_socket == Weapon_socket::main_hand) || (weapon_socket == Weapon_socket::two_hand)) ?
                         Socket::main_hand :
                         Socket::off_hand;
+    auto current_weapon = character_new.get_weapon_from_socket(socket);
     std::string current{"Current "};
     item_strengths_string += current;
     item_strengths_string =
-        item_strengths_string + socket + ": " + "<b>" + character_new.get_weapon_from_socket(socket).name + "</b>";
+        item_strengths_string + socket + ": " + "<b>" + current_weapon.name + "</b>";
     auto items = armory.get_weapon_in_socket(weapon_socket);
     items = item_optimizer.remove_weaker_weapons(weapon_socket, items, character_new.total_special_stats, dummy, 10);
-    {
-        size_t i = 0;
-        while (i < items.size())
-        {
-            if (character_new.has_item(items[i].name))
-            {
-                items.erase(items.begin() + i);
-            }
-            else
-            {
-                i++;
-            }
-        }
-    }
-    
+
     auto stronger_indexes = std::vector<size_t>{};
 
-    double quantile = Statistics::find_cdf_quantile(0.95, 0.01);
     std::string best_armor_name{};
     bool found_upgrade = false;
     std::string item_downgrades_string{};
     for (size_t i = 0, n = items.size(); i < n; ++i)
     {
-        armory.change_weapon(character_new.weapons, items[i], socket);
+        if (items[i].name == current_weapon.name) continue;
+        Armory::change_weapon(character_new.weapons, items[i], socket);
         armory.compute_total_stats(character_new);
-        compute_item_upgrade(character_new, batches_per_iteration, simulator, dps_mean, dps_sample_std, items[i].name,
-                             stronger_indexes, quantile, i, item_strengths_string, found_upgrade,
+        compute_item_upgrade(character_new, batches_per_iteration, simulator, base_dps, items[i].name,
+                             stronger_indexes, i, item_strengths_string, found_upgrade,
                              item_downgrades_string);
     }
     if (!found_upgrade)
@@ -232,22 +211,20 @@ void item_upgrades_wep(std::string& item_strengths_string, Character character_n
 struct Stat_weight
 {
     double mean;
-    double sample_std;
+    double std_of_the_mean;
     double amount;
 };
 
 Stat_weight compute_stat_weight(Combat_simulator& sim, Character& char_plus,
                                 double permute_amount, double permute_factor,
-                                double mean_init, double sample_std_init)
+                                const Distribution& base_dps)
 {
     sim.simulate(char_plus);
-    double mean_plus = sim.get_dps_mean();
-    double std_plus = std::sqrt(sim.get_dps_variance());
-    double sample_std_plus = Statistics::sample_deviation(std_plus, sim.get_n_simulations());
 
-    return {(mean_plus - mean_init) / permute_factor,
-            (Statistics::add_standard_deviations(sample_std_init, sample_std_plus)) / permute_factor,
-            permute_amount};
+    auto mean_diff = (sim.get_dps_mean() - base_dps.mean()) / permute_factor;
+    auto std_of_the_mean_diff = std::sqrt(sim.get_var_of_the_mean() + base_dps.var_of_the_mean()) / permute_factor;
+
+    return {mean_diff, q95 * std_of_the_mean_diff, permute_amount};
 }
 
 std::vector<double> get_damage_sources(const Damage_sources& damage_sources_vector)
@@ -400,101 +377,167 @@ std::string get_character_stat(const Character& character)
     return out_string;
 }
 
-void compute_talent_weight(Combat_simulator& combat_simulator, const Character& character, std::string& talents_info,
-                           const std::string& talent_name, Combat_simulator_config config,
-                           int Character::talents_t::*talent, int n_points)
+std::string compute_talent_weight(Combat_simulator& combat_simulator, const Character& character,
+                                  const Distribution& init_dps, const std::string& talent_name,
+                                  int Character::talents_t::*talent, int n_points)
 {
-    auto copy = character;
-    copy.talents.*talent = 0;
-    combat_simulator.simulate(copy, 0);
-    double dps_without = combat_simulator.get_dps_mean();
-    double var_without = combat_simulator.get_dps_variance();
+    auto without = init_dps;
+    if (character.talents.*talent > 0)
+    {
+        auto copy = character;
+        copy.talents.*talent = 0;
+        combat_simulator.simulate(copy, 0);
+        without = combat_simulator.get_dps_distribution();
+    }
 
-    copy.talents.*talent = n_points;
-    combat_simulator.simulate(copy, 0);
-    double dps_with = combat_simulator.get_dps_mean();
-    double var_with = combat_simulator.get_dps_variance();
+    auto with = init_dps;
+    if (character.talents.*talent < n_points)
+    {
+        auto copy = character;
+        copy.talents.*talent = n_points;
+        combat_simulator.simulate(copy, 0);
+        with = combat_simulator.get_dps_distribution();
+    }
 
-    double delta_dps = (dps_with - dps_without) / n_points;
-    double std_dps = std::sqrt(var_without + var_with) / n_points / std::sqrt(config.n_batches);
-    talents_info += "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" +
-                    String_helpers::string_with_precision(delta_dps, 4) + " &plusmn " +
-                    String_helpers::string_with_precision(std_dps, 3) + " DPS</b><br>";
+    auto mean_diff = (with.mean() - without.mean()) / n_points;
+    auto std_of_the_mean_diff = std::sqrt(with.var_of_the_mean() + without.var_of_the_mean()) / n_points;
+
+    return "<br>Talent: <b>" + talent_name + "</b><br>Value: <b>" +
+           String_helpers::string_with_precision(mean_diff, 4) + " &plusmn " +
+           String_helpers::string_with_precision(q95 * std_of_the_mean_diff, 3) + " DPS</b><br>";
 }
 
-
-void compute_talent_weights(const Sim_input& input, const Character& character, const bool is_dual_wield,
-                            Combat_simulator_config& config, std::string& talents_info)
+std::string compute_talent_weights(Combat_simulator& sim, const Character& character, const Distribution& base_dps)
 {
-    config.n_batches = static_cast<int>(
-        String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_talent_dd"));
-    Combat_simulator simulator_talent{};
-    simulator_talent.set_config(config);
+    const auto& config = sim.config;
 
-    talents_info = "<br><b>Value per 1 talent point:</b>";
-    if (!config.combat.cleave_if_adds)
+    std::string talents_info = "<br><b>Value per 1 talent point:</b>";
+    if (config.combat.use_heroic_strike)
     {
-        compute_talent_weight(simulator_talent, character, talents_info, "Improved Heroic Strike", config,
-                              &Character::talents_t::improved_heroic_strike, 3);
-    }
-    else
-    {
-        compute_talent_weight(simulator_talent, character, talents_info, "Improved Cleave", config,
-                              &Character::talents_t::improved_cleave, 3);
-    }
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Improved Overpower", config,
-                          &Character::talents_t::improved_overpower, 2);
-
-    if (config.combat.use_slam && !is_dual_wield)
-    {
-        compute_talent_weight(simulator_talent, character, talents_info, "Improved Slam", config,
-                              &Character::talents_t::improved_slam, 2);
+        if (config.number_of_extra_targets > 0 && config.combat.cleave_if_adds)
+        {
+            talents_info += compute_talent_weight(sim, character, base_dps, "Improved Cleave",
+                                                  &Character::talents_t::improved_cleave, 3);
+        }
+        else
+        {
+            talents_info += compute_talent_weight(sim, character, base_dps, "Improved Heroic Strike",
+                                                  &Character::talents_t::improved_heroic_strike, 3);
+        }
     }
 
-    compute_talent_weight(simulator_talent, character, talents_info, "Improved Execute", config,
-                          &Character::talents_t::improved_execute, 2);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Unbridled Wrath", config,
-                          &Character::talents_t::unbridled_wrath, 5);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Flurry", config,
-                          &Character::talents_t::flurry, 5);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Impale", config,
-                          &Character::talents_t::impale, 2);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Anger Management", config,
-                          &Character::talents_t::anger_management, 1);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Death wish", config,
-                          &Character::talents_t::death_wish, 1);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Rampage", config,
-                          &Character::talents_t::rampage, 1);
-
-    compute_talent_weight(simulator_talent, character, talents_info, "Endless Rage", config,
-                          &Character::talents_t::endless_rage, 1);
-
-    if (is_dual_wield)
+    if (config.combat.use_whirlwind)
     {
-        compute_talent_weight(simulator_talent, character, talents_info, "Dual Wield Specialization", config,
-                              &Character::talents_t::dual_wield_specialization, 5);
+        talents_info += compute_talent_weight(sim, character, base_dps, "Improved Whirlwind",
+                                              &Character::talents_t::improved_whirlwind, 2);
     }
+
+    if (config.combat.use_slam && !character.is_dual_wield())
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Improved Slam",
+                                              &Character::talents_t::improved_slam, 2);
+    }
+
+    if (config.combat.use_overpower)
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Improved Overpower",
+                                              &Character::talents_t::improved_overpower, 2);
+    }
+
+    if (config.execute_phase_percentage_ > 0)
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Improved Execute",
+                                              &Character::talents_t::improved_execute, 2);
+    }
+
+    if (character.is_dual_wield())
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Dual Wield Specialization",
+                                              &Character::talents_t::dual_wield_specialization, 5);
+    }
+
+    if (character.is_dual_wield())
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "One-handed Weapon Specialization",
+                                              &Character::talents_t::one_handed_weapon_specialization, 5);
+    }
+
+    if (!character.is_dual_wield())
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Two-handed Weapon Specialization",
+                                              &Character::talents_t::two_handed_weapon_specialization, 5);
+    }
+
+    if (config.combat.use_death_wish)
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Death wish",
+                                              &Character::talents_t::death_wish, 1);
+    }
+
+    if (character.has_weapon_of_type(Weapon_type::sword))
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Sword Specialization",
+                                              &Character::talents_t::sword_specialization, 5);
+    }
+
+    if (character.has_weapon_of_type(Weapon_type::mace))
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Mace Specialization",
+                                              &Character::talents_t::mace_specialization, 5);
+    }
+
+    if (character.has_weapon_of_type(Weapon_type::axe))
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Poleaxe Specialization",
+                                              &Character::talents_t::poleaxe_specialization, 5);
+    }
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Flurry",
+                                          &Character::talents_t::flurry, 5);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Cruelty",
+                                          &Character::talents_t::cruelty, 5);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Impale",
+                                          &Character::talents_t::impale, 2);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Rampage",
+                                          &Character::talents_t::rampage, 1);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Weapon Mastery",
+                                          &Character::talents_t::weapon_mastery, 2);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Precision",
+                                          &Character::talents_t::precision, 3);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Improved Berserker Stance",
+                                          &Character::talents_t::improved_berserker_stance, 5);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Unbridled Wrath",
+                                          &Character::talents_t::unbridled_wrath, 5);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Anger Management",
+                                          &Character::talents_t::anger_management, 1);
+
+    talents_info += compute_talent_weight(sim, character, base_dps, "Endless Rage",
+                                          &Character::talents_t::endless_rage, 1);
+
+    return talents_info;
 }
 
 void compute_dpr(const Character& character, const Combat_simulator& simulator,
-                 double n_simulations_base, const double dps_mean, const Damage_sources& dmg_dist,
-                 Combat_simulator_config& config, std::string& dpr_info)
+                 const Distribution& base_dps, const Damage_sources& dmg_dist, std::string& dpr_info)
 {
+    auto config = simulator.config;
     config.n_batches = 10000;
+
     dpr_info = "<br><b>Ability damage per rage:</b><br>";
     dpr_info += "DPR for ability X is computed as following:<br> "
                 "((Normal DPS) - (DPS where ability X costs rage but has no effect)) / (rage cost of ability "
                 "X)<br>";
     if (config.combat.use_bloodthirst)
     {
-        double avg_bt_casts = static_cast<double>(dmg_dist.bloodthirst_count) / n_simulations_base;
+        double avg_bt_casts = static_cast<double>(dmg_dist.bloodthirst_count) / base_dps.samples();
         if (avg_bt_casts >= 1.0)
         {
             double bloodthirst_rage = 30 - 5 * character.has_set_bonus(Set::destroyer, 4);
@@ -502,7 +545,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_bt_casts;
             double dmg_per_rage = dmg_per_hit / bloodthirst_rage;
@@ -515,7 +558,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.use_mortal_strike)
     {
-        double avg_ms_casts = static_cast<double>(dmg_dist.mortal_strike_count) / n_simulations_base;
+        double avg_ms_casts = static_cast<double>(dmg_dist.mortal_strike_count) / base_dps.samples();
         if (avg_ms_casts >= 1.0)
         {
             double mortal_strike_rage = 30 - 5 * character.has_set_bonus(Set::destroyer, 4);
@@ -523,7 +566,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_ms_casts;
             double dmg_per_rage = dmg_per_hit / mortal_strike_rage;
@@ -536,7 +579,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.use_whirlwind)
     {
-        double avg_ww_casts = static_cast<double>(dmg_dist.whirlwind_count) / n_simulations_base;
+        double avg_ww_casts = static_cast<double>(dmg_dist.whirlwind_count) / base_dps.samples();
         if (avg_ww_casts >= 1.0)
         {
             double whirlwind_rage = 25 - 5 * character.has_set_bonus(Set::warbringer, 2);
@@ -544,7 +587,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_ww_casts;
             double dmg_per_rage = dmg_per_hit / whirlwind_rage;
@@ -557,14 +600,14 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.use_slam)
     {
-        double avg_sl_casts = static_cast<double>(dmg_dist.slam_count) / n_simulations_base;
+        double avg_sl_casts = static_cast<double>(dmg_dist.slam_count) / base_dps.samples();
         if (avg_sl_casts >= 1.0)
         {
             config.dpr_settings.compute_dpr_sl_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double avg_mh_dmg =
                 static_cast<double>(dmg_dist.white_mh_damage) / static_cast<double>(dmg_dist.white_mh_count);
@@ -581,7 +624,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.use_heroic_strike)
     {
-        double avg_hs_casts = static_cast<double>(dmg_dist.heroic_strike_count) / n_simulations_base;
+        double avg_hs_casts = static_cast<double>(dmg_dist.heroic_strike_count) / base_dps.samples();
         if (avg_hs_casts >= 1.0)
         {
             double heroic_strike_rage = 15 - character.talents.improved_heroic_strike;
@@ -589,7 +632,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hs = dmg_tot / avg_hs_casts;
             double avg_mh_dmg =
@@ -605,14 +648,14 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.cleave_if_adds)
     {
-        double avg_cl_casts = static_cast<double>(dmg_dist.cleave_count) / n_simulations_base;
+        double avg_cl_casts = static_cast<double>(dmg_dist.cleave_count) / base_dps.samples();
         if (avg_cl_casts >= 1.0)
         {
             config.dpr_settings.compute_dpr_cl_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hs = dmg_tot / avg_cl_casts;
             double avg_mh_dmg =
@@ -628,14 +671,14 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.use_hamstring)
     {
-        double avg_ha_casts = static_cast<double>(dmg_dist.hamstring_count) / n_simulations_base;
+        double avg_ha_casts = static_cast<double>(dmg_dist.hamstring_count) / base_dps.samples();
         if (avg_ha_casts >= 1.0)
         {
             config.dpr_settings.compute_dpr_ha_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_ha = dmg_tot / avg_ha_casts;
             double dmg_per_rage = dmg_per_ha / 10;
@@ -648,18 +691,18 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
     }
     if (config.combat.use_overpower)
     {
-        double avg_op_casts = static_cast<double>(dmg_dist.overpower_count) / n_simulations_base;
+        double avg_op_casts = static_cast<double>(dmg_dist.overpower_count) / base_dps.samples();
         if (avg_op_casts >= 1.0)
         {
             config.dpr_settings.compute_dpr_op_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
             simulator_dpr.simulate(character, 0);
-            double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+            double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_op_casts;
             double overpower_cost =
-                simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()) / avg_op_casts + 5.0;
+                simulator.get_rage_lost_stance() / double(base_dps.samples()) / avg_op_casts + 5.0;
             double dmg_per_rage = dmg_per_hit / overpower_cost;
             dpr_info += "<b>Overpower</b>: <br>Damage per cast: <b>" +
                         String_helpers::string_with_precision(dmg_per_hit, 4) + "</b><br>Average rage cost: <b>" +
@@ -669,14 +712,14 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         }
     }
 
-    double avg_ex_casts = static_cast<double>(dmg_dist.execute_count) / n_simulations_base;
+    double avg_ex_casts = static_cast<double>(dmg_dist.execute_count) / base_dps.samples();
     if (avg_ex_casts >= 1.0)
     {
         config.dpr_settings.compute_dpr_ex_ = true;
         Combat_simulator simulator_dpr{};
         simulator_dpr.set_config(config);
         simulator_dpr.simulate(character, 0);
-        double delta_dps = dps_mean - simulator_dpr.get_dps_mean();
+        double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
         double dmg_tot = delta_dps * config.sim_time;
         double dmg_per_hit = dmg_tot / avg_ex_casts;
         double execute_rage_cost = std::vector<int>{15, 13, 10}[character.talents.improved_execute];
@@ -688,69 +731,67 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
                     String_helpers::string_with_precision(dmg_per_rage, 4) + "</b><br>";
         config.dpr_settings.compute_dpr_ex_ = false;
     }
-    config.n_batches = static_cast<int>(n_simulations_base);
 }
 
-void compute_stat_weights(const Sim_input& input, const Character& character, const double dps_mean,
-                          const double dps_sample_std, Combat_simulator_config& config,
-                          Combat_simulator& simulator, std::vector<std::string>& stat_weights)
+std::vector<std::string> compute_stat_weights(Combat_simulator& simulator, const Character& character, const Distribution& base_dps, const std::vector<std::string>& stat_weights)
 {
-    config.n_batches =
-        String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_stat_dd");
-    simulator.set_config(config);
+    const auto rating_factor = 52.0 / 82;
 
-    auto rating_factor = 52.0 / 82;
-    for (const auto& stat_weight : input.stat_weights)
+    std::vector<std::string> sw_strings{};
+    sw_strings.reserve(stat_weights.size());
+
+    for (const auto& stat_weight : stat_weights)
     {
         Character char_plus = character;
         Stat_weight sw{};
         if (stat_weight == "strength")
         {
             char_plus.total_special_stats += Attributes{50, 0}.to_special_stats(char_plus.total_special_stats);
-            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, base_dps);
         }
         else if (stat_weight == "agility")
         {
             char_plus.total_special_stats += Attributes{0, 50}.to_special_stats(char_plus.total_special_stats);
-            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, base_dps);
         }
         else if (stat_weight == "ap")
         {
             char_plus.total_special_stats += {0, 0, 100};
-            sw = compute_stat_weight(simulator, char_plus, 10, 10, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 10, base_dps);
         }
         else if (stat_weight == "crit")
         {
             char_plus.total_special_stats.critical_strike += rating_factor / 14 * 50;
-            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, base_dps);
         }
         else if (stat_weight == "hit")
         {
             char_plus.total_special_stats.hit += rating_factor / 10 * 25;
-            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, base_dps);
         }
         else if (stat_weight == "expertise")
         {
             char_plus.total_special_stats.expertise += rating_factor / 2.5 * 25;
-            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, base_dps);
         }
         else if (stat_weight == "haste")
         {
             char_plus.total_special_stats.haste += rating_factor / 10 * 0.01 * 50;
-            sw = compute_stat_weight(simulator, char_plus, 10, 5, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 5, base_dps);
         }
         else if (stat_weight == "arpen")
         {
             char_plus.total_special_stats.gear_armor_pen += 350;
-            sw = compute_stat_weight(simulator, char_plus, 10, 35, dps_mean, dps_sample_std);
+            sw = compute_stat_weight(simulator, char_plus, 10, 35, base_dps);
         }
         else
         {
             std::cout << "stat_weight '" << stat_weight << "' is not supported, continuing" << std::endl;
             continue;
         }
-        stat_weights.emplace_back(stat_weight + ":" + std::to_string(sw.mean) + ":" + std::to_string(sw.sample_std));
+        sw_strings.emplace_back(stat_weight + ":" + std::to_string(sw.mean) + ":" + std::to_string(sw.std_of_the_mean));
     }
+    return sw_strings;
 }
 
 Sim_output Sim_interface::simulate(const Sim_input& input)
@@ -841,17 +882,15 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     const auto white_mh_ht = simulator.get_hit_probabilities_white_mh();
     const auto white_oh_ht = simulator.get_hit_probabilities_white_oh();
     const auto white_oh_ht_queued = simulator.get_hit_probabilities_white_oh_queued();
-    double n_simulations_base = config.n_batches;
 
     simulator.simulate(character, 0, true);
 #ifdef TEST_VIA_CONFIG
     print_results(simulator, true);
 #endif
 
-    const double dps_mean = simulator.get_dps_mean();
-    const double dps_sample_std = Statistics::sample_deviation(std::sqrt(simulator.get_dps_variance()), config.n_batches);
-    std::vector<double> mean_dps_vec{dps_mean};
-    std::vector<double> sample_std_dps_vec{dps_sample_std};
+    const auto base_dps = simulator.get_dps_distribution();
+    std::vector<double> mean_dps_vec{base_dps.mean()};
+    std::vector<double> sample_std_dps_vec{base_dps.std_of_the_mean()};
 
     const auto& hist_x = simulator.get_hist_x();
     const auto& hist_y = simulator.get_hist_y();
@@ -886,16 +925,13 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
     std::string character_stats = get_character_stat(character);
 
+    // TODO(vigo) add rage gained or spent here, too
     std::string rage_info = "<b>Rage Statistics:</b><br>";
     rage_info += "(Average per simulation)<br>";
     rage_info += "Rage lost to rage cap (gaining rage when at 100): <b>" +
-                 String_helpers::string_with_precision(
-                     simulator.get_rage_lost_capped() / double(simulator.get_n_simulations()), 3) +
-                 "</b><br>";
+                 String_helpers::string_with_precision(simulator.get_rage_lost_capped() / base_dps.samples(), 3) + "</b><br>";
     rage_info += "</b>Rage lost when changing stance: <b>" +
-                 String_helpers::string_with_precision(
-                     simulator.get_rage_lost_stance() / double(simulator.get_n_simulations()), 3) +
-                 "</b><br>";
+                 String_helpers::string_with_precision(simulator.get_rage_lost_stance() / base_dps.samples(), 3) + "</b><br>";
 
     std::string extra_info_string = "<b>Fight stats vs. target:</b> <br/>";
     extra_info_string += "<b>Hit:</b> <br/>";
@@ -932,17 +968,19 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
     extra_info_string += "<br><br>";
 
-    std::string dpr_info = "<br>(Hint: Ability damage per rage computations can be turned on under 'Simulation "
-                           "settings')";
+    std::string dpr_info = "<br>(Hint: Ability damage per rage computations can be turned on under 'Simulation settings')";
     if (String_helpers::find_string(input.options, "compute_dpr"))
     {
-        compute_dpr(character, simulator, n_simulations_base, dps_mean, dmg_dist, config, dpr_info);
+        compute_dpr(character, simulator, base_dps, dmg_dist, dpr_info);
     }
 
     std::string talents_info = "<br>(Hint: Talent stat-weights can be activated under 'Simulation settings')";
     if (String_helpers::find_string(input.options, "talents_stat_weights"))
     {
-        compute_talent_weights(input, character, is_dual_wield, config, talents_info);
+        config.n_batches = static_cast<int>(String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_talent_dd"));
+        Combat_simulator sim{};
+        sim.set_config(config);
+        talents_info = compute_talent_weights(sim, character, base_dps);
     }
 #ifdef TEST_VIA_CONFIG
     if (talents_info.find("Value per 1 talent point") != std::string::npos)
@@ -965,8 +1003,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         simulator_compare.simulate(character2);
 
         double mean_init_2 = simulator_compare.get_dps_mean();
-        double std_init_2 = std::sqrt(simulator_compare.get_dps_variance());
-        double sample_std_init_2 = Statistics::sample_deviation(std_init_2, config.n_batches);
+        double sample_std_init_2 = simulator_compare.get_std_of_the_mean();
 
         character_stats = get_character_stat(character, character2);
 
@@ -1004,15 +1041,15 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
                 if (socket == Socket::ring || socket == Socket::trinket)
                 {
                     item_upgrades(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator, dps_mean, dps_sample_std, socket, character_new.total_special_stats, true);
+                                  simulator_strength, base_dps, socket, character_new.total_special_stats, true);
                     item_upgrades(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator, dps_mean, dps_sample_std, socket, character_new.total_special_stats,
+                                  simulator_strength, base_dps, socket, character_new.total_special_stats,
                                   false);
                 }
                 else
                 {
                     item_upgrades(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator, dps_mean, dps_sample_std, socket, character_new.total_special_stats, true);
+                                  simulator_strength, base_dps, socket, character_new.total_special_stats, true);
                 }
             }
         }
@@ -1021,14 +1058,14 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             if (is_dual_wield)
             {
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator, dps_mean, dps_sample_std, Weapon_socket::main_hand);
+                                  simulator_strength, base_dps, Weapon_socket::main_hand);
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator, dps_mean, dps_sample_std, Weapon_socket::off_hand);
+                                  simulator_strength, base_dps, Weapon_socket::off_hand);
             }
             else
             {
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator, dps_mean, dps_sample_std, Weapon_socket::two_hand);
+                                  simulator_strength, base_dps, Weapon_socket::two_hand);
             }
         }
         item_strengths_string += "<br><br>";
@@ -1044,10 +1081,14 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     }
 #endif
 
-    std::vector<std::string> stat_weights;
+    std::vector<std::string> sw_strings{};
     if (!input.stat_weights.empty())
     {
-        compute_stat_weights(input, character, dps_mean, dps_sample_std, config, simulator, stat_weights);
+        config.n_batches = static_cast<int>(String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_stat_dd"));
+        Combat_simulator stat_weighs_simulator{};
+        stat_weighs_simulator.set_config(config);
+
+        sw_strings = compute_stat_weights(stat_weighs_simulator, character, base_dps, input.stat_weights);
     }
 
     std::string debug_topic{};
@@ -1061,7 +1102,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         {
             simulator.simulate(character);
             dps = simulator.get_dps_mean();
-            if (std::abs(dps - dps_mean) < 5)
+            if (std::abs(dps - base_dps.mean()) < 5)
             {
                 break;
             }
@@ -1108,6 +1149,11 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         debug_topic += "#Hits item effects: " + std::to_string(dist.item_hit_effects_count) + "<br>";
     }
 
+    for (auto& v : sample_std_dps_vec)
+    {
+        v *= q95;
+    }
+
     return {hist_x,
             hist_y,
             dps_dist,
@@ -1116,7 +1162,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             aura_uptimes,
             use_effects_schedule_string,
             proc_statistics,
-            stat_weights,
+            sw_strings,
             {item_strengths_string + extra_info_string + rage_info + dpr_info + talents_info, debug_topic},
             mean_dps_vec,
             sample_std_dps_vec,

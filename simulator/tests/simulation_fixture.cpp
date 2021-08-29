@@ -43,7 +43,7 @@ Combat_simulator_config get_config_with_everything_deactivated()
     config.combat.cleave_rage_thresh = 0.0;
     config.combat.whirlwind_rage_thresh = 0.0;
     config.combat.hamstring_cd_thresh = 0.0;
-    config.combat.hamstring_thresh_dd = 0.0;
+    config.combat.hamstring_rage_thresh = 0.0;
     config.combat.initial_rage = 0.0;
     config.combat.whirlwind_bt_cooldown_thresh = 0.0;
     config.combat.overpower_rage_thresh = 0.0;
@@ -52,16 +52,15 @@ Combat_simulator_config get_config_with_everything_deactivated()
     config.combat.slam_latency = 0.0;
     config.combat.slam_spam_max_time = 0.0;
     config.combat.slam_spam_rage = 0.0;
-    config.combat.slam_rage_dd = 0.0;
+    config.combat.slam_rage_thresh = 0.0;
 
     config.sim_time = 60.0;
     config.main_target_level = 73.0;
     config.main_target_initial_armor_ = 7700.0;
     config.n_sunder_armor_stacks = 5.0;
     config.number_of_extra_targets = 0.0;
-    config.extra_target_duration = 0.0;
+    config.extra_target_percentage = 0.0;
     config.extra_target_initial_armor_ = 0.0;
-    config.extra_target_level = 70.0;
     config.periodic_damage_interval_ = 0.0;
     config.periodic_damage_amount_ = 0.0;
     config.execute_phase_percentage_ = 0.0;

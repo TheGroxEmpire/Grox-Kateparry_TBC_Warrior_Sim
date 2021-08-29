@@ -13,20 +13,10 @@ void Distribution::add_sample(const double sample)
     m2_ += delta * delta2;
 }
 
-double Distribution::std_() const
-{
-    return std::sqrt(m2_ / n_samples_);
-}
-
-double Distribution::std_of_the_mean() const
-{
-    return std::sqrt(m2_) / n_samples_;
-}
-
 std::pair<double, double> Distribution::confidence_interval(double p_value) const
 {
     double val = Statistics::find_cdf_quantile(Statistics::get_two_sided_p_value(p_value), 0.01);
-    return std::pair<double, double>{mean_ - val * std_(), mean_ + val * std_()};
+    return std::pair<double, double>{mean_ - val * std(), mean_ + val * std()};
 }
 
 std::pair<double, double> Distribution::confidence_interval_of_the_mean(double p_value) const
@@ -37,6 +27,6 @@ std::pair<double, double> Distribution::confidence_interval_of_the_mean(double p
 }
 
 std::ostream& operator<<(std::ostream& os, const Distribution& d) {
-    return os << d.mean() << " +/- " << d.std_of_the_mean() << " / " << d.sample_variance() << " for " << d.samples() << " samples";
+    return os << "mean = " << d.mean() << ", std_of_the_mean = " << d.std_of_the_mean() << ", samples =" << d.samples();
 }
 

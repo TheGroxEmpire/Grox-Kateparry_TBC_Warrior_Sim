@@ -16,7 +16,7 @@ TEST(TestSuite, test_distribution)
     }
     ASSERT_DOUBLE_EQ(distribution.mean(), 5);
 
-    EXPECT_NEAR(distribution.std_(), population_std, 0.01);
+    EXPECT_NEAR(distribution.std(), population_std, 0.01);
     EXPECT_NEAR(distribution.variance(), population_std * population_std, 0.01);
     EXPECT_NEAR(distribution.std_of_the_mean(), population_std / 3, 0.01);
 }

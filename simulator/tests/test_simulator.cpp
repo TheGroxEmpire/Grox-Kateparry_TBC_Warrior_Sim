@@ -707,10 +707,10 @@ TEST_F(Sim_fixture, test_arms)
     character.talents.unbridled_wrath = 5;
     config.combat.use_mortal_strike = true;
     config.combat.use_slam = true;
-    config.combat.slam_rage_dd = 15; // this must not be < slam_rage_cost, afaik, but this isn't enforced; what does "dd" stand for?
+    config.combat.slam_rage_thresh = 15; // this must not be < slam_rage_cost, afaik, but this isn't enforced; what does "dd" stand for?
     config.combat.slam_spam_rage = 100; // default 100 aka never
-    config.combat.slam_spam_max_time = 1.5; // rather slam_min_swing_remaining, but this should (simpler) be slam_max_swing_passed
-    config.combat.slam_latency = 0.2;
+    config.combat.slam_spam_max_time = 1500; // rather slam_min_swing_remaining, but this should (simpler) be slam_max_swing_passed
+    config.combat.slam_latency = 200;
     config.combat.use_whirlwind = true;
     config.combat.use_heroic_strike = true;
     config.combat.heroic_strike_rage_thresh = 80;

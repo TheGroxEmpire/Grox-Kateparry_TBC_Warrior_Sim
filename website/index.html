@@ -4606,8 +4606,8 @@
         <input type="checkbox" id="use_slam" checked onclick="show_div('use_slam', 'slam_div')">
         <label for="use_slam"><b> Use slam (Two-handed weapons only)</b></label><br>
         <div class="description" id="slam_div">
-            <label for="slam_rage_dd">Cast slam after a melee hit if rage is above:</label>
-            <input type="number" id="slam_rage_dd" name="quantity" min="15" max="100" value="15"><br>
+            <label for="slam_rage_thresh_dd">Cast slam after a melee hit if rage is above:</label>
+            <input type="number" id="slam_rage_thresh_dd" name="quantity" min="0" max="100" value="0"><br>
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
             <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
@@ -4657,8 +4657,8 @@
         <div class="description" id="hamstring_div">
             <label for="hamstring_cd_thresh_dd">Hamstring when bloodthirst/Whirlwind CD is above:</label>
             <input type="number" id="hamstring_cd_thresh_dd" name="quantity" min="0" max="6" value="2.0" step="0.1"><br>
-            <label for="hamstring_thresh_dd">Hamstring when rage is above:</label>
-            <input type="number" id="hamstring_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
+            <label for="hamstring_rage_thresh_dd">Hamstring when rage is above:</label>
+            <input type="number" id="hamstring_rage_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
         </div>
 
         <input type="checkbox" id="ability_queue" onclick="show_div('ability_queue', 'ability_queue_div')">
@@ -4705,8 +4705,8 @@
             <input type="number" id="extra_target_armor_dd" name="quantity" min="0" max="10000" value="7000"><br>
             <label for="extra_target_level_dd">Extra targets level (70-73):</label>
             <input type="number" id="extra_target_level_dd" name="quantity" min="70" max="73" value="70"><br>
-            <label for="extra_target_duration_dd">Extra targets die at (% of fight):</label>
-            <input type="number" id="extra_target_duration_dd" name="quantity" min="1" max="100" value="100"><br>
+            <label for="extra_target_percentage_dd">Extra targets die at (% of fight):</label>
+            <input type="number" id="extra_target_percentage_dd" name="quantity" min="1" max="100" value="100"><br>
         </div>
         <br>
 
@@ -4966,12 +4966,12 @@
         "opponent_level_dd", "boss_armor_dd", "fight_time_dd",
         "sunder_armor_dd", "heroic_strike_rage_thresh_dd", "hs_rage_thresh_exec_phase_dd", "cleave_rage_thresh_dd", "whirlwind_rage_thresh_dd", "bt_whirlwind_cooldown_thresh_dd",
         "whirlwind_bt_cooldown_thresh_dd", "overpower_rage_thresh_dd", "overpower_bt_cooldown_thresh_dd",
-        "overpower_ww_cooldown_thresh_dd", "hamstring_cd_thresh_dd", "initial_rage_dd", "hamstring_thresh_dd",
+        "overpower_ww_cooldown_thresh_dd", "hamstring_cd_thresh_dd", "initial_rage_dd", "hamstring_rage_thresh_dd",
         "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd",
-        "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
-        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
+        "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_thresh_dd", "berserking_haste_dd",
+        "full_polarity_dd", "extra_target_percentage_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "enable_unleashed_rage", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_ww_in_exec_phase", "use_hs_in_exec_phase",
