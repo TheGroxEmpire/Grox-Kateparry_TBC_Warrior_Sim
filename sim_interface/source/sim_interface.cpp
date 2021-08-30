@@ -165,6 +165,29 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
     }
 }
 
+void maybe_equalize_weapon_specs(Character& c)
+{
+    const auto& mh = c.get_weapon_from_socket(Socket::main_hand);
+    if (c.is_dual_wield())
+    {
+        const auto& oh = c.get_weapon_from_socket(Socket::off_hand);
+        if (mh.type != oh.type) return;
+    }
+    switch (mh.type) {
+    case Weapon_type::sword:
+        c.talents.mace_specialization = c.talents.poleaxe_specialization = c.talents.sword_specialization;
+        break;
+    case Weapon_type::mace:
+        c.talents.sword_specialization = c.talents.poleaxe_specialization = c.talents.mace_specialization;
+        break;
+    case Weapon_type::axe:
+        c.talents.sword_specialization = c.talents.mace_specialization = c.talents.poleaxe_specialization;
+        break;
+    default:
+        return;
+    }
+}
+
 void item_upgrades_wep(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
                        Armory& armory, const std::vector<int>& batches_per_iteration, Combat_simulator& simulator,
                        const Distribution& base_dps, Weapon_socket weapon_socket)
@@ -386,7 +409,7 @@ std::string compute_talent_weight(Combat_simulator& combat_simulator, const Char
     {
         auto copy = character;
         copy.talents.*talent = 0;
-        combat_simulator.simulate(copy, 0);
+        combat_simulator.simulate(copy);
         without = combat_simulator.get_dps_distribution();
     }
 
@@ -395,7 +418,7 @@ std::string compute_talent_weight(Combat_simulator& combat_simulator, const Char
     {
         auto copy = character;
         copy.talents.*talent = n_points;
-        combat_simulator.simulate(copy, 0);
+        combat_simulator.simulate(copy);
         with = combat_simulator.get_dps_distribution();
     }
 
@@ -544,7 +567,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_bt_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_bt_casts;
@@ -565,7 +588,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_ms_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_ms_casts;
@@ -586,7 +609,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_ww_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_ww_casts;
@@ -606,7 +629,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_sl_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double avg_mh_dmg =
@@ -631,7 +654,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_hs_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hs = dmg_tot / avg_hs_casts;
@@ -654,7 +677,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_cl_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hs = dmg_tot / avg_cl_casts;
@@ -677,7 +700,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_ha_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_ha = dmg_tot / avg_ha_casts;
@@ -697,7 +720,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
             config.dpr_settings.compute_dpr_op_ = true;
             Combat_simulator simulator_dpr{};
             simulator_dpr.set_config(config);
-            simulator_dpr.simulate(character, 0);
+            simulator_dpr.simulate(character);
             double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
             double dmg_tot = delta_dps * config.sim_time;
             double dmg_per_hit = dmg_tot / avg_op_casts;
@@ -718,7 +741,7 @@ void compute_dpr(const Character& character, const Combat_simulator& simulator,
         config.dpr_settings.compute_dpr_ex_ = true;
         Combat_simulator simulator_dpr{};
         simulator_dpr.set_config(config);
-        simulator_dpr.simulate(character, 0);
+        simulator_dpr.simulate(character);
         double delta_dps = base_dps.mean() - simulator_dpr.get_dps_mean();
         double dmg_tot = delta_dps * config.sim_time;
         double dmg_per_hit = dmg_tot / avg_ex_casts;
@@ -883,7 +906,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     const auto white_oh_ht = simulator.get_hit_probabilities_white_oh();
     const auto white_oh_ht_queued = simulator.get_hit_probabilities_white_oh_queued();
 
-    simulator.simulate(character, 0, true);
+    simulator.simulate(character, true);
 #ifdef TEST_VIA_CONFIG
     print_results(simulator, true);
 #endif
@@ -1055,6 +1078,8 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         }
         if (String_helpers::find_string(input.options, "wep_strengths"))
         {
+            maybe_equalize_weapon_specs(character_new);
+
             if (is_dual_wield)
             {
                 item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,

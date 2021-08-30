@@ -376,7 +376,7 @@ public:
 
     void simulate(const Character& character, int n_simulations, const Distribution& init_distribution);
 
-    void simulate(const Character& character, int init_iteration = 0, bool log_data = false, bool reset_dps = true);
+    void simulate(const Character& character, bool log_data = false, bool reset_dps = true);
 
     void normal_phase(Sim_state& state, bool mh_swing);
     void execute_phase(Sim_state& state, bool mh_swing);

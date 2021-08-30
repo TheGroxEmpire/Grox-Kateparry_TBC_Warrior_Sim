@@ -953,3 +953,66 @@ TEST_F(Sim_fixture, base_stats)
         EXPECT_NEAR(toon.total_special_stats.critical_strike, expected_crit[i], 0.002);
     }
 }
+
+TEST_F(Sim_fixture, test_multi)
+{
+    config.sim_time = 5 * 60;
+    config.n_batches = 25000;
+
+    config.main_target_initial_armor_ = 6200.0;
+
+    config.combat.rampage_use_thresh = 3;
+    config.combat.use_rampage = true;
+    config.combat.deep_wounds = true;
+    config.combat.heroic_strike_rage_thresh = 60;
+    config.combat.use_heroic_strike = true;
+    config.combat.use_bloodthirst = true;
+    config.combat.use_whirlwind = true;
+
+    auto mh = Weapon{"test_mh", {}, {}, 2.7, 270, 270, Weapon_socket::one_hand, Weapon_type::axe};
+    auto oh = Weapon{"test_oh", {}, {}, 2.6, 260, 260, Weapon_socket::one_hand, Weapon_type::sword};
+    character.equip_weapon(mh, oh);
+
+    character.total_special_stats.attack_power = 2800;
+    character.total_special_stats.critical_strike = 35;
+    character.total_special_stats.hit = 3;
+    character.talents.flurry = 5;
+    character.talents.rampage = true;
+    character.talents.dual_wield_specialization = 5;
+    character.talents.deep_wounds = 3;
+    character.talents.improved_heroic_strike = 3;
+    character.talents.improved_whirlwind = 1;
+    character.talents.impale = 2;
+    character.talents.unbridled_wrath = 5;
+    character.talents.weapon_mastery = 2;
+    character.talents.bloodthirst = 1;
+
+    srand(110000);
+    auto start = std::chrono::steady_clock::now();
+    sim.set_config(config);
+    sim.simulate(character);
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+
+    auto& single = sim.get_dps_distribution();
+
+    std::cout << single << std::endl;
+    std::cout << "flurry = " << sim.get_flurry_uptime() << ", rampage = " << sim.get_rampage_uptime() << std::endl;
+
+    srand(110000);
+    start = std::chrono::steady_clock::now();
+    sim.set_config(config);
+    Distribution multi{};
+    for (auto i = 0; i < 100; ++i)
+    {
+        sim.simulate(character, 250, multi);
+        multi = sim.get_dps_distribution();
+    }
+    end = std::chrono::steady_clock::now();
+    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+
+    std::cout << multi << std::endl;
+    std::cout << "flurry = " << sim.get_flurry_uptime() << ", rampage = " << sim.get_rampage_uptime() << std::endl;
+
+    SUCCEED();
+}

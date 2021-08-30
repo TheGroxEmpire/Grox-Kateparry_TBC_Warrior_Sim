@@ -939,12 +939,12 @@ void Combat_simulator::simulate(const Character& character, int n_simulations, c
 {
     dps_distribution_ = init_distribution;
     config.n_batches = n_simulations;
-    simulate(character, init_distribution.samples(), false, false);
+    simulate(character, false, false);
 }
 
 // TODO(vigo) pass in a "target function", most likely a "bool (*func)(Combat_simulator& sim)", or a functor equivalent
 // also consider passing in both Combat_simulator_config and Character
-void Combat_simulator::simulate(const Character& character, int init_iteration, bool log_data, bool reset_dps)
+void Combat_simulator::simulate(const Character& character, bool log_data, bool reset_dps)
 {
     if (log_data)
     {
@@ -960,12 +960,6 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         n_damage_batches = 1;
     }
 
-    flurry_uptime_ = 0;
-    rage_lost_stance_swap_ = 0;
-    rage_lost_capped_ = 0;
-    oh_queued_uptime_ = 0;
-    rampage_uptime_ = 0;
-
     const auto& talent_special_stats = add_talent_effects(character);
 
     const auto starting_special_stats = character.total_special_stats + talent_special_stats;
@@ -979,7 +973,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
         if (weapon.weapon_type == Weapon_type::sword && character.talents.sword_specialization > 0)
         {
-            double prob = double(character.talents.sword_specialization) / 100.0;
+            double prob = character.talents.sword_specialization / 100.0;
             weapon.hit_effects.push_back({"sword_specialization", Hit_effect::Type::sword_spec, {}, {}, 0, 0, 0.5, prob});
         }
 
@@ -996,6 +990,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
     }
     compute_hit_table_stats_ = starting_special_stats;
 
+    // handle non-stat set bonuses
     if (character.has_set_bonus(Set::warbringer, 2))
     {
         whirlwind_rage_cost_ = 20;
@@ -1036,11 +1031,16 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         dps_distribution_ = Distribution{};
         proc_data_.clear();
         buff_manager_.reset_statistics();
+        flurry_uptime_ = 0;
+        rage_lost_stance_swap_ = 0;
+        rage_lost_capped_ = 0;
+        oh_queued_uptime_ = 0;
+        rampage_uptime_ = 0;
     }
 
     std::vector<Damage_instance> damage_instances{};
 
-    for (int iter = init_iteration; iter < n_damage_batches + init_iteration; iter++)
+    for (int iter = 0; iter < n_damage_batches; iter++)
     {
         ability_queue_manager.reset();
         slam_manager = Slam_manager(1500 - 500 * character.talents.improved_slam);
@@ -1279,15 +1279,17 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
         double dps_sample = state.damage_sources.sum_damage_sources() * 1000 / sim_time;
         dps_distribution_.add_sample(dps_sample);
 
+        int num_samples = dps_distribution_.samples();
+
         damage_distribution_ = damage_distribution_ + state.damage_sources;
 
-        rampage_uptime_ = Statistics::update_mean(rampage_uptime_, iter + 1, double(mh_hits_w_rampage) / mh_hits);
+        rampage_uptime_ = Statistics::update_mean(rampage_uptime_, num_samples, double(mh_hits_w_rampage) / mh_hits);
         if (is_dual_wield)
         {
-            oh_queued_uptime_ = Statistics::update_mean(oh_queued_uptime_, iter + 1, double(oh_hits_w_queued) / oh_hits);
+            oh_queued_uptime_ = Statistics::update_mean(oh_queued_uptime_, num_samples, double(oh_hits_w_queued) / oh_hits);
         }
-        flurry_uptime_ = Statistics::update_mean(flurry_uptime_, iter + 1, flurry_uptime / time_keeper_.time);
-        avg_rage_spent_executing_ = Statistics::update_mean(avg_rage_spent_executing_, iter + 1, rage_spent_on_execute_);
+        flurry_uptime_ = Statistics::update_mean(flurry_uptime_, num_samples, flurry_uptime / time_keeper_.time);
+        avg_rage_spent_executing_ = Statistics::update_mean(avg_rage_spent_executing_, num_samples, rage_spent_on_execute_);
 
         if (log_data)
         {

@@ -5,7 +5,7 @@
 
 void Distribution::add_sample(const double sample)
 {
-    // from https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm
+    // Welford's online algorithm, from https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
     n_samples_ += 1;
     auto delta = sample - mean_;
     mean_ += delta / n_samples_;
@@ -26,7 +26,8 @@ std::pair<double, double> Distribution::confidence_interval_of_the_mean(double p
     return std::pair<double, double>{mean_ - val * std_, mean_ + val * std_};
 }
 
-std::ostream& operator<<(std::ostream& os, const Distribution& d) {
-    return os << "mean = " << d.mean() << ", std_of_the_mean = " << d.std_of_the_mean() << ", samples =" << d.samples();
+std::ostream& operator<<(std::ostream& os, const Distribution& d)
+{
+    return os << "mean = " << d.mean() << ", std_of_the_mean = " << d.std_of_the_mean() << ", samples = " << d.samples();
 }
 
