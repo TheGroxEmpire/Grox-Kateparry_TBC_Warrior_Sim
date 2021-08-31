@@ -5228,17 +5228,15 @@
     let bar_chart_cooldowns;
 
     function clean_charts() {
-        try {
-            bar_chart_auras.destroy();
-            bar_chart_proc.destroy();
-            bar_chart_damage.destroy();
-            line_chart_hist.destroy();
-            line_chart_fight.destroy();
-            line_chart_fight_cum.destroy();
-            bar_chart_cooldowns.destroy();
-        } catch (error) {
-            console.log(error)
-        }
+        if (!bar_chart_auras) return; // before first run_sim()
+
+        bar_chart_auras.destroy();
+        bar_chart_proc.destroy();
+        bar_chart_damage.destroy();
+        line_chart_hist.destroy();
+        line_chart_fight.destroy();
+        line_chart_fight_cum.destroy();
+        bar_chart_cooldowns.destroy();
     }
 
     function show_loader() {
@@ -5249,15 +5247,13 @@
         $("#loader").removeClass("loader");
     }
 
-    async function run_sim(event) {
+    async function run_sim() {
         show_loader();
         setTimeout(setup_simulation_context, 100);
         setTimeout(hide_loader, 100);
-        event.preventDefault();
     }
 
     function setup_simulation_context() {
-
         clean_charts();
         read_inputs();
 
@@ -5354,9 +5350,6 @@
                 console.log("NaN value when reading talents.");
                 val = 0;
             }
-            if (val > 0) {
-                console.log(element, val);
-            }
             val = Math.min(Math.max(val, 0), max_val);
             talent_string.push_back(talent);
             talent_val.push_back(val);
@@ -5375,7 +5368,6 @@
         let stat_weight_vec = new Module.StringList();
         for (let stat_weight of stat_weigths) {
             if (document.getElementById(stat_weight).checked) {
-                console.log(stat_weight.slice(12, stat_weight.length));
                 stat_weight_vec.push_back(stat_weight.slice(12, stat_weight.length));
                 total_simulations += n_simulations_stat;
             }
@@ -5426,7 +5418,10 @@
                 mult_armor: mult_armor_vec,
             };
 
+            let t0 = performance.now();
             let result = obj.simulate(wow_input);
+            let t1 = performance.now();
+            console.log("took " + (t1 - t0) + " ms");
 
             obj.delete();
 
@@ -5439,12 +5434,12 @@
 
             let n_sim_status = "";
             if (mean_dps.length === 1) {
-                let conf_interval = 1.96 * std_dps[0];
+                let conf_interval = parseFloat(std_dps[0]);
                 n_sim_status += 'DPS: <b>' + mean_dps[0] + ' &plusmn ' + conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
             } else {
                 for (let i = 0; i < mean_dps.length; i++) {
                     let j = i + 1;
-                    let conf_interval = 1.96 * std_dps[i];
+                    let conf_interval = parseFloat(std_dps[i]);
                     n_sim_status += 'DPS setup' + j + ': <b>' + mean_dps[i] + ' &plusmn ' +
                         conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
                 }
@@ -5468,7 +5463,7 @@
                 stat_weights.push({
                     name: sw[0],
                     mean: parseFloat(sw[1]),
-                    ci95: 1.96 * parseFloat(sw[2]),
+                    ci95: parseFloat(sw[2]),
                 });
             }
 

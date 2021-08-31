@@ -37,6 +37,8 @@ enum class Weapon_socket
     two_hand
 };
 
+std::ostream& operator<<(std::ostream& os, const Weapon_socket& ws);
+
 enum class Weapon_type
 {
     sword,
@@ -45,6 +47,8 @@ enum class Weapon_type
     mace,
     unarmed
 };
+
+std::ostream& operator<<(std::ostream& os, const Weapon_type& wt);
 
 enum class Set
 {
@@ -316,14 +320,15 @@ struct Enchant
 
 struct Set_bonus
 {
-    Set_bonus(std::string name, Attributes attributes, Special_stats special_stats, int pieces, Set set)
-        : name(std::move(name)), attributes(attributes), special_stats(special_stats), pieces(pieces), set(set){};
+    Set_bonus(Set set, int pieces, std::string name, Attributes attributes = {}, Special_stats special_stats = {}, Hit_effect hit_effect = {})
+        : set(set), pieces(pieces), name(std::move(name)), attributes(attributes), special_stats(special_stats), hit_effect(std::move(hit_effect)) { }
 
+    Set set;
+    int pieces;
     std::string name;
     Attributes attributes;
     Special_stats special_stats;
-    int pieces;
-    Set set;
+    Hit_effect hit_effect;
 };
 
 struct Buff

@@ -526,7 +526,7 @@ struct Armory
                 // Phase 2
                 {"band_of_the_ranger_general", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 1.14140773620799, 56.0, 0, 0.0}, Socket::ring}, 
                 {"ring_of_lethality", Attributes{0.0, 24.0}, Special_stats{0.0, 1.2048192771084338, 50.0, 0, 0.0}, Socket::ring}, 
-                {"ancestral_ring_of_conquest", Attributes{32.0, 21.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::ring}, 
+                {"ancestral_ring_of_conquest", Attributes{32.0, 21.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::ring},
             };
 
     std::vector<Armor> trinket_t
@@ -747,21 +747,22 @@ struct Armory
 
                 // Phase 2
                 // main_hand / one_hand
-                {"talon_of_the_phoenix", Attributes{0.0, 0.0}, Special_stats{0.8605072463768116, 0.9511731135066582, 52.0, 0, 0.0}, 2.7, 182, 339, Weapon_socket::main_hand, Weapon_type::unarmed},
+                {"talon_of_the_phoenix", Attributes{0.0, 0.0}, Special_stats{0.8605, 0.9512, 52.0, 0, 0.0}, 2.7, 182, 339, Weapon_socket::main_hand, Weapon_type::unarmed},
 
                 // off_hand
                 {"claw_of_the_phoenix", Attributes{0.0, 25.0}, Special_stats{0.0, 0.0, 40, 0, 0.0}, 1.5, 101, 189, Weapon_socket::main_hand, Weapon_type::unarmed}, 
             };
 
-    std::vector<Set_bonus> set_bonuses
-    {
-            {"ragesteel",                   Attributes{0, 0}, Special_stats{0, 1.26, 0},  2, Set::ragesteel},
-            {"wastewalker",                 Attributes{0, 0}, Special_stats{0, 2.21, 0},  2, Set::wastewalker},
-            {"doomplate",                   Attributes{0, 0}, Special_stats{0, 2.21, 0},  2, Set::doomplate},
-            {"warbringer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  2, Set::warbringer},
-            {"warbringer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  4, Set::warbringer},
-            {"destroyer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  2, Set::destroyer},
-            {"destroyer",                  Attributes{0, 0}, Special_stats{0, 0, 0},  4, Set::destroyer},
+    std::vector<Set_bonus> set_bonuses{
+        {Set::ragesteel, 2, "ragesteel-2pc", {}, {0, 1.2683, 0}},
+        {Set::wastewalker, 2, "wastewalker-2pc", {}, {0, 2.2195, 0}},
+        {Set::wastewalker, 4, "wastewalker-4pc", {}, {}, {"wastewalker-4pc", Hit_effect::Type::stat_boost, {}, {0, 0, 160}, 0, 15, 0, 0.02}},
+        {Set::doomplate, 2, "doomplate-2pc", {}, {0, 2.2195, 0}},
+        {Set::doomplate, 4, "doomplate-4pc", {}, {}, {"doomplate-4pc", Hit_effect::Type::stat_boost, {}, {0, 0, 160}, 0, 15, 0, 0.02}},
+        {Set::warbringer, 2, "warbringer-2pc (2t4)"},
+        {Set::warbringer, 4, "warbringer-4pc (4t4)"},
+        {Set::destroyer, 2, "destroyer-2pc (2t5)"},
+        {Set::destroyer, 4, "destroyer-2pc (4t5)"},
     };
 
     [[nodiscard]] std::vector<Armor> get_items_in_socket(Socket socket) const;

@@ -68,7 +68,7 @@ function gem_select(){
         if (index == 0){
             num2.push("none");
         }
-        console.log("Num1: ", num1, " Num2: ", num2);
+        //console.log("Num1: ", num1, " Num2: ", num2);
         showOptions(num1, num2);
     });
     //delete unavailable gem option
@@ -117,9 +117,9 @@ function iterate_gem_select(selectObject){
 }
  */
 function hideOptions(selectObject, array) {
-    console.log("selectObject: ", selectObject, "Array: ", array);
+    //console.log("selectObject: ", selectObject, "Array: ", array);
     array = gem_option[array];
-    console.log("Array gem option: ", array);
+    //console.log("Array gem option: ", array);
     array = gem_list.filter( ( el ) => !array.includes( el ) );
     for (var i = 0; i < array.length; i++) {
         $('#'+selectObject+' option[value="' + array[i] + '"]').hide();

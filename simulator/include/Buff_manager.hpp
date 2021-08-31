@@ -39,7 +39,7 @@ struct Over_time_buff
     int next_fade;
 
     // statistics
-    long uptime;
+    int64_t uptime;
     int last_gain;
 };
 
@@ -62,7 +62,7 @@ struct Combat_buff
     int charges; // alternative way of removing buffs
 
     // statistics
-    long uptime;
+    int64_t uptime;
     int last_gain;
 };
 

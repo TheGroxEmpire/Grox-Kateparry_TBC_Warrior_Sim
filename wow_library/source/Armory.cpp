@@ -309,15 +309,22 @@ void Armory::compute_total_stats(Character& character) const
         set_counts[weapon.set_name] += 1;
     }
 
-        for (const Set_bonus& set_bonus : set_bonuses)
+    for (const Set_bonus& set_bonus : set_bonuses)
+    {
+        if (set_counts[set_bonus.set] >= set_bonus.pieces)
         {
-            if (set_counts[set_bonus.set] >= set_bonus.pieces)
+            total_attributes += set_bonus.attributes;
+            total_special_stats += set_bonus.special_stats;
+            if (set_bonus.hit_effect.type != Hit_effect::Type::none)
             {
-                total_attributes += set_bonus.attributes;
-                total_special_stats += set_bonus.special_stats;
-                character.set_bonuses.emplace_back(set_bonus);
+                for (auto& weapon : character.weapons)
+                {
+                    weapon.hit_effects.emplace_back(set_bonus.hit_effect);
+                }
             }
+            character.set_bonuses.emplace_back(set_bonus);
         }
+    }
 
     if (character.race == Race::draenei && !character.has_buff(buffs.heroic_presence))
     {
@@ -651,7 +658,7 @@ Armor Armory::find_armor(const Socket socket, const std::string& name) const
         items = ranged_t;
         break;
     default:
-        std::cout << "ERROR: incorrect item socket provided: " << socket << "\n";
+        std::cerr << "ERROR: socket '" << socket << "' invalid\n";
         assert(false);
     }
     for (const auto& item : items)
@@ -661,7 +668,8 @@ Armor Armory::find_armor(const Socket socket, const std::string& name) const
             return item;
         }
     }
-    return {"item_not_found: " + name, {}, {}, socket};
+    std::cerr << "ERROR: item '" << name << "' not found for socket '" << socket << "'\n";
+    assert(false);
 }
 
 Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
@@ -689,7 +697,8 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
                 return item;
             }
         }
-        return {"item_not_found: " + name, {}, {}, 3.0, 0, 0, Weapon_socket::two_hand, Weapon_type::sword};
+        std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'\n";
+        assert(false);
     }
     for (const auto& item : swords_t)
     {
@@ -726,7 +735,8 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
             return item;
         }
     }
-    return {"item_not_found: " + name, {}, {}, 2.0, 0, 0, Weapon_socket::one_hand, Weapon_type::unarmed};
+    std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'\n";
+    assert(false);
 }
 
 void Armory::add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec)

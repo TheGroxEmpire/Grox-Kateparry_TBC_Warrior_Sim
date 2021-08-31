@@ -995,11 +995,9 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
     {
         whirlwind_rage_cost_ = 20;
     }
-
     has_warbringer_4_set_ = character.has_set_bonus(Set::warbringer, 4);
 
     has_destroyer_2_set_ = character.has_set_bonus(Set::destroyer, 2);
-
     if (character.has_set_bonus(Set::destroyer, 4))
     {
         mortal_strike_rage_cost_ = 25;

@@ -2,8 +2,23 @@
 
 #include "iostream"
 
+std::ostream& operator<<(std::ostream& os, const Weapon_socket& ws)
+{
+    static const std::string m[]{"main_hand", "one_hand", "off_hand", "two_hand"};
+    return os << m[static_cast<size_t>(ws)];
+}
+
+std::ostream& operator<<(std::ostream& os, const Weapon_type& wt)
+{
+    static const std::string m[]{"sword", "axe", "dagger", "mace", "unarmed"};
+    return os << m[static_cast<size_t>(wt)];
+}
+
 std::ostream& operator<<(std::ostream& os, const Socket& socket)
 {
+    //static const std::string m[]{"none", "head", "neck", "shoulder", "back", "chest", "wrist", "hands",
+    //    "belt", "legs", "boots", "ring", "trinket", "main_hand", "off_hand", "ranged"};
+    //return os << m[static_cast<size_t>(socket)];
     os << "Item slot ";
     switch (socket)
     {

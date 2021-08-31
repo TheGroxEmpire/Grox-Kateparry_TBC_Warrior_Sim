@@ -6,7 +6,7 @@
 #include "Statistics.hpp"
 #include "item_heuristics.hpp"
 
-#define TEST_VIA_CONFIG
+//#define TEST_VIA_CONFIG
 
 #include <sstream>
 
@@ -292,12 +292,9 @@ std::string get_character_stat(const Character& char1, const Character& char2)
     out_string += print_stat("Strength: ", char1.total_attributes.strength, char2.total_attributes.strength);
     out_string += print_stat("Agility: ", char1.total_attributes.agility, char2.total_attributes.agility);
     out_string += print_stat("Hit: ", char1.total_special_stats.hit, char2.total_special_stats.hit);
-    out_string += print_stat("Crit (spellbook):", char1.total_special_stats.critical_strike,
-                             char2.total_special_stats.critical_strike);
-    out_string +=
-        print_stat("Attack Power: ", char1.total_special_stats.attack_power, char2.total_special_stats.attack_power);
-    out_string +=
-        print_stat("Haste factor: ", 1 + char1.total_special_stats.haste, 1 + char2.total_special_stats.haste);
+    out_string += print_stat("Crit (spellbook):", char1.total_special_stats.critical_strike, char2.total_special_stats.critical_strike);
+    out_string += print_stat("Attack Power: ", char1.total_special_stats.attack_power, char2.total_special_stats.attack_power);
+    out_string += print_stat("Haste factor: ", 1 + char1.total_special_stats.haste, 1 + char2.total_special_stats.haste);
 
     out_string += "<br><b>Armor:</b><br>";
     for (size_t i = 0; i < char1.armor.size(); i++)
@@ -328,13 +325,13 @@ std::string get_character_stat(const Character& char1, const Character& char2)
     out_string += "Set bonuses setup 1:<br>";
     for (const auto& bonus : char1.set_bonuses)
     {
-        out_string += "<b>" + bonus.name + "-" + std::to_string(bonus.pieces) + "-pieces</b><br>";
+        out_string += "<b>" + bonus.name + "</b><br>";
     }
 
     out_string += "<br>Set bonuses setup 2:<br>";
     for (const auto& bonus : char1.set_bonuses)
     {
-        out_string += "<b>" + bonus.name + "-" + std::to_string(bonus.pieces) + "-pieces</b><br>";
+        out_string += "<b>" + bonus.name + "</b><br>";
     }
 
     return out_string;
@@ -389,12 +386,12 @@ std::string get_character_stat(const Character& character)
         }
     }
 
-    out_string += "<br />";
+    out_string += "<br>";
 
-    out_string += "Set bonuses:<br />";
+    out_string += "Set bonuses:<br>";
     for (const auto& bonus : character.set_bonuses)
     {
-        out_string += "<b>" + bonus.name + "-" + std::to_string(bonus.pieces) + "-pieces</b><br>";
+        out_string += "<b>" + bonus.name + "</b><br>";
     }
 
     return out_string;
@@ -481,19 +478,19 @@ std::string compute_talent_weights(Combat_simulator& sim, const Character& chara
 
     if (character.is_dual_wield())
     {
-        talents_info += compute_talent_weight(sim, character, base_dps, "One-handed Weapon Specialization",
+        talents_info += compute_talent_weight(sim, character, base_dps, "One-Handed Weapon Specialization",
                                               &Character::talents_t::one_handed_weapon_specialization, 5);
     }
 
     if (!character.is_dual_wield())
     {
-        talents_info += compute_talent_weight(sim, character, base_dps, "Two-handed Weapon Specialization",
+        talents_info += compute_talent_weight(sim, character, base_dps, "Two-Handed Weapon Specialization",
                                               &Character::talents_t::two_handed_weapon_specialization, 5);
     }
 
     if (config.combat.use_death_wish)
     {
-        talents_info += compute_talent_weight(sim, character, base_dps, "Death wish",
+        talents_info += compute_talent_weight(sim, character, base_dps, "Death Wish",
                                               &Character::talents_t::death_wish, 1);
     }
 
@@ -884,17 +881,6 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     Combat_simulator simulator{};
     simulator.set_config(config);
 
-    std::vector<std::string> use_effects_schedule_string{};
-    {
-        auto use_effects_schedule = simulator.compute_use_effects_schedule(character);
-        for (auto it = use_effects_schedule.crbegin(); it != use_effects_schedule.crend(); ++it)
-        {
-            use_effects_schedule_string.emplace_back(
-                it->second.get().name + " " +
-                String_helpers::string_with_precision(it->first, 3) + " " +
-                String_helpers::string_with_precision(it->second.get().duration, 3));
-        }
-    }
     for (const auto& wep : character.weapons)
     {
         simulator.compute_hit_tables(character, character.total_special_stats, Weapon_sim(wep));
@@ -920,6 +906,18 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
     const auto& dmg_dist = simulator.get_damage_distribution();
     const std::vector<double>& dps_dist_raw = get_damage_sources(dmg_dist);
+
+    std::vector<std::string> use_effects_schedule_string{};
+    {
+        auto use_effects_schedule = simulator.compute_use_effects_schedule(character);
+        for (auto it = use_effects_schedule.crbegin(); it != use_effects_schedule.crend(); ++it)
+        {
+            use_effects_schedule_string.emplace_back(
+                it->second.get().name + " " +
+                String_helpers::string_with_precision(it->first * 0.001, 3) + " " +
+                String_helpers::string_with_precision(it->second.get().duration * 0.001, 3));
+        }
+    }
 
     std::vector<std::string> aura_uptimes = simulator.get_aura_uptimes();
     std::vector<std::string> proc_statistics = simulator.get_proc_statistics();
@@ -956,8 +954,8 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     rage_info += "</b>Rage lost when changing stance: <b>" +
                  String_helpers::string_with_precision(simulator.get_rage_lost_stance() / base_dps.samples(), 3) + "</b><br>";
 
-    std::string extra_info_string = "<b>Fight stats vs. target:</b> <br/>";
-    extra_info_string += "<b>Hit:</b> <br/>";
+    std::string extra_info_string = "<b>Fight stats vs. target:</b><br>";
+    extra_info_string += "<b>Hit:</b><br>";
     extra_info_string += String_helpers::percent_to_str("Yellow hits", yellow_mh_ht.miss(), "chance to miss");
     extra_info_string += String_helpers::percent_to_str("Main-hand, white hits", white_mh_ht.miss(), "chance to miss");
     if (is_dual_wield)
@@ -967,7 +965,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             String_helpers::percent_to_str("Off-hand, while ability queued", white_oh_ht_queued.miss(), "chance to miss");
     }
 
-    extra_info_string += "<b>Crit chance:</b> <br/>";
+    extra_info_string += "<b>Crit chance:</b><br>";
     extra_info_string += String_helpers::percent_to_str("Yellow main-hand", yellow_mh_ht.crit(), "chance to crit per cast");
     extra_info_string += String_helpers::percent_to_str("White main-hand", white_mh_ht.crit(), "chance to crit",
                                                         white_mh_ht.hit(), "left to crit-cap");
@@ -978,12 +976,12 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         extra_info_string += String_helpers::percent_to_str("White off-hand", white_oh_ht.crit(), "chance to crit",
                                                             white_oh_ht.hit(), "left to crit-cap");
     }
-    extra_info_string += "<b>Glancing blows:</b><br/>";
+    extra_info_string += "<b>Glancing blows:</b><br>";
     extra_info_string +=
         String_helpers::percent_to_str("Chance to occur", white_mh_ht.glance(), "(based on level difference)");
     extra_info_string +=
         String_helpers::percent_to_str("Glancing damage", 100 * white_mh_ht.glancing_penalty(), "(based on level difference)");
-    extra_info_string += "<b>Other:</b><br/>";
+    extra_info_string += "<b>Other:</b><br>";
     extra_info_string += String_helpers::percent_to_str("Main-hand dodge chance", yellow_mh_ht.dodge(), "(based on level difference and expertise)");
     if (is_dual_wield)
     {

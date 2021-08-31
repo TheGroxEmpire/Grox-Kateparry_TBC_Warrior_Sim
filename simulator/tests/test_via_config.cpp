@@ -160,6 +160,15 @@ TEST_F(Sim_fixture, test_via_config)
     {
         std::cout << v << std::endl;
     }
+    std::cout << std::endl;
+
+    std::cout << "use_effect_order_string" << std::endl;
+    for (const auto& v : sim_output.use_effect_order_string)
+    {
+        std::cout << v << std::endl;
+    }
+
+
 
     /*
     std::cout << "messages" << std::endl;
