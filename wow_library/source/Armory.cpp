@@ -331,6 +331,11 @@ void Armory::compute_total_stats(Character& character) const
         character.add_buff(buffs.heroic_presence);
     }
 
+    if (character.has_item("braided_eternium_chain") && !character.has_buff(buffs.braided_eternium_chain))
+    {
+        character.add_buff(buffs.braided_eternium_chain);
+    }
+
     for (const auto& buff : character.buffs)
     {
         total_attributes += buff.attributes;
@@ -1213,6 +1218,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     if (String_helpers::find_string(buffs_vec, "heroic_presence"))
     {
         character.add_buff(buffs.heroic_presence);
+    }
+    if (String_helpers::find_string(buffs_vec, "braided_eternium_chain"))
+    {
+        character.add_buff(buffs.braided_eternium_chain);
     }
     if (String_helpers::find_string(buffs_vec, "improved_faerie_fire"))
     {

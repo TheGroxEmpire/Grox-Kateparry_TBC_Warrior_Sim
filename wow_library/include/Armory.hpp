@@ -25,6 +25,7 @@ struct Buffs
     Buff blood_frenzy{"blood_frenzy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .04}};
     Buff improved_sanctity_aura{"improved_sanctity_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, .02, 0, 0, 0, 0, .02}};
     Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0, 0.0}};
+    Buff braided_eternium_chain{"braided_eternium_chain", Attributes{0.0, 0.0}, Special_stats{1.2683, 0.0, 0.0}};
     Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0.0}};
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
     Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 0,
@@ -186,9 +187,10 @@ struct Armory
                 {"blood_guards_necklace_of_ferocity", Attributes{0.0, 0.0}, Special_stats{0.7699275362318841, 0.0, 54.0, 0, 0.0}, Socket::neck}, 
                 {"the_savages_choker", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 50.0, 0, 0.015852885225110972}, Socket::neck}, 
                 {"bone_chain_necklace", Attributes{0.0, 19.0}, Special_stats{0.0, 0.8243500317057705, 36.0, 0, 0.0}, Socket::neck}, 
-                {"stormrages_talisman_of_seething", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 0.0, 26.0, 0, 0.0}, Socket::neck}, 
+                {"stormrages_talisman_of_seething", Attributes{0.0, 0.0}, Special_stats{1.2683, 0.0, 26.0, 0, 0.0}, Socket::neck},
                 {"insignia_of_the_maghari_hero", Attributes{0.0, 0.0}, Special_stats{0.6793478260869565, 0.8877615726062144, 30.0, 0, 0.0}, Socket::neck}, 
-                {"saberclaw_talisman", Attributes{0.0, 21.0}, Special_stats{0.0, 0.0, 46.0, 0, 0.0}, Socket::neck}, 
+                {"saberclaw_talisman", Attributes{0.0, 21.0}, Special_stats{0.0, 0.0, 46.0, 0, 0.0}, Socket::neck},
+                {"braided_eternium_chain", Attributes{0.0, 0.0}, Special_stats{0.0, 1.3317, 0, 0, 0, 0, 0, 5}, Socket::neck},
 
                 //Phase 2
                 {"pendant_of_the_perilous", Attributes{32.0, 0.0}, Special_stats{1.0416666666666667, 0.0, 0.0, 0, 0.0}, Socket::neck}, 
