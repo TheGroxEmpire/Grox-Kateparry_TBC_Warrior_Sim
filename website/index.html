@@ -1803,6 +1803,8 @@
         <br><br>
 
         <p class="select-title">Select gems:</p><br>
+        (Gems are applied regardless of socket availability.<br>
+        Socket bonus is not yet implemented)<br>
         <span>Helmet</span>
         <span style="position: relative;left: 50px;">Neck</span>
         <span style="position: relative;left: 115px;">Shoulder</span>
@@ -3665,7 +3667,7 @@
         <br><br>
         <b id="total_points">Total points: </b>
         <br>
-        (Talents with dotted black lines around them are not implemented.)
+        (Talents with dotted black lines around them are not implemented)
 
         <table class="talents arms">
             <tbody>
@@ -4633,7 +4635,7 @@
 
         <input type="checkbox" id="use_heroic_strike" checked
                onclick="show_div('use_heroic_strike', 'heroic_strike_div')">
-        <label for="use_heroic_strike"><b> Use Heroic Strike</b></label><br>
+        <label for="use_heroic_strike"><b> Use Heroic Strike / Cleave</b></label><br>
         <div class="description" id="heroic_strike_div">
             <label for="heroic_strike_rage_thresh_dd">Heroic strike when rage is above:</label>
             <input type="number" id="heroic_strike_rage_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
@@ -4643,13 +4645,12 @@
                 <label for="hs_rage_thresh_exec_phase_dd">HS when rage is above (Execute phase):</label>
                 <input type="number" id="hs_rage_thresh_exec_phase_dd" name="quantity" min="0" max="100" value="0"><br>
             </div>
-        </div>
-
-        <input type="checkbox" id="cleave_if_adds" onclick="show_div('cleave_if_adds', 'cleave_div')">
-        <label for="cleave_if_adds"> <b>Use cleave</b> (used if there are more than one target.)</label><br>
-        <div class="description" id="cleave_div">
-            <label for="cleave_rage_thresh_dd">Cleave when rage is above:</label>
-            <input type="number" id="cleave_rage_thresh_dd" name="quantity" min="0" max="100" value="50"><br>
+            <input type="checkbox" id="cleave_if_adds" onclick="show_div('cleave_if_adds', 'cleave_div')">
+            <label for="cleave_if_adds"> Use cleave instead (Used if there are more than one target)</label><br>
+            <div class="description" id="cleave_div">
+                <label for="cleave_rage_thresh_dd">Cleave when rage is above:</label>
+                <input type="number" id="cleave_rage_thresh_dd" name="quantity" min="0" max="100" value="50"><br>
+            </div>
         </div>
 
         <input type="checkbox" id="use_hamstring" onclick="show_div('use_hamstring', 'hamstring_div')">
