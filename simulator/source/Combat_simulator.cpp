@@ -442,15 +442,15 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
     }
 
     if (mh_swing || weapon.next_swing - time_keeper_.time > config.combat.slam_spam_max_time)
+    {
+        if ((mh_swing && rage > config.combat.slam_rage_dd) || rage > config.combat.slam_spam_rage)
         {
-            if ((mh_swing && rage > config.combat.slam_rage_dd) || rage > config.combat.slam_spam_rage)
-            {
             logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, "s");
-                slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
+            slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
             time_keeper_.global_cast(1.5 + config.combat.slam_latency);
-                return true;
-            }
+            return true;
         }
+    }
     return false;
 }
 
@@ -1214,8 +1214,17 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
 
                 slam(weapons[0], special_stats, damage_sources, flurry_charges, rampage_stacks);
                 slam_manager.finish_slam();
-                oldHaste = special_stats.haste;
+
+                // reset MH
                 weapons[0].next_swing = time_keeper_.time + weapons[0].swing_speed / (1 + special_stats.haste);
+
+                // ... and now OH as well
+                if (is_dual_wield) {
+                    weapons[1].next_swing = time_keeper_.time + weapons[1].swing_speed / (1 + special_stats.haste);
+                }
+
+                // keep update_swing_timer() from applying haste changes again
+                oldHaste = special_stats.haste;
             }
 
             bool mh_swing = weapons[0].next_swing < time_keeper_.time;
@@ -1280,9 +1289,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     {
                         if (start_cast_slam(mh_swing, weapons[0]))
                         {
-                        continue;
+                            continue;
+                        }
                     }
-                }
                 }
                 if (use_mortal_strike_ && config.combat.use_ms_in_exec_phase)
                 {
@@ -1372,9 +1381,9 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
                     {
                         if (start_cast_slam(mh_swing, weapons[0]))
                         {
-                        continue;
+                            continue;
+                        }
                     }
-                }
                 }
 
                 if (use_rampage_)
