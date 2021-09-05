@@ -1274,7 +1274,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
             else if (execute_phase)
             {
-                if (weapons[0].weapon_socket == Weapon_socket::two_hand && config.combat.use_slam && config.combat.use_sl_in_exec_phase)
+                if (config.combat.use_slam && config.combat.use_sl_in_exec_phase)
                 {
                     if (!slam_manager.is_slam_casting() && time_keeper_.global_ready() && rage >= 15)
                     {
@@ -1366,7 +1366,7 @@ void Combat_simulator::simulate(const Character& character, int init_iteration, 
             }
             else
             {
-                if (weapons[0].weapon_socket == Weapon_socket::two_hand && config.combat.use_slam)
+                if (config.combat.use_slam)
                 {
                     if (!slam_manager.is_slam_casting() && time_keeper_.global_ready() && rage >= 15)
                     {

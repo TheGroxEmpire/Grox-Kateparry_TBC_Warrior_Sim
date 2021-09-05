@@ -815,7 +815,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         compute_talent_weight(simulator_talent, character, talents_info, "Improved Overpower", config,
                               &Combat_simulator_config::talents_t::overpower, 2);
 
-        if (config.combat.use_slam && !is_dual_wield)
+        if (config.combat.use_slam)
         {
             compute_talent_weight(simulator_talent, character, talents_info, "Improved Slam", config,
                                   &Combat_simulator_config::talents_t::improved_slam, 2);
