@@ -89,7 +89,7 @@ public:
         }
     }
 
-    void add_gem(const Buff& buff) { buffs.emplace_back(buff); }
+    void add_gem(const Gem& gem) { gems.emplace_back(gem); }
 
     [[nodiscard]] bool has_buff(const Buff& buff) const
     {
@@ -245,16 +245,19 @@ public:
     } talents;
 
     Attributes base_attributes;
-    Attributes total_attributes;
     Special_stats base_special_stats;
+
+    Attributes total_attributes;
     Special_stats total_special_stats;
-    Special_stats talent_special_stats; // currently unused
+
     std::vector<Armor> armor;
     std::vector<Weapon> weapons;
-    std::vector<Buff> buffs;
+    std::vector<Gem> gems;
     std::vector<Set_bonus> set_bonuses;
+
+    std::vector<Buff> buffs;
     std::vector<Use_effect> use_effects;
-    //std::vector<Gem> gems;
+
     Race race;
     int level;
 };

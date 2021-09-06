@@ -6,11 +6,11 @@
 #include "Statistics.hpp"
 #include "item_heuristics.hpp"
 
-//#define TEST_VIA_CONFIG
+#define TEST_VIA_CONFIG
 
 #include <sstream>
 
-static const double q95 = Statistics::find_cdf_quantile(0.95, 0.01);
+static const double q95 = Statistics::find_cdf_quantile(Statistics::get_two_sided_p_value(0.95), 0.01);
 
 #ifdef TEST_VIA_CONFIG
 void print_results(const Combat_simulator& sim, bool print_uptimes_and_procs)
@@ -791,8 +791,9 @@ std::vector<std::string> compute_stat_weights(Combat_simulator& simulator, const
         }
         else if (stat_weight == "expertise")
         {
-            char_plus.total_special_stats.expertise += rating_factor / 2.5 * 25;
-            sw = compute_stat_weight(simulator, char_plus, 10, 2.5, base_dps);
+            // to prevent truncation, we use 6 expertise here, slightly less than for hit (~23.65 expertise rating)
+            char_plus.total_special_stats.expertise += 6;
+            sw = compute_stat_weight(simulator, char_plus, 10, 6 * 0.25 / rating_factor, base_dps);
         }
         else if (stat_weight == "haste")
         {
@@ -814,10 +815,8 @@ std::vector<std::string> compute_stat_weights(Combat_simulator& simulator, const
     return sw_strings;
 }
 
-Sim_output Sim_interface::simulate(const Sim_input& input)
+std::vector<std::string> parse_buff_options(Armory& armory, const Sim_input& input)
 {
-    Armory armory{};
-
     auto temp_buffs = input.buffs;
 
     // Separate case for options which in reality are buffs. Add them to the buff list
@@ -873,6 +872,15 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         temp_buffs.emplace_back("battle_squawk");
     }
 
+    return temp_buffs;
+}
+
+Sim_output Sim_interface::simulate(const Sim_input& input)
+{
+    Armory armory;
+
+    const auto& temp_buffs = parse_buff_options(armory, input);
+
     const Character character = character_setup(armory, input.race[0], input.armor, input.weapons, temp_buffs,
                                                 input.talent_string, input.talent_val, input.enchants, input.gems);
 
@@ -880,7 +888,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     Combat_simulator_config config{input};
     Combat_simulator simulator{};
     simulator.set_config(config);
-
+    // FIXME(vigo) this must also run _after_ char setup now (talents & buffs)
     for (const auto& wep : character.weapons)
     {
         simulator.compute_hit_tables(character, character.total_special_stats, Weapon_sim(wep));

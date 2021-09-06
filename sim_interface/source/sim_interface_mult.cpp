@@ -11,13 +11,8 @@
 #include <ctime>
 #include <iostream>
 
-Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
+std::vector<std::string> parse_buff_options(Armory& armory, const Sim_input_mult& input)
 {
-    clock_t start_time_main = clock();
-    Buffs buffs{};
-   // Gems gems{};
-    Item_optimizer item_optimizer;
-
     // Combat settings
     auto temp_buffs = input.buffs;
 
@@ -49,16 +44,16 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     {
         double full_polarity_val =
             String_helpers::find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
-        item_optimizer.armory.buffs.full_polarity.special_stats.damage_mod_physical = full_polarity_val / 100.0;
-        item_optimizer.armory.buffs.full_polarity.special_stats.damage_mod_spell = full_polarity_val / 100.0;
+        armory.buffs.full_polarity.special_stats.damage_mod_physical = full_polarity_val / 100.0;
+        armory.buffs.full_polarity.special_stats.damage_mod_spell = full_polarity_val / 100.0;
         temp_buffs.emplace_back("full_polarity");
     }
     if (String_helpers::find_string(input.options, "ferocious_inspiration"))
     {
         double ferocious_inspiration_val =
             String_helpers::find_value(input.float_options_string, input.float_options_val, "ferocious_inspiration_dd");
-        item_optimizer.armory.buffs.ferocious_inspiration.special_stats.damage_mod_physical = ferocious_inspiration_val / 100.0;
-        item_optimizer.armory.buffs.ferocious_inspiration.special_stats.damage_mod_spell = ferocious_inspiration_val / 100.0;
+        armory.buffs.ferocious_inspiration.special_stats.damage_mod_physical = ferocious_inspiration_val / 100.0;
+        armory.buffs.ferocious_inspiration.special_stats.damage_mod_spell = ferocious_inspiration_val / 100.0;
         temp_buffs.emplace_back("ferocious_inspiration");
     }
     if (String_helpers::find_string(input.options, "fungal_bloom"))
@@ -69,9 +64,22 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     {
         double battle_squawk_val =
             String_helpers::find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
-        item_optimizer.armory.buffs.battle_squawk.special_stats.attack_speed = battle_squawk_val / 100.0;
+        armory.buffs.battle_squawk.special_stats.attack_speed = battle_squawk_val / 100.0;
         temp_buffs.emplace_back("battle_squawk");
     }
+
+    return temp_buffs;
+}
+
+Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
+{
+    clock_t start_time_main = clock();
+    Buffs buffs{};
+   // Gems gems{};
+    Item_optimizer item_optimizer;
+
+    const auto& temp_buffs = parse_buff_options(item_optimizer.armory, input);
+
     double item_filter_threshold = 500;
     if (String_helpers::find_string(input.float_options_string, "item_filter_threshold"))
     {
@@ -108,7 +116,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     Combat_simulator_config config{input};
     if (String_helpers::find_string(input.float_options_string, "seed"))
     {
-        config.seed = String_helpers::find_value(input.float_options_string, input.float_options_val, "seed");
+        config.seed = static_cast<int>(String_helpers::find_value(input.float_options_string, input.float_options_val, "seed"));
     }
 
     std::string debug_message;
@@ -139,6 +147,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
             "Item filter done. Combinations: " + std::to_string(item_optimizer.total_combinations) + "<br>";
         std::cout << "Item filter done. Combinations: " << std::to_string(item_optimizer.total_combinations) << "\n";
     }
+
     std::vector<Item_optimizer::Sim_result_t> keepers;
     if (item_optimizer.total_combinations > 5000)
     {

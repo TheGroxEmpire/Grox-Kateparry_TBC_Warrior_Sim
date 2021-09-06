@@ -28,8 +28,6 @@ struct Buffs
     Buff braided_eternium_chain{"braided_eternium_chain", Attributes{0.0, 0.0}, Special_stats{1.2683, 0.0, 0.0}};
     Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0.0}};
     Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
-    Buff windfury_totem{"windfury_totem", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 0,
-                        {{"windfury_totem", Hit_effect::Type::windfury_hit, {}, {0, 0, 445}, 0, 0, 0, 0.2}}};
     Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{86.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0.0}};
 
@@ -78,50 +76,49 @@ struct Buffs
                          {{"heroic_potion", Use_effect::Effect_socket::unique, {70, 0.0}, {},
                           0, 15, 120, false}}};
 
+    Weapon_buff windfury_totem{"windfury_totem", {}, {}, 0, {"windfury_totem", Hit_effect::Type::windfury_hit, {}, {0, 0, 445}, 0, 0, 0, 0.2}};
+    Weapon_buff flametongue_totem{"flametongue_totem", {}, {}, 0, {"flametongue_totem", Hit_effect::Type::damage_magic, {}, {}, 59.7, 0, 0, 1}};
     Weapon_buff dense_stone{"dense_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 8};
-    // Adamantite stone for wep damage and for crit
-    Weapon_buff adamantite_stone_damage{"adamantite_stone_damage", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}, 12};
-    Buff adamantite_stone_crit{"adamantite_stone_crit", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}};
-    //
-    Buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{1.26, 0.0, 0.0}};
-    Buff consecrated_sharpening_stone{"consecrated_sharpening_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 100.0}};
+    Weapon_buff adamantite_stone{"adamantite_stone", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}, 12};
+    Weapon_buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{1.26, 0.0, 0.0}};
+    Weapon_buff consecrated_stone{"consecrated_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 100.0}};
 };
 
 struct Gems
 {
-    Buff strength_3{"strength_3", Attributes {3, 0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff strength_4{"strength_4", Attributes {4, 0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff strength_5{"strength_5", Attributes {5, 0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff strength_6{"strength_6", Attributes {6, 0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff strength_8{"strength_8", Attributes {8, 0}, Special_stats{0.0, 0.0, 0.0}};
-    Buff agility_3{"agility_3", Attributes {0, 3}, Special_stats{0.0, 0.0, 0.0}};
-    Buff agility_4{"agility_4", Attributes {0, 4}, Special_stats{0.0, 0.0, 0.0}};
-    Buff agility_5{"agility_5", Attributes {0, 5}, Special_stats{0.0, 0.0, 0.0}};
-    Buff agility_6{"agility_6", Attributes {0, 6}, Special_stats{0.0, 0.0, 0.0}};
-    Buff agility_8{"agility_8", Attributes {0, 8}, Special_stats{0.0, 0.0, 0.0}};
-    Buff agility_10{"agility_10", Attributes {0, 10}, Special_stats{0.0, 0.0, 0.0}};
-    Buff crit_3{"crit_3", Attributes {0, 0}, Special_stats {0.13, 0.0, 0.0}};
-    Buff crit_4{"crit_4", Attributes {0, 0}, Special_stats {0.18, 0.0, 0.0}};
-    Buff crit_5{"crit_5", Attributes {0, 0}, Special_stats {0.22, 0.0, 0.0}};
-    Buff crit_6{"crit_6", Attributes {0, 0}, Special_stats {0.27, 0.0, 0.0}};
-    Buff crit_8{"crit_8", Attributes {0, 0}, Special_stats {0.36, 0.0, 0.0}};
-    Buff crit_10{"crit_10", Attributes {0, 0}, Special_stats {0.45, 0.0, 0.0}};
-    Buff crit_12{"crit_12", Attributes {0, 0}, Special_stats {0.54, 0.0, 0.0}};
-    Buff hit_4{"hit_4", Attributes {0, 0}, Special_stats {0.0, 0.25, 0.0}};
-    Buff hit_6{"hit_6", Attributes {0, 0}, Special_stats {0.0, 0.38, 0.0}};
-    Buff hit_8{"hit_8", Attributes {0, 0}, Special_stats {0.0, 0.5, 0.0}};
-    Buff hit_10{"hit_10", Attributes {0, 0}, Special_stats {0.0, 0.63, 0.0}};
-    Buff hit_12{"hit_12", Attributes {0, 0}, Special_stats {0.0, 0.76, 0.0}};
-    Buff ap_20{"ap_20", Attributes {0, 0}, Special_stats {0.0, 0.0, 20}};
-    Buff ap_24{"ap_24", Attributes {0, 0}, Special_stats {0.0, 0.0, 24}};
-    Buff dmg_3{"dmg_3", Attributes {0, 0}, Special_stats {0.0, 0.0, 0.0, 0, 0, 0, 0, 3}};
-    Buff crit_3_str_3{"crit_3_str_3", Attributes {3, 0}, Special_stats {0.13, 0.0, 0.0}};
-    Buff crit_4_str_4{"crit_4_str_4", Attributes {4, 0}, Special_stats {0.18, 0.0, 0.0}};
-    Buff crit_4_str_5{"crit_4_str_5", Attributes {5, 0}, Special_stats {0.18, 0.0, 0.0}};
-    Buff crit_5_str_5{"crit_5_str_5", Attributes {5, 0}, Special_stats {0.22, 0.0, 0.0}};
-    Buff agi_12_critDmg_3{"agi_12_critDmg_3", Attributes {0, 12}, Special_stats {0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0.03}};
-    Buff gem_haste{"gem_haste", {}, {}, 0, 
-                  {{"gem_haste", Hit_effect::Type::stat_boost, {0, 0}, {0, 0, 0, 0.15}, 0, 6, 40, 0, 0, 1, 0, 0, 1}}};
+    Gem strength_3{"strength_3", Attributes {3, 0}, Special_stats{0.0, 0.0, 0.0}};
+    Gem strength_4{"strength_4", Attributes {4, 0}, Special_stats{0.0, 0.0, 0.0}};
+    Gem strength_5{"strength_5", Attributes {5, 0}, Special_stats{0.0, 0.0, 0.0}};
+    Gem strength_6{"strength_6", Attributes {6, 0}, Special_stats{0.0, 0.0, 0.0}};
+    Gem strength_8{"strength_8", Attributes {8, 0}, Special_stats{0.0, 0.0, 0.0}};
+    Gem strength_10{"strength_10", Attributes {10, 0}, Special_stats{0.0, 0.0, 0.0}};
+    Gem agility_3{"agility_3", Attributes {0, 3}, Special_stats{0.0, 0.0, 0.0}};
+    Gem agility_4{"agility_4", Attributes {0, 4}, Special_stats{0.0, 0.0, 0.0}};
+    Gem agility_5{"agility_5", Attributes {0, 5}, Special_stats{0.0, 0.0, 0.0}};
+    Gem agility_6{"agility_6", Attributes {0, 6}, Special_stats{0.0, 0.0, 0.0}};
+    Gem agility_8{"agility_8", Attributes {0, 8}, Special_stats{0.0, 0.0, 0.0}};
+    Gem agility_10{"agility_10", Attributes {0, 10}, Special_stats{0.0, 0.0, 0.0}};
+    Gem crit_3{"crit_3", Attributes {0, 0}, Special_stats {0.13, 0.0, 0.0}};
+    Gem crit_4{"crit_4", Attributes {0, 0}, Special_stats {0.18, 0.0, 0.0}};
+    Gem crit_5{"crit_5", Attributes {0, 0}, Special_stats {0.22, 0.0, 0.0}};
+    Gem crit_6{"crit_6", Attributes {0, 0}, Special_stats {0.27, 0.0, 0.0}};
+    Gem crit_8{"crit_8", Attributes {0, 0}, Special_stats {0.36, 0.0, 0.0}};
+    Gem crit_10{"crit_10", Attributes {0, 0}, Special_stats {0.45, 0.0, 0.0}};
+    Gem crit_12{"crit_12", Attributes {0, 0}, Special_stats {0.54, 0.0, 0.0}};
+    Gem hit_4{"hit_4", Attributes {0, 0}, Special_stats {0.0, 0.25, 0.0}};
+    Gem hit_6{"hit_6", Attributes {0, 0}, Special_stats {0.0, 0.38, 0.0}};
+    Gem hit_8{"hit_8", Attributes {0, 0}, Special_stats {0.0, 0.5, 0.0}};
+    Gem hit_10{"hit_10", Attributes {0, 0}, Special_stats {0.0, 0.63, 0.0}};
+    Gem hit_12{"hit_12", Attributes {0, 0}, Special_stats {0.0, 0.76, 0.0}};
+    Gem ap_20{"ap_20", Attributes {0, 0}, Special_stats {0.0, 0.0, 20}};
+    Gem ap_24{"ap_24", Attributes {0, 0}, Special_stats {0.0, 0.0, 24}};
+    Gem dmg_3{"dmg_3", Attributes {0, 0}, Special_stats {0.0, 0.0, 0.0, 0, 0, 0, 0, 3}};
+    Gem crit_3_str_3{"crit_3_str_3", Attributes {3, 0}, Special_stats {0.13, 0.0, 0.0}};
+    Gem crit_4_str_4{"crit_4_str_4", Attributes {4, 0}, Special_stats {0.18, 0.0, 0.0}};
+    Gem crit_4_str_5{"crit_4_str_5", Attributes {5, 0}, Special_stats {0.18, 0.0, 0.0}};
+    Gem crit_5_str_5{"crit_5_str_5", Attributes {5, 0}, Special_stats {0.22, 0.0, 0.0}};
+    Gem agi_12_critDmg_3{"agi_12_critDmg_3", Attributes {0, 12}, Special_stats {0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0.03}};
+    Gem gem_haste{"gem_haste", {}, {}, {"gem_haste", Hit_effect::Type::stat_boost, {0, 0}, {0, 0, 0, 0, 0.1522}, 0, 6, 40, 0, 0, 0, 0, 1, 1}};
 };
 
 struct Armory

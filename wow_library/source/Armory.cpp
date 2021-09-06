@@ -240,6 +240,14 @@ void Armory::clean_weapon(Weapon& weapon)
     }
 }
 
+void add_hit_effect(const Hit_effect& hit_effect, Character& character)
+{
+    for (auto& w : character.weapons)
+    {
+        w.hit_effects.emplace_back(hit_effect);
+    }
+}
+
 void Armory::compute_total_stats(Character& character) const
 {
     if (!check_if_weapons_valid(character.weapons))
@@ -266,13 +274,17 @@ void Armory::compute_total_stats(Character& character) const
     total_special_stats += character.base_special_stats;
     std::vector<Use_effect> use_effects{};
     std::unordered_map<Set, int> set_counts{};
-    for (const Armor& armor : character.armor)
+
+    for (const auto& armor : character.armor)
     {
         total_attributes += armor.attributes;
         total_special_stats += armor.special_stats;
 
-        total_attributes += get_enchant_attributes(armor.socket, armor.enchant.type);
-        total_special_stats += get_enchant_special_stats(armor.socket, armor.enchant.type);
+        if (armor.enchant.type != Enchant::Type::none)
+        {
+            total_attributes += get_enchant_attributes(armor.socket, armor.enchant.type);
+            total_special_stats += get_enchant_special_stats(armor.socket, armor.enchant.type);
+        }
 
         set_counts[armor.set_name] += 1;
         for (const auto& use_effect : armor.use_effects)
@@ -281,35 +293,60 @@ void Armory::compute_total_stats(Character& character) const
         }
         for (const auto& hit_effect : armor.hit_effects)
         {
-            for (Weapon& weapon : character.weapons)
-            {
-                weapon.hit_effects.emplace_back(hit_effect);
-            }
+            add_hit_effect(hit_effect, character);
         }
     }
 
-    for (Weapon& weapon : character.weapons)
+    for (auto& weapon : character.weapons)
     {
         total_attributes += weapon.attributes;
         total_special_stats += weapon.special_stats;
 
-        total_attributes += get_enchant_attributes(weapon.socket, weapon.enchant.type);
-        total_special_stats += get_enchant_special_stats(weapon.socket, weapon.enchant.type);
+        if (weapon.enchant.type != Enchant::Type::none)
+        {
+            total_attributes += get_enchant_attributes(weapon.socket, weapon.enchant.type);
+            total_special_stats += get_enchant_special_stats(weapon.socket, weapon.enchant.type);
+            auto hit_effect = enchant_hit_effect(weapon, weapon.enchant.type);
+            if (hit_effect.type != Hit_effect::Type::none)
+            {
+                weapon.hit_effects.emplace_back(hit_effect);
+            }
+        }
+
+        if (!weapon.buff.name.empty())
+        {
+            total_attributes += weapon.buff.attributes;
+            total_special_stats += weapon.buff.special_stats;
+
+            weapon.min_damage += weapon.buff.bonus_damage;
+            weapon.max_damage += weapon.buff.bonus_damage;
+
+            if (weapon.buff.hit_effect.type != Hit_effect::Type::none)
+            {
+                weapon.hit_effects.emplace_back(weapon.buff.hit_effect);
+            }
+        }
 
         for (const auto& use_effect : weapon.use_effects)
         {
             use_effects.emplace_back(use_effect);
         }
-        auto hit_effect = enchant_hit_effect(weapon, weapon.enchant.type);
-        if (hit_effect.type != Hit_effect::Type::none)
-        {
-            weapon.hit_effects.emplace_back(hit_effect);
-        }
 
         set_counts[weapon.set_name] += 1;
     }
 
-    for (const Set_bonus& set_bonus : set_bonuses)
+    for (const auto& gem : character.gems)
+    {
+        total_attributes += gem.attributes;
+        total_special_stats += gem.special_stats;
+
+        if (gem.hit_effect.type != Hit_effect::Type::none)
+        {
+            add_hit_effect(gem.hit_effect, character);
+        }
+    }
+
+    for (const auto& set_bonus : set_bonuses)
     {
         if (set_counts[set_bonus.set] >= set_bonus.pieces)
         {
@@ -317,10 +354,7 @@ void Armory::compute_total_stats(Character& character) const
             total_special_stats += set_bonus.special_stats;
             if (set_bonus.hit_effect.type != Hit_effect::Type::none)
             {
-                for (auto& weapon : character.weapons)
-                {
-                    weapon.hit_effects.emplace_back(set_bonus.hit_effect);
-                }
+                add_hit_effect(set_bonus.hit_effect, character);
             }
             character.set_bonuses.emplace_back(set_bonus);
         }
@@ -348,17 +382,7 @@ void Armory::compute_total_stats(Character& character) const
 
         for (const auto& hit_effect : buff.hit_effects)
         {
-            if (hit_effect.name != "windfury_totem")
-            {
-                for (Weapon& weapon : character.weapons)
-                {
-                    weapon.hit_effects.emplace_back(hit_effect);
-                }
-            }
-            else
-            {
-                character.weapons[0].hit_effects.emplace_back(hit_effect);
-            }
+            add_hit_effect(hit_effect, character);
         }
     }
 
@@ -367,6 +391,7 @@ void Armory::compute_total_stats(Character& character) const
     total_special_stats += total_attributes.to_special_stats(total_special_stats);
     character.total_attributes = total_attributes.multiply(total_special_stats);
     character.total_special_stats = total_special_stats;
+
     character.use_effects = use_effects;
 }
 
@@ -973,6 +998,12 @@ void Armory::add_gems_to_character(Character& character, const std::vector<std::
         character.add_gem(gems.strength_8);
     }
 
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+10 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_10);
+    }
+
     gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 agility");
     for (i = 0; i < gem_counter; i++)
     {
@@ -1170,12 +1201,12 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (String_helpers::find_string(buffs_vec, "windfury_totem"))
     {
-        Buff totem = buffs.windfury_totem;
+        auto totem = buffs.windfury_totem;
         if (String_helpers::find_string(buffs_vec, "improved_weapon_totems"))
         {
-            totem.hit_effects[0].special_stats_boost.attack_power *= 1.3;
+            totem.hit_effect.special_stats_boost.attack_power *= 1.3;
         }
-        character.add_buff(totem);
+        character.add_weapon_buff(Socket::main_hand, totem);
     }
     if (String_helpers::find_string(buffs_vec, "strength_of_earth_totem"))
     {
@@ -1361,16 +1392,15 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     else if (String_helpers::find_string(buffs_vec, "elemental_stone_main_hand"))
     {
-        character.add_buff(buffs.elemental_stone);
+        character.add_weapon_buff(Socket::main_hand, buffs.elemental_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "consecrated_sharpening_stone_main_hand"))
     {
-        character.add_buff(buffs.consecrated_sharpening_stone);
+        character.add_weapon_buff(Socket::main_hand, buffs.consecrated_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "adamantite_stone_main_hand"))
     {
-        character.add_weapon_buff(Socket::main_hand, buffs.adamantite_stone_damage);
-        character.add_buff(buffs.adamantite_stone_crit);
+        character.add_weapon_buff(Socket::main_hand, buffs.adamantite_stone);
     }
 
     if (String_helpers::find_string(buffs_vec, "dense_stone_off_hand"))
@@ -1379,16 +1409,15 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     else if (String_helpers::find_string(buffs_vec, "elemental_stone_off_hand"))
     {
-        character.add_buff(buffs.elemental_stone);
+        character.add_weapon_buff(Socket::off_hand, buffs.elemental_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "consecrated_sharpening_stone_off_hand"))
     {
-        character.add_buff(buffs.consecrated_sharpening_stone);
+        character.add_weapon_buff(Socket::off_hand, buffs.consecrated_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "adamantite_stone_off_hand"))
     {
-        character.add_weapon_buff(Socket::off_hand, buffs.adamantite_stone_damage);
-        character.add_buff(buffs.adamantite_stone_crit);
+        character.add_weapon_buff(Socket::off_hand, buffs.adamantite_stone);
     }
 }
 

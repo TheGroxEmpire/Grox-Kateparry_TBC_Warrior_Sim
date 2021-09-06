@@ -1,5 +1,5 @@
 template <typename T>
-void Combat_simulator_config::get_combat_simulator_config(const T& input)
+void Combat_simulator_config::parse_combat_simulator_config(const T& input)
 {
     exposed_armor = String_helpers::find_string(input.options, "exposed_armor");
     curse_of_recklessness_active = String_helpers::find_string(input.options, "curse_of_recklessness");

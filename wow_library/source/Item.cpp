@@ -16,9 +16,10 @@ std::ostream& operator<<(std::ostream& os, const Weapon_type& wt)
 
 std::ostream& operator<<(std::ostream& os, const Socket& socket)
 {
-    //static const std::string m[]{"none", "head", "neck", "shoulder", "back", "chest", "wrist", "hands",
-    //    "belt", "legs", "boots", "ring", "trinket", "main_hand", "off_hand", "ranged"};
-    //return os << m[static_cast<size_t>(socket)];
+    static const std::string m[]{"none", "head", "neck", "shoulder", "back", "chest", "wrist", "hands",
+        "belt", "legs", "boots", "ring", "trinket", "main_hand", "off_hand", "ranged"};
+    return os << m[static_cast<size_t>(socket)];
+    /*
     os << "Item slot ";
     switch (socket)
     {
@@ -72,6 +73,7 @@ std::ostream& operator<<(std::ostream& os, const Socket& socket)
         break;
     }
     return os;
+     */
 }
 
 std::string operator+(std::string& string, const Socket& socket)

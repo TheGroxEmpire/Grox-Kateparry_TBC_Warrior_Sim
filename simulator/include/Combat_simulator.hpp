@@ -3,15 +3,12 @@
 
 #include "Buff_manager.hpp"
 #include "Character.hpp"
+#include "Config.hpp"
 #include "Distribution.hpp"
 #include "Rage_manager.hpp"
 #include "damage_sources.hpp"
-#include "find_values.hpp"
 #include "logger.hpp"
-#include "sim_input.hpp"
-#include "sim_input_mult.hpp"
 #include "sim_state.hpp"
-#include "string_helpers.hpp"
 #include "time_keeper.hpp"
 #include "weapon_sim.hpp"
 
@@ -21,133 +18,6 @@
 #include <iomanip>
 #include <map>
 #include <vector>
-
-struct Combat_simulator_config
-{
-    Combat_simulator_config() = default;
-
-    explicit Combat_simulator_config(const Sim_input& input)
-    {
-        get_combat_simulator_config(input);
-
-        n_batches = static_cast<int>(
-            String_helpers::find_value(input.float_options_string, input.float_options_val, "n_simulations_dd"));
-        if (String_helpers::find_string(input.options, "item_strengths") ||
-            String_helpers::find_string(input.options, "wep_strengths") || !input.stat_weights.empty() ||
-            String_helpers::find_string(input.options, "compute_dpr"))
-        {
-            if (n_batches < 100000)
-            {
-                std::cout << "Increased the number of simulations to 100000 to improve later calculations."
-                          << std::endl;
-                n_batches = 100000;
-            }
-        }
-        seed = 110000;
-    }
-
-    explicit Combat_simulator_config(const Sim_input_mult& input)
-    {
-        get_combat_simulator_config(input);
-        seed = clock();
-    }
-
-    template <typename T>
-    void get_combat_simulator_config(const T& input);
-
-    [[nodiscard]] static int to_millis(double seconds) { return Time_keeper::to_millis(seconds); }
-
-    // Combat settings
-    int n_batches{};
-    double sim_time{};
-
-    int main_target_level{};
-    int main_target_initial_armor_{};
-    int number_of_extra_targets{};
-    double extra_target_percentage{};
-    int extra_target_initial_armor_{};
-    int n_sunder_armor_stacks{};
-    bool exposed_armor{};
-    bool curse_of_recklessness_active{};
-    bool faerie_fire_feral_active{};
-
-    bool take_periodic_damage_{};
-    int periodic_damage_amount_{};
-    int periodic_damage_interval_{};
-    bool essence_of_the_red_{};
-
-    double execute_phase_percentage_{};
-
-    bool multi_target_mode_{};
-    bool first_global_sunder_{};
-
-    double berserking_haste_{};
-    double unleashed_rage_start_{};
-
-    // Simulator settings
-    bool enable_bloodrage{};
-    bool enable_recklessness{};
-    bool enable_blood_fury{};
-    bool enable_berserking{};
-    bool enable_unleashed_rage{};
-
-    bool display_combat_debug{};
-    int seed{};
-
-    struct combat_t
-    {
-        bool use_bt_in_exec_phase{};
-        bool use_ms_in_exec_phase{};
-        bool use_ww_in_exec_phase{};
-        bool use_sl_in_exec_phase{};
-        bool use_hs_in_exec_phase{};
-        double whirlwind_rage_thresh{};
-        double overpower_rage_thresh{};
-        double whirlwind_bt_cooldown_thresh{};
-        double bt_whirlwind_cooldown_thresh{};
-        double ms_whirlwind_cooldown_thresh{};
-        double overpower_bt_cooldown_thresh{};
-        double overpower_ww_cooldown_thresh{};
-        double heroic_strike_rage_thresh{}; // this is now used for execute phase as well
-        double cleave_rage_thresh{};
-        double heroic_strike_damage{};
-        bool cleave_if_adds{};
-        bool use_hamstring{};
-        bool use_slam{};
-        bool use_bloodthirst{};
-        bool use_rampage{};
-        bool use_mortal_strike{};
-        bool use_sweeping_strikes{};
-        bool use_whirlwind{};
-        bool use_overpower{};
-        bool use_heroic_strike{};
-        double hamstring_cd_thresh{};
-        bool dont_use_hm_when_ss{};
-        double slam_latency{};
-        double rampage_use_thresh{};
-        double hamstring_rage_thresh{};
-        double initial_rage{};
-        bool deep_wounds{};
-        bool first_hit_heroic_strike{};
-        double slam_spam_rage{};
-        double slam_spam_max_time{};
-        double slam_rage_thresh{};
-        bool use_death_wish{};
-    } combat;
-
-    struct dpr_t
-    {
-        bool compute_dpr_sl_{};
-        bool compute_dpr_ms_{};
-        bool compute_dpr_bt_{};
-        bool compute_dpr_op_{};
-        bool compute_dpr_ww_{};
-        bool compute_dpr_ex_{};
-        bool compute_dpr_ha_{};
-        bool compute_dpr_hs_{};
-        bool compute_dpr_cl_{};
-    } dpr_settings;
-};
 
 class Combat_simulator : Rage_manager
 {
@@ -348,7 +218,7 @@ public:
 
     [[nodiscard]] double get_rage() const final { return rage; }
 
-    // TODO turn us into hit effects :)
+    // TODO(vigo) turn us into hit effects :)
     void maybe_gain_flurry(Hit_result hit_result, int& flurry_charges, Special_stats& special_stats) const;
     void maybe_remove_flurry(int& flurry_charges, Special_stats& special_stats) const;
     void maybe_add_rampage_stack(Hit_result hit_result, int& rampage_stacks, Special_stats& special_stats);
@@ -554,7 +424,5 @@ private:
     std::vector<int> hist_x{};
     std::vector<int> hist_y{};
 };
-
-#include "Combat_simulator.tcc"
 
 #endif // WOW_SIMULATOR_COMBAT_SIMULATOR_HPP

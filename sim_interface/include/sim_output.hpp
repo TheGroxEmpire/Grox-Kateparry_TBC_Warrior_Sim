@@ -1,5 +1,5 @@
-#ifndef COVID_OUTPUT_HPP
-#define COVID_OUTPUT_HPP
+#ifndef SIM_OUTPUT_HPP
+#define SIM_OUTPUT_HPP
 
 #include <string>
 #include <vector>
@@ -52,4 +52,4 @@ struct Sim_output
     std::vector<std::string> messages;
 };
 
-#endif // COVID_OUTPUT_HPP
+#endif // SIM_OUTPUT_HPP

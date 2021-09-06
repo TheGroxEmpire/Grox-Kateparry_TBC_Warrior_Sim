@@ -351,37 +351,32 @@ struct Buff
     std::vector<Use_effect> use_effects{};
 };
 
-// struct Gem
-// {
-//     Gem(std::string name, Attributes attributes, Special_stats special_stats, double bonus_damage = 0,
-//          std::vector<Hit_effect> hit_effects = std::vector<Hit_effect>(),
-//          std::vector<Use_effect> use_effects = std::vector<Use_effect>())
-//         : name(std::move(name))
-//         , attributes(attributes)
-//         , special_stats(special_stats)
-//         , bonus_damage(bonus_damage)
-//         , hit_effects(std::move(hit_effects))
-//         , use_effects(std::move(use_effects)){};
-
-//     std::string name;
-//     Attributes attributes;
-//     Special_stats special_stats;
-//     double bonus_damage;
-//     std::vector<Hit_effect> hit_effects{};
-//     std::vector<Use_effect> use_effects{};
-// };
-
 struct Weapon_buff
 {
     Weapon_buff() = default;
 
-    Weapon_buff(std::string name, Attributes attributes, Special_stats special_stats, double bonus_damage = 0)
-        : name(std::move(name)), attributes(attributes), special_stats(special_stats), bonus_damage(bonus_damage){};
+    Weapon_buff(std::string name, Attributes attributes, Special_stats special_stats, double bonus_damage = 0, Hit_effect hit_effect = {})
+        : name(std::move(name)), attributes(attributes), special_stats(special_stats), bonus_damage(bonus_damage), hit_effect(std::move(hit_effect)) {};
 
     std::string name{};
     Attributes attributes{};
     Special_stats special_stats{};
     double bonus_damage{};
+    Hit_effect hit_effect{};
+};
+
+struct Gem
+{
+    Gem(std::string name, Attributes attributes, Special_stats special_stats, Hit_effect hit_effect = {}) :
+        name(std::move(name)),
+        attributes(attributes),
+        special_stats(special_stats),
+        hit_effect(std::move(hit_effect)) {}
+
+    std::string name;
+    Attributes attributes;
+    Special_stats special_stats;
+    Hit_effect hit_effect;
 };
 
 struct Armor
@@ -437,7 +432,7 @@ struct Weapon
     std::vector<Use_effect> use_effects;
     Socket socket;
     Enchant enchant;
-    Weapon_buff buff;
+    Weapon_buff buff; // TODO(vigo) - temporary weapon enhancements; they should at least add bonus damage
 };
 
 std::ostream& operator<<(std::ostream& os, const Socket& socket);

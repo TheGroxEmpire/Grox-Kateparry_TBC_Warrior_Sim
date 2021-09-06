@@ -3,6 +3,7 @@ project(simulator)
 
 add_library(
         ${PROJECT_NAME}
+        source/Config.cpp
         source/Combat_simulator.cpp
         source/weapon_sim.cpp
         source/damage_sources.cpp

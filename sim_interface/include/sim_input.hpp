@@ -9,11 +9,12 @@ struct Sim_input
     Sim_input() = default;
 
     Sim_input(std::vector<std::string> race, std::vector<std::string> armor, std::vector<std::string> weapons,
-              std::vector<std::string> buffs, std::vector<std::string> enchants, std::vector<std::string> gems, std::vector<std::string> stat_weights,
-              std::vector<std::string> options, std::vector<std::string> float_options_string,
-              std::vector<double> float_options_val, std::vector<std::string> talent_string,
-              std::vector<int> talent_val, std::vector<std::string> compare_armor,
-              std::vector<std::string> compare_weapons)
+              std::vector<std::string> buffs, std::vector<std::string> enchants, std::vector<std::string> gems,
+              std::vector<std::string> stat_weights,
+              std::vector<std::string> options,
+              std::vector<std::string> float_options_string, std::vector<double> float_options_val,
+              std::vector<std::string> talent_string, std::vector<int> talent_val,
+              std::vector<std::string> compare_armor, std::vector<std::string> compare_weapons)
         : race(std::move(race))
         , armor(std::move(armor))
         , weapons(std::move(weapons))
