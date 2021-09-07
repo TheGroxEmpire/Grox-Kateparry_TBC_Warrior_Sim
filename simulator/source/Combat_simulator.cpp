@@ -426,8 +426,8 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
         if ((mh_swing && rage > config.combat.slam_rage_thresh) || rage > config.combat.slam_spam_rage)
         {
             logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, " ms");
-            slam_manager.cast_slam(time_keeper_.time + static_cast<int>(config.combat.slam_latency));
-            time_keeper_.global_cast(1500 + static_cast<int>(config.combat.slam_latency));
+            slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
+            time_keeper_.global_cast(1500 + config.combat.slam_latency);
             return true;
         }
     }
@@ -1322,7 +1322,8 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
 
     if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam && config.combat.use_sl_in_exec_phase)
     {
-        if (!slam_manager.is_slam_casting() && rage >= 15)
+        assert(!slam_manager.is_slam_casting());
+        if (rage >= 15)
         {
             if (start_cast_slam(mh_swing, state.main_hand_weapon))
             {
@@ -1405,7 +1406,8 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
 
     if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam)
     {
-        if (!slam_manager.is_slam_casting() && rage >= 15)
+        assert(!slam_manager.is_slam_casting());
+        if (rage >= 15)
         {
             if (start_cast_slam(mh_swing, state.main_hand_weapon))
             {

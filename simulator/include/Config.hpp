@@ -73,11 +73,11 @@ struct Combat_simulator_config
         bool use_hs_in_exec_phase{};
         double whirlwind_rage_thresh{};
         double overpower_rage_thresh{};
-        double whirlwind_bt_cooldown_thresh{};
-        double bt_whirlwind_cooldown_thresh{};
-        double ms_whirlwind_cooldown_thresh{};
-        double overpower_bt_cooldown_thresh{};
-        double overpower_ww_cooldown_thresh{};
+        int whirlwind_bt_cooldown_thresh{};
+        int bt_whirlwind_cooldown_thresh{};
+        int ms_whirlwind_cooldown_thresh{};
+        int overpower_bt_cooldown_thresh{};
+        int overpower_ww_cooldown_thresh{};
         double heroic_strike_rage_thresh{}; // this is now used for execute phase as well
         double cleave_rage_thresh{};
         double heroic_strike_damage{};
@@ -91,16 +91,16 @@ struct Combat_simulator_config
         bool use_whirlwind{};
         bool use_overpower{};
         bool use_heroic_strike{};
-        double hamstring_cd_thresh{};
+        int hamstring_cd_thresh{};
         bool dont_use_hm_when_ss{};
-        double slam_latency{};
-        double rampage_use_thresh{};
+        int slam_latency{};
+        int rampage_use_thresh{};
         double hamstring_rage_thresh{};
         double initial_rage{};
         bool deep_wounds{};
         bool first_hit_heroic_strike{};
         double slam_spam_rage{};
-        double slam_spam_max_time{};
+        int slam_spam_max_time{};
         double slam_rage_thresh{};
         bool use_death_wish{};
     } combat;

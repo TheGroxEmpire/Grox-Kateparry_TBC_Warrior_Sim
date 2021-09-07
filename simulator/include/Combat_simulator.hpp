@@ -94,7 +94,7 @@ public:
             next_finish_ = std::numeric_limits<int>::max();
         }
 
-        [[nodiscard]] bool ready(double current_time) const
+        [[nodiscard]] bool ready(int current_time) const
         {
             assert(next_finish_ >= current_time);
             return next_finish_ == current_time;
