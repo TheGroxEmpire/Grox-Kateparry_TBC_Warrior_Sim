@@ -39,7 +39,7 @@ TEST_F(Sim_fixture, test_endless_rage)
     config.sim_time = 100000.0;
     config.n_batches = 1;
     config.main_target_initial_armor_ = 0.0;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
 
     sim.set_config(config);
     sim.simulate(character);
@@ -63,7 +63,7 @@ TEST_F(Sim_fixture, test_bloodthirst_count)
     character.talents.bloodthirst = 1;
     config.combat.use_bloodthirst = true;
     config.essence_of_the_red_ = true;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
 
     character.total_special_stats.attack_power = 10000;
 
@@ -78,7 +78,7 @@ TEST_F(Sim_fixture, test_bloodthirst_count)
 TEST_F(Sim_fixture, test_that_with_infinite_rage_all_hits_are_heroic_strike)
 {
     config.essence_of_the_red_ = true;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
     config.combat.first_hit_heroic_strike = true;
     config.combat.use_heroic_strike = true;
     character.talents.improved_heroic_strike = 3;
@@ -227,7 +227,7 @@ TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
     config.n_batches = 500.0;
     config.combat.use_hamstring = true;
     config.essence_of_the_red_ = true;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
 
     character.total_special_stats.critical_strike = 0;
     character.total_special_stats.attack_power = 0;
@@ -564,7 +564,7 @@ TEST_F(Sim_fixture, test_deep_wounds)
 
     Combat_simulator sim{};
     character.talents.deep_wounds = 3;
-    config.combat.deep_wounds = true;
+    config.deep_wounds = true;
     config.combat.use_whirlwind = true;
     config.combat.use_bloodthirst = true;
     config.combat.use_heroic_strike = true;
@@ -717,7 +717,7 @@ TEST_F(Sim_fixture, test_arms)
     config.execute_phase_percentage_ = 20;
     config.combat.use_sl_in_exec_phase = true;
     config.combat.use_ms_in_exec_phase = true;
-    config.combat.deep_wounds = true;
+    config.deep_wounds = true;
     character.talents.mace_specialization = 0;
     sim.set_config(config);
 
@@ -768,7 +768,7 @@ TEST_F(Sim_fixture, test_fury)
     config.combat.use_rampage = false;
     character.talents.dual_wield_specialization = 5;
     character.talents.deep_wounds = 3;
-    config.combat.deep_wounds = true;
+    config.deep_wounds = true;
     character.talents.improved_heroic_strike = 3;
     character.talents.improved_whirlwind = 1;
     character.talents.impale = 2;
@@ -873,7 +873,7 @@ TEST_F(Sim_fixture, test_procs)
 
     // hello, use effects ;)
     character.talents.death_wish = true;
-    config.combat.use_death_wish = true;
+    config.use_death_wish = true;
     config.enable_bloodrage = true;
     config.enable_blood_fury = true;
     config.enable_unleashed_rage = true;
@@ -884,7 +884,7 @@ TEST_F(Sim_fixture, test_procs)
     config.combat.use_rampage = true;
     character.talents.dual_wield_specialization = 5;
     character.talents.deep_wounds = 3;
-    config.combat.deep_wounds = true;
+    config.deep_wounds = true;
     character.talents.improved_heroic_strike = 3;
     character.talents.improved_whirlwind = 1;
     character.talents.impale = 2;
@@ -963,7 +963,7 @@ TEST_F(Sim_fixture, test_multi)
 
     config.combat.rampage_use_thresh = 3;
     config.combat.use_rampage = true;
-    config.combat.deep_wounds = true;
+    config.deep_wounds = true;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     config.combat.use_bloodthirst = true;

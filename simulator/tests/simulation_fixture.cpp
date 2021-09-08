@@ -12,7 +12,7 @@ Combat_simulator_config get_config_with_everything_deactivated()
     //    config.exposed_armor = true;
     //    config.curse_of_recklessness_active = true;
     //    config.faerie_fire_feral_active = true;
-    //    config.combat.use_death_wish = true;
+    //    config.use_death_wish = true;
     //    config.enable_recklessness = true;
     //    config.enable_blood_fury = true;
     //    config.enable_berserking = true;
@@ -29,8 +29,7 @@ Combat_simulator_config get_config_with_everything_deactivated()
     //    config.combat.use_whirlwind = true;
     //    config.combat.use_overpower = true;
     //    config.combat.use_heroic_strike = true;
-    //    config.combat.deep_wounds = true;
-    config.combat.heroic_strike_damage = 176;
+    //    config.deep_wounds = true;
     //    config.combat.first_hit_heroic_strike = true;
     //    config.multi_target_mode_ = true;
     //    config.essence_of_the_red_ = true;
@@ -44,7 +43,7 @@ Combat_simulator_config get_config_with_everything_deactivated()
     config.combat.whirlwind_rage_thresh = 0.0;
     config.combat.hamstring_cd_thresh = 0.0;
     config.combat.hamstring_rage_thresh = 0.0;
-    config.combat.initial_rage = 0.0;
+    config.initial_rage = 0.0;
     config.combat.whirlwind_bt_cooldown_thresh = 0.0;
     config.combat.overpower_rage_thresh = 0.0;
     config.combat.overpower_bt_cooldown_thresh = 0.0;

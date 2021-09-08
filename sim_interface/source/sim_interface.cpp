@@ -488,7 +488,7 @@ std::string compute_talent_weights(Combat_simulator& sim, const Character& chara
                                               &Character::talents_t::two_handed_weapon_specialization, 5);
     }
 
-    if (config.combat.use_death_wish)
+    if (config.use_death_wish)
     {
         talents_info += compute_talent_weight(sim, character, base_dps, "Death Wish",
                                               &Character::talents_t::death_wish, 1);

@@ -50,11 +50,11 @@ Special_stats Combat_simulator::add_talent_effects(const Character& character)
     cleave_bonus_damage_ = 70 * (1.0 + 0.4 * character.talents.improved_cleave);
 
     tactical_mastery_rage_ = 10 + character.talents.tactical_mastery * 5;
-    deep_wounds_ = character.talents.deep_wounds && config.combat.deep_wounds;
+    deep_wounds_ = character.talents.deep_wounds && config.deep_wounds;
     use_rampage_ = character.talents.rampage && config.combat.use_rampage;
     use_bloodthirst_ = character.talents.bloodthirst && config.combat.use_bloodthirst;
     use_mortal_strike_ = character.talents.mortal_strike && config.combat.use_mortal_strike;
-    use_sweeping_strikes_ = character.talents.sweeping_strikes && config.combat.use_sweeping_strikes && config.multi_target_mode_;
+    use_sweeping_strikes_ = character.talents.sweeping_strikes && config.use_sweeping_strikes && config.multi_target_mode_;
 
     return from_talents;
 }
@@ -799,7 +799,7 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
         else if (rage >= heroic_strike_rage_cost_)
         {
             logger_.print("Performing Heroic Strike");
-            swing_damage += config.combat.heroic_strike_damage;
+            swing_damage += 176;
             const auto& hit_outcome =
                 generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, swing_damage);
             if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
@@ -1042,7 +1042,7 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
     {
         ability_queue_manager.reset();
         slam_manager = Slam_manager(1500 - 500 * character.talents.improved_slam);
-        rage = config.combat.initial_rage;
+        rage = config.initial_rage;
 
         Sim_state state(
             weapons[0],
@@ -1570,7 +1570,7 @@ void Combat_simulator::add_use_effects(const Character& character)
 {
     use_effects_.clear();
 
-    if (config.combat.use_death_wish && character.talents.death_wish)
+    if (config.use_death_wish && character.talents.death_wish)
     {
         use_effects_.emplace_back(death_wish);
     }

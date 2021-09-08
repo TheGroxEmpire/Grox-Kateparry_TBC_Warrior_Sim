@@ -17,19 +17,18 @@ struct Combat_simulator_config
     template <typename T>
     void parse_combat_simulator_config(const T& input);
 
-    void set_display_histogram(bool display_histogram_input) { display_histogram = display_histogram_input; }
-    void set_display_time_lapse(bool display_time_lapse_input) { display_time_lapse = display_time_lapse_input; }
+    //void set_display_histogram(bool display_histogram_input) { display_histogram = display_histogram_input; }
+    //void set_display_time_lapse(bool display_time_lapse_input) { display_time_lapse = display_time_lapse_input; }
 
     [[nodiscard]] static int to_millis(double seconds) { return Time_keeper::to_millis(seconds); }
 
     int n_batches{};
 
     bool display_combat_debug{};
-    bool display_histogram{};
-    bool display_time_lapse{};
+    //bool display_histogram{};
+    //bool display_time_lapse{};
     int seed{};
 
-    // Combat settings
     double sim_time{};
 
     int main_target_level{};
@@ -52,57 +51,63 @@ struct Combat_simulator_config
 
     double execute_phase_percentage_{};
 
+    double initial_rage{};
     bool first_global_sunder_{};
 
-    double berserking_haste_{};
-    double unleashed_rage_start_{};
-
-    // Simulator settings
     bool enable_bloodrage{};
     bool enable_recklessness{};
     bool enable_blood_fury{};
     bool enable_berserking{};
+    double berserking_haste_{};
     bool enable_unleashed_rage{};
+    double unleashed_rage_start_{};
+    bool use_death_wish{};
+    bool use_sweeping_strikes{};
+
+    bool deep_wounds{};
 
     struct combat_t
     {
+        bool use_bloodthirst{};
         bool use_bt_in_exec_phase{};
-        bool use_ms_in_exec_phase{};
-        bool use_ww_in_exec_phase{};
-        bool use_sl_in_exec_phase{};
-        bool use_hs_in_exec_phase{};
-        double whirlwind_rage_thresh{};
-        double overpower_rage_thresh{};
-        int whirlwind_bt_cooldown_thresh{};
         int bt_whirlwind_cooldown_thresh{};
+
+        bool use_mortal_strike{};
+        bool use_ms_in_exec_phase{};
         int ms_whirlwind_cooldown_thresh{};
+
+        bool use_whirlwind{};
+        bool use_ww_in_exec_phase{};
+        double whirlwind_rage_thresh{};
+        int whirlwind_bt_cooldown_thresh{};
+
+        bool use_slam{};
+        bool use_sl_in_exec_phase{};
+        double slam_rage_thresh{};
+        int slam_spam_max_time{};
+        double slam_spam_rage{};
+        int slam_latency{};
+
+        bool use_rampage{};
+        int rampage_use_thresh{};
+
+        bool use_heroic_strike{};
+        bool use_hs_in_exec_phase{};
+        bool first_hit_heroic_strike{};
+        double heroic_strike_rage_thresh{}; // this is now used for execute phase as well
+
+        bool cleave_if_adds{};
+        double cleave_rage_thresh{};
+
+        bool use_overpower{};
+        double overpower_rage_thresh{};
         int overpower_bt_cooldown_thresh{};
         int overpower_ww_cooldown_thresh{};
-        double heroic_strike_rage_thresh{}; // this is now used for execute phase as well
-        double cleave_rage_thresh{};
-        double heroic_strike_damage{};
-        bool cleave_if_adds{};
+
         bool use_hamstring{};
-        bool use_slam{};
-        bool use_bloodthirst{};
-        bool use_rampage{};
-        bool use_mortal_strike{};
-        bool use_sweeping_strikes{};
-        bool use_whirlwind{};
-        bool use_overpower{};
-        bool use_heroic_strike{};
+        double hamstring_rage_thresh{};
         int hamstring_cd_thresh{};
         bool dont_use_hm_when_ss{};
-        int slam_latency{};
-        int rampage_use_thresh{};
-        double hamstring_rage_thresh{};
-        double initial_rage{};
-        bool deep_wounds{};
-        bool first_hit_heroic_strike{};
-        double slam_spam_rage{};
-        int slam_spam_max_time{};
-        double slam_rage_thresh{};
-        bool use_death_wish{};
     } combat;
 
     struct dpr_t
