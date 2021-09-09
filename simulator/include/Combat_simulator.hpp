@@ -246,6 +246,8 @@ public:
 
     void simulate(const Character& character, int n_simulations, const Distribution& init_distribution);
 
+    void simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data = false, bool reset_dps = true);
+
     void simulate(const Character& character, bool log_data = false, bool reset_dps = true);
 
     void normal_phase(Sim_state& state, bool mh_swing);
@@ -265,7 +267,7 @@ public:
 
     void compute_hit_tables(const Character& character, const Special_stats& special_stats, const Weapon_sim& weapon);
 
-    Special_stats add_talent_effects(const Character& character);
+    void add_talent_effects(const Character& character);
     void add_use_effects(const Character& character);
     void add_over_time_effects(const Character& character);
 

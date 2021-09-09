@@ -22,22 +22,8 @@ constexpr double armor_reduction_factor(int target_armor)
 }
 } // namespace
 
-Special_stats Combat_simulator::add_talent_effects(const Character& character)
+void Combat_simulator::add_talent_effects(const Character& character)
 {
-    Special_stats from_talents;
-    from_talents.critical_strike = character.talents.cruelty;
-    from_talents.hit = character.talents.precision;
-    from_talents.expertise = character.talents.defiance * 2;
-    from_talents.ap_multiplier = character.talents.improved_berserker_stance * 0.02;
-    if (character.is_dual_wield())
-    {
-        from_talents.damage_mod_physical = character.talents.one_handed_weapon_specialization * 0.02;
-    }
-    else
-    {
-        from_talents.damage_mod_physical = character.talents.two_handed_weapon_specialization * 0.01;
-    }
-
     heroic_strike_rage_cost_ = 15 - character.talents.improved_heroic_strike;
     execute_rage_cost_ = std::vector<int>{15, 13, 10}[character.talents.improved_execute];
     whirlwind_rage_cost_ = 25;
@@ -55,8 +41,6 @@ Special_stats Combat_simulator::add_talent_effects(const Character& character)
     use_bloodthirst_ = character.talents.bloodthirst && config.combat.use_bloodthirst;
     use_mortal_strike_ = character.talents.mortal_strike && config.combat.use_mortal_strike;
     use_sweeping_strikes_ = character.talents.sweeping_strikes && config.use_sweeping_strikes && config.multi_target_mode_;
-
-    return from_talents;
 }
 
 void Combat_simulator::compute_hit_tables(const Character& character, const Special_stats& special_stats, const Weapon_sim& weapon)
@@ -416,11 +400,6 @@ void Combat_simulator::unbridled_wrath(Sim_state& state, const Weapon_sim& weapo
 
 bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
 {
-    if (use_rampage_ && time_keeper_.rampage_cd() <= 3000)
-    {
-        return false;
-    }
-
     if (mh_swing || weapon.next_swing - time_keeper_.time > config.combat.slam_spam_max_time)
     {
         if ((mh_swing && rage > config.combat.slam_rage_thresh) || rage > config.combat.slam_spam_rage)
@@ -428,6 +407,7 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
             logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, " ms");
             slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
             time_keeper_.global_cast(1500 + config.combat.slam_latency);
+            spend_rage(15); // reserve
             return true;
         }
     }
@@ -942,9 +922,14 @@ void Combat_simulator::simulate(const Character& character, int n_simulations, c
     simulate(character, false, false);
 }
 
-// TODO(vigo) pass in a "target function", most likely a "bool (*func)(Combat_simulator& sim)", or a functor equivalent
-// also consider passing in both Combat_simulator_config and Character
+
+// TODO(vigo) consider passing in both Combat_simulator_config
 void Combat_simulator::simulate(const Character& character, bool log_data, bool reset_dps)
+{
+    simulate(character, [this](const auto& d) { return d.samples() == config.n_batches; }, log_data, reset_dps);
+}
+
+void Combat_simulator::simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data, bool reset_dps)
 {
     if (log_data)
     {
@@ -953,6 +938,7 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
     }
     damage_distribution_ = Damage_sources();
 
+    // TODO support display_combat_debug via "target"
     int n_damage_batches = config.n_batches;
     if (config.display_combat_debug)
     {
@@ -960,9 +946,9 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
         n_damage_batches = 1;
     }
 
-    const auto& talent_special_stats = add_talent_effects(character);
+    add_talent_effects(character);
 
-    const auto starting_special_stats = character.total_special_stats + talent_special_stats;
+    const auto starting_special_stats = character.total_special_stats;
     compute_hit_table_stats_ = {};
 
     std::vector<Weapon_sim> weapons;
@@ -1038,7 +1024,7 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
 
     std::vector<Damage_instance> damage_instances{};
 
-    for (int iter = 0; iter < n_damage_batches; iter++)
+    while (!target(dps_distribution_))
     {
         ability_queue_manager.reset();
         slam_manager = Slam_manager(1500 - 500 * character.talents.improved_slam);
@@ -1185,8 +1171,10 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
                     continue; // the swing timer is effectively stopped while slam is casting
                 }
 
+                gain_rage(15); // unreserve
                 slam(state);
                 slam_manager.finish_slam();
+
                 state.main_hand_weapon.next_swing = from_offset(1000 * state.main_hand_weapon.swing_speed / (1 + state.special_stats.haste));
                 oldHaste = state.special_stats.haste; // keep update_swing_timer() from applying haste changes again (they're already in)
             }
@@ -1243,6 +1231,16 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
                     time_keeper_.global_cast(1500);
                     spend_rage(15);
                     first_global_sunder = false;
+                }
+            }
+
+            if (use_rampage_)
+            {
+                if (time_keeper_.rampage_ready() && state.rampage_stacks > 0)
+                {
+                    state.special_stats -= {0, 0, 50.0 * state.rampage_stacks};
+                    state.rampage_stacks = 0;
+                    logger_.print("Rampage fades.");
                 }
             }
 
@@ -1315,10 +1313,29 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
     }
 }
 
-// about 1/3 of all calls are cut short by the gcd check; a rage check is only effective for the execute-phase
+// about 1/3 of all calls are cut short by the gcd check; a possible rage check is only effective for the execute-phase
 void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
 {
     if (!time_keeper_.global_ready()) return;
+
+    if (use_rampage_ && config.combat.use_ra_in_exec_phase)
+    {
+        int rampage_aura_cd = time_keeper_.rampage_aura_cd();
+        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && rampage_aura_cd > 0 && time_keeper_.can_do_rampage())
+        {
+            time_keeper_.rampage_cast(30000);
+            time_keeper_.global_cast(1500);
+            spend_rage(20);
+            if (state.rampage_stacks == 0)
+            {
+                state.special_stats += {0, 0, 50};
+                state.rampage_stacks = 1;
+            }
+            logger_.print("Rampage!");
+            logger_.print("Current rage: ", int(rage));
+            return;
+        }
+    }
 
     if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam && config.combat.use_sl_in_exec_phase)
     {
@@ -1363,10 +1380,6 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
     if (config.combat.use_whirlwind && config.combat.use_ww_in_exec_phase)
     {
         bool use_ww = true;
-        if (use_rampage_)
-        {
-            use_ww = time_keeper_.rampage_cd() > 3000;
-        }
         if (use_bloodthirst_)
         {
             use_ww = std::max(time_keeper_.blood_thirst_cd(), 100) > config.combat.whirlwind_bt_cooldown_thresh;
@@ -1391,34 +1404,12 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
 
 void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
 {
-    // it looks like using rampage in execute phase /could/ be a dps loss
-    if (use_rampage_)
-    {
-        if (time_keeper_.rampage_ready() && state.rampage_stacks > 0)
-        {
-            state.special_stats -= {0, 0, 50.0 * state.rampage_stacks};
-            state.rampage_stacks = 0;
-            logger_.print("Rampage fades.");
-        }
-    }
-
     if (!time_keeper_.global_ready()) return;
 
-    if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam)
-    {
-        assert(!slam_manager.is_slam_casting());
-        if (rage >= 15)
-        {
-            if (start_cast_slam(mh_swing, state.main_hand_weapon))
-            {
-                return;
-            }
-        }
-    }
-
     if (use_rampage_)
     {
-        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && time_keeper_.can_do_rampage())
+        int rampage_aura_cd = time_keeper_.rampage_aura_cd();
+        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && rampage_aura_cd > 0 && time_keeper_.can_do_rampage())
         {
             time_keeper_.rampage_cast(30000);
             time_keeper_.global_cast(1500);
@@ -1431,6 +1422,18 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
             logger_.print("Rampage!");
             logger_.print("Current rage: ", int(rage));
             return;
+        }
+    }
+
+    if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam)
+    {
+        assert(!slam_manager.is_slam_casting());
+        if (rage >= 15)
+        {
+            if (start_cast_slam(mh_swing, state.main_hand_weapon))
+            {
+                return;
+            }
         }
     }
 
@@ -1465,10 +1468,6 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
     if (config.combat.use_whirlwind)
     {
         bool use_ww = true;
-        if (use_rampage_)
-        {
-            use_ww = time_keeper_.rampage_cd() > 3000;
-        }
         if (use_bloodthirst_)
         {
             use_ww = std::max(time_keeper_.blood_thirst_cd(), 100) > config.combat.whirlwind_bt_cooldown_thresh;
@@ -1487,10 +1486,6 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
     if (config.combat.use_overpower)
     {
         bool use_op = true;
-        if (use_rampage_)
-        {
-            use_op &= time_keeper_.rampage_cd() > 3000;
-        }
         if (use_bloodthirst_)
         {
             use_op &= time_keeper_.blood_thirst_cd() > config.combat.overpower_bt_cooldown_thresh;
@@ -1516,10 +1511,6 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         if (config.combat.dont_use_hm_when_ss && sweeping_strikes_charges_ > 0)
         {
             use_ham = false;
-        }
-        if (use_rampage_)
-        {
-            use_ham &= time_keeper_.rampage_cd() > 3000;
         }
         if (use_bloodthirst_)
         {

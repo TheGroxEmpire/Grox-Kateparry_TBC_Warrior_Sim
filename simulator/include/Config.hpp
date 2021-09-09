@@ -89,6 +89,7 @@ struct Combat_simulator_config
         int slam_latency{};
 
         bool use_rampage{};
+        bool use_ra_in_exec_phase{};
         int rampage_use_thresh{};
 
         bool use_heroic_strike{};

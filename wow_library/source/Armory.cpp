@@ -267,11 +267,10 @@ void Armory::compute_total_stats(Character& character) const
     {
         clean_weapon(wep);
     }
-    Attributes total_attributes{};
-    Special_stats total_special_stats{};
 
-    total_attributes += character.base_attributes;
-    total_special_stats += character.base_special_stats;
+    auto total_attributes{character.base_attributes};
+    auto total_special_stats{character.base_special_stats};
+
     std::vector<Use_effect> use_effects{};
     std::unordered_map<Set, int> set_counts{};
 
@@ -359,6 +358,21 @@ void Armory::compute_total_stats(Character& character) const
             character.set_bonuses.emplace_back(set_bonus);
         }
     }
+
+    Special_stats talent_special_stats{};
+    talent_special_stats.critical_strike = character.talents.cruelty;
+    talent_special_stats.hit = character.talents.precision;
+    talent_special_stats.expertise = character.talents.defiance * 2;
+    talent_special_stats.ap_multiplier = character.talents.improved_berserker_stance * 0.02;
+    if (character.is_dual_wield())
+    {
+        talent_special_stats.damage_mod_physical = character.talents.one_handed_weapon_specialization * 0.02;
+    }
+    else
+    {
+        talent_special_stats.damage_mod_physical = character.talents.two_handed_weapon_specialization * 0.01;
+    }
+    total_special_stats += talent_special_stats;
 
     if (character.race == Race::draenei && !character.has_buff(buffs.heroic_presence))
     {

@@ -401,11 +401,14 @@ std::string compute_talent_weight(Combat_simulator& combat_simulator, const Char
                                   const Distribution& init_dps, const std::string& talent_name,
                                   int Character::talents_t::*talent, int n_points)
 {
+    Armory armory;
+
     auto without = init_dps;
     if (character.talents.*talent > 0)
     {
         auto copy = character;
         copy.talents.*talent = 0;
+        armory.compute_total_stats(copy);
         combat_simulator.simulate(copy);
         without = combat_simulator.get_dps_distribution();
     }
@@ -415,6 +418,7 @@ std::string compute_talent_weight(Combat_simulator& combat_simulator, const Char
     {
         auto copy = character;
         copy.talents.*talent = n_points;
+        armory.compute_total_stats(copy);
         combat_simulator.simulate(copy);
         with = combat_simulator.get_dps_distribution();
     }
@@ -432,6 +436,7 @@ std::string compute_talent_weights(Combat_simulator& sim, const Character& chara
     const auto& config = sim.config;
 
     std::string talents_info = "<br><b>Value per 1 talent point:</b>";
+
     if (config.combat.use_heroic_strike)
     {
         if (config.number_of_extra_targets > 0 && config.combat.cleave_if_adds)
@@ -450,6 +455,12 @@ std::string compute_talent_weights(Combat_simulator& sim, const Character& chara
     {
         talents_info += compute_talent_weight(sim, character, base_dps, "Improved Whirlwind",
                                               &Character::talents_t::improved_whirlwind, 2);
+    }
+
+    if (config.combat.use_mortal_strike)
+    {
+        talents_info += compute_talent_weight(sim, character, base_dps, "Improved Mortal Strike",
+                                              &Character::talents_t::improved_mortal_strike, 5);
     }
 
     if (config.combat.use_slam && !character.is_dual_wield())
@@ -888,7 +899,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     Combat_simulator_config config{input};
     Combat_simulator simulator{};
     simulator.set_config(config);
-    // FIXME(vigo) this must also run _after_ char setup now (talents & buffs)
+
     for (const auto& wep : character.weapons)
     {
         simulator.compute_hit_tables(character, character.total_special_stats, Weapon_sim(wep));

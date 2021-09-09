@@ -624,7 +624,7 @@ struct Armory
                 // Phase 1
                 {"lionheart_champion", Attributes{49.0, 44.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 3.6, 341, 513, Weapon_socket::two_hand, Weapon_type::sword, {{"lionheart_champion", Hit_effect::Type::stat_boost, {100, 0}, {}, 0, 10, 0, 3.6 / 60}}},
                 {"gladiators_greatsword", Attributes{32.0, 0.0}, Special_stats{1.585144927536232, 1.2682308180088777, 0.0, 0, 0.0}, 3.6, 341, 513, Weapon_socket::two_hand, Weapon_type::sword}, 
-                {"khorium_champion", Attributes{110.0, 0.0}, Special_stats{0.0, 2.346227013316424, 0.0, 0, 0.0}, 3.3, 286, 430, Weapon_socket::two_hand, Weapon_type::sword, {{"khorium_champion", Hit_effect::Type::stat_boost, {120, 0}, {}, 0, 30, 0, 3.3 / 60}}},
+                {"khorium_champion", Attributes{50.0, 0.0}, Special_stats{0.0, 2.346227013316424, 0.0, 0, 0.0}, 3.3, 286, 430, Weapon_socket::two_hand, Weapon_type::sword, {{"khorium_champion", Hit_effect::Type::stat_boost, {120, 0}, {}, 0, 30, 0, 3.3 / 60}}},
                 {"despair", Attributes{52.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 3.5, 319, 479, Weapon_socket::two_hand, Weapon_type::sword, {{"despair", Hit_effect::Type::damage_physical, {}, {}, 600, 0, 0, 3.5 / 60}}}, 
                 {"lionheart_blade", Attributes{47.0, 42.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 3.6, 315, 474, Weapon_socket::two_hand, Weapon_type::sword}, 
                 {"quantum_blade", Attributes{0.0, 0.0}, Special_stats{1.358695652173913, 0.0, 102.0, 0, 0.0}, 3.5, 304, 456, Weapon_socket::two_hand, Weapon_type::sword}, 
@@ -652,7 +652,7 @@ struct Armory
                 {"lunar_crescent", Attributes{0.0, 0.0}, Special_stats{2.1286231884057973, 0.0, 96.0, 0, 0.0}, 3.7, 324, 487, Weapon_socket::two_hand, Weapon_type::axe}, 
                 {"felsteel_reaper", Attributes{0.0, 0.0}, Special_stats{1.358695652173913, 0.0, 112.0, 0, 0.0}, 3.4, 295, 443, Weapon_socket::two_hand, Weapon_type::axe}, 
                 {"trident_of_the_outcast_tribe", Attributes{37.0, 0.0}, Special_stats{0.0, 2.28281547241598, 0.0, 0, 0.0}, 3.2, 270, 406, Weapon_socket::two_hand, Weapon_type::axe}, 
-                {"singing_crystal_axe", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.04248573240329741}, 3.5, 295, 444, Weapon_socket::two_hand, Weapon_type::axe, {{"singing_crystal_axe", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .253}, 0, 10, 0, 3.5 / 60}}},  
+                {"singing_crystal_axe", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 3.5, 295, 444, Weapon_socket::two_hand, Weapon_type::axe, {{"singing_crystal_axe", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .2537}, 0, 10, 0, 3.5 / 60}}},
                 {"blackened_spear", Attributes{0.0, 26.0}, Special_stats{0.0, 1.2048192771084338, 92.0, 0, 0.0}, 3.5, 261, 392, Weapon_socket::two_hand, Weapon_type::axe}, 
                 {"sonic_spear", Attributes{0.0, 35.0}, Special_stats{0.0, 1.5218769816106532, 62.0, 0, 0.0}, 3.5, 261, 392, Weapon_socket::two_hand, Weapon_type::axe}, 
                 {"apexis_cleaver", Attributes{46.0, 0.0}, Special_stats{0.8605072463768116, 0.0, 0.0, 0, 0.0}, 3.6, 268, 403, Weapon_socket::two_hand, Weapon_type::axe}, 
