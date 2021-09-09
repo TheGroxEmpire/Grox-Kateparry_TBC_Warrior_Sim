@@ -6,8 +6,6 @@
 #include "Statistics.hpp"
 #include "item_heuristics.hpp"
 
-#define TEST_VIA_CONFIG
-
 #include <sstream>
 
 static const double q95 = Statistics::find_cdf_quantile(Statistics::get_two_sided_p_value(0.95), 0.01);
@@ -53,59 +51,48 @@ void print_results(const Combat_simulator& sim, bool print_uptimes_and_procs)
 }
 #endif
 
-void compute_item_upgrade(const Character& character_new, const std::vector<int>& batches_per_iteration,
-                          Combat_simulator& simulator, const Distribution& base_dps,
-                          const std::string& item_name, const std::vector<size_t>& stronger_indexes,
-                          size_t i, std::string& item_strengths_string, bool& found_upgrade,
-                          std::string& item_downgrades_string)
+void compute_item_upgrade(const Character& character_new, Combat_simulator& simulator, const Distribution& base_dps,
+                          const std::string& item_name, const std::vector<size_t>& stronger_indexes, size_t i,
+                          std::string& item_strengths_string, bool& found_upgrade, std::string& item_downgrades_string)
 {
+    static const double q999 = Statistics::find_cdf_quantile(Statistics::get_two_sided_p_value(0.999), 0.01);
 
-    auto mean = 0.0;
-    auto variance = 0.0;
-    auto samples = 0;
+    auto dps_diff = 0.0;
+    simulator.simulate(character_new, [base_dps, &dps_diff](const Distribution& d) {
+        if (d.samples() <= 500) return false;
+        dps_diff = d.mean() - base_dps.mean();
+        auto std_diff = std::sqrt(d.var_of_the_mean() + base_dps.var_of_the_mean());
+        if (d.samples() > 500 && dps_diff < 0 && dps_diff <= -std_diff * q999) return true;
+        if (d.samples() > 5000 && dps_diff >= 0 && dps_diff >= std_diff * q999) return true;
+        if (d.samples() >= 20000) return true;
+        return false;
+    });
 
-    for (int batches : batches_per_iteration)
+    if (dps_diff >= 0)
     {
-        simulator.simulate(character_new, batches, Distribution(mean, variance, samples));
-
-        const auto& d = simulator.get_dps_distribution();
-        mean = d.mean();
-        variance = d.variance();
-        samples = d.samples();
-        const auto std_of_the_mean = d.std_of_the_mean();
-
-        if (mean - std_of_the_mean * q95 >= base_dps.mean() && samples > 5000)
+        found_upgrade = true;
+        double dps_increase_std = std::sqrt(simulator.get_var_of_the_mean() + base_dps.var_of_the_mean());
+        item_strengths_string += "<br><b>Up</b>grade: <b>" + item_name + "</b> ( +<b>" +
+                                 String_helpers::string_with_precision(dps_diff, 2) + " &plusmn " +
+                                 String_helpers::string_with_precision(dps_increase_std * q95, 2) + "</b> DPS). [" + std::to_string(simulator.get_dps_distribution().samples()) + "]";
+    }
+    else if (dps_diff < 0)
+    {
+        double dps_decrease_std = std::sqrt(simulator.get_var_of_the_mean() + base_dps.var_of_the_mean());
+        item_downgrades_string += "<br><b>Down</b>grade: <b>" + item_name + "</b> ( <b>" +
+                                  String_helpers::string_with_precision(dps_diff, 3) + " &plusmn " +
+                                  String_helpers::string_with_precision(dps_decrease_std * q95, 2) + "</b> DPS). [" + std::to_string(simulator.get_dps_distribution().samples()) + "]";
+        if (String_helpers::does_vector_contain(stronger_indexes, i))
         {
             found_upgrade = true;
-            double dps_increase = mean - base_dps.mean();
-            double dps_increase_std = std::sqrt(d.var_of_the_mean() + base_dps.var_of_the_mean());
-            item_strengths_string += "<br><b>Up</b>grade: <b>" + item_name + "</b> ( +<b>" +
-                                     String_helpers::string_with_precision(dps_increase, 2) + " &plusmn " +
-                                     String_helpers::string_with_precision(dps_increase_std * q95, 2) + "</b> DPS).";
-            break;
-        }
-
-        if (mean + std_of_the_mean * q95 <= base_dps.mean() && samples > 500)
-        {
-            double dps_decrease = mean - base_dps.mean();
-            double dps_decrease_std = std::sqrt(d.var_of_the_mean() + base_dps.var_of_the_mean());
-            item_downgrades_string += "<br><b>Down</b>grade: <b>" + item_name + "</b> ( <b>" +
-                                      String_helpers::string_with_precision(dps_decrease, 3) + " &plusmn " +
-                                      String_helpers::string_with_precision(dps_decrease_std * q95, 2) + "</b> DPS).";
-            if (String_helpers::does_vector_contain(stronger_indexes, i))
-            {
-                found_upgrade = true;
-                item_downgrades_string += " Note: Similar item stats, difficult to draw conclusions.";
-            }
-            break;
+            item_downgrades_string += " Note: Similar item stats, difficult to draw conclusions.";
         }
     }
 }
 
 void item_upgrades(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
-                   Armory& armory, const std::vector<int>& batches_per_iteration, Combat_simulator& simulator,
-                   const Distribution& base_dps, Socket socket, const Special_stats& special_stats,
-                   bool first_item)
+                   Armory& armory, Combat_simulator& simulator, const Distribution& base_dps, Socket socket,
+                   const Special_stats& special_stats, bool first_item)
 {
     std::string dummy;
     std::string current{"Current "};
@@ -148,9 +135,8 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
         if (items[i].name == current_armor.name) continue;
         Armory::change_armor(character_new.armor, items[i], first_item);
         armory.compute_total_stats(character_new);
-        compute_item_upgrade(character_new, batches_per_iteration, simulator, base_dps, items[i].name,
-                             stronger_indexes, i, item_strengths_string, found_upgrade,
-                             item_downgrades_string);
+        compute_item_upgrade(character_new, simulator, base_dps, items[i].name, stronger_indexes, i,
+                             item_strengths_string, found_upgrade, item_downgrades_string);
     }
     if (!found_upgrade)
     {
@@ -189,8 +175,8 @@ void maybe_equalize_weapon_specs(Character& c)
 }
 
 void item_upgrades_wep(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
-                       Armory& armory, const std::vector<int>& batches_per_iteration, Combat_simulator& simulator,
-                       const Distribution& base_dps, Weapon_socket weapon_socket)
+                       Armory& armory, Combat_simulator& simulator, const Distribution& base_dps,
+                       Weapon_socket weapon_socket)
 {
     std::string dummy;
     Socket socket = ((weapon_socket == Weapon_socket::main_hand) || (weapon_socket == Weapon_socket::two_hand)) ?
@@ -214,9 +200,8 @@ void item_upgrades_wep(std::string& item_strengths_string, Character character_n
         if (items[i].name == current_weapon.name) continue;
         Armory::change_weapon(character_new.weapons, items[i], socket);
         armory.compute_total_stats(character_new);
-        compute_item_upgrade(character_new, batches_per_iteration, simulator, base_dps, items[i].name,
-                             stronger_indexes, i, item_strengths_string, found_upgrade,
-                             item_downgrades_string);
+        compute_item_upgrade(character_new, simulator, base_dps, items[i].name, stronger_indexes, i,
+                             item_strengths_string, found_upgrade, item_downgrades_string);
     }
     if (!found_upgrade)
     {
@@ -1056,12 +1041,6 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     {
         item_strengths_string = "<b>Character items and proposed upgrades:</b><br>";
 
-        std::vector<int> batches_per_iteration = {100};
-        for (int i = 0; i < 25; i++)
-        {
-            batches_per_iteration.push_back(static_cast<int>(batches_per_iteration.back() * 1.2));
-        }
-
         Combat_simulator simulator_strength{};
         simulator_strength.set_config(config);
         Item_optimizer item_optimizer{};
@@ -1080,16 +1059,15 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             {
                 if (socket == Socket::ring || socket == Socket::trinket)
                 {
-                    item_upgrades(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator_strength, base_dps, socket, character_new.total_special_stats, true);
-                    item_upgrades(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator_strength, base_dps, socket, character_new.total_special_stats,
-                                  false);
+                    item_upgrades(item_strengths_string, character_new, item_optimizer, armory, simulator_strength,
+                                  base_dps, socket, character_new.total_special_stats, true);
+                    item_upgrades(item_strengths_string, character_new, item_optimizer, armory, simulator_strength,
+                                  base_dps, socket, character_new.total_special_stats, false);
                 }
                 else
                 {
-                    item_upgrades(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator_strength, base_dps, socket, character_new.total_special_stats, true);
+                    item_upgrades(item_strengths_string, character_new, item_optimizer, armory, simulator_strength,
+                                  base_dps, socket, character_new.total_special_stats, true);
                 }
             }
         }
@@ -1099,15 +1077,15 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
             if (is_dual_wield)
             {
-                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator_strength, base_dps, Weapon_socket::main_hand);
-                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator_strength, base_dps, Weapon_socket::off_hand);
+                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, simulator_strength,
+                                  base_dps, Weapon_socket::main_hand);
+                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, simulator_strength,
+                                  base_dps, Weapon_socket::off_hand);
             }
             else
             {
-                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, batches_per_iteration,
-                                  simulator_strength, base_dps, Weapon_socket::two_hand);
+                item_upgrades_wep(item_strengths_string, character_new, item_optimizer, armory, simulator_strength,
+                                  base_dps, Weapon_socket::two_hand);
             }
         }
         item_strengths_string += "<br><br>";
@@ -1137,23 +1115,13 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     if (String_helpers::find_string(input.options, "debug_on"))
     {
         config.display_combat_debug = true;
-
         simulator.set_config(config);
-        double dps{};
-        for (int i = 0; i < 100000; i++)
-        {
-            simulator.simulate(character);
-            dps = simulator.get_dps_mean();
-            if (std::abs(dps - base_dps.mean()) < 5)
-            {
-                break;
-            }
-        }
+        simulator.simulate(character, [base_dps](const auto& d) { return std::abs(d.mean() - base_dps.mean()) < q95 * base_dps.std_of_the_mean(); });
         debug_topic = simulator.get_debug_topic();
 
         debug_topic += "<br><br>";
         debug_topic += "Fight statistics:<br>";
-        debug_topic += "DPS: " + std::to_string(dps) + "<br><br>";
+        debug_topic += "DPS: " + std::to_string(simulator.get_dps_mean()) + "<br><br>";
 
         auto dist = simulator.get_damage_distribution();
         debug_topic += "DPS from sources:<br>";

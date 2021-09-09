@@ -17,7 +17,7 @@ endif ()
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     message("Building ${CMAKE_PROJECT_NAME} in Debug mode")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wunused -std=c++17 -pedantic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTEST_VIA_CONFIG -Wall -Wextra -Werror -Wunused -std=c++17 -pedantic")
 else ()
     message("Building ${CMAKE_PROJECT_NAME} in Release mode")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -flto")

@@ -938,12 +938,9 @@ void Combat_simulator::simulate(const Character& character, const std::function<
     }
     damage_distribution_ = Damage_sources();
 
-    // TODO support display_combat_debug via "target"
-    int n_damage_batches = config.n_batches;
     if (config.display_combat_debug)
     {
         logger_ = Logger(time_keeper_);
-        n_damage_batches = 1;
     }
 
     add_talent_effects(character);
@@ -1320,8 +1317,7 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
 
     if (use_rampage_ && config.combat.use_ra_in_exec_phase)
     {
-        int rampage_aura_cd = time_keeper_.rampage_aura_cd();
-        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && rampage_aura_cd > 0 && time_keeper_.can_do_rampage())
+        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && time_keeper_.can_do_rampage())
         {
             time_keeper_.rampage_cast(30000);
             time_keeper_.global_cast(1500);
@@ -1408,8 +1404,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
 
     if (use_rampage_)
     {
-        int rampage_aura_cd = time_keeper_.rampage_aura_cd();
-        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && rampage_aura_cd > 0 && time_keeper_.can_do_rampage())
+        if (time_keeper_.rampage_cd() < config.combat.rampage_use_thresh && rage >= 20 && time_keeper_.can_do_rampage())
         {
             time_keeper_.rampage_cast(30000);
             time_keeper_.global_cast(1500);
