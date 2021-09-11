@@ -1024,6 +1024,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
     while (!target(dps_distribution_))
     {
         ability_queue_manager.reset();
+        logger_.reset();
         slam_manager = Slam_manager(1500 - 500 * character.talents.improved_slam);
         rage = config.initial_rage;
 
@@ -1205,7 +1206,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
 
             if (!in_execute_phase)
             {
-                if (time_keeper_.time >= time_execute_phase)
+                if (time_keeper_.time > time_execute_phase)
                 {
                     logger_.print("------------ Execute phase! ------------");
                     in_execute_phase = true;

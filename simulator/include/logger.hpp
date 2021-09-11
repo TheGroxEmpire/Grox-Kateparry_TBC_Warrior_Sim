@@ -13,6 +13,8 @@ public:
         if (display_combat_debug_) debug_topic_.reserve(128 * 1024); // just a hunch ;)
     }
 
+    void reset() { debug_topic_.clear(); }
+
     [[nodiscard]] bool is_enabled() const { return display_combat_debug_; }
 
     [[nodiscard]] std::string get_debug_topic() const { return debug_topic_; }
@@ -23,7 +25,7 @@ public:
         if (display_combat_debug_)
         {
             //            s. Loop idx:" + std::to_string(                    time_keeper_.step_index) +=
-            debug_topic_ += "Time: " + std::to_string(time_keeper_->time) + "s. Event: ";
+            debug_topic_ += "Time: " + std::to_string(time_keeper_->time * 0.001) + "s. Event: ";
             __attribute__((unused)) int dummy[] = {0, ((void)print_statement(std::forward<Args>(args)), 0)...};
             debug_topic_ += "<br>";
         }
