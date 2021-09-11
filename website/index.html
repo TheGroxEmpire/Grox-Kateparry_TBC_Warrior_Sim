@@ -923,6 +923,7 @@
                     <option value="none" selected disabled></option>
                     <option value="none" disabled> --- SWORDS --- </option>
                     <option value="blazeguard"> Blazeguard</option>
+                    <option value="blazefury"> Blazefury</option>
                     <option value="blinkstrike"> Blinkstrike</option>
                     <option value="edge_of_the_cosmos"> Edge of the Cosmos</option>
                     <option value="felsteel_longblade"> Felsteel Longblade</option>
@@ -987,6 +988,7 @@
                     <option value="none" selected disabled></option>
                     <option value="none" disabled> --- SWORDS --- </option>
                     <option value="blazeguard"> Blazeguard</option>
+                    <option value="blazefury"> Blazefury</option>
                     <option value="blinkstrike"> Blinkstrike</option>
                     <option value="edge_of_the_cosmos"> Edge of the Cosmos</option>
                     <option value="felsteel_longblade"> Felsteel Longblade</option>
@@ -1522,6 +1524,7 @@
             <select id="weapons_dd_mult" size="10" class="item-select" multiple>
                 <option value="none" disabled> --- SWORDS --- </option>
                 <option value="blazeguard"> Blazeguard</option>
+                <option value="blazefury"> Blazefury</option>
                 <option value="blinkstrike"> Blinkstrike</option>
                 <option value="edge_of_the_cosmos"> Edge of the Cosmos</option>
                 <option value="felsteel_longblade"> Felsteel Longblade</option>
@@ -4609,8 +4612,8 @@
             <label for="use_ww_in_exec_phase"> Use whirlwind in execute phase</label><br>
         </div>
 
-        <input type="checkbox" id="use_slam" checked onclick="show_div('use_slam', 'slam_div')">
-        <label for="use_slam"><b> Use slam (Two-handed weapons only)</b></label><br>
+        <input type="checkbox" id="use_slam" onclick="show_div('use_slam', 'slam_div')">
+        <label for="use_slam"><b> Use slam</b></label><br>
         <div class="description" id="slam_div">
             <label for="slam_rage_thresh_dd">Cast slam after a melee hit if rage is above:</label>
             <input type="number" id="slam_rage_thresh_dd" name="quantity" min="0" max="100" value="0"><br>

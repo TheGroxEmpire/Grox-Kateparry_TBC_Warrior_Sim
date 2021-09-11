@@ -53,7 +53,16 @@
         "unordered_set": "cpp",
         "numeric": "cpp",
         "random": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "bit": "cpp",
+        "bitset": "cpp",
+        "codecvt": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "cstring": "cpp",
+        "regex": "cpp",
+        "ranges": "cpp",
+        "cinttypes": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled",
     "cmake.configureOnOpen": false,

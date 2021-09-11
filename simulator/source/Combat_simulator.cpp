@@ -407,7 +407,7 @@ bool Combat_simulator::start_cast_slam(bool mh_swing, const Weapon_sim& weapon)
             logger_.print("Starting to cast slam.", " Latency: ", config.combat.slam_latency, " ms");
             slam_manager.cast_slam(time_keeper_.time + config.combat.slam_latency);
             time_keeper_.global_cast(1500 + config.combat.slam_latency);
-            spend_rage(15); // reserve
+            spend_rage(15); // reserve slam cost, to prevent usage while slam is casting (e.g. use effects)
             return true;
         }
     }
@@ -1168,16 +1168,20 @@ void Combat_simulator::simulate(const Character& character, const std::function<
                     continue; // the swing timer is effectively stopped while slam is casting
                 }
 
-                gain_rage(15); // unreserve
+                gain_rage(15); // unreserve slam cost
                 slam(state);
                 slam_manager.finish_slam();
 
                 state.main_hand_weapon.next_swing = from_offset(1000 * state.main_hand_weapon.swing_speed / (1 + state.special_stats.haste));
-                oldHaste = state.special_stats.haste; // keep update_swing_timer() from applying haste changes again (they're already in)
+                if (state.is_dual_wield)
+                {
+                    state.off_hand_weapon.next_swing = from_offset(1000 * state.off_hand_weapon.swing_speed / (1 + state.special_stats.haste));
+                }
+                oldHaste = state.special_stats.haste; // keep update_swing_timer() from applying haste changes again
             }
 
             bool mh_swing = state.main_hand_weapon.next_swing == time_keeper_.time;
-            bool oh_swing = state.is_dual_wield ? state.off_hand_weapon.next_swing == time_keeper_.time : false;
+            bool oh_swing = state.is_dual_wield && state.off_hand_weapon.next_swing == time_keeper_.time;
 
             if (mh_swing)
             {
@@ -1333,7 +1337,7 @@ void Combat_simulator::execute_phase(Sim_state& state, bool mh_swing)
         }
     }
 
-    if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam && config.combat.use_sl_in_exec_phase)
+    if (config.combat.use_slam && config.combat.use_sl_in_exec_phase)
     {
         assert(!slam_manager.is_slam_casting());
         if (rage >= 15)
@@ -1420,7 +1424,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
         }
     }
 
-    if (state.main_hand_weapon.weapon_socket == Weapon_socket::two_hand && config.combat.use_slam)
+    if (config.combat.use_slam)
     {
         assert(!slam_manager.is_slam_casting());
         if (rage >= 15)

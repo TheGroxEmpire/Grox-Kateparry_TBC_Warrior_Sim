@@ -105,8 +105,8 @@ double get_hit_effect_ap_equivalent(const Hit_effect& hit_effect, double total_a
     }
     else if (hit_effect.type == Hit_effect::Type::extra_hit)
     {
-        // Estimate extra hit as 75% the value of crit, since abilities might reset swing to early
-        hit_effects_ap += 100.0 * hit_effect.probability * swing_speed * crit_w * factor * 0.75;
+        // Estimate extra hit as crit
+        hit_effects_ap += 100.0 * hit_effect.probability * swing_speed * crit_w * factor;
     }
     else if (hit_effect.type == Hit_effect::Type::stat_boost)
     {
@@ -222,7 +222,7 @@ double get_hit_crit_expertise_ap_equivalent(const Special_stats& special_stats, 
     double ap_from_expertise{};
     if (dodge_chance > 0)
     {
-        ap_from_expertise = special_stats.expertise * expertise_w;
+        ap_from_expertise = int(special_stats.expertise) * 0.25 * expertise_w;
     }
     else
     {
@@ -243,7 +243,7 @@ double estimate_special_stats_high(const Special_stats& special_stats)
                        special_stats.damage_mod_physical * 3000 * special_stats.critical_strike / 100;
 
     high_estimation +=
-        special_stats.attack_power + special_stats.hit * hit_w + special_stats.critical_strike * crit_w;
+        special_stats.attack_power + special_stats.hit * hit_w + special_stats.critical_strike * crit_w + special_stats.expertise * expertise_w;
     return high_estimation;
 }
 
@@ -257,7 +257,7 @@ double estimate_special_stats_low(const Special_stats& special_stats)
                       special_stats.damage_mod_physical * 1500 * special_stats.critical_strike / 100;
 
     low_estimation += special_stats.attack_power + special_stats.hit * hit_w_cap +
-                      special_stats.critical_strike * crit_w_cap;
+                      special_stats.critical_strike * crit_w_cap + special_stats.expertise + expertise_w;
     return low_estimation;
 }
 
@@ -271,6 +271,7 @@ bool estimate_special_stats_smart_no_skill(const Special_stats& special_stats1, 
     diff.hit > 0 ? res_2.hit = diff.hit : res_1.hit = -diff.hit;
     diff.attack_power > 0 ? res_2.attack_power = diff.attack_power : res_1.attack_power = -diff.attack_power;
     diff.bonus_damage > 0 ? res_2.bonus_damage = diff.bonus_damage : res_1.bonus_damage = -diff.bonus_damage;
+    diff.expertise > 0 ? res_2.expertise = diff.expertise : res_1.expertise = -diff.expertise;
     double ap_1 = estimate_special_stats_high(res_1);
     double ap_2 = estimate_special_stats_low(res_2);
     return ap_2 > ap_1;

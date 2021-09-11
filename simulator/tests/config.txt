@@ -624,7 +624,7 @@ use_whirlwind use_whirlwind
 use_heroic_strike use_heroic_strike
 deep_wounds deep_wounds
 first_global_sunder first_global_sunder
-use_slam use_slam
+use_slam
 use_mortal_strike use_mortal_strike
 use_sweeping_strikes use_sweeping_strikes
 race_dd human

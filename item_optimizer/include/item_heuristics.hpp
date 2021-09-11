@@ -7,11 +7,11 @@
 #include <string>
 #include <vector>
 
-constexpr double crit_w = 35;
+constexpr double crit_w = 40;
 constexpr double crit_w_cap = 25;
 constexpr double hit_w = 45;
-constexpr double hit_w_cap = 10;
-constexpr double expertise_w = 25;
+constexpr double hit_w_cap = 15;
+constexpr double expertise_w = 10;
 constexpr double ap_per_coh = 50 / 6.2;
 
 double get_character_ap_equivalent(const Special_stats& special_stats, const Weapon& mh_wep, const Weapon& oh_wep,

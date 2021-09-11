@@ -448,7 +448,7 @@ std::string compute_talent_weights(Combat_simulator& sim, const Character& chara
                                               &Character::talents_t::improved_mortal_strike, 5);
     }
 
-    if (config.combat.use_slam && !character.is_dual_wield())
+    if (config.combat.use_slam)
     {
         talents_info += compute_talent_weight(sim, character, base_dps, "Improved Slam",
                                               &Character::talents_t::improved_slam, 2);
