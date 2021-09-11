@@ -36,10 +36,10 @@ std::string string_with_precision(int amount)
     return stream.str();
 }
 
-std::string string_with_precision(double amount, size_t precision)
+std::string string_with_precision(double amount, int precision)
 {
     std::ostringstream stream;
-    stream << std::setprecision(precision) << amount;
+    stream << std::fixed << std::setprecision(precision) << amount;
     return stream.str();
 }
 
