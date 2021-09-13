@@ -922,7 +922,6 @@ void Combat_simulator::simulate(const Character& character, int n_simulations, c
     simulate(character, false, false);
 }
 
-
 // TODO(vigo) consider passing in both Combat_simulator_config
 void Combat_simulator::simulate(const Character& character, bool log_data, bool reset_dps)
 {

@@ -437,8 +437,10 @@ struct Weapon
 
 std::ostream& operator<<(std::ostream& os, const Socket& socket);
 
+std::string friendly_name(const Socket& socket);
 std::string operator+(std::string& string, const Socket& socket);
 
+std::string friendly_name(const Weapon_socket& socket);
 std::string operator+(std::string& string, const Weapon_socket& socket);
 
 #endif // WOW_SIMULATOR_ITEM_HPP

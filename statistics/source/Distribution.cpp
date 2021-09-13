@@ -5,6 +5,7 @@
 
 void Distribution::add_sample(const double sample)
 {
+    last_sample_ = sample;
     // Welford's online algorithm, from https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
     n_samples_ += 1;
     auto delta = sample - mean_;

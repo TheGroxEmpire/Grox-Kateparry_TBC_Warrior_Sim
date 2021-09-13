@@ -151,28 +151,6 @@ void item_upgrades(std::string& item_strengths_string, Character character_new, 
     }
 }
 
-void maybe_equalize_weapon_specs(Character& c)
-{
-    const auto& mh = c.get_weapon_from_socket(Socket::main_hand);
-    if (c.is_dual_wield())
-    {
-        const auto& oh = c.get_weapon_from_socket(Socket::off_hand);
-        if (mh.type != oh.type) return;
-    }
-    switch (mh.type) {
-    case Weapon_type::sword:
-        c.talents.mace_specialization = c.talents.poleaxe_specialization = c.talents.sword_specialization;
-        break;
-    case Weapon_type::mace:
-        c.talents.sword_specialization = c.talents.poleaxe_specialization = c.talents.mace_specialization;
-        break;
-    case Weapon_type::axe:
-        c.talents.sword_specialization = c.talents.mace_specialization = c.talents.poleaxe_specialization;
-        break;
-    default:
-        return;
-    }
-}
 
 void item_upgrades_wep(std::string& item_strengths_string, Character character_new, Item_optimizer& item_optimizer,
                        Armory& armory, Combat_simulator& simulator, const Distribution& base_dps,
@@ -1073,7 +1051,11 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         }
         if (String_helpers::find_string(input.options, "wep_strengths"))
         {
-            maybe_equalize_weapon_specs(character_new);
+            const auto& tl = character_new.talents;
+            if (tl.sword_specialization != tl.mace_specialization || tl.sword_specialization != tl.poleaxe_specialization)
+            {
+                item_strengths_string += "Consider comparing weapons with all weapon specializations set to the same value (e.g. 5/5)<br>";
+            }
 
             if (is_dual_wield)
             {
@@ -1117,7 +1099,9 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
         config.display_combat_debug = true;
         Combat_simulator debug_sim{};
         debug_sim.set_config(config);
-        debug_sim.simulate(character, [base_dps](const auto& d) { return std::abs(d.mean() - base_dps.mean()) < q95 * base_dps.std_of_the_mean(); });
+        debug_sim.simulate(character, [base_dps](const Distribution& d) {
+            return std::abs(d.last_sample() - base_dps.mean()) < q95 * base_dps.std_of_the_mean();
+        });
         debug_topic = debug_sim.get_debug_topic();
 
         debug_topic += "<br><br>";
