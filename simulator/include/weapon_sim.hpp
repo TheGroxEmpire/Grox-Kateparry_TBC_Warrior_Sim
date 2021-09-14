@@ -26,7 +26,6 @@ public:
     Weapon_type weapon_type;
     Weapon_socket weapon_socket;
     std::vector<Hit_effect> hit_effects;
-    std::string socket_name;
 };
 
 #endif // WOW_SIMULATOR_WEAPON_SIM_HPP

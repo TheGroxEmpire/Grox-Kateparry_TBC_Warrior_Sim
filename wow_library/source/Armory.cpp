@@ -317,9 +317,6 @@ void Armory::compute_total_stats(Character& character) const
             total_attributes += weapon.buff.attributes;
             total_special_stats += weapon.buff.special_stats;
 
-            weapon.min_damage += weapon.buff.bonus_damage;
-            weapon.max_damage += weapon.buff.bonus_damage;
-
             if (weapon.buff.hit_effect.type != Hit_effect::Type::none)
             {
                 weapon.hit_effects.emplace_back(weapon.buff.hit_effect);
