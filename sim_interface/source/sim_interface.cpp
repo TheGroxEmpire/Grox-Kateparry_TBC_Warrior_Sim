@@ -1023,7 +1023,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             const auto& tl = character_new.talents;
             if (tl.sword_specialization != tl.mace_specialization || tl.sword_specialization != tl.poleaxe_specialization)
             {
-                item_strengths_string += "Consider comparing weapons with all weapon specializations set to the same value (e.g. 5/5)<br>";
+                item_strengths_string += "Consider comparing weapons with all weapon specializations set to the same value (e.g. 5/5).<br><br>";
             }
 
             if (is_dual_wield)

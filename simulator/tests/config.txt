@@ -13,7 +13,7 @@ ring2_dd shapeshifters_signet
 trinket1_dd bloodlust_brooch
 trinket2_dd dragonspine_trophy
 ranged_dd mamas_insurance
-main_hand_dd dragonmaw
+main_hand_dd dragonstrike
 off_hand_dd spiteblade
 two_hand_dd none
 beast_lord_helm false
@@ -627,4 +627,7 @@ first_global_sunder first_global_sunder
 use_slam
 use_mortal_strike use_mortal_strike
 use_sweeping_strikes use_sweeping_strikes
+debug_on debug_on
+wep_strengths wep_strengths
+item_strengths item_strengths
 race_dd human
