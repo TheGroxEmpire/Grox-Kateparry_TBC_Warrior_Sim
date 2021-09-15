@@ -19,6 +19,7 @@ struct Sim_output
             std::vector<std::string> proc_counter,
             std::vector<std::string> stat_weights,
             std::vector<std::string> extra_stats,
+            std::string histogram_details,
             std::vector<double> mean_dps,
             std::vector<double> std_dps,
             std::vector<std::string> messages)
@@ -33,6 +34,7 @@ struct Sim_output
             proc_counter(std::move(proc_counter)),
             stat_weights(std::move(stat_weights)),
             extra_stats(std::move(extra_stats)),
+            histogram_details(std::move(histogram_details)),
             mean_dps(std::move(mean_dps)),
             std_dps(std::move(std_dps)),
             messages(std::move(messages)) {}
@@ -47,6 +49,7 @@ struct Sim_output
     std::vector<std::string> proc_counter;
     std::vector<std::string> stat_weights;
     std::vector<std::string> extra_stats;
+    std::string histogram_details;
     std::vector<double> mean_dps{};
     std::vector<double> std_dps{};
     std::vector<std::string> messages;

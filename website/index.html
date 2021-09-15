@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
+
+<head>
+    <title>TBC DPS Warrior Sim</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="emscripten/website/wasm_interface.js"></script>
+    <script src="js/talents.js"></script>
+    <script src="js/load_presets.js"></script>
+    <script src="js/gems.js"></script>
+    <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN4PFR8SWH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-NN4PFR8SWH');
+    </script>
+
+    <style>
     body {
         font-family: Arial;
     }
@@ -289,38 +310,17 @@
         transition: border-color .2s ease-in;
     }
 </style>
-
-<head>
-    <title>TBC DPS Warrior Sim</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="emscripten/website/wasm_interface.js"></script>
-    <script src="js/talents.js"></script>
-    <script src="js/load_presets.js"></script>
-    <script src="js/gems.js"></script>
-    <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN4PFR8SWH"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-NN4PFR8SWH');
-    </script>
-
 </head>
-
-<h1>TBC DPS Warrior Sim</h1>
-<h4>Ported from Kateparry's WoW Fury Sim</h4>
-<h4>GroxEmpire | Grahand - BloodsailBuccaneers</h4>
 
 <body style="background-color:#bfbfbf;"
       onload="openTab('event', 'Simulator');open_armor();show_div('cleave_if_adds', 'cleave_div');
       show_div('use_hamstring', 'hamstring_div');show_div('multi_target_mode', 'multi_target_div');
       show_div('periodic_damage', 'periodic_damage_div');show_div('ability_queue', 'ability_queue_div');
       show_div('dual_wield_mode', 'dual_wield_div');show_div('use_hs_in_exec_phase', 'hs_exec_div');displayTalentBootup();calcTotalTalents();load_talent_dual_wield_fury();">
+
+<h1>TBC DPS Warrior Sim</h1>
+<h4>Ported from Kateparry's WoW Fury Sim</h4>
+<h4>GroxEmpire | Grahand - BloodsailBuccaneers</h4>
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Simulator')">Simulator</button>
@@ -4852,6 +4852,7 @@
     </div>
 
     <canvas id="line-chart-hist"></canvas>
+    <p id="output5"></p>
 
     <p></p>
     <canvas id="line-chart-fight"></canvas>
@@ -5406,6 +5407,7 @@
             }
             document.getElementById("output3").innerHTML = "";
             document.getElementById("output4").innerHTML = "";
+            document.getElementById("output5").innerHTML = "";
 
         } else {
             let wow_input = {
@@ -5487,6 +5489,9 @@
 
             // Crit cap details:
             document.getElementById("output4").innerHTML = result['extra_stats'].get(0);
+
+            // DPS histogram details:
+            document.getElementById("output5").innerHTML = result['histogram_details'];
 
             if (document.getElementById("debug_on").checked) {
                 document.getElementById("combat_debug").style.display = "block";
