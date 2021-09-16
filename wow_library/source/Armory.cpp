@@ -4,8 +4,6 @@
 #include "find_values.hpp"
 #include "string_helpers.hpp"
 
-#include <unordered_map>
-
 Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type)
 {
     switch (socket)
@@ -652,6 +650,52 @@ std::vector<Armor> Armory::get_items_in_socket(const Socket socket) const
         std::cout << "ERROR: incorrect item socket provided: " << socket << "\n";
         assert(false);
     }
+}
+
+std::unordered_map<std::string, const Armor*> Armory::build_armor_index() const
+{
+    const std::vector<Armor>* slots[] {
+        &helmet_t, &neck_t, &shoulder_t, &back_t, &chest_t, &wrists_t, &hands_t,
+        &belt_t, &legs_t, &boots_t, &ring_t, &trinket_t, &ranged_t
+    };
+
+    std::unordered_map<std::string, const Armor*> index{};
+    for (const auto& slot : slots)
+    {
+        for (const auto& a : *slot)
+        {
+            const auto& r = index.emplace(std::make_pair(a.name, &a));
+            if (!r.second)
+            {
+                const auto& clash = *r.first->second;
+                std::cerr << "ERROR: duplicate armor name " << a.name << "@" << a.socket << " clashes w/ " << clash.name << "@" << clash.socket << std::endl;
+            }
+        }
+    }
+    return index;
+}
+
+std::unordered_map<std::string, const Weapon*> Armory::build_weapons_index() const
+{
+    const std::vector<Weapon>* slots[] {
+        &swords_t, &maces_t, &axes_t, &fists_t, &daggers_t,
+        &two_handed_swords_t, &two_handed_maces_t, &two_handed_axes_polearm_t
+    };
+
+    std::unordered_map<std::string, const Weapon*> index{};
+    for (const auto& slot : slots)
+    {
+        for (const auto& w : *slot)
+        {
+            const auto& r = index.emplace(std::make_pair(w.name, &w));
+            if (!r.second)
+            {
+                const auto& clash = *r.first->second;
+                std::cerr << "ERROR: duplicate weapon name " << w.name << "@" << w.socket << " clashes w/ " << clash.name << "@" << clash.socket << std::endl;
+            }
+        }
+    }
+    return index;
 }
 
 Armor Armory::find_armor(const Socket socket, const std::string& name) const

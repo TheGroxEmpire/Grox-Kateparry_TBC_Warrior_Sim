@@ -41,6 +41,9 @@ TEST_F(Sim_fixture, test_via_config)
     std::vector<std::string> talent_string;
     std::vector<int> talent_val;
 
+    std::vector<std::string> multi_armor;
+    std::vector<std::string> multi_weapons;
+
     const std::vector<std::string> empty;
 
     std::regex LINE_RE(R"(^(\w+)\s+(.+)$)");
@@ -54,6 +57,7 @@ TEST_F(Sim_fixture, test_via_config)
     std::regex KEY_TALENTS(R"(_talent$)");
 
     auto has_seen_talents = false;
+    auto has_seen_armor_weapons_transition = false;
 
     std::string line;
     while (std::getline(ifs, line))
@@ -64,6 +68,8 @@ TEST_F(Sim_fixture, test_via_config)
         auto key = sm[1].str();
         auto value = sm[2].str();
 
+        if (key == "none" && value == "false") has_seen_armor_weapons_transition = true;
+
         if (value == "false" || value == "none") continue;
 
         if (std::regex_search(key, KEY_ARMOR))
@@ -73,6 +79,14 @@ TEST_F(Sim_fixture, test_via_config)
         else if (std::regex_search(key, KEY_WEAPONS))
         {
             weapons.emplace_back(value);
+        }
+        else if (value == "true" && !has_seen_armor_weapons_transition)
+        {
+            multi_armor.emplace_back(key);
+        }
+        else if (value == "true" && has_seen_armor_weapons_transition)
+        {
+            multi_weapons.emplace_back(key);
         }
         else if (std::regex_search(key, KEY_ENCHANTS))
         {
@@ -112,72 +126,110 @@ TEST_F(Sim_fixture, test_via_config)
         }
     }
 
-    Sim_input sim_input(race, armor, weapons,
-                        buffs, enchants, gems,
-                        stat_weights,
-                        options, float_options_string, float_options_val,
-                        talent_string, talent_val,
-                        empty, empty);
-
-    Sim_interface sim_interface;
-
-    auto start = std::chrono::steady_clock::now();
-    const auto& sim_output = sim_interface.simulate(sim_input);
-    auto end = std::chrono::steady_clock::now();
-    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "dmg_sources" << std::endl;
-    for (const auto& ds : sim_output.dmg_sources)
+    if (multi_armor.empty() && multi_weapons.empty())
     {
-        std::cout << ds << std::endl;
-    }
-    std::cout << std::endl;
+        Sim_input sim_input(race, armor, weapons,
+                            buffs, enchants, gems,
+                            stat_weights,
+                            options, float_options_string, float_options_val,
+                            talent_string, talent_val,
+                            empty, empty);
 
-    std::cout << "aura_uptimes" << std::endl;
-    for (const auto& s : sim_output.aura_uptimes)
-    {
-        std::cout << s << std::endl;
-    }
-    std::cout << std::endl;
+        Sim_interface sim_interface;
 
-    std::cout << "mean_dps" << std::endl;
-    for (const auto& v : sim_output.mean_dps)
-    {
-        std::cout << v << std::endl;
-    }
-    std::cout << std::endl;
+        auto start = std::chrono::steady_clock::now();
+        const auto& sim_output = sim_interface.simulate(sim_input);
+        auto end = std::chrono::steady_clock::now();
 
-    std::cout << "std_dps" << std::endl;
-    for (const auto& v : sim_output.std_dps)
-    {
-        std::cout << v << std::endl;
-    }
-    std::cout << std::endl;
+        std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+        std::cout << std::endl;
 
-    std::cout << "stat_weights" << std::endl;
-    for (const auto& v : sim_output.stat_weights)
-    {
-        std::cout << v << std::endl;
-    }
-    std::cout << std::endl;
-
-    std::cout << "use_effect_order_string" << std::endl;
-    for (const auto& v : sim_output.use_effect_order_string)
-    {
-        std::cout << v << std::endl;
-    }
-
-
-
-    /*
-    std::cout << "messages" << std::endl;
-    for (const auto& m : sim_output.extra_stats)
-    {
-        for (size_t ppos = 0, pos = m.find("<br>", ppos); pos != std::string::npos; ppos = pos + 4, pos = m.find("<br>", ppos))
+        std::cout << "dmg_sources" << std::endl;
+        for (const auto& ds : sim_output.dmg_sources)
         {
-            std::cout << m.substr(ppos, pos - ppos) << std::endl;
+            std::cout << ds << std::endl;
+        }
+        std::cout << std::endl;
+
+        std::cout << "aura_uptimes" << std::endl;
+        for (const auto& s : sim_output.aura_uptimes)
+        {
+            std::cout << s << std::endl;
+        }
+        std::cout << std::endl;
+
+        std::cout << "mean_dps" << std::endl;
+        for (const auto& v : sim_output.mean_dps)
+        {
+            std::cout << v << std::endl;
+        }
+        std::cout << std::endl;
+
+        std::cout << "std_dps" << std::endl;
+        for (const auto& v : sim_output.std_dps)
+        {
+            std::cout << v << std::endl;
+        }
+        std::cout << std::endl;
+
+        std::cout << "stat_weights" << std::endl;
+        for (const auto& v : sim_output.stat_weights)
+        {
+            std::cout << v << std::endl;
+        }
+        std::cout << std::endl;
+
+        std::cout << "use_effect_order_string" << std::endl;
+        for (const auto& v : sim_output.use_effect_order_string)
+        {
+            std::cout << v << std::endl;
+        }
+
+        /*
+        std::cout << "messages" << std::endl;
+        for (const auto& m : sim_output.extra_stats)
+        {
+            for (size_t ppos = 0, pos = m.find("<br>", ppos); pos != std::string::npos; ppos = pos + 4, pos = m.find("<br>", ppos))
+            {
+                std::cout << m.substr(ppos, pos - ppos) << std::endl;
+            }
+        }
+        */
+    }
+    else
+    {
+        Sim_input_mult sim_input_mult(race, multi_armor, multi_weapons,
+                                      buffs, enchants, gems,
+                                      options, float_options_string, float_options_val,
+                                      talent_string, talent_val);
+
+        Sim_interface sim_interface;
+
+        auto start = std::chrono::steady_clock::now();
+        const auto& sim_output_mult = sim_interface.simulate_mult(sim_input_mult);
+        auto end = std::chrono::steady_clock::now();
+        std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+        std::cout << std::endl;
+
+        std::cout << "keepers" << std::endl;
+        for (const auto& k : sim_output_mult.keepers)
+        {
+            for (const auto& m : k)
+            {
+                for (size_t ppos = 0, pos = m.find("<br>", ppos); pos != std::string::npos; ppos = pos + 4, pos = m.find("<br>", ppos))
+                {
+                    std::cout << m.substr(ppos, pos - ppos) << std::endl;
+                }
+            }
+        }
+
+        std::cout << "messages" << std::endl;
+        for (const auto& m : sim_output_mult.messages)
+        {
+            for (size_t ppos = 0, pos = m.find("<br>", ppos); pos != std::string::npos; ppos = pos + 4, pos = m.find("<br>", ppos))
+            {
+                std::cout << m.substr(ppos, pos - ppos) << std::endl;
+            }
         }
     }
-    */
 }

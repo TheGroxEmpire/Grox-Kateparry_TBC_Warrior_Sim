@@ -2,6 +2,7 @@
 #define WOW_SIMULATOR_ARMORY_HPP
 
 #include "Item.hpp"
+#include <unordered_map>
 
 class Character;
 
@@ -461,8 +462,7 @@ struct Armory
                 {"fel_leather_boots", Attributes{0.0, 0.0}, Special_stats{0.7699275362318841, 1.585288522511097, 36.0, 0, 0.0}, Socket::boots}, 
                 {"edgewalker_longboots", Attributes{0.0, 29.0}, Special_stats{0.0, 0.8243500317057705, 44.0, 0, 0.0}, Socket::boots}, 
                 {"ironstriders_of_urgency", Attributes{33.0, 20.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::boots}, 
-                {"vortex_walking_boots", Attributes{28.0, 0.0}, Special_stats{0.8605072463768116, 0.0, 0.0, 0, 0.0}, Socket::boots}, 
-                {"fiend_slayer_boots", Attributes{0.0, 26.0}, Special_stats{0.0, 1.077996195307546, 34.0, 0, 0.0}, Socket::boots}, 
+                {"fiend_slayer_boots", Attributes{0.0, 26.0}, Special_stats{0.0, 1.077996195307546, 34.0, 0, 0.0}, Socket::boots},
                 {"rapscallion_boots", Attributes{0.0, 0.0}, Special_stats{1.0869565217391306, 0.0, 82.0, 0, 0.0}, Socket::boots}, 
                 {"feroucious_swift_kickers", Attributes{0.0, 0.0}, Special_stats{0.7246376811594204, 0.0, 58.0, 0, 0.0}, Socket::boots}, 
                 {"boots_of_the_unjust", Attributes{0.0, 0.0}, Special_stats{0.8605072463768116, 0.8243500317057705, 64.0, 0, 0.0}, Socket::boots}, 
@@ -748,9 +748,8 @@ struct Armory
                 // Phase 2
                 // main_hand / one_hand
                 {"talon_of_the_phoenix", Attributes{0.0, 0.0}, Special_stats{0.8605, 0.9512, 52.0, 0, 0.0}, 2.7, 182, 339, Weapon_socket::main_hand, Weapon_type::unarmed},
-
                 // off_hand
-                {"claw_of_the_phoenix", Attributes{0.0, 25.0}, Special_stats{0.0, 0.0, 40, 0, 0.0}, 1.5, 101, 189, Weapon_socket::main_hand, Weapon_type::unarmed}, 
+                {"claw_of_the_phoenix", Attributes{0.0, 21.0}, Special_stats{0.0, 0.0, 40, 0, 0.0}, 1.5, 101, 189, Weapon_socket::off_hand, Weapon_type::unarmed},
             };
 
     std::vector<Set_bonus> set_bonuses{
@@ -768,6 +767,9 @@ struct Armory
     [[nodiscard]] std::vector<Armor> get_items_in_socket(Socket socket) const;
 
     [[nodiscard]] std::vector<Weapon> get_weapon_in_socket(Weapon_socket socket) const;
+
+    [[nodiscard]] std::unordered_map<std::string, const Armor*> build_armor_index() const;
+    [[nodiscard]] std::unordered_map<std::string, const Weapon*> build_weapons_index() const;
 
     [[nodiscard]] Armor find_armor(Socket socket, const std::string &name) const;
 

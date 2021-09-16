@@ -75,7 +75,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
 {
     clock_t start_time_main = clock();
     Buffs buffs{};
-   // Gems gems{};
+    // Gems gems{};
     Item_optimizer item_optimizer;
 
     const auto& temp_buffs = parse_buff_options(item_optimizer.armory, input);
@@ -106,7 +106,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     item_optimizer.buffs = buffs;
     item_optimizer.buffs_vec = temp_buffs;
     item_optimizer.ench_vec = input.enchants;
-  // item_optimizer.gems = gems;
+    // item_optimizer.gems = gems;
     item_optimizer.gem_vec = input.gems;
     item_optimizer.talent_vec = input.talent_string;
     item_optimizer.talent_val_vec = input.talent_val;
@@ -246,7 +246,6 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         keepers.reserve(item_optimizer.total_combinations);
         for (size_t i = 0; i < item_optimizer.total_combinations; ++i)
         {
-            Character character = item_optimizer.construct(i);
             keepers.emplace_back(i, 0, 0, 0);
         }
     }

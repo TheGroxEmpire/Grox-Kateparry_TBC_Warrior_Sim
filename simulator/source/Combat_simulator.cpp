@@ -918,7 +918,7 @@ void Combat_simulator::update_swing_timers(Sim_state& state, double oldHaste)
 void Combat_simulator::simulate(const Character& character, int n_simulations, const Distribution& init_distribution)
 {
     dps_distribution_ = init_distribution;
-    config.n_batches = n_simulations;
+    config.n_batches = init_distribution.samples() + n_simulations;
     simulate(character, false, false);
 }
 
