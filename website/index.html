@@ -3,8 +3,7 @@
 
 <head>
     <title>TBC DPS Warrior Sim</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script src="emscripten/website/wasm_interface.js"></script>
     <script src="js/talents.js"></script>
     <script src="js/load_presets.js"></script>
@@ -5249,11 +5248,11 @@
     }
 
     function show_loader() {
-        $("#loader").addClass("loader");
+        document.getElementById("loader").className = "loader";
     }
 
     function hide_loader() {
-        $("#loader").removeClass("loader");
+        document.getElementById("loader").className = "";
     }
 
     async function run_sim() {
@@ -5583,6 +5582,8 @@
                 time_stamps.push(time_stamps[j - 1] + .50);
             }
 
+            window.emResult = result;
+
             let hist_x = [];
             let hist_y = [];
             for (let i = 0; i < result['hist_x'].size(); i++) {
@@ -5709,33 +5710,44 @@
                 )
             }
 
-            Chart.defaults.global.defaultFontSize = 36;
-            Chart.defaults.global.defaultFontStyle = 'Bold';
+            Chart.defaults.global.defaultFontColor = "black";
+            Chart.defaults.global.defaultFontFamily = "Arial, Helvetica, sans-serif";
+            Chart.defaults.global.defaultFontSize = 24;
+            Chart.defaults.global.defaultFontStyle = "normal";
+            Chart.defaults.global.title.fontColor = "black";
+            Chart.defaults.global.title.fontSize = 48;
+            Chart.defaults.global.title.display = true;
             Chart.defaults.scale.gridLines.color = "black";
 
+            let total = hist_y.reduce((a, v) => a + v);
+
+            let sum = 0;
+            let colorFunc = function(ctx) {
+                if (ctx.dataIndex === undefined) return;
+                if (ctx.dataset === undefined) return;
+
+                if (ctx.dataIndex === 0) sum = 0;
+
+                let oldSum = sum;
+                sum += ctx.dataset.data[ctx.dataIndex];
+                if (sum < 0.25 * total || oldSum > 0.75 * total) {
+                    return "#3e95cd";
+                }
+                return "#64aad7";
+            };
+
             line_chart_hist = new Chart(document.getElementById("line-chart-hist"), {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: hist_x,
                     datasets: [{
                         data: hist_y,
                         label: "Simulator results",
-                        borderWidth: 10,
-                        borderColor: "#3e95cd",
-                        fill: origin,
-                        backgroundColor: "#3e95cd"
+                        backgroundColor: colorFunc
                     }]
                 },
                 options: {
-                    legend: {
-                        labels: {
-                            fontColor: "black",
-                        }
-                    },
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Damage histogram'
                     },
                     scales: {
@@ -5743,13 +5755,9 @@
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0.5)",
                             },
-                            ticks: {
-                                fontColor: "black",
-                            },
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Frequency',
-                                fontColor: "black",
                             }
                         }],
                         xAxes: [{
@@ -5757,12 +5765,10 @@
                                 color: "rgba(0, 0, 0, 0.5)",
                             },
                             ticks: {
-                                fontColor: "black",
                                 maxTicksLimit: 30,
-                                maxRotation: 0
+                                maxRotation: 45
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'DPS'
                             }
@@ -5783,16 +5789,8 @@
                     datasets: data_damage_time_lapse
                 },
                 options: {
-                    legend: {
-                        labels: {
-                            fontColor: "black",
-                        }
-                    },
                     bezierCurve: false,
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Fight time lapse (DPS)'
                     },
                     scales: {
@@ -5800,11 +5798,7 @@
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
-                            ticks: {
-                                fontColor: "black",
-                            },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Average damage'
                             }
@@ -5817,10 +5811,8 @@
                                 autoSkip: true,
                                 maxTicksLimit: 30,
                                 maxRotation: 0,
-                                fontColor: "black",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Time'
                             }
@@ -5842,15 +5834,7 @@
                     datasets: data_damage_time_lapse_cum
                 },
                 options: {
-                    legend: {
-                        labels: {
-                            fontColor: "black",
-                        }
-                    },
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Fight time lapse'
                     },
                     scales: {
@@ -5859,12 +5843,8 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Cumulative damage'
-                            },
-                            ticks: {
-                                fontColor: "black",
                             },
                         }],
                         xAxes: [{
@@ -5872,12 +5852,10 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             ticks: {
-                                fontColor: "black",
                                 maxTicksLimit: 30,
                                 maxRotation: 0
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Time'
                             }
@@ -5900,47 +5878,36 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Use Effect Schedule'
                     },
                     scales: {
                         yAxes: [{
                             stacked: true,
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Use Effect'
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }],
                         xAxes: [{
                             stacked: true,
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Time'
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }]
                     }
                 }
@@ -5967,44 +5934,33 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'DPS from different sources'
                     },
                     scales: {
                         yAxes: [{
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'DPS'
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }],
                         xAxes: [{
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: false,
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }]
                     }
                 }
@@ -6030,9 +5986,6 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontColor: "black",
-                        fontSize: 60,
-                        display: true,
                         text: 'Aura uptime'
                     },
                     scales: {
@@ -6041,26 +5994,21 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: '%',
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }],
                         xAxes: [{
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                            }
                         }],
                     }
                 }
@@ -6086,9 +6034,6 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontColor: "black",
-                        fontSize: 60,
-                        display: true,
                         text: 'Average # of procs'
                     },
                     scales: {
@@ -6097,25 +6042,19 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                            }
                         }],
                         xAxes: [{
                             gridLines: {
-                                fontColor: "black",
                                 color: "rgba(0, 0, 0, 0)",
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                            }
                         }],
                     }
                 }

@@ -1122,10 +1122,10 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     auto p95 = Statistics::find_cdf_quantile(Statistics::get_two_sided_p_value(0.95), 0.01);
 
     std::string histogram_details(
-        "Mean is " + String_helpers::string_with_precision(base_dps.mean(), 1) + ", " +
-        "Standard deviation is " + String_helpers::string_with_precision(base_dps.std(), 1) +  + ".<br><ul>" +
+        "Mean is " + String_helpers::string_with_precision(base_dps.mean(), 1) + " DPS, " +
+        "Standard deviation is " + String_helpers::string_with_precision(base_dps.std(), 1) +  + " DPS.<br><ul>" +
         "<li>5% of all samples are within &plusmn " + String_helpers::string_with_precision(base_dps.std() * p5, 1) + " DPS of the mean." +
-        "<li>50% of all samples are within &plusmn " + String_helpers::string_with_precision(base_dps.std() * p50, 1) + " DPS of the mean." +
+        "<li>50% of all samples are within &plusmn " + String_helpers::string_with_precision(base_dps.std() * p50, 1) + " DPS of the mean (lighter blue above)." +
         "<li>95% of all samples are within &plusmn " + String_helpers::string_with_precision(base_dps.std() * p95, 1) + " DPS of the mean." +
         "</ul><br>");
 
