@@ -526,6 +526,7 @@ struct Armory
                 {"band_of_the_ranger_general", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 1.14140773620799, 56.0, 0, 0.0}, Socket::ring}, 
                 {"ring_of_lethality", Attributes{0.0, 24.0}, Special_stats{0.0, 1.2048192771084338, 50.0, 0, 0.0}, Socket::ring}, 
                 {"ancestral_ring_of_conquest", Attributes{32.0, 21.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::ring},
+                {"veterans_band_of_triumph", Attributes{0.0, 0.0}, Special_stats{0.9963768116, 0.0, 42.0, 0, 0.0}, Socket::neck}, 
             };
 
     std::vector<Armor> trinket_t
@@ -533,6 +534,7 @@ struct Armory
                 // Phase 1
                 {"dragonspine_trophy", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 40.0, 0, 0.0}, Socket::trinket, Set::none, {{"dragonspine_trophy", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .206}, 0, 10, 20, 0, 0, 1, 0, 0, 1}}}, 
                 {"bloodlust_brooch", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 72.0, 0, 0.0}, Socket::trinket, Set::none, {}, {{"bloodlust_brooch", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 278}, 0, 20, 120, true}}}, 
+                {"empty_mug_of_direbrew", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 72.0, 0, 0.0}, Socket::trinket, Set::none, {}, {{"empty_mug_of_direbrew", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 278}, 0, 20, 120, true}}}, 
                 {"hourglass_of_the_unraveller", Attributes{0.0, 0.0}, Special_stats{1.4492753623188408, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::none, {{"hourglass_of_the_unraveller", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 300}, 0, 10, 50, .1}}}, 
                 {"abacus_of_violent_odds", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 64.0, 0, 0.0}, Socket::trinket, Set::none, {}, {{"abacus_of_violent_odds", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 0, 0, .16}, 0, 10, 120, true}}}, 
                 {"bladefists_breadth", Attributes{0.0, 0.0}, Special_stats{1.18, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::none, {}, {{"bladefists_breadth", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 200}, 0, 15, 90, true}}}, 
@@ -714,6 +716,7 @@ struct Armory
                 {"retainers_blade", Attributes{0.0, 22.0}, Special_stats{0.0, 0.0, 0.0}, 1.5, 97, 146, Weapon_socket::one_hand, Weapon_type::dagger},
                 {"guile_of_khoraazi", Attributes{0.0, 19.0}, Special_stats{0.0, 0.0, 38.0}, 1.6, 104, 156, Weapon_socket::one_hand, Weapon_type::dagger},
                 {"feltooth_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.9963768116, 0.0, 34.0}, 1.4, 83, 156, Weapon_socket::one_hand, Weapon_type::dagger},
+                {"fang_of_vashj", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 56.0, 0, 0, 0, 0, 0, 0, 0, 0, 5.326569436}, 1.8, 144, 217, Weapon_socket::one_hand, Weapon_type::dagger},
             };
 
     std::vector<Weapon> maces_t
