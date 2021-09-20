@@ -1,5 +1,5 @@
-#ifndef COVID_OUTPUT_MULT_HPP
-#define COVID_OUTPUT_MULT_HPP
+#ifndef SIM_OUTPUT_MULT_HPP
+#define SIM_OUTPUT_MULT_HPP
 
 #include <string>
 #include <vector>
@@ -17,4 +17,4 @@ struct Sim_output_mult
     std::vector<std::vector<std::string>> keepers;
 };
 
-#endif // COVID_OUTPUT_MULT_HPP
+#endif // SIM_OUTPUT_MULT_HPP

@@ -1,8 +1,10 @@
-#include "../include/damage_sources.hpp"
+#include "damage_sources.hpp"
 
-Damage_sources::Damage_sources(bool keep_history) : keep_history(keep_history)
+std::ostream& operator<<(std::ostream& os, Damage_source damage_source)
 {
-    if (keep_history) damage_instances.reserve(500);
+    static std::string m[] = {"white_mh", "white_oh", "bloodthirst", "execute", "heroic_strike", "cleave",
+                              "whirlwind", "hamstring", "deep_wound", "item_hit_effects", "overpower", "slam", "mortal_strike", "sweeping_strikes"};
+    return os << m[static_cast<size_t>(damage_source)];
 }
 
 Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
@@ -39,13 +41,8 @@ Damage_sources& Damage_sources::operator+(const Damage_sources& rhs)
     return *(this);
 }
 
-void Damage_sources::add_damage(Damage_source source, double damage, double time_stamp)
+void Damage_sources::add_damage(Damage_source source, double damage)
 {
-    if (keep_history)
-    {
-        damage_instances.emplace_back(source, damage, time_stamp);
-    }
-
     switch (source)
     {
     case Damage_source::white_mh:

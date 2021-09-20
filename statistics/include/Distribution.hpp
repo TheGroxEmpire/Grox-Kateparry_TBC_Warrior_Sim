@@ -1,34 +1,37 @@
 #ifndef WOW_SIMULATOR_DISTRIBUTION_HPP
 #define WOW_SIMULATOR_DISTRIBUTION_HPP
 
-#include <cstdint>
 #include <utility>
-#include <iostream>
+#include <ostream>
+#include <cmath>
 
 class Distribution
 {
 public:
     Distribution() = default;
+    Distribution(double mean, double variance, int samples) : n_samples_(samples), mean_(mean), m2_(variance * samples) {}
 
     void add_sample(double sample);
 
-    void reset();
+    [[nodiscard]] int samples() const { return n_samples_; }
+    [[nodiscard]] double mean() const { return mean_; }
 
-    [[nodiscard]] double std_() const;
+    [[nodiscard]] double variance() const { return m2_ / n_samples_; }
+    [[nodiscard]] double std() const { return std::sqrt(m2_ / n_samples_); }
 
-    [[nodiscard]] double std_of_the_mean() const;
+    [[nodiscard]] double var_of_the_mean() const { return m2_ / (static_cast<double>(n_samples_) * n_samples_); }
+    [[nodiscard]] double std_of_the_mean() const { return std::sqrt(m2_) / n_samples_; }
 
-    [[nodiscard]] bool is_normal_distributed() const;
+    [[nodiscard]] double last_sample() const { return last_sample_; }
 
     [[nodiscard]] std::pair<double, double> confidence_interval(double quantile) const;
-
     [[nodiscard]] std::pair<double, double> confidence_interval_of_the_mean(double quantile) const;
-
-    double mean_;
-    double variance_;
-    double max_;
-    double min_;
+private:
     int n_samples_;
+    double mean_;
+    double m2_;
+
+    double last_sample_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Distribution& d);

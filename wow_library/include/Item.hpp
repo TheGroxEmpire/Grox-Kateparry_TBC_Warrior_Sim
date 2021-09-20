@@ -5,6 +5,9 @@
 
 #include <cassert>
 #include <utility>
+#include <cmath>
+
+[[nodiscard]] static int to_millis(double s) { return static_cast<int>(std::rint(1000 * s)); }
 
 enum class Socket
 {
@@ -34,6 +37,8 @@ enum class Weapon_socket
     two_hand
 };
 
+std::ostream& operator<<(std::ostream& os, const Weapon_socket& ws);
+
 enum class Weapon_type
 {
     sword,
@@ -43,6 +48,8 @@ enum class Weapon_type
     unarmed
 };
 
+std::ostream& operator<<(std::ostream& os, const Weapon_type& wt);
+
 enum class Set
 {
     none,
@@ -51,7 +58,6 @@ enum class Set
     doomplate,
     warbringer,
     destroyer,
-    solarian_bs_bonus,
 };
 
 /* enum class Gem_bonus
@@ -108,6 +114,7 @@ struct Gem
     Special_stats special_stats{};
 }; */
 
+
 struct Over_time_effect
 {
     Over_time_effect() = default;
@@ -118,8 +125,8 @@ struct Over_time_effect
         special_stats(special_stats),
         rage_gain(rage_gain),
         damage(damage),
-        interval(interval),
-        duration(duration) {};
+        interval(1000 * interval),
+        duration(1000 * duration) {};
 
     std::string name{};
     Special_stats special_stats{}; // unused (?)
@@ -165,8 +172,8 @@ public:
         attribute_boost(attribute_boost),
         special_stats_boost(special_stats_boost),
         damage(damage),
-        duration(duration),
-        cooldown(cooldown),
+        duration(to_millis(duration)),
+        cooldown(to_millis(cooldown)),
         probability(probability),
         attack_power_boost(attack_power_boost), // unused
         max_charges(max_charges),
@@ -204,8 +211,8 @@ public:
     Attributes attribute_boost{};
     Special_stats special_stats_boost{};
     double damage{};
-    double duration{};
-    double cooldown{};
+    int duration{};
+    int cooldown{};
     double probability{};
     double attack_power_boost{}; // unused; was in use for windfury_totem only
     int max_charges{1}; // used to be "n_targets", and unused; now used for charges (for windfury attack or flurry)
@@ -214,7 +221,7 @@ public:
     bool affects_both_weapons{}; // unused
     int max_stacks{1};
 
-    double time_counter{}; // "next_ready", aka cooldown end
+    int time_counter{}; // "next_ready", aka cooldown end
 
     int procs{}; // statistics
 
@@ -236,36 +243,35 @@ public:
 
     Use_effect() = default;
 
-    Use_effect(std::string name, Effect_socket effect_socket, Attributes attribute_boost,
+    Use_effect(const std::string& name, Effect_socket effect_socket, Attributes attribute_boost,
                Special_stats special_stats_boost, double rage_boost, double duration, double cooldown,
                bool triggers_gcd, std::vector<Hit_effect> hit_effects = std::vector<Hit_effect>(),
-               std::vector<Over_time_effect> over_time_effects = std::vector<Over_time_effect>())
-        : name(std::move(name))
-        , effect_socket(effect_socket)
-        , attribute_boost(attribute_boost)
-        , special_stats_boost(special_stats_boost)
-        , rage_boost(rage_boost)
-        , duration(duration)
-        , cooldown(cooldown)
-        , triggers_gcd(triggers_gcd)
-        , hit_effects(std::move(hit_effects))
-        , over_time_effects(std::move(over_time_effects)){};
+               std::vector<Over_time_effect> over_time_effects = std::vector<Over_time_effect>()) :
+        name(name),
+        effect_socket(effect_socket),
+        rage_boost(rage_boost),
+        duration(to_millis(duration)),
+        cooldown(to_millis(cooldown)),
+        triggers_gcd(triggers_gcd),
+        hit_effects(std::move(hit_effects)),
+        over_time_effects(std::move(over_time_effects)),
+        combat_buff({name, Hit_effect::Type::stat_boost, attribute_boost, special_stats_boost, 0, duration, 0, 0})
+    {}
 
     [[nodiscard]] Special_stats to_special_stats(const Special_stats& multipliers) const
     {
-        return special_stats_boost + attribute_boost.to_special_stats(multipliers);
+        return combat_buff.to_special_stats(multipliers);
     }
 
     std::string name{};
     Effect_socket effect_socket{};
-    Attributes attribute_boost{};
-    Special_stats special_stats_boost{};
     double rage_boost{};
-    double duration{};
-    double cooldown{};
+    int duration{};
+    int cooldown{};
     bool triggers_gcd{};
     std::vector<Hit_effect> hit_effects{};
     std::vector<Over_time_effect> over_time_effects{};
+    Hit_effect combat_buff{};
 };
 
 struct Enchant
@@ -314,14 +320,15 @@ struct Enchant
 
 struct Set_bonus
 {
-    Set_bonus(std::string name, Attributes attributes, Special_stats special_stats, int pieces, Set set)
-        : name(std::move(name)), attributes(attributes), special_stats(special_stats), pieces(pieces), set(set){};
+    Set_bonus(Set set, int pieces, std::string name, Attributes attributes = {}, Special_stats special_stats = {}, Hit_effect hit_effect = {})
+        : set(set), pieces(pieces), name(std::move(name)), attributes(attributes), special_stats(special_stats), hit_effect(std::move(hit_effect)) { }
 
+    Set set;
+    int pieces;
     std::string name;
     Attributes attributes;
     Special_stats special_stats;
-    int pieces;
-    Set set;
+    Hit_effect hit_effect;
 };
 
 struct Buff
@@ -344,37 +351,32 @@ struct Buff
     std::vector<Use_effect> use_effects{};
 };
 
-// struct Gem
-// {
-//     Gem(std::string name, Attributes attributes, Special_stats special_stats, double bonus_damage = 0,
-//          std::vector<Hit_effect> hit_effects = std::vector<Hit_effect>(),
-//          std::vector<Use_effect> use_effects = std::vector<Use_effect>())
-//         : name(std::move(name))
-//         , attributes(attributes)
-//         , special_stats(special_stats)
-//         , bonus_damage(bonus_damage)
-//         , hit_effects(std::move(hit_effects))
-//         , use_effects(std::move(use_effects)){};
-
-//     std::string name;
-//     Attributes attributes;
-//     Special_stats special_stats;
-//     double bonus_damage;
-//     std::vector<Hit_effect> hit_effects{};
-//     std::vector<Use_effect> use_effects{};
-// };
-
 struct Weapon_buff
 {
     Weapon_buff() = default;
 
-    Weapon_buff(std::string name, Attributes attributes, Special_stats special_stats, double bonus_damage = 0)
-        : name(std::move(name)), attributes(attributes), special_stats(special_stats), bonus_damage(bonus_damage){};
+    Weapon_buff(std::string name, Attributes attributes, Special_stats special_stats, double bonus_damage = 0, Hit_effect hit_effect = {})
+        : name(std::move(name)), attributes(attributes), special_stats(special_stats), bonus_damage(bonus_damage), hit_effect(std::move(hit_effect)) {};
 
     std::string name{};
     Attributes attributes{};
     Special_stats special_stats{};
     double bonus_damage{};
+    Hit_effect hit_effect{};
+};
+
+struct Gem
+{
+    Gem(std::string name, Attributes attributes, Special_stats special_stats, Hit_effect hit_effect = {}) :
+        name(std::move(name)),
+        attributes(attributes),
+        special_stats(special_stats),
+        hit_effect(std::move(hit_effect)) {}
+
+    std::string name;
+    Attributes attributes;
+    Special_stats special_stats;
+    Hit_effect hit_effect;
 };
 
 struct Armor
@@ -430,13 +432,15 @@ struct Weapon
     std::vector<Use_effect> use_effects;
     Socket socket;
     Enchant enchant;
-    Weapon_buff buff;
+    Weapon_buff buff; // TODO(vigo) - temporary weapon enhancements; they should at least add bonus damage
 };
 
 std::ostream& operator<<(std::ostream& os, const Socket& socket);
 
+std::string friendly_name(const Socket& socket);
 std::string operator+(std::string& string, const Socket& socket);
 
+std::string friendly_name(const Weapon_socket& socket);
 std::string operator+(std::string& string, const Weapon_socket& socket);
 
 #endif // WOW_SIMULATOR_ITEM_HPP

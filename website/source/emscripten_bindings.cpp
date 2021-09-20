@@ -56,6 +56,7 @@ EMSCRIPTEN_BINDINGS(module)
         .field("proc_counter", &Sim_output::proc_counter)
         .field("stat_weights", &Sim_output::stat_weights)
         .field("extra_stats", &Sim_output::extra_stats)
+        .field("histogram_details", &Sim_output::histogram_details)
         .field("mean_dps", &Sim_output::mean_dps)
         .field("std_dps", &Sim_output::std_dps)
         .field("messages", &Sim_output::messages);

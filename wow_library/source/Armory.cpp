@@ -4,9 +4,7 @@
 #include "find_values.hpp"
 #include "string_helpers.hpp"
 
-#include <unordered_map>
-
-Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) const
+Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type)
 {
     switch (socket)
     {
@@ -129,7 +127,7 @@ Attributes Armory::get_enchant_attributes(Socket socket, Enchant::Type type) con
     }
 }
 
-Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type type) const
+Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type type)
 {
     switch (socket)
     {
@@ -208,7 +206,7 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
     }
 }
 
-Hit_effect Armory::enchant_hit_effect(Weapon& weapon, Enchant::Type type) const
+Hit_effect Armory::enchant_hit_effect(Weapon& weapon, Enchant::Type type)
 {
     switch (type)
     {
@@ -223,7 +221,7 @@ Hit_effect Armory::enchant_hit_effect(Weapon& weapon, Enchant::Type type) const
     }
 }
 
-void Armory::clean_weapon(Weapon& weapon) const
+void Armory::clean_weapon(Weapon& weapon)
 {
     // TODO remove from armory.
     if (!weapon.hit_effects.empty())
@@ -237,6 +235,14 @@ void Armory::clean_weapon(Weapon& weapon) const
                 weapon.hit_effects.emplace_back(hit_effect);
             }
         }
+    }
+}
+
+void add_hit_effect(const Hit_effect& hit_effect, Character& character)
+{
+    for (auto& w : character.weapons)
+    {
+        w.hit_effects.emplace_back(hit_effect);
     }
 }
 
@@ -259,20 +265,23 @@ void Armory::compute_total_stats(Character& character) const
     {
         clean_weapon(wep);
     }
-    Attributes total_attributes{};
-    Special_stats total_special_stats{};
 
-    total_attributes += character.base_attributes;
-    total_special_stats += character.base_special_stats;
+    auto total_attributes{character.base_attributes};
+    auto total_special_stats{character.base_special_stats};
+
     std::vector<Use_effect> use_effects{};
     std::unordered_map<Set, int> set_counts{};
-    for (const Armor& armor : character.armor)
+
+    for (const auto& armor : character.armor)
     {
         total_attributes += armor.attributes;
         total_special_stats += armor.special_stats;
 
-        total_attributes += get_enchant_attributes(armor.socket, armor.enchant.type);
-        total_special_stats += get_enchant_special_stats(armor.socket, armor.enchant.type);
+        if (armor.enchant.type != Enchant::Type::none)
+        {
+            total_attributes += get_enchant_attributes(armor.socket, armor.enchant.type);
+            total_special_stats += get_enchant_special_stats(armor.socket, armor.enchant.type);
+        }
 
         set_counts[armor.set_name] += 1;
         for (const auto& use_effect : armor.use_effects)
@@ -281,77 +290,93 @@ void Armory::compute_total_stats(Character& character) const
         }
         for (const auto& hit_effect : armor.hit_effects)
         {
-            for (Weapon& weapon : character.weapons)
-            {
-                weapon.hit_effects.emplace_back(hit_effect);
-            }
+            add_hit_effect(hit_effect, character);
         }
     }
 
-    for (Weapon& weapon : character.weapons)
+    for (auto& weapon : character.weapons)
     {
         total_attributes += weapon.attributes;
         total_special_stats += weapon.special_stats;
 
-        total_attributes += get_enchant_attributes(weapon.socket, weapon.enchant.type);
-        total_special_stats += get_enchant_special_stats(weapon.socket, weapon.enchant.type);
+        if (weapon.enchant.type != Enchant::Type::none)
+        {
+            total_attributes += get_enchant_attributes(weapon.socket, weapon.enchant.type);
+            total_special_stats += get_enchant_special_stats(weapon.socket, weapon.enchant.type);
+            auto hit_effect = enchant_hit_effect(weapon, weapon.enchant.type);
+            if (hit_effect.type != Hit_effect::Type::none)
+            {
+                weapon.hit_effects.emplace_back(hit_effect);
+            }
+        }
+
+        if (!weapon.buff.name.empty())
+        {
+            total_attributes += weapon.buff.attributes;
+            total_special_stats += weapon.buff.special_stats;
+
+            if (weapon.buff.hit_effect.type != Hit_effect::Type::none)
+            {
+                weapon.hit_effects.emplace_back(weapon.buff.hit_effect);
+            }
+        }
 
         for (const auto& use_effect : weapon.use_effects)
         {
             use_effects.emplace_back(use_effect);
         }
-        auto hit_effect = enchant_hit_effect(weapon, weapon.enchant.type);
-        if (hit_effect.type != Hit_effect::Type::none)
-        {
-            weapon.hit_effects.emplace_back(hit_effect);
-        }
 
         set_counts[weapon.set_name] += 1;
     }
 
-        for (const Set_bonus& set_bonus : set_bonuses)
+    for (const auto& gem : character.gems)
+    {
+        total_attributes += gem.attributes;
+        total_special_stats += gem.special_stats;
+
+        if (gem.hit_effect.type != Hit_effect::Type::none)
         {
-        if (set_counts[set_bonus.set] >= set_bonus.pieces)
-            {
-                total_attributes += set_bonus.attributes;
-                total_special_stats += set_bonus.special_stats;
-                character.set_bonuses.emplace_back(set_bonus);
-                if (set_bonus.name == "warbringer")
-                {
-                    if (set_bonus.pieces == 4)
-                    {
-                        character.set_bonus_effect.warbringer_4_set = true;
-                        character.set_bonus_effect.warbringer_2_set = true;
-                    }
-                    else
-                    {
-                        character.set_bonus_effect.warbringer_2_set = true;
-                    }
-                }
-                if (set_bonus.name == "destroyer")
-                {
-                    if (set_bonus.pieces == 4)
-                    {
-                        character.set_bonus_effect.destroyer_4_set = true;
-                        character.set_bonus_effect.destroyer_2_set = true;
-                    }
-                    else
-                    {
-                        character.set_bonus_effect.destroyer_2_set = true;
-                    }
-                }
-                // TODO(vigo) it's a lot simpler to check for presence of "solarians_sapphire" directly
-                // PS: Solarian has a set on it. This is a workaround to have solarian giving BS AP bonus
-                if (set_bonus.name == "solarian_bs_bonus")
-                {
-                    character.set_bonus_effect.solarian_bs_bonus = true;
-                }
-            }
+            add_hit_effect(gem.hit_effect, character);
         }
+    }
+
+    for (const auto& set_bonus : set_bonuses)
+    {
+        if (set_counts[set_bonus.set] >= set_bonus.pieces)
+        {
+            total_attributes += set_bonus.attributes;
+            total_special_stats += set_bonus.special_stats;
+            if (set_bonus.hit_effect.type != Hit_effect::Type::none)
+            {
+                add_hit_effect(set_bonus.hit_effect, character);
+            }
+            character.set_bonuses.emplace_back(set_bonus);
+        }
+    }
+
+    Special_stats talent_special_stats{};
+    talent_special_stats.critical_strike = character.talents.cruelty;
+    talent_special_stats.hit = character.talents.precision;
+    talent_special_stats.expertise = character.talents.defiance * 2;
+    talent_special_stats.ap_multiplier = character.talents.improved_berserker_stance * 0.02;
+    if (character.is_dual_wield())
+    {
+        talent_special_stats.damage_mod_physical = character.talents.one_handed_weapon_specialization * 0.02;
+    }
+    else
+    {
+        talent_special_stats.damage_mod_physical = character.talents.two_handed_weapon_specialization * 0.01;
+    }
+    total_special_stats += talent_special_stats;
 
     if (character.race == Race::draenei && !character.has_buff(buffs.heroic_presence))
     {
         character.add_buff(buffs.heroic_presence);
+    }
+
+    if (character.has_item("braided_eternium_chain") && !character.has_buff(buffs.braided_eternium_chain))
+    {
+        character.add_buff(buffs.braided_eternium_chain);
     }
 
     for (const auto& buff : character.buffs)
@@ -366,79 +391,20 @@ void Armory::compute_total_stats(Character& character) const
 
         for (const auto& hit_effect : buff.hit_effects)
         {
-            if (hit_effect.name != "windfury_totem")
-            {
-                for (Weapon& weapon : character.weapons)
-                {
-                    weapon.hit_effects.emplace_back(hit_effect);
-                }
-            }
-            else
-            {
-                character.weapons[0].hit_effects.emplace_back(hit_effect);
-            }
+            add_hit_effect(hit_effect, character);
         }
     }
-
-    // Effects gained from talents and set bonuses
-    for (auto& use_effect : use_effects)
-    {
-        if (use_effect.name == "battle_shout")
-        {
-            if (character.talents.booming_voice_talent)
-            {
-                use_effect.duration = 180.0;
-            }
-            if (character.set_bonus_effect.solarian_bs_bonus)
-            {
-                use_effect.special_stats_boost.attack_power += 70;
-            }
-            if (character.talents.commanding_presence_talent > 0)
-            {
-                use_effect.special_stats_boost.attack_power *=
-                    1.0 + 0.05 * character.talents.commanding_presence_talent;
-            }
-            break;
-        }
-    }
-
-    if (character.talents.sword_specialization > 0)
-    {
-        for (auto& wep : character.weapons)
-        {
-            if (wep.type == Weapon_type::sword)
-            {
-                double prob = double(character.talents.sword_specialization) / 100.0;
-                wep.hit_effects.push_back({"sword_specialization", Hit_effect::Type::sword_spec, {}, {}, 0, 0, 0.5, prob});
-            }
-        }
-    }
-
-    if (character.talents.one_handed_weapon_specialization > 0 && character.is_dual_wield())
-    {
-        Special_stats ss;
-        ss.damage_mod_physical = 0.02 * character.talents.one_handed_weapon_specialization;
-        character.talent_special_stats += ss;
-    }
-
-    // Cruelty etc.
-    total_special_stats += character.talent_special_stats;
 
     total_special_stats += {3, 0, 0}; // crit from berserker stance
-    if (character.talents.improved_berserker_stance > 0)
-    {
-        Special_stats ss;
-        ss.ap_multiplier = 0.02 * character.talents.improved_berserker_stance;
-        total_special_stats += ss;
-    }
 
     total_special_stats += total_attributes.to_special_stats(total_special_stats);
     character.total_attributes = total_attributes.multiply(total_special_stats);
     character.total_special_stats = total_special_stats;
+
     character.use_effects = use_effects;
 }
 
-bool Armory::check_if_armor_valid(const std::vector<Armor>& armor) const
+bool Armory::check_if_armor_valid(const std::vector<Armor>& armor)
 {
     std::vector<Socket> sockets;
     bool one_ring{false};
@@ -479,7 +445,7 @@ bool Armory::check_if_armor_valid(const std::vector<Armor>& armor) const
     return true;
 }
 
-bool Armory::check_if_weapons_valid(std::vector<Weapon>& weapons) const
+bool Armory::check_if_weapons_valid(std::vector<Weapon>& weapons)
 {
     bool is_valid{true};
     is_valid &= weapons.size() <= 2;
@@ -495,7 +461,7 @@ bool Armory::check_if_weapons_valid(std::vector<Weapon>& weapons) const
     return is_valid;
 }
 
-void Armory::change_weapon(std::vector<Weapon>& current_weapons, const Weapon& equip_weapon, const Socket& socket) const
+void Armory::change_weapon(std::vector<Weapon>& current_weapons, const Weapon& equip_weapon, const Socket& socket)
 {
     // TODO fix twohanded -> dual wield item swap!
     if (equip_weapon.weapon_socket == Weapon_socket::two_hand)
@@ -518,7 +484,7 @@ void Armory::change_weapon(std::vector<Weapon>& current_weapons, const Weapon& e
     }
 }
 
-void Armory::change_armor(std::vector<Armor>& armor_vec, const Armor& armor, bool first_misc_slot) const
+void Armory::change_armor(std::vector<Armor>& armor_vec, const Armor& armor, bool first_misc_slot)
 {
     auto socket = armor.socket;
     for (auto& armor_piece : armor_vec)
@@ -649,6 +615,7 @@ std::vector<Weapon> Armory::get_weapon_in_socket(const Weapon_socket socket) con
         return swords_t;
     }
 }
+
 std::vector<Armor> Armory::get_items_in_socket(const Socket socket) const
 {
     switch (socket)
@@ -682,8 +649,53 @@ std::vector<Armor> Armory::get_items_in_socket(const Socket socket) const
     default:
         std::cout << "ERROR: incorrect item socket provided: " << socket << "\n";
         assert(false);
-        return ranged_t;
     }
+}
+
+std::unordered_map<std::string, const Armor*> Armory::build_armor_index() const
+{
+    const std::vector<Armor>* slots[] {
+        &helmet_t, &neck_t, &shoulder_t, &back_t, &chest_t, &wrists_t, &hands_t,
+        &belt_t, &legs_t, &boots_t, &ring_t, &trinket_t, &ranged_t
+    };
+
+    std::unordered_map<std::string, const Armor*> index{};
+    for (const auto& slot : slots)
+    {
+        for (const auto& a : *slot)
+        {
+            const auto& r = index.emplace(std::make_pair(a.name, &a));
+            if (!r.second)
+            {
+                const auto& clash = *r.first->second;
+                std::cerr << "ERROR: duplicate armor name " << a.name << "@" << a.socket << " clashes w/ " << clash.name << "@" << clash.socket << std::endl;
+            }
+        }
+    }
+    return index;
+}
+
+std::unordered_map<std::string, const Weapon*> Armory::build_weapons_index() const
+{
+    const std::vector<Weapon>* slots[] {
+        &swords_t, &maces_t, &axes_t, &fists_t, &daggers_t,
+        &two_handed_swords_t, &two_handed_maces_t, &two_handed_axes_polearm_t
+    };
+
+    std::unordered_map<std::string, const Weapon*> index{};
+    for (const auto& slot : slots)
+    {
+        for (const auto& w : *slot)
+        {
+            const auto& r = index.emplace(std::make_pair(w.name, &w));
+            if (!r.second)
+            {
+                const auto& clash = *r.first->second;
+                std::cerr << "ERROR: duplicate weapon name " << w.name << "@" << w.socket << " clashes w/ " << clash.name << "@" << clash.socket << std::endl;
+            }
+        }
+    }
+    return index;
 }
 
 Armor Armory::find_armor(const Socket socket, const std::string& name) const
@@ -731,9 +743,8 @@ Armor Armory::find_armor(const Socket socket, const std::string& name) const
         items = ranged_t;
         break;
     default:
-        std::cout << "ERROR: incorrect item socket provided: " << socket << "\n";
+        std::cerr << "ERROR: socket '" << socket << "' invalid\n";
         assert(false);
-        break;
     }
     for (const auto& item : items)
     {
@@ -742,7 +753,8 @@ Armor Armory::find_armor(const Socket socket, const std::string& name) const
             return item;
         }
     }
-    return {"item_not_found: " + name, {}, {}, socket};
+    std::cerr << "ERROR: item '" << name << "' not found for socket '" << socket << "'\n";
+    assert(false);
 }
 
 Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
@@ -770,7 +782,8 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
                 return item;
             }
         }
-        return {"item_not_found: " + name, {}, {}, 3.0, 0, 0, Weapon_socket::two_hand, Weapon_type::sword};
+        std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'\n";
+        assert(false);
     }
     for (const auto& item : swords_t)
     {
@@ -807,10 +820,11 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
             return item;
         }
     }
-    return {"item_not_found: " + name, {}, {}, 2.0, 0, 0, Weapon_socket::one_hand, Weapon_type::unarmed};
+    std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'\n";
+    assert(false);
 }
 
-void Armory::add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec) const
+void Armory::add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec)
 {
     if (String_helpers::find_string(ench_vec, "e+8 strength"))
     {
@@ -1007,7 +1021,7 @@ void Armory::add_enchants_to_character(Character& character, const std::vector<s
 
 void Armory::add_gems_to_character(Character& character, const std::vector<std::string>& gem_vec) const
 {
-    int gem_counter, i;
+    size_t gem_counter, i;
 
     gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 strength");
     for (i = 0; i < gem_counter; i++)
@@ -1037,6 +1051,12 @@ void Armory::add_gems_to_character(Character& character, const std::vector<std::
     for (i = 0; i < gem_counter; i++)
     {
         character.add_gem(gems.strength_8);
+    }
+
+    gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+10 strength");
+    for (i = 0; i < gem_counter; i++)
+    {
+        character.add_gem(gems.strength_10);
     }
 
     gem_counter = std::count(gem_vec.begin(), gem_vec.end(), "+3 agility");
@@ -1236,12 +1256,12 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     if (String_helpers::find_string(buffs_vec, "windfury_totem"))
     {
-        Buff totem = buffs.windfury_totem;
+        auto totem = buffs.windfury_totem;
         if (String_helpers::find_string(buffs_vec, "improved_weapon_totems"))
         {
-            totem.hit_effects[0].special_stats_boost.attack_power *= 1.3;
+            totem.hit_effect.special_stats_boost.attack_power *= 1.3;
         }
-        character.add_buff(totem);
+        character.add_weapon_buff(Socket::main_hand, totem);
     }
     if (String_helpers::find_string(buffs_vec, "strength_of_earth_totem"))
     {
@@ -1284,6 +1304,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     if (String_helpers::find_string(buffs_vec, "heroic_presence"))
     {
         character.add_buff(buffs.heroic_presence);
+    }
+    if (String_helpers::find_string(buffs_vec, "braided_eternium_chain"))
+    {
+        character.add_buff(buffs.braided_eternium_chain);
     }
     if (String_helpers::find_string(buffs_vec, "improved_faerie_fire"))
     {
@@ -1423,16 +1447,15 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     else if (String_helpers::find_string(buffs_vec, "elemental_stone_main_hand"))
     {
-        character.add_buff(buffs.elemental_stone);
+        character.add_weapon_buff(Socket::main_hand, buffs.elemental_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "consecrated_sharpening_stone_main_hand"))
     {
-        character.add_buff(buffs.consecrated_sharpening_stone);
+        character.add_weapon_buff(Socket::main_hand, buffs.consecrated_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "adamantite_stone_main_hand"))
     {
-        character.add_weapon_buff(Socket::main_hand, buffs.adamantite_stone_damage);
-        character.add_buff(buffs.adamantite_stone_crit);
+        character.add_weapon_buff(Socket::main_hand, buffs.adamantite_stone);
     }
 
     if (String_helpers::find_string(buffs_vec, "dense_stone_off_hand"))
@@ -1441,73 +1464,53 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     }
     else if (String_helpers::find_string(buffs_vec, "elemental_stone_off_hand"))
     {
-        character.add_buff(buffs.elemental_stone);
+        character.add_weapon_buff(Socket::off_hand, buffs.elemental_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "consecrated_sharpening_stone_off_hand"))
     {
-        character.add_buff(buffs.consecrated_sharpening_stone);
+        character.add_weapon_buff(Socket::off_hand, buffs.consecrated_stone);
     }
     else if (String_helpers::find_string(buffs_vec, "adamantite_stone_off_hand"))
     {
-        character.add_weapon_buff(Socket::off_hand, buffs.adamantite_stone_damage);
-        character.add_buff(buffs.adamantite_stone_crit);
+        character.add_weapon_buff(Socket::off_hand, buffs.adamantite_stone);
     }
 }
 
 void Armory::add_talents_to_character(Character& character, const std::vector<std::string>& talent_string,
-                                      const std::vector<int>& talent_val) const
+                                      const std::vector<int>& talent_val)
 {
     Find_values<int> fv{talent_string, talent_val};
-    int val = fv.find("cruelty_talent");
-    if (val > 0)
-    {
-        character.talent_special_stats.critical_strike += val;
-    }
-    val = fv.find("defiance_talent");
-    if (val > 0)
-    {
-        character.talent_special_stats.expertise += val * 2;
-    }
-    val = fv.find("precision_talent");
-    if (val > 0)
-    {
-        character.talent_special_stats.hit += val;
-    }
-    val = fv.find("two_handed_weapon_specialization_talent");
-    if (val > 0)
-    {
-        if (!character.is_dual_wield())
-        {
-            Special_stats ss;
-            ss.damage_mod_physical = val * 0.01;
-            character.talent_special_stats += ss;
-        }
-    }
-    val = fv.find("booming_voice_talent");
-    if (val > 0)
-    {
-        character.talents.booming_voice_talent = true;
-    }
-    val = fv.find("commanding_presence_talent");
-    if (val > 0)
-    {
-        character.talents.commanding_presence_talent = val;
-    }
-    val = fv.find("sword_specialization_talent");
-    if (val > 0)
-    {
-        character.talents.sword_specialization = val;
-    }
-
-    val = fv.find("one_handed_weapon_specialization_talent");
-    if (val > 0)
-    {
-        character.talents.one_handed_weapon_specialization = val;
-    }
-
-    val = fv.find("improved_berserker_stance_talent");
-    if (val > 0)
-    {
-        character.talents.improved_berserker_stance = val;
-    }
+    character.talents.improved_heroic_strike = fv.find("improved_heroic_strike_talent");
+    character.talents.improved_overpower = fv.find("improved_overpower_talent");
+    character.talents.anger_management = fv.find("anger_management_talent");
+    character.talents.deep_wounds = fv.find("deep_wounds_talent");
+    character.talents.two_handed_weapon_specialization = fv.find("two_handed_weapon_specialization_talent");
+    character.talents.impale = fv.find("impale_talent");
+    character.talents.poleaxe_specialization = fv.find("poleaxe_specialization_talent");
+    character.talents.death_wish = fv.find("death_wish_talent");
+    character.talents.mace_specialization = fv.find("mace_specialization_talent");
+    character.talents.sword_specialization = fv.find("sword_specialization_talent");
+    character.talents.improved_disciplines = fv.find("improved_disciplines_talent");
+    character.talents.mortal_strike = fv.find("mortal_strike_talent");
+    character.talents.improved_mortal_strike = fv.find("improved_mortal_strike_talent");
+    character.talents.endless_rage = fv.find("endless_rage_talent");
+    character.talents.booming_voice = fv.find("booming_voice_talent");
+    character.talents.cruelty = fv.find("cruelty_talent");
+    character.talents.unbridled_wrath = fv.find("unbridled_wrath_talent");
+    character.talents.improved_cleave = fv.find("improved_cleave_talent");
+    character.talents.commanding_presence = fv.find("commanding_presence_talent");
+    character.talents.dual_wield_specialization = fv.find("dual_wield_specialization_talent");
+    character.talents.improved_execute = fv.find("improved_execute_talent");
+    character.talents.improved_slam = fv.find("improved_slam_talent");
+    character.talents.sweeping_strikes = fv.find("sweeping_strikes_talent");
+    character.talents.weapon_mastery = fv.find("weapon_mastery_talent");
+    character.talents.flurry = fv.find("flurry_talent");
+    character.talents.precision = fv.find("precision_talent");
+    character.talents.bloodthirst = fv.find("bloodthirst_talent");
+    character.talents.improved_whirlwind = fv.find("improved_whirlwind_talent");
+    character.talents.improved_berserker_stance = fv.find("improved_berserker_stance_talent");
+    character.talents.rampage = fv.find("rampage_talent");
+    character.talents.tactical_mastery = fv.find("tactical_mastery_talent");
+    character.talents.defiance = fv.find("defiance_talent");
+    character.talents.one_handed_weapon_specialization = fv.find("one_handed_weapon_specialization_talent");
 }

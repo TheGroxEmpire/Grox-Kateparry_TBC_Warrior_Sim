@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
+
+<head>
+    <title>TBC DPS Warrior Sim</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="emscripten/website/wasm_interface.js"></script>
+    <script src="js/talents.js"></script>
+    <script src="js/load_presets.js"></script>
+    <script src="js/gems.js"></script>
+    <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN4PFR8SWH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-NN4PFR8SWH');
+    </script>
+
+    <style>
     body {
         font-family: Arial;
     }
@@ -289,38 +309,17 @@
         transition: border-color .2s ease-in;
     }
 </style>
-
-<head>
-    <title>TBC DPS Warrior Sim</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="emscripten/website/wasm_interface.js"></script>
-    <script src="js/talents.js"></script>
-    <script src="js/load_presets.js"></script>
-    <script src="js/gems.js"></script>
-    <meta name="site_description" content="WoW TBC simulator for DPS Warriors">
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN4PFR8SWH"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-NN4PFR8SWH');
-    </script>
-
 </head>
-
-<h1>TBC DPS Warrior Sim</h1>
-<h4>Ported from Kateparry's WoW Fury Sim</h4>
-<h4>GroxEmpire | Grahand - BloodsailBuccaneers</h4>
 
 <body style="background-color:#bfbfbf;"
       onload="openTab('event', 'Simulator');open_armor();show_div('cleave_if_adds', 'cleave_div');
       show_div('use_hamstring', 'hamstring_div');show_div('multi_target_mode', 'multi_target_div');
       show_div('periodic_damage', 'periodic_damage_div');show_div('ability_queue', 'ability_queue_div');
       show_div('dual_wield_mode', 'dual_wield_div');show_div('use_hs_in_exec_phase', 'hs_exec_div');displayTalentBootup();calcTotalTalents();load_talent_dual_wield_fury();">
+
+<h1>TBC DPS Warrior Sim</h1>
+<h4>Ported from Kateparry's WoW Fury Sim</h4>
+<h4>GroxEmpire | Grahand - BloodsailBuccaneers</h4>
 
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'Simulator')">Simulator</button>
@@ -471,6 +470,7 @@
                 <option value="necklace_of_trophies"> Necklace of Trophies</option>
                 <option value="pendant_of_the_perilous"> Pendant of the Perilous</option>
                 <option value="saberclaw_talisman"> Saberclaw Talisman</option>
+                <option value="braided_eternium_chain"> Braided Eternium Chain</option>
                 <option value="stormrages_talisman_of_seething"> Stormrages Talisman of Seething</option>
                 <option value="telonicuss_pendant_of_mayhem"> Telonicuss Pendant of Mayhem</option>
                 <option value="the_savages_choker"> The Savages Choker</option>
@@ -4136,6 +4136,9 @@
             <input type="checkbox" id="heroic_presence">
             <label for="heroic_presence" style="color: #003d99"> Heroic Presence</label><br>
 
+            <input type="checkbox" id="braided_eternium_chain">
+            <label for="braided_eternium_chain" style="color: #003d99"> Braided Eternium Chain</label><br>
+
             <input type="checkbox" id="improved_faerie_fire">
             <label for="improved_faerie_fire"> Improved Faerie Fire</label><br>
 
@@ -4620,8 +4623,8 @@
         <input type="checkbox" id="use_slam" onclick="show_div('use_slam', 'slam_div')">
         <label for="use_slam"><b> Use slam</b></label><br>
         <div class="description" id="slam_div">
-            <label for="slam_rage_dd">Cast slam after a melee hit if rage is above:</label>
-            <input type="number" id="slam_rage_dd" name="quantity" min="15" max="100" value="15"><br>
+            <label for="slam_rage_thresh_dd">Cast slam after a melee hit if rage is above:</label>
+            <input type="number" id="slam_rage_thresh_dd" name="quantity" min="0" max="100" value="0"><br>
             <label for="slam_spam_rage_dd">Spam slam when rage is above:</label>
             <input type="number" id="slam_spam_rage_dd" name="quantity" min="15" max="100" value="100"><br>
             <label for="slam_spam_max_time_dd">Never cast slam when weapon swing timer is less than:</label>
@@ -4670,8 +4673,8 @@
         <div class="description" id="hamstring_div">
             <label for="hamstring_cd_thresh_dd">Hamstring when bloodthirst/Whirlwind CD is above:</label>
             <input type="number" id="hamstring_cd_thresh_dd" name="quantity" min="0" max="6" value="2.0" step="0.1"><br>
-            <label for="hamstring_thresh_dd">Hamstring when rage is above:</label>
-            <input type="number" id="hamstring_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
+            <label for="hamstring_rage_thresh_dd">Hamstring when rage is above:</label>
+            <input type="number" id="hamstring_rage_thresh_dd" name="quantity" min="0" max="100" value="70"><br>
         </div>
 
         <input type="checkbox" id="ability_queue" onclick="show_div('ability_queue', 'ability_queue_div')">
@@ -4718,8 +4721,8 @@
             <input type="number" id="extra_target_armor_dd" name="quantity" min="0" max="10000" value="7000"><br>
             <label for="extra_target_level_dd">Extra targets level (70-73):</label>
             <input type="number" id="extra_target_level_dd" name="quantity" min="70" max="73" value="70"><br>
-            <label for="extra_target_duration_dd">Extra targets die at (% of fight):</label>
-            <input type="number" id="extra_target_duration_dd" name="quantity" min="1" max="100" value="100"><br>
+            <label for="extra_target_percentage_dd">Extra targets die at (% of fight):</label>
+            <input type="number" id="extra_target_percentage_dd" name="quantity" min="1" max="100" value="100"><br>
         </div>
         <br>
 
@@ -4857,6 +4860,7 @@
     </div>
 
     <canvas id="line-chart-hist"></canvas>
+    <p id="output5"></p>
 
     <p></p>
     <canvas id="line-chart-fight"></canvas>
@@ -4938,7 +4942,7 @@
 
     let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura",
         "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem", "improved_seal_of_the_crusader", "blood_frenzy", "improved_sanctity_aura",
-        "heroic_presence", "improved_faerie_fire", "trueshot_aura"];
+        "heroic_presence", "braided_eternium_chain", "improved_faerie_fire", "trueshot_aura"];
     let buffs_input = [];
 
     let consumables = ["elixir_mongoose", "blessed_sunfruit", "roasted_clefthoof", "juju_power",
@@ -4979,12 +4983,12 @@
         "opponent_level_dd", "boss_armor_dd", "fight_time_dd",
         "sunder_armor_dd", "heroic_strike_rage_thresh_dd", "hs_rage_thresh_exec_phase_dd", "cleave_rage_thresh_dd", "whirlwind_rage_thresh_dd", "bt_whirlwind_cooldown_thresh_dd",
         "whirlwind_bt_cooldown_thresh_dd", "overpower_rage_thresh_dd", "overpower_bt_cooldown_thresh_dd",
-        "overpower_ww_cooldown_thresh_dd", "hamstring_cd_thresh_dd", "initial_rage_dd", "hamstring_thresh_dd",
+        "overpower_ww_cooldown_thresh_dd", "hamstring_cd_thresh_dd", "initial_rage_dd", "hamstring_rage_thresh_dd",
         "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd",
-        "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_dd", "berserking_haste_dd",
-        "full_polarity_dd", "extra_target_duration_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
+        "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_thresh_dd", "berserking_haste_dd",
+        "full_polarity_dd", "extra_target_percentage_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
 
     let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
         "enable_berserking", "enable_unleashed_rage", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_ww_in_exec_phase", "use_hs_in_exec_phase",
@@ -5241,36 +5245,32 @@
     let bar_chart_cooldowns;
 
     function clean_charts() {
-        try {
-            bar_chart_auras.destroy();
-            bar_chart_proc.destroy();
-            bar_chart_damage.destroy();
-            line_chart_hist.destroy();
-            line_chart_fight.destroy();
-            line_chart_fight_cum.destroy();
-            bar_chart_cooldowns.destroy();
-        } catch (error) {
-            console.log(error)
-        }
+        if (!bar_chart_auras) return; // before first run_sim()
+
+        bar_chart_auras.destroy();
+        bar_chart_proc.destroy();
+        bar_chart_damage.destroy();
+        line_chart_hist.destroy();
+        line_chart_fight.destroy();
+        line_chart_fight_cum.destroy();
+        bar_chart_cooldowns.destroy();
     }
 
     function show_loader() {
-        $("#loader").addClass("loader");
+        document.getElementById("loader").className = "loader";
     }
 
     function hide_loader() {
-        $("#loader").removeClass("loader");
+        document.getElementById("loader").className = "";
     }
 
-    async function run_sim(event) {
+    async function run_sim() {
         show_loader();
         setTimeout(setup_simulation_context, 100);
         setTimeout(hide_loader, 100);
-        event.preventDefault();
     }
 
     function setup_simulation_context() {
-
         clean_charts();
         read_inputs();
 
@@ -5367,9 +5367,6 @@
                 console.log("NaN value when reading talents.");
                 val = 0;
             }
-            if (val > 0) {
-                console.log(element, val);
-            }
             val = Math.min(Math.max(val, 0), max_val);
             talent_string.push_back(talent);
             talent_val.push_back(val);
@@ -5388,7 +5385,6 @@
         let stat_weight_vec = new Module.StringList();
         for (let stat_weight of stat_weigths) {
             if (document.getElementById(stat_weight).checked) {
-                console.log(stat_weight.slice(12, stat_weight.length));
                 stat_weight_vec.push_back(stat_weight.slice(12, stat_weight.length));
                 total_simulations += n_simulations_stat;
             }
@@ -5419,6 +5415,7 @@
             }
             document.getElementById("output3").innerHTML = "";
             document.getElementById("output4").innerHTML = "";
+            document.getElementById("output5").innerHTML = "";
 
         } else {
             let wow_input = {
@@ -5439,7 +5436,10 @@
                 mult_armor: mult_armor_vec,
             };
 
+            let t0 = performance.now();
             let result = obj.simulate(wow_input);
+            let t1 = performance.now();
+            console.log("took " + (t1 - t0) + " ms");
 
             obj.delete();
 
@@ -5452,12 +5452,12 @@
 
             let n_sim_status = "";
             if (mean_dps.length === 1) {
-                let conf_interval = 1.96 * std_dps[0];
+                let conf_interval = parseFloat(std_dps[0]);
                 n_sim_status += 'DPS: <b>' + mean_dps[0] + ' &plusmn ' + conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
             } else {
                 for (let i = 0; i < mean_dps.length; i++) {
                     let j = i + 1;
-                    let conf_interval = 1.96 * std_dps[i];
+                    let conf_interval = parseFloat(std_dps[i]);
                     n_sim_status += 'DPS setup' + j + ': <b>' + mean_dps[i] + ' &plusmn ' +
                         conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
                 }
@@ -5481,7 +5481,7 @@
                 stat_weights.push({
                     name: sw[0],
                     mean: parseFloat(sw[1]),
-                    ci95: 1.96 * parseFloat(sw[2]),
+                    ci95: parseFloat(sw[2]),
                 });
             }
 
@@ -5497,6 +5497,9 @@
 
             // Crit cap details:
             document.getElementById("output4").innerHTML = result['extra_stats'].get(0);
+
+            // DPS histogram details:
+            document.getElementById("output5").innerHTML = result['histogram_details'];
 
             if (document.getElementById("debug_on").checked) {
                 document.getElementById("combat_debug").style.display = "block";
@@ -5587,6 +5590,8 @@
             for (let j = 1; j < damage_vec[0].length; j++) {
                 time_stamps.push(time_stamps[j - 1] + .50);
             }
+
+            window.emResult = result;
 
             let hist_x = [];
             let hist_y = [];
@@ -5714,33 +5719,44 @@
                 )
             }
 
-            Chart.defaults.global.defaultFontSize = 36;
-            Chart.defaults.global.defaultFontStyle = 'Bold';
+            Chart.defaults.global.defaultFontColor = "black";
+            Chart.defaults.global.defaultFontFamily = "Arial, Helvetica, sans-serif";
+            Chart.defaults.global.defaultFontSize = 24;
+            Chart.defaults.global.defaultFontStyle = "normal";
+            Chart.defaults.global.title.fontColor = "black";
+            Chart.defaults.global.title.fontSize = 48;
+            Chart.defaults.global.title.display = true;
             Chart.defaults.scale.gridLines.color = "black";
 
+            let total = hist_y.reduce((a, v) => a + v);
+
+            let sum = 0;
+            let colorFunc = function(ctx) {
+                if (ctx.dataIndex === undefined) return;
+                if (ctx.dataset === undefined) return;
+
+                if (ctx.dataIndex === 0) sum = 0;
+
+                let oldSum = sum;
+                sum += ctx.dataset.data[ctx.dataIndex];
+                if (sum < 0.25 * total || oldSum > 0.75 * total) {
+                    return "#3e95cd";
+                }
+                return "#64aad7";
+            };
+
             line_chart_hist = new Chart(document.getElementById("line-chart-hist"), {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: hist_x,
                     datasets: [{
                         data: hist_y,
                         label: "Simulator results",
-                        borderWidth: 10,
-                        borderColor: "#3e95cd",
-                        fill: origin,
-                        backgroundColor: "#3e95cd"
+                        backgroundColor: colorFunc
                     }]
                 },
                 options: {
-                    legend: {
-                        labels: {
-                            fontColor: "black",
-                        }
-                    },
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Damage histogram'
                     },
                     scales: {
@@ -5748,13 +5764,9 @@
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0.5)",
                             },
-                            ticks: {
-                                fontColor: "black",
-                            },
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Frequency',
-                                fontColor: "black",
                             }
                         }],
                         xAxes: [{
@@ -5762,12 +5774,10 @@
                                 color: "rgba(0, 0, 0, 0.5)",
                             },
                             ticks: {
-                                fontColor: "black",
                                 maxTicksLimit: 30,
-                                maxRotation: 0
+                                maxRotation: 45
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'DPS'
                             }
@@ -5788,16 +5798,8 @@
                     datasets: data_damage_time_lapse
                 },
                 options: {
-                    legend: {
-                        labels: {
-                            fontColor: "black",
-                        }
-                    },
                     bezierCurve: false,
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Fight time lapse (DPS)'
                     },
                     scales: {
@@ -5805,11 +5807,7 @@
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
-                            ticks: {
-                                fontColor: "black",
-                            },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Average damage'
                             }
@@ -5822,10 +5820,8 @@
                                 autoSkip: true,
                                 maxTicksLimit: 30,
                                 maxRotation: 0,
-                                fontColor: "black",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Time'
                             }
@@ -5847,15 +5843,7 @@
                     datasets: data_damage_time_lapse_cum
                 },
                 options: {
-                    legend: {
-                        labels: {
-                            fontColor: "black",
-                        }
-                    },
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Fight time lapse'
                     },
                     scales: {
@@ -5864,12 +5852,8 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Cumulative damage'
-                            },
-                            ticks: {
-                                fontColor: "black",
                             },
                         }],
                         xAxes: [{
@@ -5877,12 +5861,10 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             ticks: {
-                                fontColor: "black",
                                 maxTicksLimit: 30,
                                 maxRotation: 0
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Time'
                             }
@@ -5905,47 +5887,36 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'Use Effect Schedule'
                     },
                     scales: {
                         yAxes: [{
                             stacked: true,
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Use Effect'
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }],
                         xAxes: [{
                             stacked: true,
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'Time'
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }]
                     }
                 }
@@ -5972,44 +5943,33 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontSize: 60,
-                        fontColor: "black",
-                        display: true,
                         text: 'DPS from different sources'
                     },
                     scales: {
                         yAxes: [{
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: 'DPS'
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }],
                         xAxes: [{
-                            fontColor: "black",
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: false,
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }]
                     }
                 }
@@ -6035,9 +5995,6 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontColor: "black",
-                        fontSize: 60,
-                        display: true,
                         text: 'Aura uptime'
                     },
                     scales: {
@@ -6046,26 +6003,21 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                                 labelString: '%',
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                    suggestedMin: 0,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMin: 0,
+                            }
                         }],
                         xAxes: [{
                             gridLines: {
                                 color: "rgba(0, 0, 0, 0)",
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                            }
                         }],
                     }
                 }
@@ -6091,9 +6043,6 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        fontColor: "black",
-                        fontSize: 60,
-                        display: true,
                         text: 'Average # of procs'
                     },
                     scales: {
@@ -6102,25 +6051,19 @@
                                 color: "rgba(0, 0, 0, 0)",
                             },
                             scaleLabel: {
-                                fontColor: "black",
                                 display: true,
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                            }
                         }],
                         xAxes: [{
                             gridLines: {
-                                fontColor: "black",
                                 color: "rgba(0, 0, 0, 0)",
                             },
-                            ticks:
-                                {
-                                    fontColor: "black",
-                                    beginAtZero: true,
-                                }
+                            ticks: {
+                                beginAtZero: true,
+                            }
                         }],
                     }
                 }

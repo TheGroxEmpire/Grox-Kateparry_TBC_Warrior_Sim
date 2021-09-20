@@ -3,7 +3,7 @@
 #include <iostream>
 
 Character::Character(const Race& race, int level)
-    : base_attributes{}, total_attributes{}, base_special_stats{}, total_special_stats{}, race{race}, level(level)
+    : base_attributes{}, base_special_stats{}, total_attributes{}, total_special_stats{}, race{race}, level(level)
 {
     base_special_stats = Special_stats{};
     base_special_stats.attack_power = 190;
@@ -79,10 +79,10 @@ Character character_setup(const Armory& armory, const std::string& race, const s
         character.equip_weapon(armory.find_weapon(Weapon_socket::two_hand, weapons_vec[0]));
     }
 
-    armory.add_enchants_to_character(character, ench_vec);
+    Armory::add_enchants_to_character(character, ench_vec);
     armory.add_gems_to_character(character, gem_vec);
     armory.add_buffs_to_character(character, buffs_vec);
-    armory.add_talents_to_character(character, talent_string, talent_val);
+    Armory::add_talents_to_character(character, talent_string, talent_val);
 
     armory.compute_total_stats(character);
 
@@ -173,8 +173,7 @@ Race get_race(const std::string& race)
     }
     else
     {
-        std::cout << "Race not found!!! picking human"
-                  << "\n";
+        std::cerr << "Race not found!!! picking human" << "\n";
         return Race::human;
     }
 }
@@ -197,7 +196,7 @@ Character get_character_of_race(const std::string& race)
     {
         return {Race::night_elf, 70};
     }
-        else if (race == "draenei")
+    else if (race == "draenei")
     {
         return {Race::draenei, 70};
     }
@@ -219,8 +218,7 @@ Character get_character_of_race(const std::string& race)
     }
     else
     {
-        std::cout << "Race not found!!! picking human"
-                  << "\n";
+        std::cerr << "Race not found!!! picking human" << "\n";
         return {Race::human, 70};
     }
 }

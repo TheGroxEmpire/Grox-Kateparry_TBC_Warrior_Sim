@@ -31,7 +31,7 @@ public:
 
     void compute_weapon_combinations();
 
-    std::vector<std::vector<Armor>> get_combinations(const std::vector<Armor>& armors);
+    static std::vector<std::vector<Armor>> get_combinations(const std::vector<Armor>& armors);
 
     void item_setup(const std::vector<std::string>& armor_vec, const std::vector<std::string>& weapons_vec);
 
@@ -61,8 +61,6 @@ public:
     void fill_empty_weapons();
 
     void find_set_bonuses();
-
-    void fill(std::vector<Armor>& vec, Socket socket, std::string name);
 
     std::vector<Armor> helmets;
     std::vector<Armor> necks;

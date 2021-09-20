@@ -15,7 +15,7 @@ std::string percent_to_str(const std::string& stat_name, double value1, const st
 
 std::string string_with_precision(int amount);
 
-std::string string_with_precision(double amount, size_t precision);
+std::string string_with_precision(double amount, int precision);
 
 template <typename T>
 bool does_vector_contain(const std::vector<T>& vec, const T& match);

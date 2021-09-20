@@ -46,156 +46,110 @@ void Item_optimizer::compute_weapon_combinations()
 std::vector<std::vector<Armor>> Item_optimizer::get_combinations(const std::vector<Armor>& armors)
 {
     std::vector<std::vector<Armor>> combinations;
-    for (size_t i_1 = 0; i_1 < armors.size() - 1; i_1++)
+    for (size_t i = 0; i < armors.size() - 1; i++)
     {
-        for (size_t i_2 = i_1 + 1; i_2 < armors.size(); i_2++)
+        for (size_t j = i + 1; j < armors.size(); j++)
         {
-            combinations.emplace_back(std::vector<Armor>{armors[i_1], armors[i_2]});
+            combinations.emplace_back(std::vector<Armor>{armors[i], armors[j]});
         }
     }
     return combinations;
 }
 
-bool is_armor_valid(const std::string& name)
-{
-    return !(name.substr(0, 14) == "item_not_found");
-}
-
 void Item_optimizer::extract_armors(const std::vector<std::string>& armor_vec)
 {
+    if (armor_vec.empty()) return;
+
+    const auto& index = armory.build_armor_index();
+
     for (const auto& armor_name : armor_vec)
     {
-        auto armor = armory.find_armor(Socket::head, armor_name);
-        if (is_armor_valid(armor.name))
+        auto it = index.find(armor_name);
+        if (it == index.end())
         {
-            helmets.emplace_back(armor);
+            std::cerr << armor_name << " is not contained in armory" << std::endl;
             continue;
         }
-        armor = armory.find_armor(Socket::neck, armor_name);
-        if (is_armor_valid(armor.name))
+        const auto& a = *it->second;
+        switch (a.socket)
         {
-            necks.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::shoulder, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            shoulders.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::back, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            backs.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::chest, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            chests.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::wrist, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            wrists.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::hands, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            hands.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::belt, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            belts.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::legs, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            legs.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::boots, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            boots.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::ring, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            rings.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::trinket, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            trinkets.emplace_back(armor);
-            continue;
-        }
-        armor = armory.find_armor(Socket::ranged, armor_name);
-        if (is_armor_valid(armor.name))
-        {
-            ranged.emplace_back(armor);
-            continue;
+        case Socket::head:
+            helmets.emplace_back(a);
+            break;
+        case Socket::neck:
+            necks.emplace_back(a);
+            break;
+        case Socket::shoulder:
+            shoulders.emplace_back(a);
+            break;
+        case Socket::back:
+            backs.emplace_back(a);
+            break;
+        case Socket::chest:
+            chests.emplace_back(a);
+            break;
+        case Socket::wrist:
+            wrists.emplace_back(a);
+            break;
+        case Socket::hands:
+            hands.emplace_back(a);
+            break;
+        case Socket::belt:
+            belts.emplace_back(a);
+            break;
+        case Socket::legs:
+            legs.emplace_back(a);
+            break;
+        case Socket::boots:
+            boots.emplace_back(a);
+            break;
+        case Socket::ring:
+            rings.emplace_back(a);
+            break;
+        case Socket::trinket:
+            trinkets.emplace_back(a);
+            break;
+        case Socket::ranged:
+            ranged.emplace_back(a);
+            break;
+        default:
+            std::cerr << armor_name << " has an invalid socket (" << a.socket << ")" << std::endl;
         }
     }
 }
 
 void Item_optimizer::extract_weapons(const std::vector<std::string>& weapon_vec)
 {
+    if (weapon_vec.empty()) return;
+
+    const auto& index = armory.build_weapons_index();
+
     for (const auto& weapon_name : weapon_vec)
     {
-        auto weapon = armory.find_weapon(Weapon_socket::one_hand, weapon_name);
-        if (is_armor_valid(weapon.name))
+        auto it = index.find(weapon_name);
+        if (it == index.end())
         {
-            if (weapon.weapon_socket == Weapon_socket::one_hand)
-            {
-                main_hands.emplace_back(weapon);
-                off_hands.emplace_back(weapon);
-            }
-            else if (weapon.weapon_socket == Weapon_socket::main_hand)
-            {
-                main_hands.emplace_back(weapon);
-            }
-            else if (weapon.weapon_socket == Weapon_socket::off_hand)
-            {
-                off_hands.emplace_back(weapon);
-            }
+            std::cerr << weapon_name << " is not contained in armory" << std::endl;
+            continue;
         }
-        else
+        const auto& w = *it->second;
+        switch (w.weapon_socket)
         {
-            auto th_weapon = armory.find_weapon(Weapon_socket::two_hand, weapon_name);
-            if (is_armor_valid(th_weapon.name))
-            {
-                two_hands.emplace_back(th_weapon);
-            }
-            else
-            {
-                std::cout << "Not valid weapon: " << weapon.name << std::endl;
-            }
-        }
-    }
-}
-
-void Item_optimizer::fill(std::vector<Armor>& vec, Socket socket, std::string name)
-{
-    if (socket == Socket::trinket || socket == Socket::ring)
-    {
-        while (vec.size() < 2)
-        {
-            vec.emplace_back(armory.find_armor(socket, name));
-        }
-    }
-    else
-    {
-        if (vec.empty())
-        {
-            vec.emplace_back(armory.find_armor(socket, name));
+        case Weapon_socket::one_hand:
+            main_hands.emplace_back(w);
+            off_hands.emplace_back(w);
+            break;
+        case Weapon_socket::main_hand:
+            main_hands.emplace_back(w);
+            break;
+        case Weapon_socket::off_hand:
+            off_hands.emplace_back(w);
+            break;
+        case Weapon_socket::two_hand:
+            two_hands.emplace_back(w);
+            break;
+        default:
+            std::cerr << weapon_name << " has an invalid weapon socket (" << w.weapon_socket << ")" << std::endl;
         }
     }
 }
@@ -594,6 +548,11 @@ void Item_optimizer::filter_weaker_items(const Special_stats& special_stats, std
     two_hands = remove_weaker_weapons(Weapon_socket::main_hand, two_hands, special_stats, debug_message, min_removal);
 }
 
+void fill(std::vector<Armor>& vec, Socket socket, const std::string& name)
+{
+    if (vec.empty()) vec.emplace_back(Armor{name, {}, {}, socket});
+}
+
 void Item_optimizer::fill_empty_armor()
 {
     fill(helmets, Socket::head, "helmet");
@@ -608,101 +567,57 @@ void Item_optimizer::fill_empty_armor()
     fill(boots, Socket::boots, "boots");
     fill(ranged, Socket::ranged, "ranged");
     fill(rings, Socket::ring, "ring");
+    if (rings.size() == 1) rings.emplace_back(Armor{"ring", {}, {},Socket::ring});
     fill(trinkets, Socket::trinket, "trinket");
+    if (trinkets.size() == 1) trinkets.emplace_back(Armor("trinket", {}, {}, Socket::trinket));
+}
+
+void fill(std::vector<Weapon>& vec, Weapon_socket ws, const std::string& name)
+{
+    if (vec.empty()) vec.emplace_back(Weapon{name, {}, {}, 2, 0, 0, ws, Weapon_type::unarmed});
 }
 
 void Item_optimizer::fill_empty_weapons()
 {
-    if (main_hands.empty())
-    {
-        main_hands.emplace_back(armory.find_weapon(Weapon_socket::one_hand, "none"));
-    }
-    if (off_hands.empty())
-    {
-        off_hands.emplace_back(armory.find_weapon(Weapon_socket::one_hand, "none"));
-    }
-    if (two_hands.empty())
-    {
-        two_hands.emplace_back(armory.find_weapon(Weapon_socket::two_hand, "none"));
-    }
+    fill(main_hands, Weapon_socket::main_hand, "main-hand");
+    fill(off_hands, Weapon_socket::off_hand, "off-hand");
+    fill(two_hands, Weapon_socket::two_hand, "two-hand");
 }
 
 void Item_optimizer::find_set_bonuses()
 {
-    std::vector<std::vector<Armor>> armors;
-    armors.push_back(helmets);
-    armors.push_back(necks);
-    armors.push_back(shoulders);
-    armors.push_back(backs);
-    armors.push_back(chests);
-    armors.push_back(wrists);
-    armors.push_back(hands);
-    armors.push_back(belts);
-    armors.push_back(legs);
-    armors.push_back(boots);
-    armors.push_back(ranged);
-    armors.push_back(rings);
-    armors.push_back(trinkets);
+    const std::vector<Armor>* armors[] {
+        &helmets, &necks, &shoulders, &backs, &chests, &wrists, &hands,
+        &belts, &legs, &boots, &ranged, &rings, &trinkets
+    };
 
-    std::vector<std::vector<Weapon>> weapons;
-    weapons.push_back(main_hands);
-    weapons.push_back(off_hands);
+    const std::vector<Weapon>* weapons[] {
+        &main_hands, &off_hands, &two_hands
+    };
 
-    set_names.clear();
+    std::unordered_map<Set, int> set_counts{};
     for (const auto& armor_vec : armors)
     {
-        for (const auto& armor : armor_vec)
+        for (const auto& armor : *armor_vec)
         {
-            set_names.emplace_back(armor.set_name);
+            set_counts[armor.set_name] += 1;
         }
     }
     for (const auto& weapon_vec : weapons)
     {
-        for (const auto& armor : weapon_vec)
+        for (const auto& armor : *weapon_vec)
         {
-            set_names.emplace_back(armor.set_name);
+            set_counts[armor.set_name] += 1;
         }
     }
 
-    std::vector<Set> unique_set_names{};
-    for (const Set& set_name : set_names)
-    {
-        if (set_name != Set::none)
-        {
-            bool unique = true;
-            for (const Set& set_name_unique : unique_set_names)
-            {
-                if (set_name == set_name_unique)
-                {
-                    unique = false;
-                }
-            }
-            if (unique)
-            {
-                unique_set_names.emplace_back(set_name);
-            }
-        }
-    }
-
-    std::cout << "Possible set-bonuses: " << std::endl;
     possible_set_bonuses.clear();
-    for (const Set& unique_set_name : unique_set_names)
+    for (const auto& set_bonus : armory.set_bonuses)
     {
-        int count = 0;
-        for (const Set& set_name : set_names)
+        if (set_counts[set_bonus.set] >= set_bonus.pieces)
         {
-            if (set_name == unique_set_name)
-            {
-                count++;
-            }
-        }
-        for (const Set_bonus& set_bonus : armory.set_bonuses)
-        {
-            if (set_bonus.set == unique_set_name && count >= set_bonus.pieces)
-            {
-                std::cout << "Possible set-bonus: " << set_bonus.name << std::endl;
-                possible_set_bonuses.push_back(set_bonus);
-            }
+            std::cout << "Possible set-bonus: " << set_bonus.name << std::endl;
+            possible_set_bonuses.emplace_back(set_bonus);
         }
     }
 }
@@ -785,16 +700,10 @@ Character Item_optimizer::generate_character(const std::vector<size_t>& item_ids
 Character Item_optimizer::construct(size_t index)
 {
     Character character = generate_character(get_item_ids(index));
-
-    armory.add_enchants_to_character(character, ench_vec);
-
+    Armory::add_enchants_to_character(character, ench_vec);
     armory.add_buffs_to_character(character, buffs_vec);
-
     armory.add_gems_to_character(character, gem_vec);
-
-    armory.add_talents_to_character(character, talent_vec, talent_val_vec);
-
+    Armory::add_talents_to_character(character, talent_vec, talent_val_vec);
     armory.compute_total_stats(character);
-
     return character;
 }

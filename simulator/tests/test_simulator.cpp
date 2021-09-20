@@ -8,7 +8,7 @@
 
 TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
 {
-    config.talents.flurry = 5;
+    character.talents.flurry = 5;
     config.sim_time = 500.0;
     config.main_target_level = 70;
 
@@ -22,7 +22,7 @@ TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
 
 TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
 {
-    config.talents.flurry = 5;
+    character.talents.flurry = 5;
     config.sim_time = 500.0;
     config.main_target_level = 70;
 
@@ -39,7 +39,7 @@ TEST_F(Sim_fixture, test_endless_rage)
     config.sim_time = 100000.0;
     config.n_batches = 1;
     config.main_target_initial_armor_ = 0.0;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
 
     sim.set_config(config);
     sim.simulate(character);
@@ -47,7 +47,7 @@ TEST_F(Sim_fixture, test_endless_rage)
     double rage_normal = sim.get_rage_lost_capped();
 
     Combat_simulator sim{};
-    config.talents.endless_rage = true;
+    character.talents.endless_rage = true;
     sim.set_config(config);
     sim.simulate(character);
 
@@ -60,10 +60,10 @@ TEST_F(Sim_fixture, test_endless_rage)
 
 TEST_F(Sim_fixture, test_bloodthirst_count)
 {
-    config.talents.bloodthirst = 1;
+    character.talents.bloodthirst = 1;
     config.combat.use_bloodthirst = true;
     config.essence_of_the_red_ = true;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
 
     character.total_special_stats.attack_power = 10000;
 
@@ -78,10 +78,10 @@ TEST_F(Sim_fixture, test_bloodthirst_count)
 TEST_F(Sim_fixture, test_that_with_infinite_rage_all_hits_are_heroic_strike)
 {
     config.essence_of_the_red_ = true;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
     config.combat.first_hit_heroic_strike = true;
     config.combat.use_heroic_strike = true;
-    config.talents.improved_heroic_strike = 3;
+    character.talents.improved_heroic_strike = 3;
     config.sim_time = 500.0;
 
     character.total_special_stats.attack_power = 10000;
@@ -227,7 +227,7 @@ TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
     config.n_batches = 500.0;
     config.combat.use_hamstring = true;
     config.essence_of_the_red_ = true;
-    config.combat.initial_rage = 100;
+    config.initial_rage = 100;
 
     character.total_special_stats.critical_strike = 0;
     character.total_special_stats.attack_power = 0;
@@ -563,8 +563,8 @@ TEST_F(Sim_fixture, test_deep_wounds)
     character.base_special_stats.attack_power = 1400;
 
     Combat_simulator sim{};
-    config.talents.deep_wounds = 3;
-    config.combat.deep_wounds = true;
+    character.talents.deep_wounds = 3;
+    config.deep_wounds = true;
     config.combat.use_whirlwind = true;
     config.combat.use_bloodthirst = true;
     config.combat.use_heroic_strike = true;
@@ -573,7 +573,7 @@ TEST_F(Sim_fixture, test_deep_wounds)
 
     auto ap = character.total_special_stats.attack_power;
     auto w = character.weapons[0];
-    auto dwTick = config.talents.deep_wounds * 0.2 * (0.5 * (w.min_damage + w.max_damage) + ap / 14 * w.swing_speed) / 4;
+    auto dwTick = character.talents.deep_wounds * 0.2 * (0.5 * (w.min_damage + w.max_damage) + ap / 14 * w.swing_speed) / 4;
 
     auto damage_sources = sim.get_damage_distribution();
 
@@ -596,8 +596,8 @@ TEST_F(Sim_fixture, test_flurry_uptime)
     character.total_special_stats.haste = 0.05; // haste should probably use % as well, for consistency
 
     Combat_simulator sim{};
-    config.talents.flurry = 5;
-    config.talents.bloodthirst = 1;
+    character.talents.flurry = 5;
+    character.talents.bloodthirst = 1;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     config.combat.use_bloodthirst = true;
@@ -606,7 +606,7 @@ TEST_F(Sim_fixture, test_flurry_uptime)
     sim.simulate(character);
 
     auto flurryUptime = sim.get_flurry_uptime();
-    auto flurryHaste = 1 + config.talents.flurry * 0.05;
+    auto flurryHaste = 1 + character.talents.flurry * 0.05;
 
     auto haste = 1 + character.total_special_stats.haste;
 
@@ -666,85 +666,20 @@ void print_results(const std::string name, const Combat_simulator& sim, bool pri
 
 /*
 >> results on master:
+took 2052 ms
 
-took 6994 ms
-
-white (mh)    = 282.709
-mortal strike = 83.4979
-whirlwind     = 43.0987
-slam          = 286.997
-heroic strike = 0.981576
-deep wounds   = 48.7078
-----------------------
-total         = 768.312 / 770.882
-rage lost 12012.1
-
->> after heroic strike fix & rampage/overpower changes:
-
-took 6163 ms
-
-white (mh)    = 282.746
-mortal strike = 83.5375
-whirlwind     = 43.15
-slam          = 287.001
-heroic strike = 0.961978
-deep wounds   = 48.7231
-----------------------
-total         = 768.415 / 770.985
-rage lost 12138.6
-
->> after over_time_buff / deep wound changes:
-
-took 5492 ms
-
-white (mh)    = 282.709 (15.7341x)
-slam          = 286.883 (14.0663x)
-mortal strike = 83.4875 (4.18832x)
-whirlwind     = 43.1253 (2.55086x)
-deep wounds   = 42.0281 (13.3422x)
-execute       = 22.3852 (1.22389x)
-heroic strike = 0.964171 (0.04656x)
-----------------------
-total         = 761.583 / 764.131
-rage lost 11748
-
->> after sim_time changes (new format)
-
-took 3884 ms
-
-white (mh)    = 283.65 (15.79x)
-slam          = 287.80 (14.11x)
-mortal strike = 83.80 (4.20x)
-whirlwind     = 43.22 (2.56x)
-deep wounds   = 42.16 (13.38x)
-execute       = 22.49 (1.23x)
-heroic strike = 0.97 (0.05x)
-----------------------
-total         = 764.08
-
-rage lost 0.10 per minute
-
-Deep_wounds 88.15%
-Anger Management 100.00%
-
->> after haste and attack speed split
-
-took 2157 ms
-
-white (mh)    = 283.57 (15.78x)
-slam          = 287.85 (14.12x)
-mortal strike = 83.64 (4.19x)
-whirlwind     = 43.19 (2.55x)
-deep wounds   = 42.16 (13.38x)
-execute       = 22.60 (1.24x)
+white (mh)    = 282.19 (15.71x)
+mortal strike = 83.10 (4.17x)
+whirlwind     = 43.00 (2.55x)
+slam          = 286.54 (14.05x)
 heroic strike = 1.04 (0.05x)
+execute       = 22.53 (1.23x)
+deep wounds   = 42.59 (13.52x)
 ----------------------
-total         = 764.05
+total         = 761.00
 
-rage lost 0.09 per minute
-
-Deep_wounds 88.15%
-Anger Management 100.00%
+>> results on cleanup:
+took 1953 ms
 */
 TEST_F(Sim_fixture, test_arms)
 {
@@ -764,30 +699,29 @@ TEST_F(Sim_fixture, test_arms)
     character.total_special_stats.crit_multiplier = 0.03;
 
     Combat_simulator sim{};
-    config.talents.flurry = 3;
-    config.talents.mortal_strike = 1;
-    config.talents.improved_slam = 2;
-    config.talents.deep_wounds = 3;
-    config.talents.anger_management = true;
-    config.talents.unbridled_wrath = 5;
+    character.talents.flurry = 3;
+    character.talents.mortal_strike = 1;
+    character.talents.improved_slam = 2;
+    character.talents.deep_wounds = 3;
+    character.talents.anger_management = true;
+    character.talents.unbridled_wrath = 5;
     config.combat.use_mortal_strike = true;
     config.combat.use_slam = true;
-    config.combat.slam_rage_dd = 15; // this must not be < slam_rage_cost, afaik, but this isn't enforced; what does "dd" stand for?
+    config.combat.slam_rage_thresh = 15; // this must not be < slam_rage_cost, afaik, but this isn't enforced; what does "dd" stand for?
     config.combat.slam_spam_rage = 100; // default 100 aka never
-    config.combat.slam_spam_max_time = 1.5; // rather slam_min_swing_remaining, but this should (simpler) be slam_max_swing_passed
-    config.combat.slam_latency = 0.2;
+    config.combat.slam_spam_max_time = 1500; // rather slam_min_swing_remaining, but this should (simpler) be slam_max_swing_passed
+    config.combat.slam_latency = 200;
     config.combat.use_whirlwind = true;
     config.combat.use_heroic_strike = true;
     config.combat.heroic_strike_rage_thresh = 80;
     config.execute_phase_percentage_ = 20;
     config.combat.use_sl_in_exec_phase = true;
     config.combat.use_ms_in_exec_phase = true;
-    config.combat.deep_wounds = true;
-    config.talents.mace_specialization = 0;
+    config.deep_wounds = true;
+    character.talents.mace_specialization = 0;
     sim.set_config(config);
 
     time_simulate(sim, character);
-
     print_results(test_info_->name(), sim, true);
 
     EXPECT_EQ(0, 0);
@@ -795,71 +729,6 @@ TEST_F(Sim_fixture, test_arms)
 
 /*
 >>> results on master:
-
-took 9671 ms
-
-white (mh)    = 212.512
-white (oh)    = 173.113
-heroic strike = 98.4273
-bloodthirst   = 166.721
-whirlwind     = 99.9492
-execute       = 83.4121
-deep wounds   = 38.2024
-----------------------
-total         = 872.337 / 875.255
-rage lost 8648.78
-
->>> after heroic strike fix & rampage/overpower changes:
-
-took 9223 ms
-
-white (mh)    = 212.676
-white (oh)    = 172.942
-heroic strike = 95.3933
-bloodthirst   = 166.764
-whirlwind     = 100.027
-execute       = 83.2502
-deep wounds   = 38.1973
-----------------------
-total         = 869.249 / 872.157
-rage lost 8478.46
-
->>> after over_time_buffs / deep wound changes:
-
-took 8160 ms
-
-white (mh)    = 212.649 (21.3161x)
-white (oh)    = 172.938 (28.3863x)
-bloodthirst   = 166.533 (8.36789x)
-whirlwind     = 99.9227 (5.24548x)
-heroic strike = 95.4492 (6.11997x)
-execute       = 83.3244 (4.31656x)
-deep wounds   = 19.9497 (9.8517x)
-----------------------
-total         = 850.766 / 853.611
-rage lost 8702.61
-
->>> after sim_time changes (new format)
-
-took 5846 ms
-
-white (mh)    = 213.40 (21.40x)
-white (oh)    = 173.72 (28.48x)
-bloodthirst   = 167.18 (8.39x)
-whirlwind     = 100.28 (5.26x)
-heroic strike = 95.51 (6.13x)
-execute       = 84.09 (4.35x)
-deep wounds   = 20.01 (9.88x)
-----------------------
-total         = 854.19
-
-rage lost 0.07 per minute
-
-Deep_wounds 98.31%
-Anger Management 100.00%
-
->>> after haste/attack speed split
-
 took 3433 ms
 
 white (mh)    = 213.53 (21.40x)
@@ -872,10 +741,8 @@ deep wounds   = 20.00 (9.88x)
 ----------------------
 total         = 854.86
 
-rage lost 0.07 per minute
-
-Deep_wounds 98.31%
-Anger Management 100.00%
+>>> results on cleanup:
+took 3024 ms
 */
 TEST_F(Sim_fixture, test_fury)
 {
@@ -895,20 +762,20 @@ TEST_F(Sim_fixture, test_fury)
     character.total_special_stats.expertise = 5;
     character.total_special_stats.axe_expertise = 5;
 
-    config.talents.flurry = 5;
-    config.talents.rampage = true;
+    character.talents.flurry = 5;
+    character.talents.rampage = true;
     config.combat.rampage_use_thresh = 3;
     config.combat.use_rampage = false;
-    config.talents.dual_wield_specialization = 5;
-    config.talents.deep_wounds = 3;
-    config.combat.deep_wounds = true;
-    config.talents.improved_heroic_strike = 3;
-    config.talents.improved_whirlwind = 1;
-    config.talents.impale = 2;
-    config.talents.unbridled_wrath = 5;
-    config.talents.weapon_mastery = 2;
-    config.talents.bloodthirst = 1;
-    config.talents.anger_management = true;
+    character.talents.dual_wield_specialization = 5;
+    character.talents.deep_wounds = 3;
+    config.deep_wounds = true;
+    character.talents.improved_heroic_strike = 3;
+    character.talents.improved_whirlwind = 1;
+    character.talents.impale = 2;
+    character.talents.unbridled_wrath = 5;
+    character.talents.weapon_mastery = 2;
+    character.talents.bloodthirst = 1;
+    character.talents.anger_management = true;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     /*
@@ -934,66 +801,7 @@ TEST_F(Sim_fixture, test_fury)
 }
 
 /*
->>> baseline, after deep wound fixes
-
-took 14558 ms
-
-white (mh)    = 277.576 (25.2471x)
-white (oh)    = 200.944 (29.9224x)
-bloodthirst   = 189.134 (8.5567x)
-whirlwind     = 106.055 (5.17051x)
-heroic strike = 164.315 (9.8308x)
-execute       = 97.9637 (4.66646x)
-deep wounds   = 18.6281 (8.6935x)
-----------------------
-total         = 1054.62 / 1058.14
-rage lost 576971
-
->>> after lazy add and other perf work
-
-took 8139 ms
-
-white (mh)    = 277.931 (25.263x)
-white (oh)    = 201.414 (29.951x)
-bloodthirst   = 189.787 (8.56638x)
-whirlwind     = 106.299 (5.17456x)
-heroic strike = 164.903 (9.85761x)
-execute       = 98.0892 (4.67223x)
-deep wounds   = 18.5604 (8.66152x)
-----------------------
-total         = 1056.98 / 1060.52
-rage lost 584443
-
->>> more perf work, sim_time update, new layout
-
-took 7802 ms
-
-white (mh)    = 278.81 (25.35x)
-white (oh)    = 202.05 (30.05x)
-bloodthirst   = 190.20 (8.59x)
-whirlwind     = 106.61 (5.19x)
-heroic strike = 165.30 (9.88x)
-execute       = 98.79 (4.70x)
-deep wounds   = 18.61 (8.69x)
-----------------------
-total         = 1060.36
-
-rage lost 4.64 per minute
-
-Deep_wounds 98.85%
-Anger Management 100.00%
-mongoose_oh 25.62%
-mongoose_mh 38.86%
-dragonmaw 28.01%
-
-dragonmaw 2.02 procs/min
-mongoose_mh 2.03 procs/min
-windfury_totem 4.82 procs/min
-mongoose_oh 1.20 procs/min
-sword_specialization 1.38 procs/min
-
->>> after haste/attack speed split, and other stuff ;)
-
+>>> master
 took 5167 ms
 
 white (mh)    = 276.48 (25.16x)
@@ -1006,24 +814,12 @@ deep wounds   = 18.83 (8.71x)
 ----------------------
 total         = 1058.50
 
-rage lost 4.54 per minute
-
-Anger Management 100.00%
-windfury_attack 2.50%
-mongoose_oh 25.53%
-Deep_wounds 98.84%
-mongoose_mh 38.64%
-dragonmaw 27.90%
-
-dragonmaw 2.01 procs/min
-mongoose_mh 2.01 procs/min
-windfury_totem 8.95 procs/min
-mongoose_oh 1.19 procs/min
-sword_specialization 1.38 procs/min
+>>> cleanup
+took 4586 ms
 */
 TEST_F(Sim_fixture, test_procs)
 {
-    config.sim_time = 120;
+    config.sim_time = 5 * 60;
     config.n_batches = 25000;
     config.main_target_initial_armor_ = 6200.0;
 
@@ -1076,26 +872,26 @@ TEST_F(Sim_fixture, test_procs)
     character.total_special_stats += mult;
 
     // hello, use effects ;)
-    config.talents.death_wish = true;
-    config.combat.use_death_wish = true;
+    character.talents.death_wish = true;
+    config.use_death_wish = true;
     config.enable_bloodrage = true;
     config.enable_blood_fury = true;
     config.enable_unleashed_rage = true;
 
-    config.talents.flurry = 5;
-    config.talents.rampage = true;
+    character.talents.flurry = 5;
+    character.talents.rampage = true;
     config.combat.rampage_use_thresh = 3;
     config.combat.use_rampage = true;
-    config.talents.dual_wield_specialization = 5;
-    config.talents.deep_wounds = 3;
-    config.combat.deep_wounds = true;
-    config.talents.improved_heroic_strike = 3;
-    config.talents.improved_whirlwind = 1;
-    config.talents.impale = 2;
-    config.talents.unbridled_wrath = 5;
-    config.talents.weapon_mastery = 2;
-    config.talents.bloodthirst = 1;
-    config.talents.anger_management = true;
+    character.talents.dual_wield_specialization = 5;
+    character.talents.deep_wounds = 3;
+    config.deep_wounds = true;
+    character.talents.improved_heroic_strike = 3;
+    character.talents.improved_whirlwind = 1;
+    character.talents.impale = 2;
+    character.talents.unbridled_wrath = 5;
+    character.talents.weapon_mastery = 2;
+    character.talents.bloodthirst = 1;
+    character.talents.anger_management = true;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     /*
@@ -1117,12 +913,6 @@ TEST_F(Sim_fixture, test_procs)
     config.combat.overpower_rage_thresh = 25;
 
     sim.set_config(config);
-
-    time_simulate(sim, character);
-    print_results(test_info_->name(), sim, true);
-
-    time_simulate(sim, character);
-    print_results(test_info_->name(), sim, true);
 
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);
@@ -1162,4 +952,67 @@ TEST_F(Sim_fixture, base_stats)
         EXPECT_EQ(toon.total_special_stats.attack_power, expected_ap[i]);
         EXPECT_NEAR(toon.total_special_stats.critical_strike, expected_crit[i], 0.002);
     }
+}
+
+TEST_F(Sim_fixture, test_multi)
+{
+    config.sim_time = 5 * 60;
+    config.n_batches = 25000;
+
+    config.main_target_initial_armor_ = 6200.0;
+
+    config.combat.rampage_use_thresh = 3;
+    config.combat.use_rampage = true;
+    config.deep_wounds = true;
+    config.combat.heroic_strike_rage_thresh = 60;
+    config.combat.use_heroic_strike = true;
+    config.combat.use_bloodthirst = true;
+    config.combat.use_whirlwind = true;
+
+    auto mh = Weapon{"test_mh", {}, {}, 2.7, 270, 270, Weapon_socket::one_hand, Weapon_type::axe};
+    auto oh = Weapon{"test_oh", {}, {}, 2.6, 260, 260, Weapon_socket::one_hand, Weapon_type::sword};
+    character.equip_weapon(mh, oh);
+
+    character.total_special_stats.attack_power = 2800;
+    character.total_special_stats.critical_strike = 35;
+    character.total_special_stats.hit = 3;
+    character.talents.flurry = 5;
+    character.talents.rampage = true;
+    character.talents.dual_wield_specialization = 5;
+    character.talents.deep_wounds = 3;
+    character.talents.improved_heroic_strike = 3;
+    character.talents.improved_whirlwind = 1;
+    character.talents.impale = 2;
+    character.talents.unbridled_wrath = 5;
+    character.talents.weapon_mastery = 2;
+    character.talents.bloodthirst = 1;
+
+    srand(110000);
+    auto start = std::chrono::steady_clock::now();
+    sim.set_config(config);
+    sim.simulate(character);
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+
+    auto& single = sim.get_dps_distribution();
+
+    std::cout << single << std::endl;
+    std::cout << "flurry = " << sim.get_flurry_uptime() << ", rampage = " << sim.get_rampage_uptime() << std::endl;
+
+    srand(110000);
+    start = std::chrono::steady_clock::now();
+    sim.set_config(config);
+    Distribution multi{};
+    for (auto i = 0; i < 100; ++i)
+    {
+        sim.simulate(character, 250, multi);
+        multi = sim.get_dps_distribution();
+    }
+    end = std::chrono::steady_clock::now();
+    std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+
+    std::cout << multi << std::endl;
+    std::cout << "flurry = " << sim.get_flurry_uptime() << ", rampage = " << sim.get_rampage_uptime() << std::endl;
+
+    SUCCEED();
 }

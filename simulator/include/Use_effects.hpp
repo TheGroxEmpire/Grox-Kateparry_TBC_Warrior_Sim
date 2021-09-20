@@ -1,27 +1,27 @@
 #ifndef WOW_SIMULATOR_USE_EFFECTS_H
 #define WOW_SIMULATOR_USE_EFFECTS_H
 
-#include "include/Character.hpp"
+#include "Item.hpp"
 
-namespace Use_effects
+class Use_effects
 {
-double is_time_available(const std::vector<std::pair<double, Use_effect>>& use_effect_timers, double check_time,
-                         double duration);
+public:
+    typedef std::reference_wrapper<Use_effect> Use_effect_ref;
+    typedef std::vector<std::pair<int, Use_effect_ref>> Schedule;
 
-double get_next_available_time(const std::vector<std::pair<double, Use_effect>>& use_effect_timers, double check_time,
-                               double duration);
+    static Schedule compute_schedule(std::vector<Use_effect>& use_effects, const Special_stats& special_stats,
+                                     int sim_time, double ap);
 
-std::vector<std::pair<double, Use_effect>> compute_use_effect_order(std::vector<Use_effect>& use_effects,
-                                                                    const Special_stats& special_stats, double sim_time,
-                                                                    double ap, int number_of_targets,
-                                                                    double extra_target_duration);
+    static double get_use_effect_ap_equivalent(const Use_effect& use_effect, const Special_stats& special_stats, double total_ap,
+                                               int sim_time);
 
-std::vector<Use_effect> sort_use_effects_by_power_ascending(std::vector<Use_effect>& shared_effects,
-                                                            const Special_stats& special_stats, double total_ap);
+    static int is_time_available(const Schedule& schedule, int check_time, int duration);
 
-double get_use_effect_ap_equivalent(const Use_effect& use_effect, const Special_stats& special_stats, double total_ap,
-                                    double sim_time);
+    static int get_next_available_time(const Schedule& schedule, int check_time, int duration);
 
-} // namespace Use_effects
+private:
+    static std::vector<Use_effect_ref> sort_use_effects_by_power_ascending(std::vector<Use_effect_ref>& shared_effects,
+                                                                const Special_stats& special_stats, double total_ap);
+};
 
 #endif // WOW_SIMULATOR_USE_EFFECTS_H
