@@ -5610,7 +5610,7 @@
                         borderColor: colors[i],
                         backgroundColor: colors[i],
                         pointRadius: 0.1,
-                        fill: origin
+                        fill: "origin"
                     }
                 )
             }
@@ -5625,7 +5625,7 @@
                         borderColor: colors[i],
                         backgroundColor: colors[i],
                         pointRadius: 0.1,
-                        fill: origin
+                        fill: "origin"
                     }
                 )
             }
@@ -5719,14 +5719,15 @@
                 )
             }
 
-            Chart.defaults.global.defaultFontColor = "black";
             Chart.defaults.global.defaultFontFamily = "Arial, Helvetica, sans-serif";
-            Chart.defaults.global.defaultFontSize = 24;
-            Chart.defaults.global.defaultFontStyle = "normal";
-            Chart.defaults.global.title.fontColor = "black";
-            Chart.defaults.global.title.fontSize = 48;
+            Chart.defaults.global.defaultFontStyle = "bold";
+            Chart.defaults.global.defaultFontColor = "black";
+            Chart.defaults.global.defaultFontSize = 36;
+            Chart.defaults.global.title.fontSize = 64;
             Chart.defaults.global.title.display = true;
-            Chart.defaults.scale.gridLines.color = "black";
+            Chart.defaults.scale.gridLines.color = "rgba(0, 0, 0, 0.5)";
+            Chart.defaults.scale.gridLines.display = false;
+            Chart.defaults.scale.scaleLabel.display = true;
 
             let total = hist_y.reduce((a, v) => a + v);
 
@@ -5746,7 +5747,7 @@
             };
 
             line_chart_hist = new Chart(document.getElementById("line-chart-hist"), {
-                type: 'bar',
+                type: "bar",
                 data: {
                     labels: hist_x,
                     datasets: [{
@@ -5757,29 +5758,26 @@
                 },
                 options: {
                     title: {
-                        text: 'Damage histogram'
+                        text: "Damage histogram"
                     },
                     scales: {
                         yAxes: [{
                             gridLines: {
-                                color: "rgba(0, 0, 0, 0.5)",
+                                display: true
                             },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Frequency',
+                                labelString: "Frequency",
                             }
                         }],
                         xAxes: [{
                             gridLines: {
-                                color: "rgba(0, 0, 0, 0.5)",
+                                display: true
                             },
                             ticks: {
-                                maxTicksLimit: 30,
-                                maxRotation: 45
+                                maxRotation: 0,
                             },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'DPS'
+                                labelString: "DPS"
                             }
                         }]
                     }
@@ -5788,11 +5786,11 @@
 
             let canvas = document.getElementById("line-chart-hist");
             canvas.maintainAspectRatio = true;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
 
             line_chart_fight = new Chart(document.getElementById("line-chart-fight"), {
-                type: 'line',
+                type: "line",
                 data: {
                     labels: time_stamps,
                     datasets: data_damage_time_lapse
@@ -5800,32 +5798,22 @@
                 options: {
                     bezierCurve: false,
                     title: {
-                        text: 'Fight time lapse (DPS)'
+                        text: "Fight time lapse (DPS)"
                     },
                     scales: {
                         yAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Average damage'
+                                labelString: "Average damage"
                             }
                         }],
                         xAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: 30,
                                 maxRotation: 0,
                             },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Time'
+                                labelString: "Time"
                             }
-                        }],
+                        }]
                     }
                 }
             });
@@ -5833,40 +5821,31 @@
             canvas = document.getElementById("line-chart-fight");
             canvas.maintainAspectRatio = true;
             canvas.responsive = false;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
 
             line_chart_fight_cum = new Chart(document.getElementById("line-chart-fight-cumulative"), {
-                type: 'line',
+                type: "line",
                 data: {
                     labels: time_stamps,
                     datasets: data_damage_time_lapse_cum
                 },
                 options: {
                     title: {
-                        text: 'Fight time lapse'
+                        text: "Fight time lapse"
                     },
                     scales: {
                         yAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Cumulative damage'
+                                labelString: "Cumulative damage"
                             },
                         }],
                         xAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             ticks: {
-                                maxTicksLimit: 30,
-                                maxRotation: 0
+                                maxRotation: 0,
                             },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Time'
+                                labelString: "Time"
                             }
                         }]
                     }
@@ -5875,47 +5854,36 @@
 
             canvas = document.getElementById("line-chart-fight-cumulative");
             canvas.maintainAspectRatio = true;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
 
             bar_chart_cooldowns = new Chart(document.getElementById("bar-chart-cooldowns").getContext("2d"), {
-                type: 'horizontalBar',
+                type: "horizontalBar",
                 data: {
                     labels: use_effect_labels,
                     datasets: use_effect_datasets
                 },
                 options: {
-                    legend: {display: false},
+                    legend: {
+                        display: false
+                    },
                     title: {
-                        text: 'Use Effect Schedule'
+                        text: "Use Effect Schedule"
+                    },
+                    tooltips: {
+                        mode: "point",
                     },
                     scales: {
                         yAxes: [{
                             stacked: true,
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Use Effect'
+                                labelString: "Use Effect"
                             },
-                            ticks: {
-                                beginAtZero: true,
-                                suggestedMin: 0,
-                            }
                         }],
                         xAxes: [{
                             stacked: true,
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'Time'
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                suggestedMin: 0,
+                                labelString: "Time"
                             }
                         }]
                     }
@@ -5925,12 +5893,12 @@
             canvas = document.getElementById("bar-chart-cooldowns");
             canvas.maintainAspectRatio = true;
             canvas.responsive = false;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
 
             // Bar chart
             bar_chart_damage = new Chart(document.getElementById("bar-chart-damage"), {
-                type: 'bar',
+                type: "bar",
                 data: {
                     labels: damage_name,
                     datasets: [
@@ -5943,16 +5911,12 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        text: 'DPS from different sources'
+                        text: "DPS from different sources"
                     },
                     scales: {
                         yAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
-                                labelString: 'DPS'
+                                labelString: "DPS"
                             },
                             ticks: {
                                 beginAtZero: true,
@@ -5960,9 +5924,6 @@
                             }
                         }],
                         xAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
                                 display: false,
                             },
@@ -5977,12 +5938,12 @@
 
             canvas = document.getElementById("bar-chart-damage");
             canvas.maintainAspectRatio = true;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
 
             // Bar chart
             bar_chart_auras = new Chart(document.getElementById("bar-chart-auras"), {
-                type: 'bar',
+                type: "bar",
                 data: {
                     labels: aura_name,
                     datasets: [
@@ -5995,16 +5956,12 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        text: 'Aura uptime'
+                        text: "Aura uptime"
                     },
                     scales: {
                         yAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
-                                labelString: '%',
+                                labelString: "%",
                             },
                             ticks: {
                                 beginAtZero: true,
@@ -6012,8 +5969,8 @@
                             }
                         }],
                         xAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
+                            scaleLabel: {
+                                display: false
                             },
                             ticks: {
                                 beginAtZero: true,
@@ -6025,12 +5982,12 @@
 
             canvas = document.getElementById("bar-chart-auras");
             canvas.maintainAspectRatio = true;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
 
             // Bar chart
             bar_chart_proc = new Chart(document.getElementById("bar-chart-proc"), {
-                type: 'bar',
+                type: "bar",
                 data: {
                     labels: proc_name,
                     datasets: [
@@ -6043,23 +6000,20 @@
                 options: {
                     legend: {display: false},
                     title: {
-                        text: 'Average # of procs'
+                        text: "Average # of procs"
                     },
                     scales: {
                         yAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
-                            },
                             scaleLabel: {
-                                display: true,
+                                display: false,
                             },
                             ticks: {
                                 beginAtZero: true,
                             }
                         }],
                         xAxes: [{
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0)",
+                            scaleLabel: {
+                                display: false,
                             },
                             ticks: {
                                 beginAtZero: true,
@@ -6072,8 +6026,8 @@
             canvas = document.getElementById("bar-chart-proc");
             canvas.maintainAspectRatio = true;
             canvas.responsive = false;
-            canvas.style.height = '450px';
-            canvas.style.width = '675px';
+            canvas.style.height = "450px";
+            canvas.style.width = "675px";
         }
     }
 </script>
