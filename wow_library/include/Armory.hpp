@@ -526,7 +526,7 @@ struct Armory
                 {"band_of_the_ranger_general", Attributes{0.0, 0.0}, Special_stats{1.2681159420289856, 1.14140773620799, 56.0, 0, 0.0}, Socket::ring}, 
                 {"ring_of_lethality", Attributes{0.0, 24.0}, Special_stats{0.0, 1.2048192771084338, 50.0, 0, 0.0}, Socket::ring}, 
                 {"ancestral_ring_of_conquest", Attributes{32.0, 21.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::ring},
-                {"veterans_band_of_triumph", Attributes{0.0, 0.0}, Special_stats{0.9963768116, 0.0, 42.0, 0, 0.0}, Socket::neck}, 
+                {"veterans_band_of_triumph", Attributes{0.0, 0.0}, Special_stats{0.9963768116, 0.0, 42.0, 0, 0.0}, Socket::ring}, 
             };
 
     std::vector<Armor> trinket_t

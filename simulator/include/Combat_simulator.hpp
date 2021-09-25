@@ -226,7 +226,7 @@ public:
 
     void swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
-    void hit_effects(Sim_state& state, Weapon_sim& weapon, Hit_type hit_type = Hit_type::spell, Extra_attack_type extra_attack_type = Extra_attack_type::all);
+    void hit_effects(Sim_state& state, Hit_result hit_result, Weapon_sim& weapon, Hit_type hit_type = Hit_type::spell, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
     void overpower(Sim_state& state);
 
