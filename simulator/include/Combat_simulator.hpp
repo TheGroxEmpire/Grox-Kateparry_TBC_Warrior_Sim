@@ -11,6 +11,7 @@
 #include "sim_state.hpp"
 #include "time_keeper.hpp"
 #include "weapon_sim.hpp"
+#include "hit_result.hpp"
 
 #include <array>
 #include <cassert>
@@ -23,16 +24,6 @@ class Combat_simulator : Rage_manager
 {
 public:
     void set_config(const Combat_simulator_config& new_config);
-
-    enum class Hit_result
-    {
-        miss,
-        dodge,
-        glancing,
-        crit,
-        hit,
-        TBD
-    };
 
     enum class Hit_type
     {

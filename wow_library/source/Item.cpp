@@ -74,7 +74,7 @@ std::ostream& operator<<(std::ostream& os, const Hit_effect::Type& t)
 std::ostream& operator<<(std::ostream& os, const Hit_effect& he)
 {
     os << he.name << " " << he.type << " affects_both_weapons = " << std::boolalpha << he.affects_both_weapons
-    << ", attack_power_boost = " << he.attack_power_boost << ", max_charges = " << he.max_charges
+    << ", proc_type = " << he.proc_type << ", max_charges = " << he.max_charges
        << ", armor_reduction = " << he.armor_reduction << ", max_stacks = " << he.max_stacks;
     return os;
 }

@@ -342,20 +342,20 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(Sim_state& state, c
 
     if (deep_wounds_)
     {
-        if (hit_outcome.hit_result == Combat_simulator::Hit_result::crit)
+        if (hit_outcome.hit_result == Hit_result::crit)
         {
             deep_wound_effect_.damage = 0.25 * (1 + state.special_stats.damage_mod_physical) * state.talents.deep_wounds * 0.2 * state.main_hand_weapon.swing(state.special_stats);
             buff_manager_.add_over_time_buff(deep_wound_effect_, time_keeper_.time);
         }
     }
 
-    if (config.combat.use_overpower && hit_outcome.hit_result == Combat_simulator::Hit_result::dodge)
+    if (config.combat.use_overpower && hit_outcome.hit_result == Hit_result::dodge)
     {
         logger_.print("Overpower aura gained!");
         time_keeper_.gain_overpower_aura();
     }
 
-    if (use_rampage_ && hit_outcome.hit_result == Combat_simulator::Hit_result::crit)
+    if (use_rampage_ && hit_outcome.hit_result == Hit_result::crit)
     {
         logger_.print("Rampage aura gained!");
         time_keeper_.gain_rampage_aura();
@@ -670,7 +670,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
             continue;
         }
 
-        if ((hit_effect.name == "tsunami_talisman" || hit_effect.name == "hourglass_of_the_unraveller") && hit_result != Hit_result::crit)
+        if (!hit_effect.is_procced_by(hit_result))
         {
             continue;
         }

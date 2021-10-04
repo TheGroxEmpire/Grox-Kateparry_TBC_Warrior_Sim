@@ -1,7 +1,7 @@
 #ifndef WOW_SIMULATOR_WEAPON_SIM_HPP
 #define WOW_SIMULATOR_WEAPON_SIM_HPP
 
-#include "include/Item.hpp"
+#include "Item.hpp"
 
 class Weapon_sim
 {

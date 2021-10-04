@@ -2,6 +2,7 @@
 #define WOW_SIMULATOR_ITEM_HPP
 
 #include "Attributes.hpp"
+#include "hit_result.hpp"
 
 #include <cassert>
 #include <utility>
@@ -162,10 +163,16 @@ public:
         rage_boost,
     };
 
+    // TODO(vigo) turn into an enum class; it's uint8_t for now, so there's fewer Armory changes
+    struct Proc_type {
+        static constexpr uint8_t hits = (uint8_t)Hit_result::glancing | (uint8_t)Hit_result::crit | (uint8_t)Hit_result::hit;
+        static constexpr uint8_t crits = (uint8_t)Hit_result::crit;
+    };
+
     Hit_effect() = default;
 
     Hit_effect(std::string name, Type type, Attributes attribute_boost, Special_stats special_stats_boost,
-               double damage, double duration, double cooldown, double probability, double attack_power_boost = 0, int max_charges = 1,
+               double damage, double duration, double cooldown, double probability, uint8_t proc_type = Hit_effect::Proc_type::hits, int max_charges = 1,
                int armor_reduction = 0, int max_stacks = 1, double ppm = 0.0, bool affects_both_weapons = false) :
         name(std::move(name)),
         type(type),
@@ -175,7 +182,7 @@ public:
         duration(to_millis(duration)),
         cooldown(to_millis(cooldown)),
         probability(probability),
-        attack_power_boost(attack_power_boost), // unused
+        proc_type(proc_type), // unused
         max_charges(max_charges),
         armor_reduction(armor_reduction), // unused
         ppm(ppm),
@@ -199,6 +206,16 @@ public:
         {
             max_stacks = 1;
         }
+
+        if (proc_type == 0)
+        {
+            proc_type = Hit_effect::Proc_type::hits;
+        }
+    }
+
+    [[nodiscard]] bool is_procced_by(Hit_result hit_result) const
+    {
+        return (proc_type & (uint8_t)hit_result) > 0;
     }
 
     [[nodiscard]] Special_stats to_special_stats(const Special_stats& multipliers) const
@@ -214,7 +231,7 @@ public:
     int duration{};
     int cooldown{};
     double probability{};
-    double attack_power_boost{}; // unused; was in use for windfury_totem only
+    uint8_t proc_type{Proc_type::hits}; // used to be "attack_power_boost", and in use for windfury_totem only; now used for proc_type (e.g. tsunami_talisman)
     int max_charges{1}; // used to be "n_targets", and unused; now used for charges (for windfury attack or flurry)
     int armor_reduction{}; // deprecated, use special_stats_boost.gear_armor_pen instead (3 usages)
     double ppm{};
