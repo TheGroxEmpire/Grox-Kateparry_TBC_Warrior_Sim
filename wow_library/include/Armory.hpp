@@ -251,6 +251,7 @@ struct Armory
                 {"cloak_of_darkness", Attributes{23.0, 0.0}, Special_stats{1.0869565217391306, 0.0, 0.0, 0, 0.0}, Socket::back}, 
                 {"thalassian_wildercloak", Attributes{0.0, 28.0}, Special_stats{0.0, 0.0, 68.0, 0, 0.0}, Socket::back}, 
                 {"razor_scale_battlecloak", Attributes{33.0, 23.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::back}, 
+                {"crystalweave_cape", Attributes{0.0, 15.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.01648700063}, Socket::back}, 
 
             };
 
@@ -560,6 +561,7 @@ struct Armory
                 // Phase 2
                 {"solarians_sapphire", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::none},
                 {"tsunami_talisman", Attributes{0.0, 0.0}, Special_stats{1.7210144927536233, 0.6341154090044389, 0.0, 0, 0.0}, Socket::trinket, Set::none, {{"tsunami_talisman", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 340}, 0, 10, 45, .1, Hit_effect::Proc_type::crits}}},
+                {"crystalforged_trinket", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0, 0, 0.0, 0, 0, 7}, Socket::trinket, Set::none, {}, {{"crystalforged_trinket", Use_effect::Effect_socket::shared, {0,  0}, {0, 0, 216}, 0, 10, 60, true}}},
                 {"darkmoon_card_crusade", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0}, Socket::trinket, Set::none, {{"darkmoon_card_crusade", Hit_effect::Type::stat_boost, {}, {0, 0, 6}, 0, 10, 0, 1, 0, 1, 0, 20}}, {}},
             };
 
@@ -588,6 +590,7 @@ struct Armory
                 {"merciless_gladiators_war_edge", Attributes{0.0, 0.0}, Special_stats{0.7246376811594204, 0.0, 28.0, 0, 0.0}, Socket::ranged}, 
                 {"sepentshrine_shuriken", Attributes{0.0, 0.0}, Special_stats{0.9057971014492754, 0.7609384908053266, 0.0, 0, 0.0}, Socket::ranged}, 
                 {"arcanite_steam_pistol", Attributes{0.0, 20.0}, Special_stats{0.0, 1.2048192771084338, 0.0, 0, 0.0}, Socket::ranged}, 
+                {"crystalline_crossbow", Attributes{0.0, 12.0}, Special_stats{0.0, 0.6975269499, 0.0, 0, 0.0}, Socket::ranged}, 
 
             };
 
@@ -723,6 +726,7 @@ struct Armory
                 {"guile_of_khoraazi", Attributes{0.0, 19.0}, Special_stats{0.0, 0.0, 38.0}, 1.6, 104, 156, Weapon_socket::one_hand, Weapon_type::dagger},
                 {"feltooth_eviscerator", Attributes{0.0, 0.0}, Special_stats{0.9963768116, 0.0, 34.0}, 1.4, 83, 156, Weapon_socket::one_hand, Weapon_type::dagger},
                 {"blade_of_the_unrequited", Attributes{0.0, 0.0}, Special_stats{0.4076086957, 0.0, 18.0}, 1.6, 112, 168, Weapon_socket::one_hand, Weapon_type::dagger},
+                {"emerald_ripper", Attributes{0.0, 10.0}, Special_stats{0.0, 0.0, 36.0}, 1.8, 126, 189, Weapon_socket::one_hand, Weapon_type::dagger},
 
                 // Phase 2
                 {"fang_of_vashj", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 56.0, 0, 0, 0, 0, 0, 0, 0, 0, 5.326569436}, 1.8, 144, 217, Weapon_socket::one_hand, Weapon_type::dagger},
