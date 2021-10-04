@@ -560,7 +560,7 @@ struct Armory
                 // Phase 2
                 {"solarians_sapphire", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, Socket::trinket, Set::none},
                 {"tsunami_talisman", Attributes{0.0, 0.0}, Special_stats{1.7210144927536233, 0.6341154090044389, 0.0, 0, 0.0}, Socket::trinket, Set::none, {{"tsunami_talisman", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 340}, 0, 10, 45, .1}}}, 
-                //{"darkmoon_card_crusade", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 120}, Socket::trinket}, 
+                {"darkmoon_card_crusade", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0}, Socket::trinket, Set::none, {{"darkmoon_card_crusade", Hit_effect::Type::stat_boost, {}, {0, 0, 6}, 0, 10, 0, 1, 0, 1, 0, 20}}, {}},
             };
 
     std::vector<Armor> ranged_t

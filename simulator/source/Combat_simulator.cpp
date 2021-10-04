@@ -670,6 +670,11 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
             continue;
         }
 
+        if ((hit_effect.name == "tsunami_talisman" || hit_effect.name == "hourglass_of_the_unraveller") && hit_result != Hit_result::crit)
+        {
+            continue;
+        }
+
         auto probability = hit_effect.ppm > 0 ? hit_effect.ppm * weapon.swing_speed / 60 : hit_effect.probability;
         if (probability < 1 && get_uniform_random(1) >= probability)
         {
@@ -707,10 +712,6 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
             break;
         }
         case Hit_effect::Type::stat_boost: {
-            if ((hit_effect.name == "tsunami_talisman" || hit_effect.name == "hourglass_of_the_unraveller") && hit_result != Hit_result::crit)
-            {
-                break;
-            }
             hit_effect.procs++;
             logger_.print("PROC: ", hit_effect.name, " stats increased for ", hit_effect.duration, "s");
             buff_manager_.add_combat_buff(hit_effect, time_keeper_.time);
@@ -755,7 +756,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
     }
 }
 
-double Combat_simulator::rage_generation(Sim_state& state, const Hit_outcome& hit_outcome, const Weapon_sim& weapon) const
+double Combat_simulator::rage_generation(Sim_state& state, const Hit_outcome& hit_outcome, const Weapon_sim& weapon)
 {
     auto hit_factor = weapon.socket == Socket::main_hand ? 3.5/2 : 1.75/2;
     if (hit_outcome.hit_result == Hit_result::crit) hit_factor *= 2;
