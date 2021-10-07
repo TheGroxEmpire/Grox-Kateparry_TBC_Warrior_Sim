@@ -1,5 +1,7 @@
 #include "Buff_manager.hpp"
 
+#include "Item.hpp" // should be redundant
+
 void Buff_manager::initialize(std::vector<Hit_effect>& hit_effects_mh_input, std::vector<Hit_effect>& hit_effects_oh_input,
                 Use_effects::Schedule& use_effects_schedule_input, Rage_manager* rage_manager_input)
 {

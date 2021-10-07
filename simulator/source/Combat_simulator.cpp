@@ -1755,9 +1755,9 @@ void Combat_simulator::add_damage_source_to_time_lapse(const std::vector<Damage_
 {
     for (const auto& damage_instance : damage_instances)
     {
-        auto first_idx = static_cast<size_t>(damage_instance.damage_source);
-        auto second_idx = static_cast<size_t>(damage_instance.time_stamp / time_lapse_resolution);
-        assert(second_idx >= 0 && second_idx < damage_time_lapse_[first_idx].size());
+        auto first_idx = static_cast<int>(damage_instance.damage_source);
+        auto second_idx = static_cast<int>(damage_instance.time_stamp / time_lapse_resolution);
+        assert(second_idx >= 0 && second_idx < static_cast<int>(damage_time_lapse_[first_idx].size()));
         damage_time_lapse_[first_idx][second_idx] += damage_instance.damage;
     }
 }
