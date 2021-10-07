@@ -594,6 +594,8 @@ struct Armory
 
             };
 
+    std::vector<Armor> none_t {};
+
     std::vector<Weapon> swords_t
             {
                 // Phase 1
@@ -783,7 +785,7 @@ struct Armory
         {Set::destroyer, 4, "destroyer-2pc (4t5)"},
     };
 
-    [[nodiscard]] std::vector<Armor> get_items_in_socket(Socket socket) const;
+    [[nodiscard]] const std::vector<Armor>& get_items_in_socket(Socket socket) const;
 
     [[nodiscard]] std::vector<Weapon> get_weapon_in_socket(Weapon_socket socket) const;
 
@@ -806,7 +808,7 @@ struct Armory
 
     [[nodiscard]] static bool check_if_armor_valid(const std::vector<Armor> &armor);
 
-    [[nodiscard]] static bool check_if_weapons_valid(std::vector<Weapon> &weapons);
+    [[nodiscard]] static bool check_if_weapons_valid(std::vector<Weapon> & ws);
 
     static void change_weapon(std::vector<Weapon> &current_weapons, const Weapon &equip_weapon, const Socket &socket);
 

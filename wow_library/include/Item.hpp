@@ -416,6 +416,8 @@ struct Armor
     Enchant enchant{};
     std::vector<Hit_effect> hit_effects{};
     std::vector<Use_effect> use_effects{};
+
+    static const Armor none;
 };
 
 struct Weapon
@@ -450,6 +452,8 @@ struct Weapon
     Socket socket;
     Enchant enchant;
     Weapon_buff buff; // TODO(vigo) - temporary weapon enhancements; they should at least add bonus damage
+
+    static const Weapon none;
 };
 
 std::ostream& operator<<(std::ostream& os, const Socket& socket);

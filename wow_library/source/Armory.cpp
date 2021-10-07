@@ -250,12 +250,12 @@ void Armory::compute_total_stats(Character& character) const
 {
     if (!check_if_weapons_valid(character.weapons))
     {
-        std::cout << "invalid weapon setup";
+        std::cerr << "invalid weapon setup" << std::endl;
         assert(false);
     }
     if (!check_if_armor_valid(character.armor))
     {
-        std::cout << "invalid armor setup";
+        std::cerr << "invalid armor setup" << std::endl;
         assert(false);
     }
     character.total_attributes = {};
@@ -419,7 +419,7 @@ bool Armory::check_if_armor_valid(const std::vector<Armor>& armor)
                 {
                     if (armor_piece.socket == Socket::ring && one_ring)
                     {
-                        std::cout << "extra copy of " << armor_piece.socket << "\n";
+                        std::cerr << "extra copy of " << armor_piece.socket << std::endl;
                         return false;
                     }
                     one_ring = true;
@@ -428,14 +428,14 @@ bool Armory::check_if_armor_valid(const std::vector<Armor>& armor)
                 {
                     if (armor_piece.socket == Socket::trinket && one_trinket)
                     {
-                        std::cout << "extra copy of " << armor_piece.socket << "\n";
+                        std::cerr << "extra copy of " << armor_piece.socket << std::endl;
                         return false;
                     }
                     one_trinket = true;
                 }
                 else
                 {
-                    std::cout << "extra copy of " << armor_piece.socket << "\n";
+                    std::cerr << "extra copy of " << armor_piece.socket << std::endl;
                     return false;
                 }
             }
@@ -445,20 +445,16 @@ bool Armory::check_if_armor_valid(const std::vector<Armor>& armor)
     return true;
 }
 
-bool Armory::check_if_weapons_valid(std::vector<Weapon>& weapons)
+bool Armory::check_if_weapons_valid(std::vector<Weapon>& ws)
 {
-    bool is_valid{true};
-    is_valid &= weapons.size() <= 2;
-    if (weapons.size() == 2)
+    switch (ws.size())
     {
-        is_valid &= (weapons[0].socket != Socket::off_hand);
-        is_valid &= (weapons[1].socket != Socket::main_hand);
+    case 0: return true;
+    case 1: return ws[0].weapon_socket == Weapon_socket::two_hand;
+    case 2: return (ws[0].weapon_socket == Weapon_socket::main_hand || ws[0].weapon_socket == Weapon_socket::one_hand)
+                    && (ws[1].weapon_socket == Weapon_socket::off_hand || ws[1].weapon_socket == Weapon_socket::one_hand);
+    default: return false;
     }
-    if (weapons.size() == 1)
-    {
-        is_valid &= (weapons[0].weapon_socket == Weapon_socket::two_hand);
-    }
-    return is_valid;
 }
 
 void Armory::change_weapon(std::vector<Weapon>& current_weapons, const Weapon& equip_weapon, const Socket& socket)
@@ -514,109 +510,39 @@ void Armory::change_armor(std::vector<Armor>& armor_vec, const Armor& armor, boo
 
 std::vector<Weapon> Armory::get_weapon_in_socket(const Weapon_socket socket) const
 {
+    std::vector<Weapon> weapons{};
     switch (socket)
     {
-    case Weapon_socket::main_hand: {
-        std::vector<Weapon> mh_weapons{};
-        for (const auto& wep : swords_t)
+    case Weapon_socket::main_hand:
+    case Weapon_socket::off_hand:
+        for (const auto by_type : {&swords_t, &axes_t, &maces_t, &daggers_t, &fists_t})
         {
-            if (wep.weapon_socket == Weapon_socket::main_hand || wep.weapon_socket == Weapon_socket::one_hand)
+            for (const auto& w : *by_type)
             {
-                mh_weapons.emplace_back(wep);
+                if (w.weapon_socket == socket || w.weapon_socket == Weapon_socket::one_hand)
+                {
+                    weapons.emplace_back(w);
+                }
             }
         }
-        for (const auto& wep : axes_t)
+        return weapons;
+    case Weapon_socket::two_hand:
+        for (const auto by_type : {&two_handed_swords_t, &two_handed_axes_polearm_t, &two_handed_maces_t})
         {
-            if (wep.weapon_socket == Weapon_socket::main_hand || wep.weapon_socket == Weapon_socket::one_hand)
+            for (const auto& w : *by_type)
             {
-                mh_weapons.emplace_back(wep);
+                weapons.emplace_back(w);
             }
         }
-        for (const auto& wep : maces_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::main_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                mh_weapons.emplace_back(wep);
-            }
-        }
-        for (const auto& wep : daggers_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::main_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                mh_weapons.emplace_back(wep);
-            }
-        }
-        for (const auto& wep : fists_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::main_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                mh_weapons.emplace_back(wep);
-            }
-        }
-        return mh_weapons;
-    }
-    case Weapon_socket::off_hand: {
-        std::vector<Weapon> oh_weapons{};
-        for (const auto& wep : swords_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::off_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                oh_weapons.emplace_back(wep);
-            }
-        }
-        for (const auto& wep : axes_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::off_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                oh_weapons.emplace_back(wep);
-            }
-        }
-        for (const auto& wep : maces_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::off_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                oh_weapons.emplace_back(wep);
-            }
-        }
-        for (const auto& wep : daggers_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::off_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                oh_weapons.emplace_back(wep);
-            }
-        }
-        for (const auto& wep : fists_t)
-        {
-            if (wep.weapon_socket == Weapon_socket::off_hand || wep.weapon_socket == Weapon_socket::one_hand)
-            {
-                oh_weapons.emplace_back(wep);
-            }
-        }
-        return oh_weapons;
-    }
-    case Weapon_socket ::two_hand: {
-        std::vector<Weapon> th_weapons{};
-        for (const auto& wep : two_handed_swords_t)
-        {
-            th_weapons.emplace_back(wep);
-        }
-        for (const auto& wep : two_handed_maces_t)
-        {
-            th_weapons.emplace_back(wep);
-        }
-        for (const auto& wep : two_handed_axes_polearm_t)
-        {
-            th_weapons.emplace_back(wep);
-        }
-        return th_weapons;
-    }
+        return weapons;
     default:
-        std::cout << "ERROR: incorrect weapon socket provided!\n";
-        return swords_t;
+        std::cerr << "ERROR: incorrect weapon socket provided!" << std::endl;
+        assert(false);
+        return weapons;
     }
 }
 
-std::vector<Armor> Armory::get_items_in_socket(const Socket socket) const
+const std::vector<Armor>& Armory::get_items_in_socket(const Socket socket) const
 {
     switch (socket)
     {
@@ -647,8 +573,9 @@ std::vector<Armor> Armory::get_items_in_socket(const Socket socket) const
     case Socket::ranged:
         return ranged_t;
     default:
-        std::cout << "ERROR: incorrect item socket provided: " << socket << "\n";
+        std::cerr << "ERROR: incorrect item socket provided: " << socket << std::endl;
         assert(false);
+        return none_t;
     }
 }
 
@@ -700,51 +627,11 @@ std::unordered_map<std::string, const Weapon*> Armory::build_weapons_index() con
 
 Armor Armory::find_armor(const Socket socket, const std::string& name) const
 {
-    std::vector<Armor> items;
-    switch (socket)
+    const auto& items = get_items_in_socket(socket);
+    if (items.empty())
     {
-    case Socket::head:
-        items = helmet_t;
-        break;
-    case Socket::neck:
-        items = neck_t;
-        break;
-    case Socket::shoulder:
-        items = shoulder_t;
-        break;
-    case Socket::back:
-        items = back_t;
-        break;
-    case Socket::chest:
-        items = chest_t;
-        break;
-    case Socket::wrist:
-        items = wrists_t;
-        break;
-    case Socket::hands:
-        items = hands_t;
-        break;
-    case Socket::belt:
-        items = belt_t;
-        break;
-    case Socket::legs:
-        items = legs_t;
-        break;
-    case Socket::boots:
-        items = boots_t;
-        break;
-    case Socket::ring:
-        items = ring_t;
-        break;
-    case Socket::trinket:
-        items = trinket_t;
-        break;
-    case Socket::ranged:
-        items = ranged_t;
-        break;
-    default:
-        std::cerr << "ERROR: socket '" << socket << "' invalid\n";
         assert(false);
+        return Armor::none;
     }
     for (const auto& item : items)
     {
@@ -753,75 +640,36 @@ Armor Armory::find_armor(const Socket socket, const std::string& name) const
             return item;
         }
     }
-    std::cerr << "ERROR: item '" << name << "' not found for socket '" << socket << "'\n";
+    std::cerr << "ERROR: item '" << name << "' not found for socket '" << socket << "'" << std::endl;
     assert(false);
+    return Armor::none;
 }
 
 Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
 {
     if (socket == Weapon_socket::two_hand)
     {
-        for (const auto& item : two_handed_swords_t)
+        for (const auto by_type : {&two_handed_swords_t, &two_handed_axes_polearm_t, &two_handed_maces_t})
         {
-            if (item.name == name)
+            for (const auto& w : *by_type)
             {
-                return item;
+                if (w.name == name) return w;
             }
         }
-        for (const auto& item : two_handed_maces_t)
-        {
-            if (item.name == name)
-            {
-                return item;
-            }
-        }
-        for (const auto& item : two_handed_axes_polearm_t)
-        {
-            if (item.name == name)
-            {
-                return item;
-            }
-        }
-        std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'\n";
+        std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'" << std::endl;
         assert(false);
+        return Weapon::none;
     }
-    for (const auto& item : swords_t)
+    for (const auto by_type : {&swords_t, &axes_t, &maces_t, &daggers_t, &fists_t})
     {
-        if (item.name == name)
+        for (const auto& w : *by_type)
         {
-            return item;
+            if (w.name == name) return w;
         }
     }
-    for (const auto& item : maces_t)
-    {
-        if (item.name == name)
-        {
-            return item;
-        }
-    }
-    for (const auto& item : axes_t)
-    {
-        if (item.name == name)
-        {
-            return item;
-        }
-    }
-    for (const auto& item : daggers_t)
-    {
-        if (item.name == name)
-        {
-            return item;
-        }
-    }
-    for (const auto& item : fists_t)
-    {
-        if (item.name == name)
-        {
-            return item;
-        }
-    }
-    std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'\n";
+    std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'" << std::endl;
     assert(false);
+    return Weapon::none;
 }
 
 void Armory::add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec)
