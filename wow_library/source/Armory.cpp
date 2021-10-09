@@ -483,27 +483,19 @@ void Armory::change_weapon(std::vector<Weapon>& current_weapons, const Weapon& e
 void Armory::change_armor(std::vector<Armor>& armor_vec, const Armor& armor, bool first_misc_slot)
 {
     auto socket = armor.socket;
+    auto first_slot = (socket != Socket::ring && socket != Socket::trinket) || first_misc_slot;
     for (auto& armor_piece : armor_vec)
     {
         if (armor_piece.socket == socket)
         {
-            if (socket == Socket::ring || socket == Socket::trinket)
-            {
-                if (first_misc_slot)
-                {
-                    armor_piece = armor;
-                    return;
-                }
-                first_misc_slot = true; // Will trigger on the second hit instead
-            }
-            else
-            {
+            if (first_slot) {
                 // Reuse the same enchant
                 auto enchant = armor_piece.enchant;
                 armor_piece = armor;
                 armor_piece.enchant = enchant;
                 return;
             }
+            first_slot = true;
         }
     }
 }

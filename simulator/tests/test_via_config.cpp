@@ -93,6 +93,7 @@ TEST_F(Sim_fixture, test_via_config)
             auto prefix = key[0];
             if (key == "helmet_ench_dd") prefix = 'e';
             if (key == "boots_ench_dd") prefix = 't';
+            if (key == "ring_2_ench_dd") prefix = 'f';
             enchants.emplace_back(prefix + value);
         }
         else if (std::regex_search(key, KEY_GEMS))
