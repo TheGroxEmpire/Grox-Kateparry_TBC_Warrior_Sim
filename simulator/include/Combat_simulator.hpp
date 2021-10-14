@@ -238,9 +238,8 @@ public:
 
     void sunder_armor(Sim_state& state);
 
-    void simulate(const Character& character, int n_simulations, const Distribution& init_distribution);
-    void simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data = false, bool reset_dps = true);
-    void simulate(const Character& character, bool log_data = false, bool reset_dps = true);
+    void simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data = false);
+    void simulate(const Character& character, bool log_data = false);
 
     static Distribution simulate(const Combat_simulator_config& config, const Character& character);
 
@@ -421,6 +420,8 @@ private:
     std::vector<std::vector<double>> damage_time_lapse_{};
     std::vector<int> hist_x{};
     std::vector<int> hist_y{};
+
+    bool has_run{}; // TODO(vigo) remove me soonish
 };
 
 #endif // WOW_SIMULATOR_COMBAT_SIMULATOR_HPP

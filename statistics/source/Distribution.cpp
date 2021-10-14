@@ -14,6 +14,17 @@ void Distribution::add_sample(const double sample)
     m2_ += delta * delta2;
 }
 
+void Distribution::add(const Distribution& other)
+{
+    auto n = n_samples_ + other.n_samples_;
+    auto mean = (mean_ * n_samples_ + other.mean_ * other.n_samples_) / n;
+    auto delta = mean_ - other.mean_;
+    auto m2 = m2_ + other.m2_ + n_samples_ * other.n_samples_ * delta * delta / n;
+    n_samples_ = n;
+    mean_ = mean;
+    m2_ = m2;
+}
+
 std::pair<double, double> Distribution::confidence_interval(double p_value) const
 {
     double val = Statistics::find_cdf_quantile(Statistics::get_two_sided_p_value(p_value), 0.01);

@@ -6,6 +6,7 @@
 #include "item_heuristics.hpp"
 #include "string_helpers.hpp"
 
+#include <Distribution.hpp>
 #include <algorithm>
 #include <ctime>
 #include <iostream>
@@ -18,15 +19,17 @@ public:
     {
         Sim_result_t() = default;
 
-        Sim_result_t(size_t index, double mean_dps, double variance, double ap_equivalent)
-            : index{index}, mean_dps{mean_dps}, variance{variance}, ap_equivalent{ap_equivalent}
+        Sim_result_t(size_t index, double ap_equivalent)
+            : index(index), ap_equivalent(ap_equivalent), distribution()
         {
         }
 
+        [[nodiscard]] double mean() const { return distribution.mean(); }
+        [[nodiscard]] double std_of_the_mean() const { return distribution.samples() > 0 ? distribution.std_of_the_mean() : 0; }
+
         size_t index{};
-        double mean_dps{};
-        double variance{};
         double ap_equivalent{};
+        Distribution distribution{};
     };
 
     void compute_weapon_combinations();

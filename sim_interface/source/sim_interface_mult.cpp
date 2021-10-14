@@ -196,7 +196,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
                                                 character.use_effects);
             if (ap_equivalent > filtering_ap)
             {
-                keepers.emplace_back(i, 0, 0, ap_equivalent);
+                keepers.emplace_back(i, ap_equivalent);
             }
         }
         debug_message += "Set filter done. Combinations: " + std::to_string(keepers.size()) + "<br>";
@@ -246,50 +246,42 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         keepers.reserve(item_optimizer.total_combinations);
         for (size_t i = 0; i < item_optimizer.total_combinations; ++i)
         {
-            keepers.emplace_back(i, 0, 0, 0);
+            keepers.emplace_back(i, 0);
         }
     }
 
     debug_message += "Starting optimizer! Current combinations:" + std::to_string(keepers.size()) + "<br>";
-    std::vector<int> batches_per_iteration = {20};
-    std::vector<int> cumulative_simulations = {0};
-    for (int i = 0; i < 40; i++)
-    {
-        batches_per_iteration.push_back(batches_per_iteration.back() * 1.2);
-        cumulative_simulations.push_back(cumulative_simulations.back() + batches_per_iteration[i]);
-    }
-    cumulative_simulations.push_back(cumulative_simulations.back() + batches_per_iteration.back());
+
+    const size_t num_iterations = 40;
+    int num_batches = 20;
+
     size_t n_sim{};
-    size_t performed_iterations{};
     double max_optimize_time =
         String_helpers::find_value(input.float_options_string, input.float_options_val, "max_optimize_time_dd");
     Combat_simulator simulator(config);
-    for (size_t i = 0; i < batches_per_iteration.size(); i++)
+    for (size_t i = 0; i < num_iterations; i++)
     {
         clock_t optimizer_start_time = clock();
         debug_message +=
-            "Iteration " + std::to_string(i + 1) + " of " + std::to_string(batches_per_iteration.size()) + "<br>";
+            "Iteration " + std::to_string(i + 1) + " of " + std::to_string(num_iterations) + "<br>";
         debug_message += "Total keepers: " + std::to_string(keepers.size()) + "<br>";
 
-        std::cout << "Iter: " + std::to_string(i) + ". Total keepers: " + std::to_string(keepers.size()) << "\n";
+        std::cout << "Iter: " + std::to_string(i + 1) + ". Total keepers: " + std::to_string(keepers.size()) << "\n";
 
-        double best_dps = 0;
-        double best_dps_variance = 0;
+        Distribution best{};
         size_t iter = 0;
         for (auto& keeper : keepers)
         {
-            Character character = item_optimizer.construct(keeper.index);
-            simulator.simulate(character, batches_per_iteration[i], Distribution{keeper.mean_dps, keeper.variance, cumulative_simulations[i]});
-            keeper.mean_dps = simulator.get_dps_mean();
-            keeper.variance = simulator.get_dps_variance();
-            if (keeper.mean_dps > best_dps)
+            config.n_batches = num_batches;
+            const auto& d = Combat_simulator::simulate(config, item_optimizer.construct(keeper.index));
+            keeper.distribution.add(d);
+            if (keeper.mean() > best.mean())
             {
-                best_dps = keeper.mean_dps;
-                best_dps_variance = keeper.variance;
+                best = keeper.distribution;
             }
 
             // Time taken
-            n_sim += batches_per_iteration[i];
+            n_sim += num_batches;
             iter++;
             if (keepers.size() < 200)
             {
@@ -324,19 +316,15 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
         if (keepers.size() > 5)
         {
             double quantile = Statistics::find_cdf_quantile(1 - 1 / static_cast<double>(keepers.size()), 0.01);
-            double best_dps_sample_std =
-                Statistics::sample_deviation(std::sqrt(best_dps_variance), cumulative_simulations[i + 1]);
-            double filter_value = best_dps - quantile * best_dps_sample_std;
-            debug_message += "Best combination DPS: " + std::to_string(best_dps) +
-                             ", removing sets below: " + std::to_string(best_dps - quantile * best_dps_sample_std) +
+            double filter_value = best.mean() - quantile * best.std_of_the_mean();
+            debug_message += "Best combination DPS: " + std::to_string(best.mean()) +
+                             ", removing sets below: " + std::to_string(filter_value) +
                              "<br>";
             std::vector<Item_optimizer::Sim_result_t> temp_keepers;
             temp_keepers.reserve(keepers.size());
             for (const auto& keeper : keepers)
             {
-                double keeper_sample_std =
-                    Statistics::sample_deviation(std::sqrt(keeper.variance), cumulative_simulations[i + 1]);
-                if (keeper.mean_dps + keeper_sample_std * quantile >= filter_value)
+                if (keeper.mean() + keeper.std_of_the_mean() * quantile >= filter_value)
                 {
                     temp_keepers.emplace_back(keeper);
                 }
@@ -352,9 +340,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
                     temp_keepers.clear();
                     for (const auto& keeper : keepers)
                     {
-                        double keeper_sample_std =
-                            Statistics::sample_deviation(std::sqrt(keeper.variance), cumulative_simulations[i + 1]);
-                        if (keeper.mean_dps + keeper_sample_std * quantile >= filter_value)
+                        if (keeper.mean() + keeper.std_of_the_mean() * quantile >= filter_value)
                         {
                             temp_keepers.emplace_back(keeper);
                         }
@@ -377,7 +363,8 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
                 break;
             }
         }
-        performed_iterations = i;
+
+        num_batches = static_cast<int>(num_batches * 1.2);
     }
 
     std::sort(keepers.begin(), keepers.end());
@@ -521,11 +508,9 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     for (size_t i = 0; i < max_number; i++)
     {
         message += "<b>Set " + std::to_string(i + 1) + ":</b><br>";
-        message += "DPS: " + String_helpers::string_with_precision(keepers[i].mean_dps, 5) + " (-<b>" +
-                   String_helpers::string_with_precision(keepers[0].mean_dps - keepers[i].mean_dps, 3) + "</b>)<br> ";
-        double error_margin = Statistics::sample_deviation(std::sqrt(keepers[i].variance),
-                                                           cumulative_simulations[performed_iterations + 1]);
-        message += "Error margin DPS: " + String_helpers::string_with_precision(error_margin, 3) + "<br>";
+        message += "DPS: " + String_helpers::string_with_precision(keepers[i].mean(), 5) + " (-<b>" +
+                   String_helpers::string_with_precision(keepers[0].mean() - keepers[i].mean(), 3) + "</b>)<br> ";
+        message += "Error margin DPS: " + String_helpers::string_with_precision(keepers[i].std_of_the_mean(), 3) + "<br>";
         message += "<b>Stats:</b><br>";
         message +=
             "Hit: " + String_helpers::string_with_precision(best_characters[i].total_special_stats.hit, 3) + " %<br>";

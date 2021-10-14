@@ -976,30 +976,24 @@ TEST_F(Sim_fixture, test_multi)
 
     srand(110000);
     auto start = std::chrono::steady_clock::now();
-    Combat_simulator sim(config);
-    sim.simulate(character);
+    const auto& single = Combat_simulator::simulate(config, character);
     auto end = std::chrono::steady_clock::now();
     std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
 
-    auto& single = sim.get_dps_distribution();
-
     std::cout << single << std::endl;
-    std::cout << "flurry = " << sim.get_flurry_uptime() << ", rampage = " << sim.get_rampage_uptime() << std::endl;
 
     srand(110000);
     start = std::chrono::steady_clock::now();
-    Combat_simulator multi_sim(config);
+    config.n_batches = 250;
     Distribution multi{};
     for (auto i = 0; i < 100; ++i)
     {
-        multi_sim.simulate(character, 250, multi);
-        multi = multi_sim.get_dps_distribution();
+        multi.add(Combat_simulator::simulate(config, character));
     }
     end = std::chrono::steady_clock::now();
     std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
 
     std::cout << multi << std::endl;
-    std::cout << "flurry = " << sim.get_flurry_uptime() << ", rampage = " << sim.get_rampage_uptime() << std::endl;
 
     SUCCEED();
 }

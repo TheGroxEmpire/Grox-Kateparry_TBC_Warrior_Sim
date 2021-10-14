@@ -655,7 +655,7 @@ void Combat_simulator::sunder_armor(Sim_state& state)
     time_keeper_.global_cast(1500);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
-        spend_rage(2);
+        spend_rage(3);
         if (hit_outcome.hit_result == Hit_result::dodge && has_warbringer_4_set_)
         {
             gain_rage(2);
@@ -941,28 +941,24 @@ void Combat_simulator::update_swing_timers(Sim_state& state, double oldHaste)
     }
 }
 
-void Combat_simulator::simulate(const Character& character, int n_simulations, const Distribution& init_distribution)
+void Combat_simulator::simulate(const Character& character, bool log_data)
 {
-    dps_distribution_ = init_distribution;
-    config.n_batches = init_distribution.samples() + n_simulations;
-    simulate(character, false, false);
-}
-
-// TODO(vigo) consider passing in both Combat_simulator_config
-void Combat_simulator::simulate(const Character& character, bool log_data, bool reset_dps)
-{
-    simulate(character, [this](const auto& d) { return d.samples() == config.n_batches; }, log_data, reset_dps);
+    simulate(character, [this](const auto& d) { return d.samples() == config.n_batches; }, log_data);
 }
 
 Distribution Combat_simulator::simulate(const Combat_simulator_config& config, const Character& character)
 {
     Combat_simulator sim(config);
-    sim.simulate(character, false, true);
+    sim.simulate(character, false);
     return sim.get_dps_distribution();
 }
 
-void Combat_simulator::simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data, bool reset_dps)
+void Combat_simulator::simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data)
 {
+    // TODO(vigo) remove me soonish
+    assert(!has_run);
+    has_run = true;
+
     if (log_data)
     {
         reset_time_lapse();
@@ -1037,18 +1033,6 @@ void Combat_simulator::simulate(const Character& character, const std::function<
     else
     {
         buff_manager_.initialize(weapons[0].hit_effects,empty_hit_effects, use_effect_schedule, this);
-    }
-
-    if (reset_dps)
-    {
-        dps_distribution_ = Distribution{};
-        proc_data_.clear();
-        buff_manager_.reset_statistics();
-        flurry_uptime_ = 0;
-        rage_lost_stance_swap_ = 0;
-        rage_lost_capped_ = 0;
-        oh_queued_uptime_ = 0;
-        rampage_uptime_ = 0;
     }
 
     std::vector<Damage_instance> damage_instances{};

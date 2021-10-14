@@ -8,10 +8,9 @@
 class Distribution
 {
 public:
-    Distribution() = default;
-    Distribution(double mean, double variance, int samples) : n_samples_(samples), mean_(mean), m2_(variance * samples), last_sample_(0) {}
-
     void add_sample(double sample);
+
+    void add(const Distribution& other);
 
     [[nodiscard]] int samples() const { return n_samples_; }
     [[nodiscard]] double mean() const { return mean_; }

@@ -2,7 +2,7 @@
 
 bool operator<(const Item_optimizer::Sim_result_t& left, const Item_optimizer::Sim_result_t& right)
 {
-    return left.mean_dps < right.mean_dps;
+    return left.mean() < right.mean();
 }
 
 void Item_optimizer::compute_weapon_combinations()

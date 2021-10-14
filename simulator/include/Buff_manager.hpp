@@ -90,7 +90,6 @@ public:
                     Use_effects::Schedule& use_effects_schedule_input, Rage_manager* rage_manager_input);
 
     void reset(Sim_state& state);
-    void reset_statistics();
 
     void update_aura_uptimes(int current_time);
     [[nodiscard]] std::unordered_map<std::string, double> get_aura_uptimes_map() const;

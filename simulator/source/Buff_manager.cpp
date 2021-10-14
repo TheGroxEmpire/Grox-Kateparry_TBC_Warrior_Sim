@@ -8,8 +8,6 @@ void Buff_manager::initialize(std::vector<Hit_effect>& hit_effects_mh_input, std
     hit_effects_mh = &hit_effects_mh_input;
     hit_effects_oh = &hit_effects_oh_input;
 
-    hit_auras.clear();
-
     use_effects_schedule = use_effects_schedule_input;
 
     rage_manager = rage_manager_input;
@@ -55,29 +53,6 @@ void Buff_manager::reset(Sim_state& state)
 
     need_to_recompute_mitigation = true;
     need_to_recompute_hit_tables = true;
-}
-
-void Buff_manager::reset_statistics()
-{
-    for (auto& he : *hit_effects_mh)
-    {
-        he.procs = 0;
-    }
-
-    for (auto& he : *hit_effects_oh)
-    {
-        he.procs = 0;
-    }
-
-    for (auto& buff : combat_buffs)
-    {
-        buff.uptime = 0;
-    }
-
-    for (auto& buff : over_time_buffs)
-    {
-        buff.uptime = 0;
-    }
 }
 
 void Buff_manager::update_aura_uptimes(int current_time) {
