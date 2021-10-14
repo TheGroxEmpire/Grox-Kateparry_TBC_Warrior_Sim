@@ -263,8 +263,7 @@ Sim_output_mult Sim_interface::simulate_mult(const Sim_input_mult& input)
     size_t performed_iterations{};
     double max_optimize_time =
         String_helpers::find_value(input.float_options_string, input.float_options_val, "max_optimize_time_dd");
-    Combat_simulator simulator{};
-    simulator.set_config(config);
+    Combat_simulator simulator(config);
     for (size_t i = 0; i < batches_per_iteration.size(); i++)
     {
         clock_t optimizer_start_time = clock();

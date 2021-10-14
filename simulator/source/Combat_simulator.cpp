@@ -22,6 +22,18 @@ constexpr double armor_reduction_factor(int target_armor)
 }
 } // namespace
 
+
+Combat_simulator::Combat_simulator(const Combat_simulator_config& config) : config(config)
+{
+    armor_reduction_from_spells_ = 0;
+    armor_reduction_from_spells_ += 800 * config.curse_of_recklessness_active;
+    armor_reduction_from_spells_ += 610 * config.faerie_fire_feral_active;
+    if (config.exposed_armor)
+    {
+        armor_reduction_delayed_ = 3075;
+    }
+}
+
 void Combat_simulator::add_talent_effects(const Character& character)
 {
     heroic_strike_rage_cost_ = 15 - character.talents.improved_heroic_strike;
@@ -146,19 +158,6 @@ void Combat_simulator::compute_hit_tables(const Character& character, const Spec
 
         auto yellow_dm = Damage_multipliers(0, oh_factor * yellow_crit_dm, oh_factor);
         hit_table_yellow_oh_ = Hit_table("yellow (oh)", sw_miss, dodge, 0, (100 - sw_miss - dodge) / 100 * crit, yellow_dm);
-    }
-}
-
-
-void Combat_simulator::set_config(const Combat_simulator_config& new_config)
-{
-    config = new_config;
-    armor_reduction_from_spells_ = 0;
-    armor_reduction_from_spells_ += 800 * config.curse_of_recklessness_active;
-    armor_reduction_from_spells_ += 610 * config.faerie_fire_feral_active;
-    if (config.exposed_armor)
-    {
-        armor_reduction_delayed_ = 3075;
     }
 }
 
@@ -955,6 +954,13 @@ void Combat_simulator::simulate(const Character& character, bool log_data, bool 
     simulate(character, [this](const auto& d) { return d.samples() == config.n_batches; }, log_data, reset_dps);
 }
 
+Distribution Combat_simulator::simulate(const Combat_simulator_config& config, const Character& character)
+{
+    Combat_simulator sim(config);
+    sim.simulate(character, false, true);
+    return sim.get_dps_distribution();
+}
+
 void Combat_simulator::simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data, bool reset_dps)
 {
     if (log_data)
@@ -972,7 +978,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
     add_talent_effects(character);
 
     const auto starting_special_stats = character.total_special_stats;
-    compute_hit_table_stats_ = {};
+    compute_hit_table_stats_ = {-1,-1,0};
 
     std::vector<Weapon_sim> weapons;
     for (const auto& wep : character.weapons)
@@ -1537,6 +1543,7 @@ void Combat_simulator::normal_phase(Sim_state& state, bool mh_swing)
             return;
         }
     }
+
     if (config.combat.use_overpower)
     {
         bool use_op = true;

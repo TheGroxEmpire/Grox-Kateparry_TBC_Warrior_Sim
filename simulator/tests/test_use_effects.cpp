@@ -68,7 +68,7 @@ TEST(TestSuite, test_use_effects)
     auto use1 = armory.find_armor(Socket::trinket, "badge_of_the_swarmguard");
     auto use2 = armory.find_armor(Socket::trinket, "icon_of_unyielding_courage");
     auto use3 = armory.find_armor(Socket::chest, "bulwark_of_kings");
-    Combat_simulator sim{};
+    Combat_simulator sim(Combat_simulator_config{});
 
     std::vector<Use_effect> use_effects{};
     use_effects.emplace_back(sim.death_wish);

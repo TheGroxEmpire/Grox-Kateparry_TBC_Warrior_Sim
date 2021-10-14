@@ -14,7 +14,7 @@ TEST_F(Sim_fixture, test_no_crit_equals_no_flurry_uptime)
 
     character.total_special_stats.critical_strike = 0;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     EXPECT_EQ(sim.get_flurry_uptime(), 0.0);
@@ -28,7 +28,7 @@ TEST_F(Sim_fixture, test_max_crit_equals_high_flurry_uptime)
 
     character.total_special_stats.critical_strike = 100;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     EXPECT_GT(sim.get_flurry_uptime(), .95);
@@ -41,15 +41,14 @@ TEST_F(Sim_fixture, test_endless_rage)
     config.main_target_initial_armor_ = 0.0;
     config.initial_rage = 100;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     double rage_normal = sim.get_rage_lost_capped();
 
-    Combat_simulator sim{};
+    Combat_simulator sim2(config);
     character.talents.endless_rage = true;
-    sim.set_config(config);
-    sim.simulate(character);
+    sim2.simulate(character);
 
     double rage_endless = sim.get_rage_lost_capped();
 
@@ -63,11 +62,11 @@ TEST_F(Sim_fixture, test_bloodthirst_count)
     character.talents.bloodthirst = 1;
     config.combat.use_bloodthirst = true;
     config.essence_of_the_red_ = true;
-    config.initial_rage = 100;
+    config.initial_rage = 0;
 
     character.total_special_stats.attack_power = 10000;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     auto distrib = sim.get_damage_distribution();
@@ -88,7 +87,7 @@ TEST_F(Sim_fixture, test_that_with_infinite_rage_all_hits_are_heroic_strike)
     character.weapons[0].swing_speed = 1.9;
     character.weapons[1].swing_speed = 1.7;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     auto distrib = sim.get_damage_distribution();
@@ -100,7 +99,7 @@ TEST_F(Sim_fixture, test_that_with_infinite_rage_all_hits_are_heroic_strike)
     EXPECT_FLOAT_EQ(hs_uptime, 1);
 }
 
-TEST_F(Sim_fixture, test_dps_return_matches_heristic_values)
+TEST_F(Sim_fixture, test_dps_return_matches_heuristic_values)
 {
     config.main_target_initial_armor_ = 0.0;
     config.sim_time = 1000.0;
@@ -109,7 +108,7 @@ TEST_F(Sim_fixture, test_dps_return_matches_heristic_values)
     character.total_special_stats.critical_strike = 0;
     character.total_special_stats.attack_power = 0;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     double miss_chance = (8 + 19) / 100.0;
@@ -141,8 +140,7 @@ TEST_F(Sim_fixture, test_hit_effects_extra_hit)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -189,8 +187,7 @@ TEST_F(Sim_fixture, test_hit_effects_icd)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -239,8 +236,7 @@ TEST_F(Sim_fixture, test_hit_effects_windfury_hit)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -286,8 +282,7 @@ TEST_F(Sim_fixture, test_hit_effects_sword_spec)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -334,8 +329,7 @@ TEST_F(Sim_fixture, test_hit_effects_physical_damage)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -384,8 +378,7 @@ TEST_F(Sim_fixture, test_hit_effects_magic_damage)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -434,8 +427,7 @@ TEST_F(Sim_fixture, test_hit_effects_stat_boost_short_duration)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -480,8 +472,7 @@ TEST_F(Sim_fixture, test_hit_effects_stat_boost_long_duration)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     Damage_sources sources = sim.get_damage_distribution();
@@ -537,8 +528,7 @@ TEST_F(Sim_fixture, test_hit_effects_stat_boost_long_duration_overlap)
     character.weapons[0].hit_effects.push_back(test_effect_mh);
     character.weapons[1].hit_effects.push_back(test_effect_oh);
 
-    Combat_simulator sim{};
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     auto aura_uptimes = sim.get_aura_uptimes_map();
@@ -562,13 +552,12 @@ TEST_F(Sim_fixture, test_deep_wounds)
 
     character.base_special_stats.attack_power = 1400;
 
-    Combat_simulator sim{};
     character.talents.deep_wounds = 3;
     config.deep_wounds = true;
     config.combat.use_whirlwind = true;
     config.combat.use_bloodthirst = true;
     config.combat.use_heroic_strike = true;
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     auto ap = character.total_special_stats.attack_power;
@@ -595,14 +584,13 @@ TEST_F(Sim_fixture, test_flurry_uptime)
     character.total_special_stats.critical_strike = 35;
     character.total_special_stats.haste = 0.05; // haste should probably use % as well, for consistency
 
-    Combat_simulator sim{};
     character.talents.flurry = 5;
     character.talents.bloodthirst = 1;
     config.combat.heroic_strike_rage_thresh = 60;
     config.combat.use_heroic_strike = true;
     config.combat.use_bloodthirst = true;
     config.combat.use_whirlwind = true;
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
 
     auto flurryUptime = sim.get_flurry_uptime();
@@ -698,7 +686,6 @@ TEST_F(Sim_fixture, test_arms)
     character.total_special_stats.axe_expertise = 5;
     character.total_special_stats.crit_multiplier = 0.03;
 
-    Combat_simulator sim{};
     character.talents.flurry = 3;
     character.talents.mortal_strike = 1;
     character.talents.improved_slam = 2;
@@ -719,7 +706,7 @@ TEST_F(Sim_fixture, test_arms)
     config.combat.use_ms_in_exec_phase = true;
     config.deep_wounds = true;
     character.talents.mace_specialization = 0;
-    sim.set_config(config);
+    Combat_simulator sim(config);
 
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);
@@ -792,7 +779,7 @@ TEST_F(Sim_fixture, test_fury)
     config.combat.use_whirlwind = true;
     config.execute_phase_percentage_ = 20;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
 
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);
@@ -912,7 +899,7 @@ TEST_F(Sim_fixture, test_procs)
     config.combat.use_overpower = false;
     config.combat.overpower_rage_thresh = 25;
 
-    sim.set_config(config);
+    Combat_simulator sim(config);
 
     time_simulate(sim, character);
     print_results(test_info_->name(), sim, true);
@@ -989,7 +976,7 @@ TEST_F(Sim_fixture, test_multi)
 
     srand(110000);
     auto start = std::chrono::steady_clock::now();
-    sim.set_config(config);
+    Combat_simulator sim(config);
     sim.simulate(character);
     auto end = std::chrono::steady_clock::now();
     std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
@@ -1001,12 +988,12 @@ TEST_F(Sim_fixture, test_multi)
 
     srand(110000);
     start = std::chrono::steady_clock::now();
-    sim.set_config(config);
+    Combat_simulator multi_sim(config);
     Distribution multi{};
     for (auto i = 0; i < 100; ++i)
     {
-        sim.simulate(character, 250, multi);
-        multi = sim.get_dps_distribution();
+        multi_sim.simulate(character, 250, multi);
+        multi = multi_sim.get_dps_distribution();
     }
     end = std::chrono::steady_clock::now();
     std::cout << "took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;

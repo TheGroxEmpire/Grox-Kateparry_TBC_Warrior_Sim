@@ -138,7 +138,7 @@ public:
         return false;
     }
 
-    Armor get_item_from_socket(const Socket socket, bool first_slot = true)
+    [[nodiscard]] Armor get_item_from_socket(const Socket socket, bool first_slot = true) const
     {
         for (const auto& armor_piece : armor)
         {
@@ -155,7 +155,7 @@ public:
         return armor[0];
     }
 
-    Weapon get_weapon_from_socket(const Socket socket)
+    [[nodiscard]] Weapon get_weapon_from_socket(const Socket socket) const
     {
         for (const auto& wep : weapons)
         {

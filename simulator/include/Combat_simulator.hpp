@@ -23,8 +23,6 @@
 class Combat_simulator : Rage_manager
 {
 public:
-    void set_config(const Combat_simulator_config& new_config);
-
     enum class Hit_type
     {
         melee,
@@ -174,6 +172,9 @@ public:
         Damage_multipliers dm_;
     };
 
+
+    explicit Combat_simulator(const Combat_simulator_config& config);
+
     void gain_rage(double amount) final
     {
         rage_gained_ += amount;
@@ -238,10 +239,10 @@ public:
     void sunder_armor(Sim_state& state);
 
     void simulate(const Character& character, int n_simulations, const Distribution& init_distribution);
-
     void simulate(const Character& character, const std::function<bool(const Distribution&)>& target, bool log_data = false, bool reset_dps = true);
-
     void simulate(const Character& character, bool log_data = false, bool reset_dps = true);
+
+    static Distribution simulate(const Combat_simulator_config& config, const Character& character);
 
     void normal_phase(Sim_state& state, bool mh_swing);
     void execute_phase(Sim_state& state, bool mh_swing);
