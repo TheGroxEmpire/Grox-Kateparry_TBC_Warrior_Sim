@@ -344,7 +344,7 @@ std::string compute_talent_weight(const Combat_simulator_config& config, const C
         auto copy = character;
         copy.talents.*talent = 0;
         armory.compute_total_stats(copy);
-        without = Combat_simulator::simulate(config, character);
+        without = Combat_simulator::simulate(config, copy);
     }
 
     auto with = init_dps;
@@ -353,7 +353,7 @@ std::string compute_talent_weight(const Combat_simulator_config& config, const C
         auto copy = character;
         copy.talents.*talent = n_points;
         armory.compute_total_stats(copy);
-        with = Combat_simulator::simulate(config, character);
+        with = Combat_simulator::simulate(config, copy);
     }
 
     auto mean_diff = (with.mean() - without.mean()) / n_points;
