@@ -106,12 +106,14 @@ void item_upgrades(std::string& item_strengths_string, const Combat_simulator_co
                      armor_vec;
 
     auto current_armor = character_new.get_item_from_socket(socket, first_item);
+    auto other_armor = Armor::empty(socket);
+    if (socket == Socket::ring || socket == Socket::trinket) other_armor = character_new.get_item_from_socket(socket, !first_item);
 
     std::vector<Item_upgrade> ius{};
     ius.reserve(items.size());
     for (const auto& item : items)
     {
-        if (item.name == current_armor.name) continue;
+        if (item.name == current_armor.name || item.name == other_armor.name) continue;
         Armory::change_armor(character_new.armor, item, first_item);
         armory.compute_total_stats(character_new);
         ius.emplace_back(compute_item_upgrade(config, character_new, base_dps, item.name));

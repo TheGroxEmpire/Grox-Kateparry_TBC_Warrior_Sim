@@ -409,38 +409,38 @@ bool Armory::check_if_armor_valid(const std::vector<Armor>& armor)
     std::vector<Socket> sockets;
     bool one_ring{false};
     bool one_trinket{false};
-    for (auto const& armor_piece : armor)
+    for (auto const& a : armor)
     {
         for (auto const& socket : sockets)
         {
-            if (armor_piece.socket == socket)
+            if (a.socket == socket)
             {
-                if (armor_piece.socket == Socket::ring)
+                if (a.socket == Socket::ring)
                 {
-                    if (armor_piece.socket == Socket::ring && one_ring)
+                    if (a.socket == Socket::ring && one_ring)
                     {
-                        std::cerr << "extra copy of " << armor_piece.socket << std::endl;
+                        std::cerr << "extra copy of " << a.socket << std::endl;
                         return false;
                     }
                     one_ring = true;
                 }
-                else if (armor_piece.socket == Socket::trinket)
+                else if (a.socket == Socket::trinket)
                 {
-                    if (armor_piece.socket == Socket::trinket && one_trinket)
+                    if (a.socket == Socket::trinket && one_trinket)
                     {
-                        std::cerr << "extra copy of " << armor_piece.socket << std::endl;
+                        std::cerr << "extra copy of " << a.socket << std::endl;
                         return false;
                     }
                     one_trinket = true;
                 }
                 else
                 {
-                    std::cerr << "extra copy of " << armor_piece.socket << std::endl;
+                    std::cerr << "extra copy of " << a.socket << std::endl;
                     return false;
                 }
             }
         }
-        sockets.emplace_back(armor_piece.socket);
+        sockets.emplace_back(a.socket);
     }
     return true;
 }
@@ -619,11 +619,13 @@ std::unordered_map<std::string, const Weapon*> Armory::build_weapons_index() con
 
 Armor Armory::find_armor(const Socket socket, const std::string& name) const
 {
+    if (name == "none") return Armor::empty(socket);
+
     const auto& items = get_items_in_socket(socket);
     if (items.empty())
     {
         assert(false);
-        return Armor::none;
+        return Armor::empty(socket);
     }
     for (const auto& item : items)
     {
@@ -634,11 +636,13 @@ Armor Armory::find_armor(const Socket socket, const std::string& name) const
     }
     std::cerr << "ERROR: item '" << name << "' not found for socket '" << socket << "'" << std::endl;
     assert(false);
-    return Armor::none;
+    return Armor::empty(socket);
 }
 
 Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
 {
+    if (name == "none") return Weapon::empty(socket);
+
     if (socket == Weapon_socket::two_hand)
     {
         for (const auto by_type : {&two_handed_swords_t, &two_handed_axes_polearm_t, &two_handed_maces_t})
@@ -650,7 +654,7 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
         }
         std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'" << std::endl;
         assert(false);
-        return Weapon::none;
+        return Weapon::empty(socket);
     }
     for (const auto by_type : {&swords_t, &axes_t, &maces_t, &daggers_t, &fists_t})
     {
@@ -661,7 +665,7 @@ Weapon Armory::find_weapon(Weapon_socket socket, const std::string& name) const
     }
     std::cerr << "item '" << name << " not found for weapon socket '" << socket << "'" << std::endl;
     assert(false);
-    return Weapon::none;
+    return Weapon::empty(socket);
 }
 
 void Armory::add_enchants_to_character(Character& character, const std::vector<std::string>& ench_vec)

@@ -2,10 +2,6 @@
 
 #include "iostream"
 
-const Armor Armor::none = Armor{"", {}, {}, Socket::none};
-
-const Weapon Weapon::none = Weapon{"", {}, {}, std::numeric_limits<double>::max(), 0, 0, Weapon_socket::one_hand, Weapon_type::unarmed};
-
 std::ostream& operator<<(std::ostream& os, const Weapon_socket& ws)
 {
     static const std::string m[]{"main_hand", "one_hand", "off_hand", "two_hand"};
