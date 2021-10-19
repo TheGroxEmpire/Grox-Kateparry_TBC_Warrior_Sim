@@ -76,14 +76,12 @@ TEST_F(Sim_fixture, test_via_config)
             continue;
         }
 
+        if (value == "false" || value == "none") continue;
+
         if (std::regex_search(key, KEY_WEAPONS))
         {
             weapons.emplace_back(value);
-            continue;
         }
-
-        if (value == "false" || value == "none") continue;
-
         else if (value == "true" && !has_seen_armor_weapons_transition)
         {
             multi_armor.emplace_back(key);

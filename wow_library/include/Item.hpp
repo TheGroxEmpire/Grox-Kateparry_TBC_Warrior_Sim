@@ -458,7 +458,7 @@ struct Weapon
 
     static Weapon empty(Weapon_socket weapon_socket)
     {
-        return Weapon{"", {}, {}, std::numeric_limits<double>::max(), 0, 0, weapon_socket, Weapon_type::unarmed};
+        return Weapon{"", {}, {}, 1000, 0, 0, weapon_socket, Weapon_type::unarmed};
     }
 };
 

@@ -258,7 +258,7 @@ struct Armory
     std::vector<Armor> chest_t
             {
                 // Phase 1
-                {"bulwark_of_kings", Attributes{35.0, 0.0}, Special_stats{1.6757246376811596, 1.4584654407102093, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_kings", Use_effect::Effect_socket::shared, {150, 0}, {}, 0, 15, 900, true}}},
+                {"bulwark_of_kings", Attributes{35.0, 0.0}, Special_stats{1.6757246376811596, 1.4584654407102093, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_kings", Use_effect::Effect_socket::unique, {150, 0}, {}, 0, 15, 900, false}}},
                 {"bulwark_of_kings_no_cd", Attributes{35.0, 0.0}, Special_stats{1.6757246376811596, 1.4584654407102093, 0.0, 0, 0.0}, Socket::chest}, 
                 {"terrorweave_tunic", Attributes{0.0, 0.0}, Special_stats{1.1322463768115942, 1.3316423589093216, 96.0, 0, 0.0}, Socket::chest}, 
                 {"breastplate_of_kings", Attributes{31.0, 0.0}, Special_stats{1.403985507246377, 1.2682308180088777, 0.0, 0, 0.0}, Socket::chest}, 
@@ -288,7 +288,7 @@ struct Armory
                 {"chestguard_of_no_remorse", Attributes{0.0, 0.0}, Special_stats{0.9510869565, 0.0, 0.0, 92, 0.0}, Socket::chest},
 
                 // Phase 2
-                {"bulwark_of_ancient_kings", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_ancient_kings", Use_effect::Effect_socket::shared, {150, 0}, {}, 0, 15, 900, true}}},
+                {"bulwark_of_ancient_kings", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_ancient_kings", Use_effect::Effect_socket::unique, {150, 0}, {}, 0, 15, 900, false}}},
                 {"bulwark_of_ancient_kings_no_cd", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest}, 
                 {"bloodsea_brigand_s_vest", Attributes{0.0, 0.0}, Special_stats{1.6304347826086958, 1.7121116043119848, 92.0, 0, 0.0}, Socket::chest}, 
                 {"destroyer_breasplate", Attributes{50.0, 0.0}, Special_stats{1.4945652173913044, 0.9511731135066582, 0.0, 0, 0.0}, Socket::chest, Set::destroyer}, 
@@ -792,9 +792,9 @@ struct Armory
     [[nodiscard]] std::unordered_map<std::string, const Armor*> build_armor_index() const;
     [[nodiscard]] std::unordered_map<std::string, const Weapon*> build_weapons_index() const;
 
-    [[nodiscard]] Armor find_armor(Socket socket, const std::string &name) const;
+    [[nodiscard]] Armor find_armor(Socket socket, const std::string& name) const;
 
-    [[nodiscard]] Weapon find_weapon(Weapon_socket weapon_socket, const std::string &name) const;
+    [[nodiscard]] Weapon find_weapon(Weapon_socket weapon_socket, const std::string& name) const;
 
     [[nodiscard]] static Attributes get_enchant_attributes(Socket socket, Enchant::Type type);
 
@@ -802,15 +802,15 @@ struct Armory
 
     [[nodiscard]] static Hit_effect enchant_hit_effect(Weapon &weapon, Enchant::Type type);
 
-    static void clean_weapon(Weapon &weapon);
+    void clean_weapon(Weapon& weapon) const;
 
-    void compute_total_stats(Character &character) const;
+    void compute_total_stats(Character& character) const;
 
-    [[nodiscard]] static bool check_if_armor_valid(const std::vector<Armor> &armor);
+    [[nodiscard]] static bool check_if_armor_valid(const std::vector<Armor>& armor);
 
-    [[nodiscard]] static bool check_if_weapons_valid(std::vector<Weapon> & ws);
+    [[nodiscard]] static bool check_if_weapons_valid(std::vector<Weapon>& ws);
 
-    static void change_weapon(std::vector<Weapon> &current_weapons, const Weapon &equip_weapon, const Socket &socket);
+    static void change_weapon(std::vector<Weapon>& current_weapons, const Weapon& equip_weapon, const Socket& socket);
 
     static void change_armor(std::vector<Armor> &armor_vec, const Armor &armor, bool first_misc_slot = true);
 

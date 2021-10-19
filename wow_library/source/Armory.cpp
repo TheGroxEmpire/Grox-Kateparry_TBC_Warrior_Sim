@@ -221,21 +221,11 @@ Hit_effect Armory::enchant_hit_effect(Weapon& weapon, Enchant::Type type)
     }
 }
 
-void Armory::clean_weapon(Weapon& weapon)
+// TODO remove from armory.
+void Armory::clean_weapon(Weapon& weapon) const
 {
-    // TODO remove from armory.
-    if (!weapon.hit_effects.empty())
-    {
-        auto temp = weapon.hit_effects;
-        weapon.hit_effects = {};
-        for (const auto& hit_effect : temp)
-        {
-            if (hit_effect.name == weapon.name)
-            {
-                weapon.hit_effects.emplace_back(hit_effect);
-            }
-        }
-    }
+    if (weapon.hit_effects.empty()) return;
+    weapon.hit_effects = find_weapon(weapon.weapon_socket, weapon.name).hit_effects;
 }
 
 void add_hit_effect(const Hit_effect& hit_effect, Character& character)
