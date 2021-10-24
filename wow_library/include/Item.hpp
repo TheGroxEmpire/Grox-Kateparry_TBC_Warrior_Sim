@@ -66,7 +66,6 @@ enum class Set
     none
 };
 
-
 struct Gem
 {
     enum class Type

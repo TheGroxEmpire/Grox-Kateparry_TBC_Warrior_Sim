@@ -304,7 +304,7 @@ struct Armor_struct
     explicit Armor_struct(const Armor& a, const Special_stats& ss) :
         armor(a),
         special_stats(a.special_stats + a.attributes.to_special_stats(ss)),
-        can_be_estimated(a.set_name == Set::none && a.hit_effects.empty() && a.use_effects.empty()) {}
+        can_be_estimated(a.set_name == Set::none && a.hit_effects.empty() && a.use_effects.empty() && a.socket != Socket::trinket) {}
 
     bool operator==(const Armor_struct& other) const { return &armor.get() == &other.armor.get(); }
     [[nodiscard]] const std::string& name() const { return armor.get().name; }
