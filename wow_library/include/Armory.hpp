@@ -291,7 +291,7 @@ struct Armory
                 {"bulwark_of_ancient_kings", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_ancient_kings", Use_effect::Effect_socket::unique, {150, 0}, {}, 0, 15, 900, false}}},
                 {"bulwark_of_ancient_kings_no_cd", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest}, 
                 {"bloodsea_brigand_s_vest", Attributes{0.0, 0.0}, Special_stats{1.6304347826086958, 1.7121116043119848, 92.0, 0, 0.0}, Socket::chest}, 
-                {"destroyer_breasplate", Attributes{50.0, 0.0}, Special_stats{1.4945652173913044, 0.9511731135066582, 0.0, 0, 0.0}, Socket::chest, Set::destroyer}, 
+                {"destroyer_breastplate", Attributes{50.0, 0.0}, Special_stats{1.4945652173913044, 0.9511731135066582, 0.0, 0, 0.0}, Socket::chest, Set::destroyer}, 
                 {"krakken_heart_breastplate", Attributes{61.0, 43.0}, Special_stats{0.0, 1.9023462270133165, 0.0, 0, 0.0}, Socket::chest}, 
                 {"merciless_gladiators_plate_chestpiece", Attributes{35.0, 0.0}, Special_stats{1.585144927536232, 0.8877615726062144, 0.0, 0, 0.0}, Socket::chest}, 
                 {"ranger_generals_chestguard", Attributes{0.0, 36.0}, Special_stats{0.6340579710144928, 0.0, 88.0, 0, 0.0}, Socket::chest}, 
