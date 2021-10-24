@@ -96,24 +96,27 @@ Item_upgrade compute_item_upgrade(const Combat_simulator_config& config, const C
 }
 
 void item_upgrades(std::string& item_strengths_string, const Combat_simulator_config& config, Character character_new,
-                   Item_optimizer& item_optimizer, Armory& armory, const Distribution& base_dps, Socket socket,
-                   bool first_item)
+                   Armory& armory, const Distribution& base_dps, Socket socket, bool first_item)
 {
     std::string dummy;
     const auto& armor_vec = armory.get_items_in_socket(socket);
-    auto items = (socket != Socket::trinket) ?
-                     item_optimizer.remove_weaker_items(armor_vec, character_new.total_special_stats, dummy, 3) :
-                     armor_vec;
 
     auto current_armor = character_new.get_item_from_socket(socket, first_item);
     auto other_armor = Armor::empty(socket);
-    if (socket == Socket::ring || socket == Socket::trinket) other_armor = character_new.get_item_from_socket(socket, !first_item);
+    if (socket == Socket::ring || socket == Socket::trinket)
+    {
+        other_armor = character_new.get_item_from_socket(socket, !first_item);
+    }
+    auto filter = [&current_armor, &other_armor](const Armor& a) {
+        return a.name == current_armor.name || a.name == other_armor.name;
+    };
+
+    auto items = Item_optimizer::remove_weaker_items(armor_vec, character_new.total_special_stats, dummy, 4, filter);
 
     std::vector<Item_upgrade> ius{};
     ius.reserve(items.size());
     for (const auto& item : items)
     {
-        if (item.name == current_armor.name || item.name == other_armor.name) continue;
         Armory::change_armor(character_new.armor, item, first_item);
         armory.compute_total_stats(character_new);
         ius.emplace_back(compute_item_upgrade(config, character_new, base_dps, item.name));
@@ -132,24 +135,27 @@ void item_upgrades(std::string& item_strengths_string, const Combat_simulator_co
     item_strengths_string += "<br><br>";
 }
 
-void item_upgrades_wep(std::string& item_strengths_string, const Combat_simulator_config& config, Character character_new,
-                       Item_optimizer& item_optimizer, Armory& armory, const Distribution& base_dps,
+void wep_upgrades(std::string& item_strengths_string, const Combat_simulator_config& config,
+                       Character character_new, Armory& armory, const Distribution& base_dps,
                        Weapon_socket weapon_socket)
 {
     auto socket = (weapon_socket == Weapon_socket::main_hand || weapon_socket == Weapon_socket::two_hand) ? Socket::main_hand : Socket::off_hand;
 
     std::string dummy;
-    auto items = armory.get_weapon_in_socket(weapon_socket);
-    items = item_optimizer.remove_weaker_weapons(weapon_socket, items, character_new.total_special_stats, dummy, 10);
+    const auto& wep_vec = armory.get_weapon_in_socket(weapon_socket);
 
+    // Restrict Kael'thas Legendary weapons not to be suggested, or competing for "stronger items"
     auto current_weapon = character_new.get_weapon_from_socket(socket);
+    auto filter = [&current_weapon](const Weapon& w) {
+        return w.name == current_weapon.name || w.name == "devastation" || w.name == "warp_slicer" || w.name == "infinity_blade";
+    };
+
+    auto items = Item_optimizer::remove_weaker_weapons(weapon_socket, wep_vec, character_new.total_special_stats, dummy, 10, filter);
 
     std::vector<Item_upgrade> ius{};
     ius.reserve(items.size());
     for (const auto& item : items)
     {
-        // Restrict Kael'thas Legendary weapons to be suggested
-        if (item.name == current_weapon.name || item.name == "devastation" || item.name == "warp_slicer" || item.name == "infinity_blade") continue;
         Armory::change_weapon(character_new.weapons, item, socket);
         armory.compute_total_stats(character_new);
         ius.emplace_back(compute_item_upgrade(config, character_new, base_dps, item.name));
@@ -966,8 +972,6 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
     {
         item_strengths_string = "<b>Character items and proposed upgrades:</b><br>";
 
-        Item_optimizer item_optimizer{};
-        item_optimizer.race = get_race(input.race[0]);
         Character character_new = character_setup(armory, input.race[0], input.armor, input.weapons, temp_buffs,
                                                   input.talent_string, input.talent_val, input.enchants, input.gems);
         std::string dummy{};
@@ -982,15 +986,12 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
             {
                 if (socket == Socket::ring || socket == Socket::trinket)
                 {
-                    item_upgrades(item_strengths_string, config, character_new, item_optimizer, armory,
-                                  base_dps, socket, true);
-                    item_upgrades(item_strengths_string, config, character_new, item_optimizer, armory,
-                                  base_dps, socket, false);
+                    item_upgrades(item_strengths_string, config, character_new, armory, base_dps, socket, true);
+                    item_upgrades(item_strengths_string, config, character_new, armory, base_dps, socket, false);
                 }
                 else
                 {
-                    item_upgrades(item_strengths_string, config, character_new, item_optimizer, armory,
-                                  base_dps, socket, true);
+                    item_upgrades(item_strengths_string, config, character_new, armory, base_dps, socket, true);
                 }
             }
         }
@@ -1004,15 +1005,12 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
             if (is_dual_wield)
             {
-                item_upgrades_wep(item_strengths_string, config, character_new, item_optimizer, armory,
-                                  base_dps, Weapon_socket::main_hand);
-                item_upgrades_wep(item_strengths_string, config, character_new, item_optimizer, armory,
-                                  base_dps, Weapon_socket::off_hand);
+                wep_upgrades(item_strengths_string, config, character_new, armory, base_dps, Weapon_socket::main_hand);
+                wep_upgrades(item_strengths_string, config, character_new, armory, base_dps, Weapon_socket::off_hand);
             }
             else
             {
-                item_upgrades_wep(item_strengths_string, config, character_new, item_optimizer, armory,
-                                  base_dps, Weapon_socket::two_hand);
+                wep_upgrades(item_strengths_string, config, character_new, armory, base_dps, Weapon_socket::two_hand);
             }
         }
         item_strengths_string += "<br><br>";

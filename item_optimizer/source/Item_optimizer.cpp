@@ -156,36 +156,28 @@ void Item_optimizer::extract_weapons(const std::vector<std::string>& weapon_vec)
 
 struct Weapon_struct
 {
-    Weapon_struct() = default;
+    Weapon_struct(const Weapon& w, const Special_stats& ss) :
+        weapon(w),
+        special_stats(w.special_stats + w.attributes.to_special_stats(ss)),
+        swing_speed(w.swing_speed),
+        average_damage((w.min_damage + w.max_damage) / 2),
+        can_be_estimated(w.set_name == Set::none && w.hit_effects.empty() && w.use_effects.empty()) {}
 
-    Weapon_struct(size_t index, Special_stats special_stats, double average_damage, double swing_speed,
-                  std::string name, Weapon_type type, Weapon_socket socket)
-        : index(index)
-        , special_stats(special_stats)
-        , average_damage(average_damage)
-        , swing_speed(swing_speed)
-        , name(std::move(name))
-        , type(type)
-        , socket(socket)
-    {
-    }
+    bool operator==(const Weapon_struct& other) { return &weapon.get() == &other.weapon.get(); }
+    [[nodiscard]] const std::string& name() const { return weapon.get().name; }
+    [[nodiscard]] Weapon_type type() const { return weapon.get().type; }
 
-    size_t index{};
-    Special_stats special_stats;
-    Special_stats set_special_stats;
-    Special_stats hit_special_stats;
-    double average_damage{};
-    double swing_speed{};
-    std::string name{};
-    Weapon_type type{};
-    Weapon_socket socket{};
-    bool can_be_estimated{true};
-    bool remove{false};
+    const std::reference_wrapper<const Weapon> weapon;
+    const Special_stats special_stats;
+    const double swing_speed;
+    const double average_damage;
+    const bool can_be_estimated;
+    bool remove{};
 };
 
 bool is_strictly_weaker_wep(const Weapon_struct& wep_struct1, const Weapon_struct& wep_struct2, Weapon_socket socket)
 {
-    auto special_stats1 = wep_struct1.special_stats + wep_struct1.set_special_stats + wep_struct1.hit_special_stats;
+    auto special_stats1 = wep_struct1.special_stats;
     auto special_stats2 = wep_struct2.special_stats;
 
     bool greater_eq = (special_stats2.hit >= special_stats1.hit) &&
@@ -231,142 +223,77 @@ bool is_strictly_weaker_wep(const Weapon_struct& wep_struct1, const Weapon_struc
 
 double estimate_wep_stat_diff(const Weapon_struct& wep1, const Weapon_struct& wep2, bool main_hand)
 {
-    // Penalize fast MH and slow OH. Set 1 second to equal 100 AP.
     double wep_1_ap = wep1.average_damage / wep1.swing_speed * 14;
-    wep_1_ap += main_hand ? 100 * (wep1.swing_speed - 2.3) : -100 * (wep1.swing_speed - 2.3);
-
+    if (main_hand) wep_1_ap += 100 * (wep1.swing_speed - 2.3);
     double wep_2_ap = wep2.average_damage / wep2.swing_speed * 14;
-    wep_2_ap += main_hand ? 100 * (wep2.swing_speed - 2.3) : -100 * (wep2.swing_speed - 2.3);
+    if (main_hand) wep_2_ap += 100 * (wep2.swing_speed - 2.3);
 
-    return wep_2_ap - wep_1_ap;
+    return main_hand ? wep_2_ap - wep_1_ap : 0.5 * (wep_2_ap - wep_1_ap);
 }
 
 std::vector<Weapon> Item_optimizer::remove_weaker_weapons(const Weapon_socket weapon_socket,
                                                           const std::vector<Weapon>& weapon_vec,
                                                           const Special_stats& special_stats,
-                                                          std::string& debug_message, int keep_n_stronger_items)
+                                                          std::string& debug_message, int keep_n_stronger_items,
+                                                          const std::function<bool(const Weapon&)>& filter)
 {
-    std::vector<Weapon_struct> weapon_struct_vec;
-    Character character{race, 70};
-    //Special_stats racial_stats = character.base_special_stats;
-    for (size_t i = 0; i < weapon_vec.size(); ++i)
+    std::vector<Weapon_struct> wep_structs;
+    wep_structs.reserve(weapon_vec.size());
+
+    for (const auto& w : weapon_vec)
     {
-        Special_stats wep_special_stats = weapon_vec[i].special_stats;
-        wep_special_stats += weapon_vec[i].attributes.to_special_stats(special_stats);
-
-        Weapon_struct wep_struct{i,
-                                 wep_special_stats,
-                                 (weapon_vec[i].min_damage + weapon_vec[i].max_damage) / 2,
-                                 weapon_vec[i].swing_speed,
-                                 weapon_vec[i].name,
-                                 weapon_vec[i].type,
-                                 weapon_vec[i].weapon_socket};
-
-        if (weapon_vec[i].set_name != Set::none)
-        {
-            double ap_equiv_max = 0;
-            Special_stats best_special_stats;
-            for (const auto& set_bonus : armory.set_bonuses)
-            {
-                if (weapon_vec[i].set_name == set_bonus.set)
-                {
-                    Special_stats set_special_stats = set_bonus.special_stats;
-                    set_special_stats += set_bonus.attributes.to_special_stats(special_stats);
-                    double ap_equiv = estimate_special_stats_high(set_special_stats);
-                    if (ap_equiv > ap_equiv_max)
-                    {
-                        ap_equiv_max = ap_equiv;
-                        best_special_stats = set_special_stats;
-                    }
-                }
-            }
-            wep_struct.set_special_stats = best_special_stats;
-        }
-        if (!weapon_vec[i].hit_effects.empty())
-        {
-            for (const auto& effect : weapon_vec[i].hit_effects)
-            {
-                switch (effect.type)
-                {
-                case Hit_effect::Type::damage_magic:
-                case Hit_effect::Type::damage_physical:
-                case Hit_effect::Type::extra_hit: {
-                    double factor = weapon_socket == Weapon_socket::main_hand ? 1.0 : 0.5;
-                    if (effect.affects_both_weapons)
-                    {
-                        factor *= 2;
-                    }
-                    wep_struct.hit_special_stats.attack_power +=
-                        get_hit_effect_ap_equivalent(effect, 0.0, weapon_vec[i].swing_speed, factor);
-                    break;
-                }
-                default:
-                    wep_struct.can_be_estimated = false;
-                }
-            }
-        }
-        if (!weapon_vec[i].use_effects.empty())
-        {
-            wep_struct.can_be_estimated = false;
-        }
-        weapon_struct_vec.push_back(wep_struct);
+        if (filter(w)) continue;
+        wep_structs.emplace_back(w, special_stats);
     }
 
-    std::string wep_socket{};
-    wep_socket = wep_socket + weapon_socket;
-    for (auto& wep1 : weapon_struct_vec)
+    for (auto& wep1 : wep_structs)
     {
-        if (wep1.can_be_estimated)
+        if (!wep1.can_be_estimated) continue;
+
+        auto stronger_found = 0;
+        for (const auto& wep2 : wep_structs)
         {
-            int stronger_found = 0;
-            for (const auto& wep2 : weapon_struct_vec)
+            if (wep1 == wep2 || !wep2.can_be_estimated) continue;
+
+            if (wep1.type() == wep2.type() && is_strictly_weaker_wep(wep1, wep2, weapon_socket))
             {
-                if (wep1.index != wep2.index)
+                stronger_found++;
+                debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
+                                 String_helpers::string_with_precision(keep_n_stronger_items) + " since <b>" +
+                                 wep2.name() + "</b> is better than <b>" + wep1.name() + "</b> in all aspects.<br>";
+            }
+            else
+            {
+                auto stat_diff = estimate_stat_diff(wep1.special_stats, wep2.special_stats);
+                auto wep_stat_diff = estimate_wep_stat_diff(wep1, wep2, weapon_socket == Weapon_socket::main_hand);
+                if (stat_diff + wep_stat_diff > 0)
                 {
-                    if ((wep1.type == wep2.type) && is_strictly_weaker_wep(wep1, wep2, weapon_socket))
-                    {
-                        stronger_found++;
-                        debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
-                                         String_helpers::string_with_precision(keep_n_stronger_items) + " since <b>" +
-                                         wep2.name + "</b> is better than <b>" + wep1.name + "</b> in all aspects.<br>";
-                    }
-                    else
-                    {
-                        double stat_diff =
-                            estimate_stat_diff(wep1.special_stats + wep1.set_special_stats + wep1.hit_special_stats,
-                                               wep2.special_stats + wep2.hit_special_stats);
-                        double wep_stat_diff =
-                            estimate_wep_stat_diff(wep1, wep2, weapon_socket == Weapon_socket::main_hand);
-                        if (stat_diff + wep_stat_diff > 0)
-                        {
-                            stronger_found++;
-                            debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
-                                             String_helpers::string_with_precision(keep_n_stronger_items) +
-                                             " since <b>" + wep2.name + "</b> was estimated to be <b>" +
-                                             String_helpers::string_with_precision(stat_diff + wep_stat_diff, 3) +
-                                             " AP </b>better than <b>" + wep1.name + "</b>.<br>";
-                        }
-                    }
-                    if (stronger_found >= keep_n_stronger_items)
-                    {
-                        wep1.remove = true;
-                        debug_message += "REMOVED:<b> " + wep1.name + "</b>.<br>";
-                        break;
-                    }
+                    stronger_found++;
+                    debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
+                                     String_helpers::string_with_precision(keep_n_stronger_items) +
+                                     " since <b>" + wep2.name() + "</b> was estimated to be <b>" +
+                                     String_helpers::string_with_precision(stat_diff + wep_stat_diff, 3) +
+                                     " AP </b>better than <b>" + wep1.name() + "</b>.<br>";
                 }
+            }
+
+            if (stronger_found >= keep_n_stronger_items)
+            {
+                wep1.remove = true;
+                debug_message += "REMOVED:<b> " + wep1.name() + "</b>.<br>";
+                break;
             }
         }
     }
 
     debug_message += "Weapons left:<br>";
     std::vector<Weapon> filtered_weapons;
-    for (size_t i = 0; i < weapon_vec.size(); ++i)
+    filtered_weapons.reserve(keep_n_stronger_items);
+    for (const auto& w : wep_structs)
     {
-        if (!weapon_struct_vec[i].remove)
-        {
-            filtered_weapons.push_back(weapon_vec[i]);
-            debug_message += "<b>" + weapon_vec[i].name + "</b><br>";
-        }
+        if (w.remove) continue;
+        filtered_weapons.push_back(w.weapon.get());
+        debug_message += "<b>" + w.name() + "</b><br>";
     }
 
     return filtered_weapons;
@@ -374,134 +301,82 @@ std::vector<Weapon> Item_optimizer::remove_weaker_weapons(const Weapon_socket we
 
 struct Armor_struct
 {
-    Armor_struct() = default;
+    explicit Armor_struct(const Armor& a, const Special_stats& ss) :
+        armor(a),
+        special_stats(a.special_stats + a.attributes.to_special_stats(ss)),
+        can_be_estimated(a.set_name == Set::none && a.hit_effects.empty() && a.use_effects.empty()) {}
 
-    Armor_struct(size_t index, Special_stats special_stats, std::string name)
-        : index(index), special_stats(special_stats), name(std::move(name))
-    {
-    }
+    bool operator==(const Armor_struct& other) const { return &armor.get() == &other.armor.get(); }
+    [[nodiscard]] const std::string& name() const { return armor.get().name; }
 
-    size_t index{};
-    Special_stats special_stats{};
-    Special_stats set_special_stats{};
-    Special_stats use_special_stats{};
-    Special_stats hit_special_stats{};
-    std::string name{};
-    bool can_be_estimated{true};
-    bool remove{false};
+    const std::reference_wrapper<const Armor> armor;
+    const Special_stats special_stats;
+    const bool can_be_estimated;
+    bool remove{};
 };
 
 std::vector<Armor> Item_optimizer::remove_weaker_items(const std::vector<Armor>& armors,
                                                        const Special_stats& special_stats, std::string& debug_message,
-                                                       int keep_n_stronger_items)
+                                                       int keep_n_stronger_items, const std::function<bool(const Armor&)>& filter)
 {
-    std::vector<Armor_struct> armors_special_stats;
-    for (size_t i = 0; i < armors.size(); ++i)
+    std::vector<Armor_struct> armor_structs;
+    armor_structs.reserve(armors.size());
+    
+    for (const auto& a : armors)
     {
-        Special_stats armor_special_stats = armors[i].special_stats;
-        armor_special_stats += armors[i].attributes.to_special_stats(special_stats);
-        Armor_struct armor_equiv{i, armor_special_stats, armors[i].name};
-        if (armors[i].set_name != Set::none)
-        {
-            double ap_equiv_max = 0;
-            Special_stats best_special_stats;
-            for (const auto& set_bonus : possible_set_bonuses)
-            {
-                if (armors[i].set_name == set_bonus.set)
-                {
-                    Special_stats set_special_stats = set_bonus.special_stats;
-                    set_special_stats += set_bonus.attributes.to_special_stats(special_stats);
-                    double ap_equiv = estimate_special_stats_high(set_special_stats);
-                    if (ap_equiv > ap_equiv_max)
-                    {
-                        ap_equiv_max = ap_equiv;
-                        best_special_stats = set_special_stats;
-                    }
-                }
-            }
-            armor_equiv.set_special_stats = best_special_stats;
-        }
-        if (!armors[i].use_effects.empty())
-        {
-            armor_equiv.can_be_estimated = false;
-        }
-        if (!armors[i].hit_effects.empty())
-        {
-            for (const auto& effect : armors[i].hit_effects)
-            {
-                switch (effect.type)
-                {
-                case Hit_effect::Type::damage_magic:
-                case Hit_effect::Type::damage_physical:
-                    armor_equiv.hit_special_stats.attack_power += effect.probability * effect.damage * ap_per_coh;
-                    break;
-                case Hit_effect::Type::extra_hit:
-                    //  the factor 0.5 since extra hit resets main hand attack
-                    armor_equiv.hit_special_stats.critical_strike += effect.probability * 0.5;
-                    break;
-                default:
-                    armor_equiv.can_be_estimated = false;
-                }
-            }
-        }
-        armors_special_stats.push_back(armor_equiv);
+        if (filter(a)) continue;
+        armor_structs.emplace_back(a, special_stats);
     }
 
-    for (auto& armor1 : armors_special_stats)
+    for (auto& armor1 : armor_structs)
     {
+        if (!armor1.can_be_estimated) continue;
+
         int stronger_found = 0;
-        if (armor1.can_be_estimated)
+        for (const auto& armor2 : armor_structs)
         {
-            for (const auto& armor2 : armors_special_stats)
+            if (armor1 == armor2 || !armor2.can_be_estimated) continue;
+
+            if (armor1.special_stats < armor2.special_stats)
             {
-                if (armor1.index != armor2.index)
+                stronger_found++;
+                debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
+                                 String_helpers::string_with_precision(keep_n_stronger_items) + " since <b>" +
+                                 armor2.name() + "</b> is better than <b>" + armor1.name() +
+                                 "</b> in all aspects.<br>";
+            }
+            else
+            {
+                auto stat_diff = estimate_stat_diff(armor1.special_stats, armor2.special_stats);
+                if (stat_diff > 0)
                 {
-                    Special_stats armor1_stats = armor1.special_stats + armor1.set_special_stats +
-                                                 armor1.use_special_stats + armor1.hit_special_stats;
-                    if (armor1_stats < armor2.special_stats + armor2.hit_special_stats)
-                    {
-                        stronger_found++;
-                        debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
-                                         String_helpers::string_with_precision(keep_n_stronger_items) + " since <b>" +
-                                         armor2.name + "</b> is better than <b>" + armor1.name +
-                                         "</b> in all aspects.<br>";
-                    }
-                    else
-                    {
-                        double stat_diff = estimate_stat_diff(
-                            armor1_stats, armor2.special_stats + armor2.use_special_stats + armor2.hit_special_stats);
-                        if (stat_diff > 0)
-                        {
-                            stronger_found++;
-                            debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
-                                             String_helpers::string_with_precision(keep_n_stronger_items) +
-                                             " since <b>" + armor2.name + "</b> was estimated to be <b>" +
-                                             String_helpers::string_with_precision(stat_diff, 3) +
-                                             " AP </b>better than <b>" + armor1.name + "</b>.<br>";
-                        }
-                    }
-                    if (stronger_found >= keep_n_stronger_items)
-                    {
-                        armor1.remove = true;
-                        debug_message += "REMOVED:<b> " + armor1.name + "</b>.<br>";
-                        break;
-                    }
+                    stronger_found++;
+                    debug_message += String_helpers::string_with_precision(stronger_found) + "/" +
+                                     String_helpers::string_with_precision(keep_n_stronger_items) +
+                                     " since <b>" + armor2.name() + "</b> was estimated to be <b>" +
+                                     String_helpers::string_with_precision(stat_diff, 3) +
+                                     " AP </b>better than <b>" + armor1.name() + "</b>.<br>";
                 }
+            }
+            if (stronger_found >= keep_n_stronger_items)
+            {
+                armor1.remove = true;
+                debug_message += "REMOVED:<b> " + armor1.name() + "</b>.<br>";
+                break;
             }
         }
     }
 
     debug_message += "Armors left:<br>";
     std::vector<Armor> filtered_armors;
-    for (size_t i = 0; i < armors.size(); ++i)
+    filtered_armors.reserve(keep_n_stronger_items);
+    for (const auto& a : armor_structs)
     {
-        if (!armors_special_stats[i].remove)
-        {
-            filtered_armors.push_back(armors[i]);
-            debug_message += "<b>" + armors[i].name + "</b><br>";
-        }
-    }
+        if (a.remove) continue;
 
+        filtered_armors.push_back(a.armor.get());
+        debug_message += "<b>" + a.name() + "</b><br>";
+    }
     return filtered_armors;
 }
 
