@@ -28,7 +28,8 @@ struct Buffs
     Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0, 0.0}};
     Buff braided_eternium_chain{"braided_eternium_chain", Attributes{0.0, 0.0}, Special_stats{1.2683, 0.0, 0.0}};
     Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0.0}};
-    Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
+    Buff trueshot_aura{"trueshot_aura", {}, {0, 0, 125}};
+    Buff improved_hunters_mark{"improved_hunters_mark", {}, {0, 0, 0, 110}};
     Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{86.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0.0}};
 
@@ -285,7 +286,7 @@ struct Armory
                 {"plated_abomination_ribcage", Attributes{45.0, 0.0}, Special_stats{0.6340579710144928, 0.6341154090044389, 0.0, 0, 0.0}, Socket::chest}, 
                 {"maghari_scouts_tunic", Attributes{0.0, 23.0}, Special_stats{0.0, 0.7609384908053266, 86.0, 0, 0.0}, Socket::chest}, 
                 {"high_warlords_plate_chestpiece", Attributes{12.0, 0.0}, Special_stats{1.0869565217391306, 0.0, 0.0, 0, 0.0}, Socket::chest}, 
-                {"chestguard_of_no_remorse", Attributes{0.0, 0.0}, Special_stats{0.9510869565, 0.0, 0.0, 92, 0.0}, Socket::chest},
+                {"chestguard_of_no_remorse", Attributes{0.0, 0.0}, Special_stats{0.9510869565, 0.0, 92.0, 0, 0.0}, Socket::chest},
 
                 // Phase 2
                 {"bulwark_of_ancient_kings", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_ancient_kings", Use_effect::Effect_socket::shared, {150, 0}, {}, 0, 15, 900, true}}},

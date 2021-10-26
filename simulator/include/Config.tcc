@@ -39,10 +39,13 @@ void Combat_simulator_config::parse_combat_simulator_config(const T& input)
     enable_blood_fury = String_helpers::find_string(input.options, "enable_blood_fury");
     enable_berserking = String_helpers::find_string(input.options, "enable_berserking");
     berserking_haste_ = fv.find("berserking_haste_dd");
-    enable_unleashed_rage = String_helpers::find_string(input.options, "enable_unleashed_rage");
-    unleashed_rage_start_ = fv.find("unleashed_rage_dd");
     use_death_wish = String_helpers::find_string(input.options, "death_wish");
     use_sweeping_strikes = String_helpers::find_string(input.options, "use_sweeping_strikes");
+
+    enable_unleashed_rage = String_helpers::find_string(input.options, "enable_unleashed_rage");
+    unleashed_rage_start_ = fv.find("unleashed_rage_dd");
+    enable_expose_weakness = String_helpers::find_string(input.options, "enable_expose_weakness");
+    expose_weakness_bonus_attack_power_ = 0.25 * fv.find("expose_weakness_dd");
 
     deep_wounds = String_helpers::find_string(input.options, "deep_wounds");
 

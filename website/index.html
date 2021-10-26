@@ -81,6 +81,11 @@
         background-color: #b3c6ff;
     }
 
+    input[type=number] {
+        text-align: right;
+        width: 5em;
+    }
+
     select.enchant-select {
         width: 100px;
     }
@@ -4131,6 +4136,13 @@
             <input type="checkbox" id="trueshot_aura" checked>
             <label for="trueshot_aura"> Trueshot Aura</label><br>
 
+            <input type="checkbox" id="improved_hunters_mark">
+            <label for="improved_hunters_mark"> Improved Hunter's Mark</label><br>
+
+            <input type="checkbox" id="enable_expose_weakness">
+            <label for="enable_expose_weakness"> Expose Armor (with <input type="number" id="expose_weakness_dd" name="quantity"
+                min="10" max="1600" value="800" step="10"> Agility)</label><br>
+
             <input type="checkbox" id="blessing_of_kings" checked>
             <label for="blessing_of_kings"> Blessing of Kings</label><br>
 
@@ -4812,14 +4824,14 @@
 
     <button type="button" class="collapsible">Simulator Settings</button>
     <div class="content">
-        <label for="n_simulations_dd">Number of simulations (DPS): (1 - 1.000.000):</label>
-        <input type="number" id="n_simulations_dd" name="quantity" min="1" max="1000000" value="50000"><br>
+        <label for="n_simulations_dd">Number of simulations (DPS): (1.000 - 1.000.000):</label>
+        <input type="number" id="n_simulations_dd" name="quantity" min="1000" max="1000000" value="50000" step="1000"><br>
 
-        <label for="n_simulations_stat_dd">Number of simulations (per stat weight): (1 - 100.000):</label>
-        <input type="number" id="n_simulations_stat_dd" name="quantity" min="1" max="100000" value="20000"><br>
+        <label for="n_simulations_stat_dd">Number of simulations (per stat weight): (1.000 - 100.000):</label>
+        <input type="number" id="n_simulations_stat_dd" name="quantity" min="1000" max="100000" value="20000" step="1000"><br>
 
-        <label for="n_simulations_talent_dd">Number of simulations (per talent): (1 - 20.000):</label>
-        <input type="number" id="n_simulations_talent_dd" name="quantity" min="1" max="20000" value="5000"><br><br>
+        <label for="n_simulations_talent_dd">Number of simulations (per talent): (1.000 - 20.000):</label>
+        <input type="number" id="n_simulations_talent_dd" name="quantity" min="1000" max="20000" value="5000" step="1000"><br><br>
 
         <b>Compute stat weights (adds extra simulations):</b><br>
         <input type="checkbox" id="stat_weight_strength">
@@ -4980,9 +4992,9 @@
     }
 
 
-    let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura",
-        "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem", "improved_seal_of_the_crusader", "blood_frenzy", "improved_sanctity_aura",
-        "heroic_presence", "braided_eternium_chain", "improved_faerie_fire", "trueshot_aura"];
+    let buffs = ["battle_shout", "blessing_of_kings", "blessing_of_might", "gift_of_the_wild", "leader_of_the_pack", "trueshot_aura", "improved_hunters_mark",
+        "windfury_totem", "strength_of_earth_totem", "grace_of_air_totem", "improved_seal_of_the_crusader", "improved_sanctity_aura",
+        "heroic_presence", "blood_frenzy", "braided_eternium_chain", "improved_faerie_fire"];
     let buffs_input = [];
 
     let consumables = ["elixir_mongoose", "blessed_sunfruit", "roasted_clefthoof", "juju_power",
@@ -5028,9 +5040,9 @@
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "sunder_armor_globals_dd",
         "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_thresh_dd", "berserking_haste_dd",
-        "full_polarity_dd", "extra_target_percentage_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd"];
+        "full_polarity_dd", "extra_target_percentage_dd", "battle_squawk_dd", "rampage_use_thresh_dd", "ferocious_inspiration_dd", "unleashed_rage_dd", "expose_weakness_dd"];
 
-    let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury",
+    let sim_options = ["faerie_fire", "exposed_armor", "curse_of_recklessness", "death_wish", "enable_blood_fury", "enable_expose_weakness",
         "enable_berserking", "enable_unleashed_rage", "recklessness", "mighty_rage_potion", "debug_on", "use_bt_in_exec_phase", "use_ww_in_exec_phase", "use_hs_in_exec_phase",
         "cleave_if_adds", "use_hamstring", "use_sunder_armor", "use_rampage", "use_bloodthirst", "use_whirlwind", "use_overpower", "use_heroic_strike",
         "item_strengths", "wep_strengths", "deep_wounds", "compute_dpr", "talents_stat_weights",

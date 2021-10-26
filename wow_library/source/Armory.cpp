@@ -1157,6 +1157,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.trueshot_aura);
     }
+    if (String_helpers::find_string(buffs_vec, "improved_hunters_mark"))
+    {
+        character.add_buff(buffs.improved_hunters_mark);
+    }
     if (String_helpers::find_string(buffs_vec, "elixir_mongoose"))
     {
         character.add_buff(buffs.elixir_mongoose);

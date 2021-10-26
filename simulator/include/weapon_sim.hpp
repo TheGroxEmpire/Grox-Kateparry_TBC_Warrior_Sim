@@ -10,12 +10,12 @@ public:
 
     [[nodiscard]] double swing(const Special_stats& special_stats) const
     {
-        return average_damage + special_stats.bonus_damage + special_stats.attack_power * swing_speed / 14;
+        return average_damage + special_stats.bonus_damage + (special_stats.attack_power + special_stats.bonus_attack_power) * swing_speed / 14;
     }
 
     [[nodiscard]] double normalized_swing(const Special_stats& special_stats) const
     {
-        return average_damage + special_stats.bonus_damage + special_stats.attack_power * normalized_swing_speed / 14;
+        return average_damage + special_stats.bonus_damage + (special_stats.attack_power + special_stats.bonus_attack_power) * normalized_swing_speed / 14;
     }
 
     double swing_speed;
