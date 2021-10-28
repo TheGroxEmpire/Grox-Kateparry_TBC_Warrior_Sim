@@ -1045,7 +1045,7 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
         debug_topic += "<br><br>";
         debug_topic += "Fight statistics:<br>";
-        debug_topic += "DPS: " + std::to_string(simulator.get_dps_mean()) + "<br><br>";
+        debug_topic += "DPS: " + std::to_string(base_dps.mean()) + "<br><br>";
 
         auto f = 1.0 / (config.sim_time * base_dps.samples());
         debug_topic += "DPS from sources:<br>";

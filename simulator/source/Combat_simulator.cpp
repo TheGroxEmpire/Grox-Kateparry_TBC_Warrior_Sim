@@ -36,18 +36,21 @@ Combat_simulator::Combat_simulator(const Combat_simulator_config& config) : conf
 
 void Combat_simulator::add_talent_effects(const Character& character)
 {
-    heroic_strike_rage_cost_ = 15 - character.talents.improved_heroic_strike;
     execute_rage_cost_ = std::vector<int>{15, 13, 10}[character.talents.improved_execute];
+    heroic_strike_rage_cost_ = 15 - character.talents.improved_heroic_strike;
     whirlwind_rage_cost_ = 25;
     mortal_strike_rage_cost_ = 30;
     bloodthirst_rage_cost_ = 30;
 
-    have_flurry_ = character.talents.flurry > 0;
-    flurry_.attack_speed = character.talents.flurry * 0.05;
+    tactical_mastery_rage_ = 10 + character.talents.tactical_mastery * 5;
+
+    dual_wield_modifier_ = 1 + 0.05 * character.talents.dual_wield_specialization;
 
     cleave_bonus_damage_ = 70 * (1.0 + 0.4 * character.talents.improved_cleave);
 
-    tactical_mastery_rage_ = 10 + character.talents.tactical_mastery * 5;
+    have_flurry_ = character.talents.flurry > 0;
+    flurry_.attack_speed = character.talents.flurry * 0.05;
+
     deep_wounds_ = character.talents.deep_wounds && config.deep_wounds;
     use_rampage_ = character.talents.rampage && config.combat.use_rampage;
     use_bloodthirst_ = character.talents.bloodthirst && config.combat.use_bloodthirst;
@@ -134,13 +137,13 @@ void Combat_simulator::compute_hit_tables(const Character& character, const Spec
     // just using the EJ-approved crit formula here ;)
     auto yellow_crit_dm = 1 + (2 * (1 + special_stats.crit_multiplier) - 1) * (1 + 0.1 * character.talents.impale);
 
+    Damage_multipliers white_dm((100 - glance_dr) / 100, 2 * (1 + special_stats.crit_multiplier), 1);
+    Damage_multipliers yellow_dm(0, yellow_crit_dm, 1);
+
     if (weapon.socket == Socket::main_hand)
     {
-        auto white_dm = Damage_multipliers((100 - glance_dr) / 100, 2 * (1 + special_stats.crit_multiplier), 1);
-
         hit_table_white_mh_ = Hit_table("white (mh)", miss, dodge, glance, crit, white_dm);
 
-        auto yellow_dm = Damage_multipliers(0, yellow_crit_dm, 1);
         hit_table_yellow_mh_ = Hit_table("yellow (mh)", sw_miss, dodge, 0, (100 - sw_miss - dodge) / 100 * crit, yellow_dm);
 
         auto overpower_crit_chance = crit + character.talents.improved_overpower * 25; // this might be capped at 100%, but presumably nobody ever tested this
@@ -150,31 +153,10 @@ void Combat_simulator::compute_hit_tables(const Character& character, const Spec
     }
     else
     {
-        auto oh_factor = 0.5 * (1 + 0.05 * character.talents.dual_wield_specialization);
-        auto white_dm = Damage_multipliers(oh_factor * (100 - glance_dr) / 100, oh_factor * 2 * (1 + special_stats.crit_multiplier), oh_factor);
-
         hit_table_white_oh_ = Hit_table("white (oh)", miss, dodge, glance, crit, white_dm);
         hit_table_white_oh_queued_ = Hit_table("white (oh queued)", sw_miss, dodge, glance, crit, white_dm);
 
-        auto yellow_dm = Damage_multipliers(0, oh_factor * yellow_crit_dm, oh_factor);
         hit_table_yellow_oh_ = Hit_table("yellow (oh)", sw_miss, dodge, 0, (100 - sw_miss - dodge) / 100 * crit, yellow_dm);
-    }
-}
-
-std::string Combat_simulator::hit_result_to_string(const Hit_result& hit_result)
-{
-    switch (hit_result)
-    {
-    case Hit_result::hit:
-        return " hit";
-    case Hit_result::crit:
-        return " crit";
-    case Hit_result::dodge:
-        return " dodge";
-    case Hit_result::miss:
-        return " miss";
-    default:
-        return " bugs";
     }
 }
 
@@ -309,7 +291,7 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(Sim_state& state, c
     {
         // TODO(vigo) can_sweep is actually either "clone damage" (can't crit; fully dependent on hit_outcome)
         //  or "normalized swing" (can't miss, can't crit; regular swing, independent of hit_outcome, happens for execute or ww)
-        if (hit_outcome.damage > 0.0 && can_sweep)
+        if (hit_outcome.damage > 0 && can_sweep)
         {
             double sweeping_strike_damage;
             if (boss_target)
@@ -341,7 +323,9 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(Sim_state& state, c
     {
         if (hit_outcome.hit_result == Hit_result::crit)
         {
-            deep_wound_effect_.damage = 0.25 * (1 + state.special_stats.damage_mod_physical) * state.talents.deep_wounds * 0.2 * state.main_hand_weapon.swing(state.special_stats);
+            // deep wounds seems to "double dip" from bonus_damage: it's added to swing damage, and to each tick's damage (!)
+            const auto& ss = state.special_stats;
+            deep_wound_effect_.damage = (0.25 * state.talents.deep_wounds * 0.2 * (state.main_hand_weapon.swing(ss) + ss.bonus_damage) + ss.bonus_damage) * (1 + ss.damage_mod_physical);
             buff_manager_.add_over_time_buff(deep_wound_effect_, time_keeper_.time);
         }
     }
@@ -420,8 +404,8 @@ void Combat_simulator::slam(Sim_state& state)
         return;
     }
     logger_.print("Slam!");
-    double damage = state.main_hand_weapon.swing(state.special_stats) + 140.0;
-    auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
+    double damage = state.main_hand_weapon.swing(state.special_stats) + 140;
+    const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
         spend_rage(3);
@@ -450,8 +434,8 @@ void Combat_simulator::mortal_strike(Sim_state& state)
         return;
     }
     logger_.print("Mortal Strike!");
-    double damage = (state.main_hand_weapon.normalized_swing(state.special_stats) + 210) * (100 + state.talents.improved_mortal_strike) / 100;
-    auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
+    double damage = (state.main_hand_weapon.normalized_swing(state.special_stats) + 210 + state.special_stats.bonus_damage) * (100 + state.talents.improved_mortal_strike) / 100;
+    const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
         spend_rage(0.2 * mortal_strike_rage_cost_);
@@ -483,8 +467,8 @@ void Combat_simulator::bloodthirst(Sim_state& state)
     }
     logger_.print("Bloodthirst!");
     // logger_.print("(DEBUG) AP: ", special_stats.attack_power);
-    double damage = state.special_stats.attack_power * 0.45;
-    auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
+    double damage = state.special_stats.attack_power * 0.45 + state.special_stats.bonus_damage;
+    const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
         spend_rage(0.2 * bloodthirst_rage_cost_);
@@ -519,8 +503,8 @@ void Combat_simulator::overpower(Sim_state& state)
     logger_.print("Changed stance: Battle Stance.");
     logger_.print("Overpower!");
     buff_manager_.add_combat_buff(battle_stance_, time_keeper_.time);
-    double damage = state.main_hand_weapon.normalized_swing(state.special_stats) + 35;
-    auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_overpower_, damage);
+    double damage = state.main_hand_weapon.normalized_swing(state.special_stats) + 35 + state.special_stats.bonus_damage;
+    const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_overpower_, damage);
     swap_stance();
     spend_rage(5);
     if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
@@ -550,13 +534,12 @@ void Combat_simulator::whirlwind(Sim_state& state)
     logger_.print("Whirlwind! #targets = boss + ", number_of_extra_targets_, " adds");
     logger_.print("Whirlwind hits: ", std::min(number_of_extra_targets_ + 1, 4), " targets");
     spend_rage(whirlwind_rage_cost_); // spend rage before hit_effects
-    double mh_damage = state.main_hand_weapon.normalized_swing(state.special_stats);
-    double oh_damage = state.is_dual_wield ? state.off_hand_weapon.normalized_swing(state.special_stats) : 0;
+    double mh_damage = state.main_hand_weapon.normalized_swing(state.special_stats) + state.special_stats.bonus_damage;
+    double oh_damage = state.is_dual_wield ? (state.off_hand_weapon.normalized_swing(state.special_stats) * 0.5 + state.special_stats.bonus_damage) * dual_wield_modifier_ : 0;
     double total_damage = 0;
     for (int i = 0; i < std::min(number_of_extra_targets_ + 1, 4); i++)
     {
-        const auto& mh_outcome =
-            generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, mh_damage, i == 0, i == 0);
+        const auto& mh_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, mh_damage, i == 0, i == 0);
         total_damage += mh_outcome.damage;
         if (mh_outcome.hit_result != Hit_result::miss && mh_outcome.hit_result != Hit_result::dodge)
         {
@@ -569,8 +552,7 @@ void Combat_simulator::whirlwind(Sim_state& state)
         }
         if (state.is_dual_wield)
         {
-            const auto& oh_outcome =
-                generate_hit(state, state.off_hand_weapon, hit_table_yellow_oh_, oh_damage, i == 0, false);
+            const auto& oh_outcome = generate_hit(state, state.off_hand_weapon, hit_table_yellow_oh_, oh_damage, i == 0, false);
             total_damage += oh_outcome.damage;
             if (oh_outcome.hit_result != Hit_result::miss && oh_outcome.hit_result != Hit_result::dodge)
             {
@@ -598,8 +580,8 @@ void Combat_simulator::execute(Sim_state& state)
         return;
     }
     logger_.print("Execute!");
-    double damage = 925 + (rage - execute_rage_cost_) * 21;
-    auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
+    double damage = 925 + (rage - execute_rage_cost_) * 21 + state.special_stats.bonus_damage;
+    const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     spend_rage(execute_rage_cost_);
     time_keeper_.global_cast(1500);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
@@ -627,8 +609,8 @@ void Combat_simulator::hamstring(Sim_state& state)
         return;
     }
     logger_.print("Hamstring!");
-    double damage = 63;
-    auto hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
+    double damage = 63 + state.special_stats.bonus_damage;
+    const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     time_keeper_.global_cast(1500);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
@@ -713,7 +695,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
             logger_.print("PROC: extra hit from: ", hit_effect.name);
             windfury_attack_.duration = hit_type == Hit_type::next_melee ? 1500 : 10;
             buff_manager_.add_combat_buff(windfury_attack_, time_keeper_.time);
-            swing_weapon(state, state.main_hand_weapon, Extra_attack_type::none);
+            swing_main_hand(state, Extra_attack_type::none);
             break;
         }
         case Hit_effect::Type::sword_spec: { // can _not_ proc itself or other extra attacks
@@ -721,7 +703,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
 
             hit_effect.procs++;
             logger_.print("PROC: extra hit from: ", hit_effect.name);
-            swing_weapon(state, state.main_hand_weapon, Extra_attack_type::none);
+            swing_main_hand(state, Extra_attack_type::none);
             break;
         }
         case Hit_effect::Type::extra_hit: { // _can_ proc itself and other extra attacks on instant attacks
@@ -729,7 +711,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
 
             hit_effect.procs++;
             logger_.print("PROC: extra hit from: ", hit_effect.name);
-            swing_weapon(state, state.main_hand_weapon,hit_type == Hit_type::spell ? Extra_attack_type::all : Extra_attack_type::self);
+            swing_main_hand(state, hit_type == Hit_type::spell ? Extra_attack_type::all : Extra_attack_type::self);
             break;
         }
         case Hit_effect::Type::stat_boost: {
@@ -756,16 +738,12 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
         }
         case Hit_effect::Type::damage_physical: {
             hit_effect.procs++;
-            auto hit = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, hit_effect.damage);
-            state.add_damage(Damage_source::item_hit_effects, hit.damage, time_keeper_.time);
-            if (config.display_combat_debug)
+            const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, hit_effect.damage);
+            state.add_damage(Damage_source::item_hit_effects, hit_outcome.damage, time_keeper_.time);
+            logger_.print("PROC: ", hit_effect.name, " does ", hit_outcome.damage, " physical damage.");
+            if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
             {
-                logger_.print("PROC: ", hit_effect.name, hit_result_to_string(hit.hit_result), " does ",
-                              int(hit.damage), " physical damage");
-            }
-            if (hit.hit_result != Hit_result::miss && hit.hit_result != Hit_result::dodge)
-            {
-                hit_effects(state, hit.hit_result, state.main_hand_weapon);
+                hit_effects(state, hit_outcome.hit_result, state.main_hand_weapon);
             }
             break;
         }
@@ -786,14 +764,14 @@ double Combat_simulator::rage_generation(Sim_state& state, const Hit_outcome& hi
     return rage_gain;
 }
 
-void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_attack_type extra_attack_type)
+void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra_attack_type)
 {
-    double swing_damage = weapon.swing(state.special_stats);
+    auto& weapon = state.main_hand_weapon;
 
     maybe_remove_flurry(state.flurry_charges, state.special_stats);
 
     auto white_replaced = false;
-    if (ability_queue_manager.heroic_strike_queued && weapon.socket == Socket::main_hand)
+    if (ability_queue_manager.heroic_strike_queued)
     {
         ability_queue_manager.heroic_strike_queued = false;
         if (rage >= heroic_strike_rage_cost_ && config.dpr_settings.compute_dpr_hs_)
@@ -805,9 +783,8 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
         else if (rage >= heroic_strike_rage_cost_)
         {
             logger_.print("Performing Heroic Strike");
-            swing_damage += 176;
-            const auto& hit_outcome =
-                generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, swing_damage);
+            double damage = weapon.swing(state.special_stats) + 176;
+            const auto& hit_outcome = generate_hit(state, weapon, hit_table_yellow_mh_, damage);
             if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
             {
                 spend_rage(0.2 * heroic_strike_rage_cost_); // Refund rage for missed/dodged heroic strikes.
@@ -830,7 +807,7 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
         }
         logger_.print("Current rage: ", int(rage));
     }
-    else if (ability_queue_manager.cleave_queued && weapon.socket == Socket::main_hand)
+    else if (ability_queue_manager.cleave_queued)
     {
         ability_queue_manager.cleave_queued = false;
         if (rage >= 20 && config.dpr_settings.compute_dpr_cl_)
@@ -843,12 +820,11 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
             logger_.print("Performing Cleave! #targets = boss + ", number_of_extra_targets_, " adds");
             logger_.print("Cleave hits: ", std::min(number_of_extra_targets_ + 1, 2), " targets");
             spend_rage(20);
-            swing_damage += cleave_bonus_damage_;
+            double damage = weapon.swing(state.special_stats) + cleave_bonus_damage_;
             double total_damage = 0;
             for (int i = 0, n = number_of_extra_targets_ > 0 ? 2 : 1; i < n; i++)
             {
-                const auto& hit_outcome =
-                    generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, swing_damage, i == 0);
+                const auto& hit_outcome = generate_hit(state, weapon, hit_table_yellow_mh_, damage, i == 0);
                 total_damage += hit_outcome.damage;
                 if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
                 {
@@ -873,11 +849,8 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
 
     if (!white_replaced)
     {
-        auto is_queued = (ability_queue_manager.heroic_strike_queued && !config.dpr_settings.compute_dpr_hs_) || (ability_queue_manager.cleave_queued && !config.dpr_settings.compute_dpr_cl_);
-
-        auto hit_table = weapon.socket == Socket::main_hand ? hit_table_white_mh_ : is_queued ? hit_table_white_oh_queued_ : hit_table_white_oh_;
-
-        const auto& hit_outcome = generate_hit(state, weapon, hit_table, swing_damage);
+        auto damage = weapon.swing(state.special_stats) + state.special_stats.bonus_damage;
+        const auto& hit_outcome = generate_hit(state, weapon, hit_table_white_mh_, damage);
         buff_manager_.remove_charge(windfury_attack_, time_keeper_.time, logger_);
         if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
         {
@@ -897,15 +870,41 @@ void Combat_simulator::swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_
         }
 
         logger_.print("Current rage: ", int(rage));
-        if (weapon.socket == Socket::main_hand)
-        {
-            state.add_damage(Damage_source::white_mh, hit_outcome.damage, time_keeper_.time);
-        }
-        else
-        {
-            state.add_damage(Damage_source::white_oh, hit_outcome.damage, time_keeper_.time);
-        }
+        state.add_damage(Damage_source::white_mh, hit_outcome.damage, time_keeper_.time);
     }
+}
+
+void Combat_simulator::swing_off_hand(Sim_state& state)
+{
+    auto& weapon = state.off_hand_weapon;
+
+    maybe_remove_flurry(state.flurry_charges, state.special_stats);
+
+    auto is_queued = (ability_queue_manager.heroic_strike_queued && !config.dpr_settings.compute_dpr_hs_) || (ability_queue_manager.cleave_queued && !config.dpr_settings.compute_dpr_cl_);
+    auto hit_table = is_queued ? hit_table_white_oh_queued_ : hit_table_white_oh_;
+
+    auto damage = (weapon.swing(state.special_stats) * 0.5 + state.special_stats.bonus_damage) * dual_wield_modifier_;
+    const auto& hit_outcome = generate_hit(state, weapon, hit_table, damage);
+    buff_manager_.remove_charge(windfury_attack_, time_keeper_.time, logger_);
+    if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
+    {
+        gain_rage(rage_generation(state, hit_outcome, weapon));
+        maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
+        unbridled_wrath(state, weapon);
+        hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::melee, Extra_attack_type::all);
+    }
+    else if (hit_outcome.hit_result == Hit_result::dodge)
+    {
+        if (has_warbringer_4_set_)
+        {
+            gain_rage(2);
+        }
+        gain_rage(rage_generation(state, hit_outcome, weapon));
+        logger_.print("Rage gained since the enemy dodged.");
+    }
+
+    logger_.print("Current rage: ", int(rage));
+    state.add_damage(Damage_source::white_oh, hit_outcome.damage, time_keeper_.time);
 }
 
 void Combat_simulator::update_swing_timers(Sim_state& state, double oldHaste)
@@ -1214,7 +1213,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
                 {
                     mh_hits_w_rampage++;
                 }
-                swing_weapon(state, state.main_hand_weapon);
+                swing_main_hand(state);
             }
 
             if (oh_swing)
@@ -1224,7 +1223,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
                 {
                     oh_hits_w_queued++;
                 }
-                swing_weapon(state, state.off_hand_weapon);
+                swing_off_hand(state);
             }
 
             if (!in_execute_phase)

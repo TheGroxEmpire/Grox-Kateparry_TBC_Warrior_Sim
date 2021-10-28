@@ -80,9 +80,9 @@ struct Buffs
 
     Weapon_buff windfury_totem{"windfury_totem", {}, {}, 0, {"windfury_totem", Hit_effect::Type::windfury_hit, {}, {0, 0, 445}, 0, 0, 0, 0.2}};
     Weapon_buff flametongue_totem{"flametongue_totem", {}, {}, 0, {"flametongue_totem", Hit_effect::Type::damage_magic, {}, {}, 59.7, 0, 0, 1}};
-    Weapon_buff dense_stone{"dense_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0}, 8};
-    Weapon_buff adamantite_stone{"adamantite_stone", Attributes{0.0, 0.0}, Special_stats{0.63, 0.0, 0.0}, 12};
-    Weapon_buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{1.26, 0.0, 0.0}};
+    Weapon_buff dense_stone{"dense_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0, 0, 0, 8}};
+    Weapon_buff adamantite_stone{"adamantite_stone", Attributes{0.0, 0.0}, Special_stats{0.6341, 0.0, 0.0, 0, 0, 0, 0, 12}};
+    Weapon_buff elemental_stone{"elemental_stone", Attributes{0.0, 0.0}, Special_stats{1.2683, 0.0, 0.0}};
     Weapon_buff consecrated_stone{"consecrated_stone", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 100.0}};
 };
 

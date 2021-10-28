@@ -216,7 +216,8 @@ public:
     void maybe_add_rampage_stack(Hit_result hit_result, int& rampage_stacks, Special_stats& special_stats);
     void unbridled_wrath(Sim_state& state, const Weapon_sim& weapon);
 
-    void swing_weapon(Sim_state& state, Weapon_sim& weapon, Extra_attack_type extra_attack_type = Extra_attack_type::all);
+    void swing_main_hand(Sim_state& state, Extra_attack_type extra_attack_type = Extra_attack_type::all);
+    void swing_off_hand(Sim_state& state);
 
     void hit_effects(Sim_state& state, Hit_result hit_result, Weapon_sim& weapon, Hit_type hit_type = Hit_type::spell, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
@@ -295,10 +296,6 @@ public:
     [[nodiscard]] const Damage_sources& get_damage_distribution() const { return damage_distribution_; }
 
     [[nodiscard]] const Distribution& get_dps_distribution() const { return dps_distribution_; }
-    [[nodiscard]] double get_dps_mean() const { return dps_distribution_.mean(); }
-    [[nodiscard]] double get_dps_variance() const { return dps_distribution_.variance(); }
-    [[nodiscard]] double get_var_of_the_mean() const { return dps_distribution_.var_of_the_mean(); }
-    [[nodiscard]] double get_std_of_the_mean() const { return dps_distribution_.std_of_the_mean(); }
 
     [[nodiscard]] double get_rage_lost_stance() const { return rage_lost_stance_swap_; }
     [[nodiscard]] double get_rage_lost_capped() const { return rage_lost_capped_; }
@@ -317,8 +314,6 @@ public:
     void prune_histogram();
 
     void normalize_timelapse();
-
-    static std::string hit_result_to_string(const Hit_result& hit_result);
 
     Combat_simulator_config config;
 
@@ -371,6 +366,8 @@ private:
     int mortal_strike_rage_cost_{};
     int bloodthirst_rage_cost_{};
     int tactical_mastery_rage_{};
+
+    double dual_wield_modifier_{};
 
     double cleave_bonus_damage_{};
     Special_stats flurry_{};
