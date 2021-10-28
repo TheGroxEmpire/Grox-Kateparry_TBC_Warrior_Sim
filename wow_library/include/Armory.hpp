@@ -28,7 +28,8 @@ struct Buffs
     Buff heroic_presence{"heroic_presence", Attributes{0.0, 0.0}, Special_stats{0.0, 1.0, 0.0}};
     Buff braided_eternium_chain{"braided_eternium_chain", Attributes{0.0, 0.0}, Special_stats{1.2683, 0.0, 0.0}};
     Buff improved_faerie_fire{"improved_faerie_fire", Attributes{0.0, 0.0}, Special_stats{0.0, 3.0, 0.0}};
-    Buff trueshot_aura{"trueshot_aura", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 125}};
+    Buff trueshot_aura{"trueshot_aura", {}, {0, 0, 125}};
+    Buff improved_hunters_mark{"improved_hunters_mark", {}, {0, 0, 0, 110}};
     Buff strength_of_earth_totem{"strength_of_earth_totem", Attributes{86.0, 0.0}, Special_stats{0.0, 0.0, 0.0}};
     Buff grace_of_air_totem{"grace_of_air_totem", Attributes{0.0, 77.0}, Special_stats{0.0, 0.0, 0.0}};
 
@@ -99,25 +100,25 @@ struct Gems
     Gem agility_6{"agility_6", Attributes {0, 6}, Special_stats{0.0, 0.0, 0.0}};
     Gem agility_8{"agility_8", Attributes {0, 8}, Special_stats{0.0, 0.0, 0.0}};
     Gem agility_10{"agility_10", Attributes {0, 10}, Special_stats{0.0, 0.0, 0.0}};
-    Gem crit_3{"crit_3", Attributes {0, 0}, Special_stats {0.13, 0.0, 0.0}};
-    Gem crit_4{"crit_4", Attributes {0, 0}, Special_stats {0.18, 0.0, 0.0}};
-    Gem crit_5{"crit_5", Attributes {0, 0}, Special_stats {0.22, 0.0, 0.0}};
-    Gem crit_6{"crit_6", Attributes {0, 0}, Special_stats {0.27, 0.0, 0.0}};
-    Gem crit_8{"crit_8", Attributes {0, 0}, Special_stats {0.36, 0.0, 0.0}};
-    Gem crit_10{"crit_10", Attributes {0, 0}, Special_stats {0.45, 0.0, 0.0}};
-    Gem crit_12{"crit_12", Attributes {0, 0}, Special_stats {0.54, 0.0, 0.0}};
-    Gem hit_4{"hit_4", Attributes {0, 0}, Special_stats {0.0, 0.25, 0.0}};
-    Gem hit_6{"hit_6", Attributes {0, 0}, Special_stats {0.0, 0.38, 0.0}};
-    Gem hit_8{"hit_8", Attributes {0, 0}, Special_stats {0.0, 0.5, 0.0}};
-    Gem hit_10{"hit_10", Attributes {0, 0}, Special_stats {0.0, 0.63, 0.0}};
-    Gem hit_12{"hit_12", Attributes {0, 0}, Special_stats {0.0, 0.76, 0.0}};
+    Gem crit_3{"crit_3", Attributes {0, 0}, Special_stats {0.1358695652, 0.0, 0.0}};
+    Gem crit_4{"crit_4", Attributes {0, 0}, Special_stats {0.1811594203, 0.0, 0.0}};
+    Gem crit_5{"crit_5", Attributes {0, 0}, Special_stats {0.2264492754, 0.0, 0.0}};
+    Gem crit_6{"crit_6", Attributes {0, 0}, Special_stats {0.2717391304, 0.0, 0.0}};
+    Gem crit_8{"crit_8", Attributes {0, 0}, Special_stats {0.3623188406, 0.0, 0.0}};
+    Gem crit_10{"crit_10", Attributes {0, 0}, Special_stats {0.4528985507, 0.0, 0.0}};
+    Gem crit_12{"crit_12", Attributes {0, 0}, Special_stats {0.5434782609, 0.0, 0.0}};
+    Gem hit_4{"hit_4", Attributes {0, 0}, Special_stats {0.0, 0.2536461636, 0.0}};
+    Gem hit_6{"hit_6", Attributes {0, 0}, Special_stats {0.0, 0.3804692454, 0.0}};
+    Gem hit_8{"hit_8", Attributes {0, 0}, Special_stats {0.0, 0.5072923272, 0.0}};
+    Gem hit_10{"hit_10", Attributes {0, 0}, Special_stats {0.0, 0.634115409, 0.0}};
+    Gem hit_12{"hit_12", Attributes {0, 0}, Special_stats {0.0, 0.7609384908, 0.0}};
     Gem ap_20{"ap_20", Attributes {0, 0}, Special_stats {0.0, 0.0, 20}};
     Gem ap_24{"ap_24", Attributes {0, 0}, Special_stats {0.0, 0.0, 24}};
     Gem dmg_3{"dmg_3", Attributes {0, 0}, Special_stats {0.0, 0.0, 0.0, 0, 0, 0, 0, 3}};
-    Gem crit_3_str_3{"crit_3_str_3", Attributes {3, 0}, Special_stats {0.13, 0.0, 0.0}};
-    Gem crit_4_str_4{"crit_4_str_4", Attributes {4, 0}, Special_stats {0.18, 0.0, 0.0}};
-    Gem crit_4_str_5{"crit_4_str_5", Attributes {5, 0}, Special_stats {0.18, 0.0, 0.0}};
-    Gem crit_5_str_5{"crit_5_str_5", Attributes {5, 0}, Special_stats {0.22, 0.0, 0.0}};
+    Gem crit_3_str_3{"crit_3_str_3", Attributes {3, 0}, Special_stats {0.1358695652, 0.0, 0.0}};
+    Gem crit_4_str_4{"crit_4_str_4", Attributes {4, 0}, Special_stats {0.1811594203, 0.0, 0.0}};
+    Gem crit_4_str_5{"crit_4_str_5", Attributes {5, 0}, Special_stats {0.1811594203, 0.0, 0.0}};
+    Gem crit_5_str_5{"crit_5_str_5", Attributes {5, 0}, Special_stats {0.2264492754, 0.0, 0.0}};
     Gem agi_12_critDmg_3{"agi_12_critDmg_3", Attributes {0, 12}, Special_stats {0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0.03}};
     Gem gem_haste{"gem_haste", {}, {}, {"gem_haste", Hit_effect::Type::stat_boost, {0, 0}, {0, 0, 0, 0, 0.1522}, 0, 6, 40, 0, 0, 0, 0, 1, 1}};
 };
@@ -285,7 +286,7 @@ struct Armory
                 {"plated_abomination_ribcage", Attributes{45.0, 0.0}, Special_stats{0.6340579710144928, 0.6341154090044389, 0.0, 0, 0.0}, Socket::chest}, 
                 {"maghari_scouts_tunic", Attributes{0.0, 23.0}, Special_stats{0.0, 0.7609384908053266, 86.0, 0, 0.0}, Socket::chest}, 
                 {"high_warlords_plate_chestpiece", Attributes{12.0, 0.0}, Special_stats{1.0869565217391306, 0.0, 0.0, 0, 0.0}, Socket::chest}, 
-                {"chestguard_of_no_remorse", Attributes{0.0, 0.0}, Special_stats{0.9510869565, 0.0, 0.0, 92, 0.0}, Socket::chest},
+                {"chestguard_of_no_remorse", Attributes{0.0, 0.0}, Special_stats{0.9510869565, 0.0, 92.0, 0, 0.0}, Socket::chest},
 
                 // Phase 2
                 {"bulwark_of_ancient_kings", Attributes{40.0, 0.0}, Special_stats{1.8568840579710146, 1.585288522511097, 0.0, 0, 0.0}, Socket::chest, Set::none, {}, {{"bulwark_of_ancient_kings", Use_effect::Effect_socket::unique, {150, 0}, {}, 0, 15, 900, false}}},

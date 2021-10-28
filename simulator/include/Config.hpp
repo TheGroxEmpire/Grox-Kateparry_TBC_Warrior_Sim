@@ -59,10 +59,13 @@ struct Combat_simulator_config
     bool enable_blood_fury{};
     bool enable_berserking{};
     double berserking_haste_{};
-    bool enable_unleashed_rage{};
-    double unleashed_rage_start_{};
     bool use_death_wish{};
     bool use_sweeping_strikes{};
+
+    bool enable_unleashed_rage{};
+    double unleashed_rage_start_{};
+    bool enable_expose_weakness{};
+    double expose_weakness_bonus_attack_power_{};
 
     bool deep_wounds{};
 

@@ -2,6 +2,31 @@
 
 #include "gtest/gtest.h"
 
+/*
+TEST(TestSuite, test_unused_special_stats)
+{
+    Armory armory;
+
+    for (const auto& p : armory.build_armor_index())
+    {
+        if (p.second->special_stats.bonus_attack_power > 0)
+        {
+            std::cout << p.first << " has chance_for_extra_hit = " << p.second->special_stats.bonus_attack_power << std::endl;
+        }
+    }
+
+    for (const auto& p : armory.build_weapons_index())
+    {
+        if (p.second->special_stats.bonus_attack_power > 0)
+        {
+            std::cout << p.first << " has chance_for_extra_hit = " << p.second->special_stats.bonus_attack_power << std::endl;
+        }
+    }
+
+    SUCCEED();
+}
+*/
+
 TEST(TestSuite, test_armory)
 {
     Armory armory;

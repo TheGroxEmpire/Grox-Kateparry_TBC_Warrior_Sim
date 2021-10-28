@@ -13,15 +13,15 @@ struct Special_stats
 {
     Special_stats() = default;
 
-    Special_stats(double critical_strike, double hit, double attack_power, double chance_for_extra_hit = 0.0,
-                  double haste = 0.0, double damage_mod_physical = 0, double stat_multiplier = 0,
+    Special_stats(double critical_strike, double hit, double attack_power, double bonus_attack_power = 0,
+                  double haste = 0, double damage_mod_physical = 0, double stat_multiplier = 0,
                   double bonus_damage = 0, double crit_multiplier = 0, double spell_crit = 0,
-                  double damage_mod_spell = 0, double expertise = 0.0, double sword_expertise = 0.0, double mace_expertise = 0.0, double axe_expertise = 0.0,
+                  double damage_mod_spell = 0, double expertise = 0, double sword_expertise = 0, double mace_expertise = 0, double axe_expertise = 0,
                   int gear_armor_pen = 0, double ap_multiplier = 0, double attack_speed = 0)
         : critical_strike{critical_strike}
         , hit{hit}
         , attack_power{attack_power}
-        , chance_for_extra_hit(chance_for_extra_hit)
+        , bonus_attack_power(bonus_attack_power)
         , haste(haste)
         , damage_mod_physical(damage_mod_physical)
         , stat_multiplier(stat_multiplier)
@@ -61,7 +61,7 @@ struct Special_stats
             critical_strike + rhs.critical_strike,
             hit + rhs.hit,
             (attack_power + rhs.attack_power * (1 + ap_multiplier)) * (1 + rhs.ap_multiplier),
-            chance_for_extra_hit + rhs.chance_for_extra_hit,
+            bonus_attack_power + rhs.bonus_attack_power,
             (1 + haste + rhs.haste * (1 + attack_speed)) * (1 + rhs.attack_speed) - 1,
             multiplicative_addition(damage_mod_physical, rhs.damage_mod_physical),
             multiplicative_addition(stat_multiplier, rhs.stat_multiplier),
@@ -87,7 +87,7 @@ struct Special_stats
             critical_strike - rhs.critical_strike,
             hit - rhs.hit,
             (attack_power - rhs.attack_power * (1 + ap_multiplier)) / (1 + rhs.ap_multiplier),
-            chance_for_extra_hit - rhs.chance_for_extra_hit,
+            bonus_attack_power - rhs.bonus_attack_power,
             (1 + haste - rhs.haste * (1 + attack_speed)) / (1 + rhs.attack_speed) - 1,
             multiplicative_subtraction(damage_mod_physical, rhs.damage_mod_physical),
             multiplicative_subtraction(stat_multiplier, rhs.stat_multiplier),
@@ -120,7 +120,7 @@ struct Special_stats
     double critical_strike{};
     double hit{};
     double attack_power{};
-    double chance_for_extra_hit{};
+    double bonus_attack_power{}; // was chance_for_extra_hit, unused; bonus_attack_power is for modelling improved hunter's mark and expose armor
     double haste{};
     double damage_mod_physical{};
     double stat_multiplier{};

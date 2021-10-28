@@ -137,7 +137,7 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         case Enchant::Type::haste:
             return {0, 0, 0, 0, .0063};
         case Enchant::Type::ferocity:
-            return {0, 1.01, 34};
+            return {0, 1.014584654, 34};
         default:
             return {0, 0, 0};
         }
@@ -148,11 +148,11 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         case Enchant::Type::attack_power:
             return {0, 0, 30};
         case Enchant::Type::naxxramas:
-            return {0.63, 0, 26};
+            return {0.634057971, 0, 26};
         case Enchant::Type::greater_vengeance:
-            return {0.45, 0, 30};
+            return {0.4528985507, 0, 30};
         case Enchant::Type::greater_blade:
-            return {0.67, 0, 20};
+            return {0.6793478261, 0, 20};
         default:
             return {0, 0, 0};
         }
@@ -174,9 +174,9 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         case Enchant::Type::haste:
             return {0, 0, 0, 0, .0063};
         case Enchant::Type::cobrahide:
-            return {0.45, 0, 40};
+            return {0.4528985507, 0, 40};
         case Enchant::Type::nethercobra:
-            return {0.54, 0, 50};
+            return {0.5434782609, 0, 50};
         default:
             return {0, 0, 0};
         }
@@ -185,7 +185,7 @@ Special_stats Armory::get_enchant_special_stats(Socket socket, Enchant::Type typ
         switch (type)
         {
         case Enchant::Type::hit:
-            return {0, 0.63, 0};
+            return {0, 0.634115409, 0};
         default:
             return {0, 0, 0};
         }
@@ -1150,6 +1150,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     if (String_helpers::find_string(buffs_vec, "trueshot_aura"))
     {
         character.add_buff(buffs.trueshot_aura);
+    }
+    if (String_helpers::find_string(buffs_vec, "improved_hunters_mark"))
+    {
+        character.add_buff(buffs.improved_hunters_mark);
     }
     if (String_helpers::find_string(buffs_vec, "elixir_mongoose"))
     {
