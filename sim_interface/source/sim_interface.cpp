@@ -737,6 +737,11 @@ std::vector<std::string> compute_stat_weights(const Combat_simulator_config& con
             char_plus.total_special_stats.gear_armor_pen += 350;
             sw = compute_stat_weight(config, char_plus, 10, 35, base_dps);
         }
+        else if (stat_weight == "bonus_damage")
+        {
+            char_plus.total_special_stats.bonus_damage += 17;
+            sw = compute_stat_weight(config, char_plus, 10, 1.7, base_dps);
+        }
         else
         {
             std::cout << "stat_weight '" << stat_weight << "' is not supported, continuing" << std::endl;
