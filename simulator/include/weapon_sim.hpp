@@ -8,19 +8,16 @@ class Weapon_sim
 public:
     explicit Weapon_sim(const Weapon& weapon);
 
-    // bonus_damage has been removed here because:
-    //  - it doesn't apply to all swing-damage based attacks (namely: heroic strike, cleave, slam, and devastate)
-    //  - it's applied /after/ the 50% offhand penalty
-    //  - there's the deep wounds absurdity
-
     [[nodiscard]] double swing(const Special_stats& special_stats) const
     {
-        return average_damage + (special_stats.attack_power + special_stats.bonus_attack_power) * swing_speed / 14;
+        auto damage = average_damage + (special_stats.attack_power + special_stats.bonus_attack_power) / 14 * swing_speed;
+        return socket == Socket::main_hand ? damage + special_stats.bonus_damage : damage * 0.5 + special_stats.bonus_damage;
     }
 
     [[nodiscard]] double normalized_swing(const Special_stats& special_stats) const
     {
-        return average_damage + (special_stats.attack_power + special_stats.bonus_attack_power) * normalized_swing_speed / 14;
+        auto damage = average_damage + (special_stats.attack_power + special_stats.bonus_attack_power) / 14 * normalized_swing_speed;
+        return socket == Socket::main_hand ? damage + special_stats.bonus_damage : damage * 0.5 + special_stats.bonus_damage;
     }
 
     double swing_speed;

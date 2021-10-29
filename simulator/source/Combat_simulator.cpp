@@ -44,10 +44,6 @@ void Combat_simulator::add_talent_effects(const Character& character)
 
     tactical_mastery_rage_ = 10 + character.talents.tactical_mastery * 5;
 
-    dual_wield_modifier_ = 1 + 0.05 * character.talents.dual_wield_specialization;
-
-    cleave_bonus_damage_ = 70 * (1.0 + 0.4 * character.talents.improved_cleave);
-
     have_flurry_ = character.talents.flurry > 0;
     flurry_.attack_speed = character.talents.flurry * 0.05;
 
@@ -323,9 +319,9 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(Sim_state& state, c
     {
         if (hit_outcome.hit_result == Hit_result::crit)
         {
-            // deep wounds seems to "double dip" from bonus_damage: it's added to swing damage, and to each tick's damage (!)
+            // deep wound double dips from +damage: it's additionally added to each tick
             const auto& ss = state.special_stats;
-            deep_wound_effect_.damage = (0.25 * state.talents.deep_wounds * 0.2 * (state.main_hand_weapon.swing(ss) + ss.bonus_damage) + ss.bonus_damage) * (1 + ss.damage_mod_physical);
+            deep_wound_effect_.damage = (0.25 * state.talents.deep_wounds * 0.2 * state.main_hand_weapon.swing(ss) + ss.bonus_damage) * (1 + ss.damage_mod_physical);
             buff_manager_.add_over_time_buff(deep_wound_effect_, time_keeper_.time);
         }
     }
@@ -434,7 +430,7 @@ void Combat_simulator::mortal_strike(Sim_state& state)
         return;
     }
     logger_.print("Mortal Strike!");
-    double damage = (state.main_hand_weapon.normalized_swing(state.special_stats) + 210 + state.special_stats.bonus_damage) * (100 + state.talents.improved_mortal_strike) / 100;
+    double damage = (state.main_hand_weapon.normalized_swing(state.special_stats) + 210) * (100 + state.talents.improved_mortal_strike) / 100;
     const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, damage);
     if (hit_outcome.hit_result == Hit_result::miss || hit_outcome.hit_result == Hit_result::dodge)
     {
@@ -503,7 +499,7 @@ void Combat_simulator::overpower(Sim_state& state)
     logger_.print("Changed stance: Battle Stance.");
     logger_.print("Overpower!");
     buff_manager_.add_combat_buff(battle_stance_, time_keeper_.time);
-    double damage = state.main_hand_weapon.normalized_swing(state.special_stats) + 35 + state.special_stats.bonus_damage;
+    double damage = state.main_hand_weapon.normalized_swing(state.special_stats) + 35;
     const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_overpower_, damage);
     swap_stance();
     spend_rage(5);
@@ -534,8 +530,8 @@ void Combat_simulator::whirlwind(Sim_state& state)
     logger_.print("Whirlwind! #targets = boss + ", number_of_extra_targets_, " adds");
     logger_.print("Whirlwind hits: ", std::min(number_of_extra_targets_ + 1, 4), " targets");
     spend_rage(whirlwind_rage_cost_); // spend rage before hit_effects
-    double mh_damage = state.main_hand_weapon.normalized_swing(state.special_stats) + state.special_stats.bonus_damage;
-    double oh_damage = state.is_dual_wield ? (state.off_hand_weapon.normalized_swing(state.special_stats) * 0.5 + state.special_stats.bonus_damage) * dual_wield_modifier_ : 0;
+    double mh_damage = state.main_hand_weapon.normalized_swing(state.special_stats);
+    double oh_damage = state.is_dual_wield ? state.off_hand_weapon.normalized_swing(state.special_stats) * (1 + 0.05 * state.talents.dual_wield_specialization) : 0;
     double total_damage = 0;
     for (int i = 0; i < std::min(number_of_extra_targets_ + 1, 4); i++)
     {
@@ -820,7 +816,7 @@ void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra
             logger_.print("Performing Cleave! #targets = boss + ", number_of_extra_targets_, " adds");
             logger_.print("Cleave hits: ", std::min(number_of_extra_targets_ + 1, 2), " targets");
             spend_rage(20);
-            double damage = weapon.swing(state.special_stats) + cleave_bonus_damage_;
+            double damage = weapon.swing(state.special_stats) + 70 * (1 + 0.4 * state.talents.improved_cleave);
             double total_damage = 0;
             for (int i = 0, n = number_of_extra_targets_ > 0 ? 2 : 1; i < n; i++)
             {
@@ -849,7 +845,7 @@ void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra
 
     if (!white_replaced)
     {
-        auto damage = weapon.swing(state.special_stats) + state.special_stats.bonus_damage;
+        auto damage = weapon.swing(state.special_stats);
         const auto& hit_outcome = generate_hit(state, weapon, hit_table_white_mh_, damage);
         buff_manager_.remove_charge(windfury_attack_, time_keeper_.time, logger_);
         if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
@@ -883,7 +879,7 @@ void Combat_simulator::swing_off_hand(Sim_state& state)
     auto is_queued = (ability_queue_manager.heroic_strike_queued && !config.dpr_settings.compute_dpr_hs_) || (ability_queue_manager.cleave_queued && !config.dpr_settings.compute_dpr_cl_);
     auto hit_table = is_queued ? hit_table_white_oh_queued_ : hit_table_white_oh_;
 
-    auto damage = (weapon.swing(state.special_stats) * 0.5 + state.special_stats.bonus_damage) * dual_wield_modifier_;
+    auto damage = weapon.swing(state.special_stats) * (1 + 0.05 * state.talents.dual_wield_specialization);
     const auto& hit_outcome = generate_hit(state, weapon, hit_table, damage);
     buff_manager_.remove_charge(windfury_attack_, time_keeper_.time, logger_);
     if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)

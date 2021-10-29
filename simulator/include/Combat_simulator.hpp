@@ -367,9 +367,6 @@ private:
     int bloodthirst_rage_cost_{};
     int tactical_mastery_rage_{};
 
-    double dual_wield_modifier_{};
-
-    double cleave_bonus_damage_{};
     Special_stats flurry_{};
 
     bool deep_wounds_{};
