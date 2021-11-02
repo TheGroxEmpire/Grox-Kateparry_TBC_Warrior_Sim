@@ -1066,6 +1066,10 @@ void Armory::add_buffs_to_character(Character& character, const std::vector<std:
     {
         character.add_buff(buffs.full_polarity);
     }
+    if (String_helpers::find_string(buffs_vec, "expose_weakness"))
+    {
+        character.add_buff(buffs.expose_weakness);
+    }
     if (String_helpers::find_string(buffs_vec, "ferocious_inspiration"))
     {
         character.add_buff(buffs.ferocious_inspiration);

@@ -13,9 +13,9 @@
 
 std::vector<std::string> parse_buff_options(Armory& armory, const Sim_input_mult& input)
 {
-    // Combat settings
     auto temp_buffs = input.buffs;
 
+    // Separate case for options which in reality are buffs. Add them to the buff list
     if (String_helpers::find_string(input.options, "mighty_rage_potion"))
     {
         temp_buffs.emplace_back("mighty_rage_potion");
@@ -40,31 +40,36 @@ std::vector<std::string> parse_buff_options(Armory& armory, const Sim_input_mult
     {
         temp_buffs.emplace_back("bloodlust");
     }
+    if (String_helpers::find_string(input.options, "fungal_bloom"))
+    {
+        temp_buffs.emplace_back("fungal_bloom");
+    }
+    if (String_helpers::find_string(input.options, "expose_weakness"))
+    {
+        auto expose_weakness_val = String_helpers::find_value(input.float_options_string, input.float_options_val, "expose_weakness_dd");
+        armory.buffs.expose_weakness.special_stats.bonus_attack_power = 0.25 * expose_weakness_val;
+        temp_buffs.emplace_back("expose_weakness");
+    }
     if (String_helpers::find_string(input.options, "full_polarity"))
     {
-        double full_polarity_val =
-            String_helpers::find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
+        auto full_polarity_val = String_helpers::find_value(input.float_options_string, input.float_options_val, "full_polarity_dd");
         armory.buffs.full_polarity.special_stats.damage_mod_physical = full_polarity_val / 100.0;
         armory.buffs.full_polarity.special_stats.damage_mod_spell = full_polarity_val / 100.0;
         temp_buffs.emplace_back("full_polarity");
     }
     if (String_helpers::find_string(input.options, "ferocious_inspiration"))
     {
-        double ferocious_inspiration_val =
-            String_helpers::find_value(input.float_options_string, input.float_options_val, "ferocious_inspiration_dd");
-        armory.buffs.ferocious_inspiration.special_stats.damage_mod_physical = ferocious_inspiration_val / 100.0;
-        armory.buffs.ferocious_inspiration.special_stats.damage_mod_spell = ferocious_inspiration_val / 100.0;
+        auto ferocious_inspiration_val = String_helpers::find_value(input.float_options_string, input.float_options_val, "ferocious_inspiration_dd");
+        auto damage_mod = std::pow(1.03, std::round(ferocious_inspiration_val / 3)) - 1;
+        armory.buffs.ferocious_inspiration.special_stats.damage_mod_physical = damage_mod;
+        armory.buffs.ferocious_inspiration.special_stats.damage_mod_spell = damage_mod;
         temp_buffs.emplace_back("ferocious_inspiration");
-    }
-    if (String_helpers::find_string(input.options, "fungal_bloom"))
-    {
-        temp_buffs.emplace_back("fungal_bloom");
     }
     if (String_helpers::find_string(input.options, "battle_squawk"))
     {
-        double battle_squawk_val =
-            String_helpers::find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
-        armory.buffs.battle_squawk.special_stats.attack_speed = battle_squawk_val / 100.0;
+        auto battle_squawk_val = String_helpers::find_value(input.float_options_string, input.float_options_val, "battle_squawk_dd");
+        auto attack_speed = std::pow(1.05, std::round(battle_squawk_val / 5)) - 1;
+        armory.buffs.battle_squawk.special_stats.attack_speed = attack_speed;
         temp_buffs.emplace_back("battle_squawk");
     }
 

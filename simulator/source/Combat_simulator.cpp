@@ -968,13 +968,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
 
     add_talent_effects(character);
 
-    Special_stats expose_weakness{};
-    if (config.enable_expose_weakness)
-    {
-        expose_weakness.bonus_attack_power = config.expose_weakness_bonus_attack_power_;
-    }
-
-    const auto starting_special_stats = character.total_special_stats + expose_weakness;
+    const auto starting_special_stats = character.total_special_stats;
     compute_hit_table_stats_ = {-1,-1,0};
 
     std::vector<Weapon_sim> weapons;

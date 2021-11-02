@@ -11,9 +11,10 @@ struct Buffs
     // World buffs
     Buff fungal_bloom{"fungal_bloom", Attributes{0, 0}, Special_stats{50, 0, 0}};
 
-    // these are set in "sim_interface.cpp" or "sim_interface_mult.cpp" depending on whats specified
+    // these are set in "sim_interface.cpp" or "sim_interface_mult.cpp" depending on what's specified
     Buff full_polarity{"full_polarity", {}, {}};
     Buff battle_squawk{"battle_squawk", {}, {}};
+    Buff expose_weakness{"expose_weakness", {}, {}};
     Buff ferocious_inspiration{"ferocious_inspiration", {}, {}};
 
     // Player_buffs
