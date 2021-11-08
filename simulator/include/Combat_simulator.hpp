@@ -219,6 +219,13 @@ public:
     void swing_main_hand(Sim_state& state, Extra_attack_type extra_attack_type = Extra_attack_type::all);
     void swing_off_hand(Sim_state& state);
 
+    // template helper for hit_effects()
+    template<typename ...Args> void on_proc(Hit_effect& hit_effect, Args&&... args) {
+        hit_effect.procs++;
+        buff_manager_.start_cooldown(hit_effect, time_keeper_.time);
+        logger_.print(args...);
+    }
+
     void hit_effects(Sim_state& state, Hit_result hit_result, Weapon_sim& weapon, Hit_type hit_type = Hit_type::spell, Extra_attack_type extra_attack_type = Extra_attack_type::all);
 
     void overpower(Sim_state& state);

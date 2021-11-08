@@ -680,15 +680,12 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
             continue;
         }
 
-        //logger_.print("Proc PPM: ", hit_effect.ppm, " Proc chance: ", probability, "Proc ICD: ");
-        buff_manager_.start_cooldown(hit_effect, time_keeper_.time);
         switch (hit_effect.type)
         {
         case Hit_effect::Type::windfury_hit: { // only triggered by melee or next_melee; can _not_ proc itself or (presumably) other extra attacks
             if (hit_type == Hit_type::spell || extra_attack_type != Extra_attack_type::all) break;
 
-            hit_effect.procs++;
-            logger_.print("PROC: extra hit from: ", hit_effect.name);
+            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name);
             windfury_attack_.duration = hit_type == Hit_type::next_melee ? 1500 : 10;
             buff_manager_.add_combat_buff(windfury_attack_, time_keeper_.time);
             swing_main_hand(state, Extra_attack_type::none);
@@ -697,46 +694,40 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
         case Hit_effect::Type::sword_spec: { // can _not_ proc itself or other extra attacks
             if (extra_attack_type != Extra_attack_type::all) break;
 
-            hit_effect.procs++;
-            logger_.print("PROC: extra hit from: ", hit_effect.name);
+            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name);
             swing_main_hand(state, Extra_attack_type::none);
             break;
         }
         case Hit_effect::Type::extra_hit: { // _can_ proc itself and other extra attacks on instant attacks
             if (extra_attack_type == Extra_attack_type::none) break;
 
-            hit_effect.procs++;
-            logger_.print("PROC: extra hit from: ", hit_effect.name);
+            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name);
             swing_main_hand(state, hit_type == Hit_type::spell ? Extra_attack_type::all : Extra_attack_type::self);
             break;
         }
         case Hit_effect::Type::stat_boost: {
-            hit_effect.procs++;
-            logger_.print("PROC: ", hit_effect.name, " stats increased for ", hit_effect.duration, "s");
+            on_proc(hit_effect, "PROC: ", hit_effect.name, " stats increased for ", hit_effect.duration, "s");
             buff_manager_.add_combat_buff(hit_effect, time_keeper_.time);
             break;
         }
         case Hit_effect::Type::rage_boost: {
-            hit_effect.procs++;
-            logger_.print("PROC: ", hit_effect.name, ". Current rage: ", int(rage));
+            on_proc(hit_effect, "PROC: ", hit_effect.name, ". Current rage: ", int(rage));
             gain_rage(hit_effect.damage);
             break;
         }
         case Hit_effect::Type::damage_magic: {
-            hit_effect.procs++;
             // * 0.83 Assumes a static 17% chance to resist.
             // (100 + special_stats.spell_crit / 2) / 100 is the average damage gained from a x1.5 spell crit
             double effect_damage = hit_effect.damage * 0.83 * (100 + state.special_stats.spell_crit / 2) / 100 *
                                    (1 + state.special_stats.damage_mod_spell);
+            on_proc(hit_effect, "PROC: ", hit_effect.name, " does ", effect_damage, " magic damage.");
             state.add_damage(Damage_source::item_hit_effects, effect_damage, time_keeper_.time);
-            logger_.print("PROC: ", hit_effect.name, " does ", effect_damage, " magic damage.");
             break;
         }
         case Hit_effect::Type::damage_physical: {
-            hit_effect.procs++;
             const auto& hit_outcome = generate_hit(state, state.main_hand_weapon, hit_table_yellow_mh_, hit_effect.damage);
+            on_proc(hit_effect, "PROC: ", hit_effect.name, " does ", hit_outcome.damage, " physical damage.");
             state.add_damage(Damage_source::item_hit_effects, hit_outcome.damage, time_keeper_.time);
-            logger_.print("PROC: ", hit_effect.name, " does ", hit_outcome.damage, " physical damage.");
             if (hit_outcome.hit_result != Hit_result::miss && hit_outcome.hit_result != Hit_result::dodge)
             {
                 hit_effects(state, hit_outcome.hit_result, state.main_hand_weapon);

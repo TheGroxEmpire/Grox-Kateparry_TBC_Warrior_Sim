@@ -744,8 +744,9 @@ struct Armory
 
                 // Phase 2
                 {"fang_of_vashj", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 56.0, 0, 0, 0, 0, 0, 0, 0, 0, 5.326569436}, 1.8, 144, 217, Weapon_socket::one_hand, Weapon_type::dagger},
+                {"heartrazor", Attributes{0, 20}, {}, 1.8, 121, 226, Weapon_socket::one_hand, Weapon_type::dagger, {{"heartrazor", Hit_effect::Type::stat_boost, {}, {0, 0, 270}, 0, 10, 0, 1.8/60}}},
 
-                // Kael'thas Legendaries
+        // Kael'thas Legendaries
                 {"infinity_blade", Attributes{0.0, 0.0}, Special_stats{1.132246377, 0.0, 70.0, 0, 0.0}, 2, 171, 318, Weapon_socket::one_hand, Weapon_type::dagger},
             };
 
