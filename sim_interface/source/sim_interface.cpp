@@ -1063,41 +1063,41 @@ Sim_output Sim_interface::simulate(const Sim_input& input)
 
         debug_topic += "<br><br>";
         debug_topic += "Fight statistics:<br>";
-        debug_topic += "DPS: " + std::to_string(base_dps.mean()) + "<br><br>";
+        debug_topic += "DPS: " + String_helpers::string_with_precision(base_dps.mean(), 2) + "<br><br>";
 
         auto f = 1.0 / (config.sim_time * base_dps.samples());
         debug_topic += "DPS from sources:<br>";
-        debug_topic += "DPS white MH: " + std::to_string(dmg_dist.white_mh_damage * f) + "<br>";
-        debug_topic += "DPS white OH: " + std::to_string(dmg_dist.white_oh_damage * f) + "<br>";
-        debug_topic += "DPS bloodthirst: " + std::to_string(dmg_dist.bloodthirst_damage * f) + "<br>";
-        debug_topic += "DPS mortal strike: " + std::to_string(dmg_dist.mortal_strike_damage * f) + "<br>";
-        debug_topic += "DPS sweeping strikes: " + std::to_string(dmg_dist.sweeping_strikes_damage * f) + "<br>";
-        debug_topic += "DPS overpower: " + std::to_string(dmg_dist.overpower_damage * f) + "<br>";
-        debug_topic += "DPS slam: " + std::to_string(dmg_dist.slam_damage * f) + "<br>";
-        debug_topic += "DPS execute: " + std::to_string(dmg_dist.execute_damage * f) + "<br>";
-        debug_topic += "DPS heroic strike: " + std::to_string(dmg_dist.heroic_strike_damage * f) + "<br>";
-        debug_topic += "DPS cleave: " + std::to_string(dmg_dist.cleave_damage * f) + "<br>";
-        debug_topic += "DPS whirlwind: " + std::to_string(dmg_dist.whirlwind_damage * f) + "<br>";
-        debug_topic += "DPS hamstring: " + std::to_string(dmg_dist.hamstring_damage * f) + "<br>";
-        debug_topic += "DPS deep wounds: " + std::to_string(dmg_dist.deep_wounds_damage * f) + "<br>";
-        debug_topic += "DPS item effects: " + std::to_string(dmg_dist.item_hit_effects_damage * f) + "<br><br>";
+        debug_topic += "DPS white MH: " + String_helpers::string_with_precision(dmg_dist.white_mh_damage * f, 2) + "<br>";
+        if (dmg_dist.white_mh_count > 0) debug_topic += "DPS white OH: " + String_helpers::string_with_precision(dmg_dist.white_oh_damage * f, 2) + "<br>";
+        if (dmg_dist.bloodthirst_count > 0) debug_topic += "DPS bloodthirst: " + String_helpers::string_with_precision(dmg_dist.bloodthirst_damage * f, 2) + "<br>";
+        if (dmg_dist.mortal_strike_count > 0) debug_topic += "DPS mortal strike: " + String_helpers::string_with_precision(dmg_dist.mortal_strike_damage * f, 2) + "<br>";
+        if (dmg_dist.sweeping_strikes_count > 0) debug_topic += "DPS sweeping strikes: " + String_helpers::string_with_precision(dmg_dist.sweeping_strikes_damage * f, 2) + "<br>";
+        if (dmg_dist.overpower_count > 0) debug_topic += "DPS overpower: " + String_helpers::string_with_precision(dmg_dist.overpower_damage * f, 2) + "<br>";
+        if (dmg_dist.slam_count > 0) debug_topic += "DPS slam: " + String_helpers::string_with_precision(dmg_dist.slam_damage * f, 2) + "<br>";
+        if (dmg_dist.execute_count > 0) debug_topic += "DPS execute: " + String_helpers::string_with_precision(dmg_dist.execute_damage * f, 2) + "<br>";
+        if (dmg_dist.heroic_strike_count > 0) debug_topic += "DPS heroic strike: " + String_helpers::string_with_precision(dmg_dist.heroic_strike_damage * f, 2) + "<br>";
+        if (dmg_dist.cleave_count > 0) debug_topic += "DPS cleave: " + String_helpers::string_with_precision(dmg_dist.cleave_damage * f, 2) + "<br>";
+        if (dmg_dist.whirlwind_damage > 0) debug_topic += "DPS whirlwind: " + String_helpers::string_with_precision(dmg_dist.whirlwind_damage * f, 2) + "<br>";
+        if (dmg_dist.hamstring_count > 0) debug_topic += "DPS hamstring: " + String_helpers::string_with_precision(dmg_dist.hamstring_damage * f, 2) + "<br>";
+        if (dmg_dist.deep_wounds_count > 0) debug_topic += "DPS deep wounds: " + String_helpers::string_with_precision(dmg_dist.deep_wounds_damage * f, 2) + "<br>";
+        if (dmg_dist.item_hit_effects_count > 0) debug_topic += "DPS item effects: " + String_helpers::string_with_precision(dmg_dist.item_hit_effects_damage * f, 2) + "<br><br>";
 
         auto g = 1.0 / base_dps.samples();
         debug_topic += "Casts:<br>";
-        debug_topic += "#Hits white MH: " + std::to_string(dmg_dist.white_mh_count * g) + "<br>";
-        debug_topic += "#Hits white OH: " + std::to_string(dmg_dist.white_oh_count * g) + "<br>";
-        debug_topic += "#Hits bloodthirst: " + std::to_string(dmg_dist.bloodthirst_count * g) + "<br>";
-        debug_topic += "#Hits mortal strike: " + std::to_string(dmg_dist.mortal_strike_count * g) + "<br>";
-        debug_topic += "#Hits sweeping strikes: " + std::to_string(dmg_dist.sweeping_strikes_count * g) + "<br>";
-        debug_topic += "#Hits overpower: " + std::to_string(dmg_dist.overpower_count * g) + "<br>";
-        debug_topic += "#Hits slam: " + std::to_string(dmg_dist.slam_count * g) + "<br>";
-        debug_topic += "#Hits execute: " + std::to_string(dmg_dist.execute_count * g) + "<br>";
-        debug_topic += "#Hits heroic strike: " + std::to_string(dmg_dist.heroic_strike_count * g) + "<br>";
-        debug_topic += "#Hits cleave: " + std::to_string(dmg_dist.cleave_count * g) + "<br>";
-        debug_topic += "#Hits whirlwind: " + std::to_string(dmg_dist.whirlwind_count * g) + "<br>";
-        debug_topic += "#Hits hamstring: " + std::to_string(dmg_dist.hamstring_count * g) + "<br>";
-        debug_topic += "#Hits deep_wounds: " + std::to_string(dmg_dist.deep_wounds_count * g) + "<br>";
-        debug_topic += "#Hits item effects: " + std::to_string(dmg_dist.item_hit_effects_count * g) + "<br>";
+        debug_topic += "#Hits white MH: " + String_helpers::string_with_precision(dmg_dist.white_mh_count * g, 2) + "<br>";
+        if (dmg_dist.white_oh_count > 0) debug_topic += "#Hits white OH: " + String_helpers::string_with_precision(dmg_dist.white_oh_count * g, 2) + "<br>";
+        if (dmg_dist.bloodthirst_count > 0) debug_topic += "#Hits bloodthirst: " + String_helpers::string_with_precision(dmg_dist.bloodthirst_count * g, 2) + "<br>";
+        if (dmg_dist.mortal_strike_count > 0) debug_topic += "#Hits mortal strike: " + String_helpers::string_with_precision(dmg_dist.mortal_strike_count * g, 2) + "<br>";
+        if (dmg_dist.sweeping_strikes_count > 0) debug_topic += "#Hits sweeping strikes: " + String_helpers::string_with_precision(dmg_dist.sweeping_strikes_count * g, 2) + "<br>";
+        if (dmg_dist.overpower_count > 0) debug_topic += "#Hits overpower: " + String_helpers::string_with_precision(dmg_dist.overpower_count * g, 2) + "<br>";
+        if (dmg_dist.slam_count > 0) debug_topic += "#Hits slam: " + String_helpers::string_with_precision(dmg_dist.slam_count * g, 2) + "<br>";
+        if (dmg_dist.execute_count > 0) debug_topic += "#Hits execute: " + String_helpers::string_with_precision(dmg_dist.execute_count * g, 2) + "<br>";
+        if (dmg_dist.heroic_strike_count > 0) debug_topic += "#Hits heroic strike: " + String_helpers::string_with_precision(dmg_dist.heroic_strike_count * g, 2) + "<br>";
+        if (dmg_dist.cleave_count > 0) debug_topic += "#Hits cleave: " + String_helpers::string_with_precision(dmg_dist.cleave_count * g, 2) + "<br>";
+        if (dmg_dist.whirlwind_count > 0) debug_topic += "#Hits whirlwind: " + String_helpers::string_with_precision(dmg_dist.whirlwind_count * g, 2) + "<br>";
+        if (dmg_dist.hamstring_count > 0) debug_topic += "#Hits hamstring: " + String_helpers::string_with_precision(dmg_dist.hamstring_count * g, 2) + "<br>";
+        if (dmg_dist.deep_wounds_count > 0) debug_topic += "#Hits deep_wounds: " + String_helpers::string_with_precision(dmg_dist.deep_wounds_count * g, 2) + "<br>";
+        if (dmg_dist.item_hit_effects_count > 0) debug_topic += "#Hits item effects: " + String_helpers::string_with_precision(dmg_dist.item_hit_effects_count * g, 2) + "<br>";
     }
 
     for (auto& v : sample_std_dps_vec)

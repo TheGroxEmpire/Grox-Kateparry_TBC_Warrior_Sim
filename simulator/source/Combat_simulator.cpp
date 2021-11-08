@@ -706,7 +706,7 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
             break;
         }
         case Hit_effect::Type::stat_boost: {
-            on_proc(hit_effect, "PROC: ", hit_effect.name, " stats increased for ", hit_effect.duration, "s");
+            on_proc(hit_effect, "PROC: ", hit_effect.name, " stats increased for ", hit_effect.duration * 0.001, "s");
             buff_manager_.add_combat_buff(hit_effect, time_keeper_.time);
             break;
         }
@@ -1145,7 +1145,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
                 }
                 target_armor = std::max(target_armor, 0);
                 armor_reduction_factor_ = armor_reduction_factor(target_armor);
-                logger_.print("Target armor: ", target_armor, ". Mitigation factor: ", 1 - armor_reduction_factor_, "%.");
+                logger_.print("Target armor: ", target_armor, ". Mitigation factor: ", 100 * (1 - armor_reduction_factor_), "%.");
                 if (config.multi_target_mode_)
                 {
                     int extra_target_armor = config.extra_target_initial_armor_ - state.special_stats.gear_armor_pen;

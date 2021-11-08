@@ -25,8 +25,7 @@ public:
     {
         if (display_combat_debug_)
         {
-            //            s. Loop idx:" + std::to_string(                    time_keeper_.step_index) +=
-            debug_topic_ += "Time: " + String_helpers::string_with_precision(time_keeper_->time * 0.001, 3) + "s. Event: ";
+            debug_topic_ += "Time: " + String_helpers::string_with_precision(time_keeper_->time * 0.001, 3) + "s. ";
             __attribute__((unused)) int dummy[] = {0, ((void)print_statement(std::forward<Args>(args)), 0)...};
             debug_topic_ += "<br>";
         }
@@ -37,7 +36,7 @@ private:
 
     void print_statement(int t) { debug_topic_ += std::to_string(t); }
 
-    void print_statement(double t) { debug_topic_ += std::to_string(t); }
+    void print_statement(double t) { debug_topic_ += String_helpers::string_with_precision(t, 3); }
 
     bool display_combat_debug_{};
     const Time_keeper* time_keeper_{nullptr};
