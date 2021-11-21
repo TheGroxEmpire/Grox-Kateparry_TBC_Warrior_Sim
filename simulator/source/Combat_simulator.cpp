@@ -650,8 +650,7 @@ void Combat_simulator::sunder_armor(Sim_state& state)
     logger_.print("Current rage: ", int(rage));
 }
 
-void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weapon_sim& weapon, Hit_type hit_type,
-                                   Extra_attack_type extra_attack_type)
+void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weapon_sim& weapon, Hit_type hit_type, Extra_attack_chain chain)
 {
     maybe_add_rampage_stack(Hit_result::hit, state.rampage_stacks, state.special_stats);
 
@@ -661,48 +660,52 @@ void Combat_simulator::hit_effects(Sim_state& state, Hit_result hit_result, Weap
         logger_.print("Mace specialization. Current rage: ", int(rage));
     }
 
+    auto extra_attack_procced = false; // melee/next_melee attacks only allow one extra attack per swing (but any number in a chain)
+
     for (auto& hit_effect : weapon.hit_effects)
     {
-        if (hit_effect.time_counter > time_keeper_.time)
-        {
-            // on cooldown
-            continue;
-        }
+        if (hit_effect.time_counter > time_keeper_.time) continue; // on cooldown
 
-        if (!hit_effect.is_procced_by(hit_result))
-        {
-            continue;
-        }
+        if (!hit_effect.is_procced_by(hit_result)) continue; // wrong trigger
 
         auto probability = hit_effect.ppm > 0 ? hit_effect.ppm * weapon.swing_speed / 60 : hit_effect.probability;
-        if (probability < 1 && get_uniform_random(1) >= probability)
-        {
-            continue;
-        }
+        if (probability < 1 && get_uniform_random(1) >= probability) continue; // no chance ;)
 
         switch (hit_effect.type)
         {
-        case Hit_effect::Type::windfury_hit: { // only triggered by melee or next_melee; can _not_ proc itself or (presumably) other extra attacks
-            if (hit_type == Hit_type::spell || extra_attack_type != Extra_attack_type::all) break;
+        case Hit_effect::Type::windfury_hit: { // only triggered by melee or next_melee, and only once per chain
+            if (hit_type == Hit_type::spell || chain.windfury) break;
 
-            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name);
-            windfury_attack_.duration = hit_type == Hit_type::next_melee ? 1500 : 10;
+            auto ineffective = extra_attack_procced;
+            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name, ineffective ? " (ineffective)" : "");
+            chain.windfury = true;
+            windfury_attack_.duration = hit_type == Hit_type::next_melee ? 1500 : 10; // even if the extra attack is ineffective, the buff is still up
             buff_manager_.add_combat_buff(windfury_attack_, time_keeper_.time);
-            swing_main_hand(state, Extra_attack_type::none);
+            if (ineffective) break;
+
+            extra_attack_procced = true;
+            swing_main_hand(state, chain);
             break;
         }
-        case Hit_effect::Type::sword_spec: { // can _not_ proc itself or other extra attacks
-            if (extra_attack_type != Extra_attack_type::all) break;
+        case Hit_effect::Type::sword_spec: { // only once per chain (which is guaranteed via ICD already)
+            if (chain.sword_spec) break;
 
-            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name);
-            swing_main_hand(state, Extra_attack_type::none);
+            auto ineffective = hit_type != Hit_type::spell && extra_attack_procced;
+            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name, ineffective ? " (ineffective)" : "");
+            chain.sword_spec = true;
+            if (ineffective) break;
+
+            extra_attack_procced = true;
+            swing_main_hand(state, chain);
             break;
         }
-        case Hit_effect::Type::extra_hit: { // _can_ proc itself and other extra attacks on instant attacks
-            if (extra_attack_type == Extra_attack_type::none) break;
+        case Hit_effect::Type::extra_hit: { // no restrictions
+            auto ineffective = hit_type != Hit_type::spell && extra_attack_procced;
+            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name, ineffective ? " (ineffective)" : "");
+            if (ineffective) break;
 
-            on_proc(hit_effect, "PROC: extra hit from: ", hit_effect.name);
-            swing_main_hand(state, hit_type == Hit_type::spell ? Extra_attack_type::all : Extra_attack_type::self);
+            extra_attack_procced = true;
+            swing_main_hand(state, chain);
             break;
         }
         case Hit_effect::Type::stat_boost: {
@@ -751,7 +754,7 @@ double Combat_simulator::rage_generation(Sim_state& state, const Hit_outcome& hi
     return rage_gain;
 }
 
-void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra_attack_type)
+void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_chain chain)
 {
     auto& weapon = state.main_hand_weapon;
 
@@ -782,7 +785,7 @@ void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra
                 spend_rage(heroic_strike_rage_cost_);
                 maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
                 unbridled_wrath(state, weapon);
-                hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::next_melee, extra_attack_type);
+                hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::next_melee, chain);
             }
             state.add_damage(Damage_source::heroic_strike, hit_outcome.damage, time_keeper_.time);
             white_replaced = true;
@@ -817,7 +820,7 @@ void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra
                 {
                     maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
                     unbridled_wrath(state, weapon);
-                    hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::next_melee, extra_attack_type);
+                    hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::next_melee, chain);
                 }
                 else if (hit_outcome.hit_result == Hit_result::dodge)
                 {
@@ -844,7 +847,7 @@ void Combat_simulator::swing_main_hand(Sim_state& state, Extra_attack_type extra
             gain_rage(rage_generation(state, hit_outcome, weapon));
             maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
             unbridled_wrath(state, weapon);
-            hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::melee, extra_attack_type);
+            hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::melee, chain);
         }
         else if (hit_outcome.hit_result == Hit_result::dodge)
         {
@@ -878,7 +881,7 @@ void Combat_simulator::swing_off_hand(Sim_state& state)
         gain_rage(rage_generation(state, hit_outcome, weapon));
         maybe_gain_flurry(hit_outcome.hit_result, state.flurry_charges, state.special_stats);
         unbridled_wrath(state, weapon);
-        hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::melee, Extra_attack_type::all);
+        hit_effects(state, hit_outcome.hit_result, weapon, Hit_type::melee);
     }
     else if (hit_outcome.hit_result == Hit_result::dodge)
     {
@@ -1030,6 +1033,10 @@ void Combat_simulator::simulate(const Character& character, const std::function<
         slam_manager = Slam_manager(1500 - 500 * character.talents.improved_slam);
         rage = config.initial_rage;
         sunder_armor_stacks_ = config.n_sunder_armor_stacks;
+
+        // permute hit_effect order between runs - this isn't strictly necessary, but closer to what happens in-game, it seems
+        std::next_permutation(weapons[0].hit_effects.begin(), weapons[0].hit_effects.end(), [](const auto& he1, const auto& he2) { return he1.name < he2.name; });
+        if (is_dual_wield) std::next_permutation(weapons[1].hit_effects.begin(), weapons[1].hit_effects.end(), [](const auto& he1, const auto& he2) { return he1.name < he2.name; });
 
         Sim_state state(
             weapons[0],
