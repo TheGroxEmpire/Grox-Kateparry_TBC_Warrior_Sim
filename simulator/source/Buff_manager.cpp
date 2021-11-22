@@ -42,6 +42,15 @@ void Buff_manager::reset(Sim_state& state)
 
     for (auto& hit_aura : hit_auras)
     {
+        // update hit effect pointers, since hit_effects are permutated now
+        auto mh = std::find_if(hit_effects_mh->begin(), hit_effects_mh->end(), [&hit_aura](auto& he) { return he.name == hit_aura.name; });
+        assert(mh != hit_effects_mh->end());
+        hit_aura.hit_effect_mh = &(*mh);
+
+        auto oh = std::find_if(hit_effects_oh->begin(), hit_effects_oh->end(), [&hit_aura](auto& he) { return he.name == hit_aura.name; });
+        assert(oh != hit_effects_oh->end());
+        hit_aura.hit_effect_oh = &(*oh);
+
         hit_aura.next_fade = Hit_aura::inactive;
         hit_aura.hit_effect_mh->time_counter = std::numeric_limits<int>::max();
         hit_aura.hit_effect_oh->time_counter = std::numeric_limits<int>::max();
