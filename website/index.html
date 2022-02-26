@@ -5620,7 +5620,15 @@
             }
             string += "(Accuracy is based on the 'number of simulations per stat weight' value.)<br>";
             for (const sw of stat_weights) {
-                string += "+10 " + sw.name + " equate <b>" + sw.mean.toFixed(2) + " &plusmn " + sw.ci95.toFixed(2) + "</b> dps.<br />";
+                let mean_stat_value = sw.mean.toFixed(2);
+                let ci95_value = sw.ci95.toFixed(2);
+                string += "+10 " + sw.name + " equate <b>" + mean_stat_value + " &plusmn " + ci95_value + "</b> dps";
+                if (sw.name === "arpen") {
+                    string += " (<b>" + mean_stat_value * 7 + " &plusmn " + ci95_value * 7 + "</b> per 10 item budget)";
+                } else if (sw.name === "ap") {
+                    string += " (<b>" + mean_stat_value * 2 + " &plusmn " + ci95_value * 2 + "</b> per 10 item budget)";
+                }
+                string += ".<br />";
             }
             document.getElementById("output2").innerHTML = string;
 
