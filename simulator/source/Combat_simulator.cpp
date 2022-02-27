@@ -319,9 +319,20 @@ Combat_simulator::Hit_outcome Combat_simulator::generate_hit(Sim_state& state, c
     {
         if (hit_outcome.hit_result == Hit_result::crit)
         {
-            // deep wound double dips from +damage: it's additionally added to each tick
+            // Emrus researched the following formula:
+            //  ((DW_Mod * (AvgWeaponDamage + ModDamageDone) * WeaponMult * PersonalDamageMult + ModDamageDone) * PersonalDamageMult * Bleed + ModDamageTaken) * TargetDamageMult
+            // to actually use it, "damage_mod_physical" would have to be split into
+            //  - mod_damage_done% (e.g. Death Wish, Ferocious Inspiration; deep wound double dips from these)
+            //  - weapon_damage_done% (e.g. 1H/2H weapon spec; this might just be calculated here, locally)
+            //  - mod_damage_taken% (blood frenzy)
+
             const auto& ss = state.special_stats;
-            deep_wound_effect_.damage = (0.25 * state.talents.deep_wounds * 0.2 * state.main_hand_weapon.swing(ss) + ss.bonus_damage) * (1 + ss.damage_mod_physical);
+            const auto& w = state.main_hand_weapon;
+
+            // deep wound double dips from "bonus damage": it's additionally added to each tick
+            // it also double dips from "damage_mod_physical", but is not affected by "bonus_attack_power"
+            deep_wound_effect_.damage = ((0.25 * state.talents.deep_wounds * 0.2) * (w.average_damage + ss.attack_power / 14 * w.swing_speed + ss.bonus_damage)
+                * (1 + ss.damage_mod_physical) + ss.bonus_damage) * (1 + ss.damage_mod_physical);
             buff_manager_.add_over_time_buff(deep_wound_effect_, time_keeper_.time);
         }
     }

@@ -10,14 +10,16 @@ public:
 
     [[nodiscard]] double swing(const Special_stats& special_stats) const
     {
-        auto damage = average_damage + (special_stats.attack_power + special_stats.bonus_attack_power) / 14 * swing_speed;
-        return socket == Socket::main_hand ? damage + special_stats.bonus_damage : damage * 0.5 + special_stats.bonus_damage;
+        auto damage = average_damage + special_stats.attack_power / 14 * swing_speed;
+        auto bonus = special_stats.bonus_attack_power / 14 * swing_speed + special_stats.bonus_damage;
+        return socket == Socket::main_hand ? damage + bonus : damage * 0.5 + bonus;
     }
 
     [[nodiscard]] double normalized_swing(const Special_stats& special_stats) const
     {
-        auto damage = average_damage + (special_stats.attack_power + special_stats.bonus_attack_power) / 14 * normalized_swing_speed;
-        return socket == Socket::main_hand ? damage + special_stats.bonus_damage : damage * 0.5 + special_stats.bonus_damage;
+        auto damage = average_damage + special_stats.attack_power / 14 * normalized_swing_speed;
+        auto bonus = special_stats.bonus_attack_power / 14 * normalized_swing_speed + special_stats.bonus_damage;
+        return socket == Socket::main_hand ? damage + bonus : damage * 0.5 + bonus;
     }
 
     double swing_speed;
