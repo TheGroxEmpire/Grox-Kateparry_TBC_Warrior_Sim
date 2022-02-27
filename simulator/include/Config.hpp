@@ -2,7 +2,6 @@
 #define COMBAT_SIMULATOR_CONFIG_HPP
 
 #include "sim_input.hpp"
-#include "sim_input_mult.hpp"
 #include "string_helpers.hpp"
 #include "find_values.hpp"
 #include "time_keeper.hpp"
@@ -12,7 +11,6 @@ struct Combat_simulator_config
     Combat_simulator_config() = default;
 
     explicit Combat_simulator_config(const Sim_input& input);
-    explicit Combat_simulator_config(const Sim_input_mult& input);
 
     template <typename T>
     void parse_combat_simulator_config(const T& input);

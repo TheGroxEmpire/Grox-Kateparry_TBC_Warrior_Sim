@@ -7,8 +7,7 @@ EMSCRIPTEN_BINDINGS(module)
 {
     class_<Sim_interface>("Sim_interface")
         .constructor<>()
-        .function("simulate", &Sim_interface::simulate)
-        .function("simulate_mult", &Sim_interface::simulate_mult);
+        .function("simulate", &Sim_interface::simulate);
 
     register_vector<double>("vectorDouble");
     register_vector<int>("vectorInt");
@@ -32,19 +31,6 @@ EMSCRIPTEN_BINDINGS(module)
         .field("compare_armor", &Sim_input::compare_armor)
         .field("compare_weapons", &Sim_input::compare_weapons);
 
-    value_object<Sim_input_mult>("Sim_input_mult")
-        .field("race", &Sim_input_mult::race)
-        .field("armor", &Sim_input_mult::armor)
-        .field("weapons", &Sim_input_mult::weapons)
-        .field("buffs", &Sim_input_mult::buffs)
-        .field("enchants", &Sim_input_mult::enchants)
-        .field("gems", &Sim_input_mult::gems)
-        .field("options", &Sim_input_mult::options)
-        .field("float_options_string", &Sim_input_mult::float_options_string)
-        .field("float_options_val", &Sim_input_mult::float_options_val)
-        .field("talent_string", &Sim_input_mult::talent_string)
-        .field("talent_val", &Sim_input_mult::talent_val);
-
     value_object<Sim_output>("Sim_output")
         .field("hist_x", &Sim_output::hist_x)
         .field("hist_y", &Sim_output::hist_y)
@@ -60,8 +46,4 @@ EMSCRIPTEN_BINDINGS(module)
         .field("mean_dps", &Sim_output::mean_dps)
         .field("std_dps", &Sim_output::std_dps)
         .field("messages", &Sim_output::messages);
-
-    value_object<Sim_output_mult>("Sim_output_mult")
-        .field("messages", &Sim_output_mult::messages)
-        .field("keepers", &Sim_output_mult::keepers);
 };

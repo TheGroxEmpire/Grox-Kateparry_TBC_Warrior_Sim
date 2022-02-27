@@ -5,7 +5,6 @@ project(sim_interface)
 add_library(
         ${PROJECT_NAME}
         source/sim_interface.cpp
-        source/sim_interface_mult.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} item_optimizer wow_library common)
