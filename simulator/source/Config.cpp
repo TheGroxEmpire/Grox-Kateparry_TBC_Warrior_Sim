@@ -20,9 +20,3 @@ Combat_simulator_config::Combat_simulator_config(const Sim_input& input)
     }
     seed = 110000;
 }
-
-Combat_simulator_config::Combat_simulator_config(const Sim_input_mult& input)
-{
-    parse_combat_simulator_config(input);
-    seed = clock();
-}

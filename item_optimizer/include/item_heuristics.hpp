@@ -3,10 +3,6 @@
 
 #include "Character.hpp"
 
-#include <sstream>
-#include <string>
-#include <vector>
-
 constexpr double crit_w = 40;
 constexpr double crit_w_cap = 25;
 constexpr double hit_w = 45;
@@ -28,8 +24,6 @@ double get_hit_effect_ap_equivalent(const Hit_effect& hit_effect, double total_a
 double estimate_special_stats_high(const Special_stats& special_stats);
 
 double estimate_special_stats_low(const Special_stats& special_stats);
-
-bool estimate_special_stats_smart_no_skill(const Special_stats& special_stats1, const Special_stats& special_stats2);
 
 double estimate_stat_diff(Special_stats special_stats1, Special_stats special_stats2);
 

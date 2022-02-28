@@ -30,10 +30,6 @@ add_subdirectory(sim_interface)
 add_subdirectory(common)
 add_subdirectory(item_optimizer)
 
-if (NOT EMSCRIPTEN)
-    add_subdirectory(local_build)
-endif ()
-
 if (EMSCRIPTEN)
     add_subdirectory(website)
 endif ()

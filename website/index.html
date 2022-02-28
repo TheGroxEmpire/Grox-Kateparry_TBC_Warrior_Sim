@@ -1023,675 +1023,12 @@
 
 
         </div>
-        <div id="armor_multiple" style="display:none">
-
-            <p class="select-title">Quick-select:</p><br>
-            <button onclick="load_naxxgearmult()">Load Naxx gear</button>
-            <button onclick="load_preraidbismult()">Load Babyhoof's Preraid "BiS"</button>
-            <button onclick="load_p1armsbismult()">Load Babyhoof's P1 Arms BiS</button>
-            <button onclick="load_p1furybismult()">Load Babyhoof's P1 Fury BiS</button>
-            <button onclick="load_p2armsbisplatemult()">Load Babyhoof's P2 Arms Plate BiS</button>
-            <button onclick="load_p2armsbisleathermult()">Load Babyhoof's P2 Arms Leather BiS</button>
-            <button onclick="load_p2furybisplatemult()">Load Babyhoof's P2 Fury Plate BiS</button>
-            <button onclick="load_p2furybisleathermult()">Load Babyhoof's P2 Fury Leather BiS</button>
-            <br>
-            Add/remove items: <b>ctrl + left-click</b>.<br>
-            Add all items in a slot: Select an item box then press <b> ctrl + a</b>.<br><br>
-            The optimization takes between: 1-"Max optimization time" seconds. <br>
-            If you selected a lot of items leave it running in another tab<br><br>
-
-            <!--armor begin4-->
-            <span class="left_select">Helmet</span><span class="middle_select">Neck</span><span class="right_select">Shoulder</span><br>
-            <select id="helmet_dd_mult" size="10" class="item-select" multiple>
-                <option value="beast_lord_helm"> Beast Lord Helm</option>
-                <option value="cobrascale_hood"> Cobrascale Hood</option>
-                <option value="conquerors_crown"> Conquerors Crown</option>
-                <option value="cowl_of_beastly_rage"> Cowl of Beastly Rage</option>
-                <option value="cowl_of_defiance"> Cowl of Defiance</option>
-                <option value="cursed_vision_of_sargeras"> Cursed Vision of Sargeras</option>
-                <option value="destroyer_battlehelm"> Destroyer Battlehelm</option>
-                <option value="doomplate_warhelm"> Doomplate Warhelm</option>
-                <option value="earthwardens_coif"> Earthwardens Coif</option>
-                <option value="exorcists_leather_helm"> Exorcists Leather Helm</option>
-                <option value="exorcists_linked_helm"> Exorcists Linked Helm</option>
-                <option value="exorcists_plate_helm"> Exorcists Plate Helm</option>
-                <option value="exorcists_scaled_helm"> Exorcists Scaled Helm</option>
-                <option value="felsteel_warhelm"> Felsteel Warhelm</option>
-                <option value="forest_prowlers_helm"> Forest Prowlers Helm</option>
-                <option value="furious_gizmatic_goggles"> Furious Gizmatic Goggles</option>
-                <option value="gladiators_plate_helm"> Gladiators Plate Helm</option>
-                <option value="gnomish_battle_goggles"> Gnomish Battle Goggles</option>
-                <option value="grand_marshal_plate_helm"> Grand Marshal Plate Helm</option>
-                <option value="helm_of_assassination"> Helm of Assassination</option>
-                <option value="helm_of_desolation"> Helm of Desolation</option>
-                <option value="helm_of_endless_rage"> Helm of Endless Rage</option>
-                <option value="helm_of_the_claw"> Helm of the Claw</option>
-                <option value="helm_of_the_illidari_shatterer"> Helm of the Illidari Shatterer</option>
-                <option value="hope_bearer_helm"> Hope Bearer Helm</option>
-                <option value="lionheart_helm"> Lionheart Helm</option>
-                <option value="malefic_mask_of_the_shadows"> Malefic Mask of the Shadows</option>
-                <option value="mask_of_the_deceiver"> Mask of the Deceiver</option>
-                <option value="mask_of_veiled_death"> Mask of Veiled Death</option>
-                <option value="maulgars_warhelm"> Maulgars Warhelm</option>
-                <option value="merciless_gladiators_plate_helm"> Merciless Gladiators Plate Helm</option>
-                <option value="moonglade_cowl"> Moonglade Cowl</option>
-                <option value="onslaught_battle-helm"> Onslaught Battle-helm</option>
-                <option value="overlords_helmet_of_second_sight"> Overlords Helmet of Second Sight</option>
-                <option value="ragesteel_helm"> Ragesteel Helm</option>
-                <option value="stalkers_helmet_of_second_sight"> Stalkers Helmet of Second Sight</option>
-                <option value="stealthers_helmet_of_second_sight"> Stealthers Helmet of Second Sight</option>
-                <option value="thundering_greathelm"> Thundering Greathelm</option>
-                <option value="vengeful_gladiators_plate_helm"> Vengeful Gladiators Plate Helm</option>
-                <option value="warbringer_battle-helm"> Warbringer Battle-helm</option>
-                <option value="warbringer_greathelm"> Warbringer Greathelm</option>
-                <option value="warhelm_of_the_bold"> Warhelm of the Bold</option>
-                <option value="warpstalker_helm"> Warpstalker Helm</option>
-                <option value="wastewalker_helm"> Wastewalker Helm</option>
-            </select>
-
-            <select id="neck_dd_mult" size="10" class="item-select" multiple>
-                <option value="adamantite_chain_of_the_unbroken"> Adamantite Chain of the Unbroken</option>
-                <option value="blood_guards_necklace_of_ferocity"> Blood Guards Necklace of Ferocity</option>
-                <option value="bone_chain_necklace"> Bone Chain Necklace</option>
-                <option value="braided_eternium_chain"> Braided Eternium Chain</option>
-                <option value="choker_of_animalistic_fury"> Choker of Animalistic Fury</option>
-                <option value="choker_of_endless_nightmares"> Choker of Endless Nightmares</option>
-                <option value="choker_of_serrated_blades"> Choker of Serrated Blades</option>
-                <option value="choker_of_vile_intent"> Choker of Vile Intent</option>
-                <option value="haramads_bargain"> Haramads Bargain</option>
-                <option value="insignia_of_the_maghari_hero"> Insignia of the Maghari Hero</option>
-                <option value="mithril_chain_of_heroism"> Mithril Chain of Heroism</option>
-                <option value="natashas_choker"> Natashas Choker</option>
-                <option value="necklace_of_trophies"> Necklace of Trophies</option>
-                <option value="pendant_of_the_perilous"> Pendant of the Perilous</option>
-                <option value="saberclaw_talisman"> Saberclaw Talisman</option>
-                <option value="stormrages_talisman_of_seething"> Stormrages Talisman of Seething</option>
-                <option value="telonicuss_pendant_of_mayhem"> Telonicuss Pendant of Mayhem</option>
-                <option value="the_savages_choker"> The Savages Choker</option>
-                <option value="traitors_noose"> Traitors Noose</option>
-                <option value="veterans_pendant_of_triumph"> Veterans Pendant of Triumph</option>
-                <option value="vindicators_pendant_of_triumph"> Vindicators Pendant of Triumph</option>
-                <option value="worgen_claw_necklace"> Worgen Claw Necklace</option>
-            </select>
-
-            <select id="shoulder_dd_mult" size="10" class="item-select" multiple>
-                <option value="bladed_shoulderpads_of_the_merciless"> Bladed Shoulderpads of the Merciless</option>
-                <option value="blood-stained_pauldrons"> Blood-stained Pauldrons</option>
-                <option value="conquerors_spaulders"> Conquerors Spaulders</option>
-                <option value="destroyer_shoulderblades"> Destroyer Shoulderblades</option>
-                <option value="doomplate_shoulderguards"> Doomplate Shoulderguards</option>
-                <option value="expedition_scouts_epaulets"> Expedition Scouts Epaulets</option>
-                <option value="gladiators_plate_shoulders"> Gladiators Plate Shoulders</option>
-                <option value="high_warlord_plate_shoulders"> High Warlord Plate Shoulders</option>
-                <option value="mantle_of_darkness"> Mantle of Darkness</option>
-                <option value="mantle_of_perenolde"> Mantle of Perenolde</option>
-                <option value="merciless_gladiators_plate_shoulders"> Merciless Gladiators Plate Shoulders</option>
-                <option value="onslaught_shoulderblades"> Onslaught Shoulderblades</option>
-                <option value="pauldrons_of_the_wardancer"> Pauldrons of the Wardancer</option>
-                <option value="ragesteel_shoulders"> Ragesteel Shoulders</option>
-                <option value="razorfury_mantle"> Razorfury Mantle</option>
-                <option value="ripfiend_shoulderplates"> Ripfiend Shoulderplates</option>
-                <option value="shoulderpads_of_assassination"> Shoulderpads of Assassination</option>
-                <option value="shoulderpads_of_the_stranger"> Shoulderpads of the Stranger</option>
-                <option value="shoulders_of_lighting_reflexes"> Shoulders of Lighting Reflexes</option>
-                <option value="shoulders_of_the_hidden_predator"> Shoulders of the Hidden Predator</option>
-                <option value="spaulders_of_slaughter"> Spaulders of Slaughter</option>
-                <option value="swiftsteel_shoulders"> Swiftsteel Shoulders</option>
-                <option value="swiftstrike_shoulders"> Swiftstrike Shoulders</option>
-                <option value="talbuk_hide_shoulders"> Talbuk Hide Shoulders</option>
-                <option value="warbringer_shoulderplates"> Warbringer Shoulderplates</option>
-                <option value="wastewalker_shoulderpads"> Wastewalker Shoulderpads</option>
-            </select>
-
-            <p></p>
-
-            <span class="left_select">Back</span><span class="middle_select">Chest</span><span class="right_select">Wrists</span><br>
-            <select id="back_dd_mult" size="10" class="item-select" multiple>
-                <option value="black_iron_battlecloak"> Black Iron Battlecloak</option>
-                <option value="blood_knight_war_cloak"> Blood Knight War Cloak</option>
-                <option value="capacitus_cloak_of_calibration"> Capacitus Cloak of Calibration</option>
-                <option value="cloak_of_darkness"> Cloak of Darkness</option>
-                <option value="cloak_of_fiends"> Cloak of Fiends</option>
-                <option value="cloak_of_impulsiveness"> Cloak of Impulsiveness</option>
-                <option value="cloak_of_malice"> Cloak of Malice</option>
-                <option value="cloak_of_the_craft"> Cloak of the Craft</option>
-                <option value="cloak_of_the_fallen_god"> Cloak of the Fallen God</option>
-                <option value="cloak_of_the_inciter"> Cloak of the Inciter</option>
-                <option value="cloak_of_the_pit_stalker"> Cloak of the Pit Stalker</option>
-                <option value="consortium_cloak_of_the_quick"> Consortium Cloak of the Quick</option>
-                <option value="crystalweave_cape"> Crystalweave Cape</option>
-                <option value="dawnstrikes_cloak"> Dawnstrikes Cloak</option>
-                <option value="delicate_green_poncho"> Delicate Green Poncho</option>
-                <option value="dorys_embrace"> Dorys Embrace</option>
-                <option value="drape_of_the_dark_reavers"> Drape of the Dark Reavers</option>
-                <option value="farstrider_wildercloak"> Farstrider Wildercloak</option>
-                <option value="netherfury_cape"> Netherfury Cape</option>
-                <option value="nomads_woven_cloak"> Nomads Woven Cloak</option>
-                <option value="razor_scale_battlecloak"> Razor Scale Battlecloak</option>
-                <option value="royal_cloak_of_arathi_kings"> Royal Cloak of Arathi Kings</option>
-                <option value="sergeants_heavy_cloak"> Sergeants Heavy Cloak</option>
-                <option value="shadowmoon_destroyers_drape"> Shadowmoon Destroyers Drape</option>
-                <option value="shroud_of_dominion"> Shroud of Dominion</option>
-                <option value="shroud_of_frenzy"> Shroud of Frenzy</option>
-                <option value="thalassian_wildercloak"> Thalassian Wildercloak</option>
-                <option value="vengeance_wrap"> Vengeance Wrap</option>
-            </select>
-
-            <select id="chest_dd_mult" size="10" class="item-select" multiple>
-                <option value="blackened_chestplate"> Blackened Chestplate</option>
-                <option value="bloodsea_brigand_s_vest"> Bloodsea Brigand S Vest</option>
-                <option value="breastplate_of_kings"> Breastplate of Kings</option>
-                <option value="bulwark_of_ancient_kings"> Bulwark of Ancient Kings</option>
-                <option value="bulwark_of_ancient_kings_no_cd"> Bulwark of Ancient Kings No Cd</option>
-                <option value="bulwark_of_kings"> Bulwark of Kings</option>
-                <option value="bulwark_of_kings_no_cd"> Bulwark of Kings No Cd</option>
-                <option value="chestguard_of_exile"> Chestguard of Exile</option>
-                <option value="chestguard_of_no_remorse"> Chestguard of No Remorse</option>
-                <option value="chestguard_of_the_conniver"> Chestguard of the Conniver</option>
-                <option value="chestguard_of_the_dark_stalker"> Chestguard of the Dark Stalker</option>
-                <option value="chestplate_of_adal"> Chestplate of Adal</option>
-                <option value="crimsonforge_breastplate"> Crimsonforge Breastplate</option>
-                <option value="destroyer_breastplate"> Destroyer Breastplate</option>
-                <option value="doomplate_chestguard"> Doomplate Chestguard</option>
-                <option value="durotans_battle_harness"> Durotans Battle Harness</option>
-                <option value="ebon_netherscale_breastplate"> Ebon Netherscale Breastplate</option>
-                <option value="ghoul_skin_tunic"> Ghoul Skin Tunic</option>
-                <option value="gladiators_plate_chestpiece"> Gladiators Plate Chestpiece</option>
-                <option value="heartshatter_breastplate"> Heartshatter Breastplate</option>
-                <option value="high_warlords_plate_chestpiece"> High Warlords Plate Chestpiece</option>
-                <option value="krakken_heart_breastplate"> Krakken Heart Breastplate</option>
-                <option value="maghari_scouts_tunic"> Maghari Scouts Tunic</option>
-                <option value="merciless_gladiators_plate_chestpiece"> Merciless Gladiators Plate Chestpiece</option>
-                <option value="midnight_chestguard"> Midnight Chestguard</option>
-                <option value="nether_chain_shirt"> Nether Chain Shirt</option>
-                <option value="nether_shadow_tunic"> Nether Shadow Tunic</option>
-                <option value="onslaught_breastplate"> Onslaught Breastplate</option>
-                <option value="plated_abomination_ribcage"> Plated Abomination Ribcage</option>
-                <option value="primalstrike_vest"> Primalstrike Vest</option>
-                <option value="ragesteel_breastplate"> Ragesteel Breastplate</option>
-                <option value="ranger_generals_chestguard"> Ranger Generals Chestguard</option>
-                <option value="shadowprowlers_chestguard"> Shadowprowlers Chestguard</option>
-                <option value="terrorweave_tunic"> Terrorweave Tunic</option>
-                <option value="the_exarchs_protector"> The Exarchs Protector</option>
-                <option value="tunic_of_assassination"> Tunic of Assassination</option>
-                <option value="twisting_nether_chain_shirt"> Twisting Nether Chain Shirt</option>
-                <option value="vengeful_gladiators_plate_chestpiece"> Vengeful Gladiators Plate Chestpiece</option>
-                <option value="vest_of_mounting_assault"> Vest of Mounting Assault</option>
-                <option value="vest_of_vengeance"> Vest of Vengeance</option>
-                <option value="warbringer_breastplate"> Warbringer Breastplate</option>
-                <option value="wastewalker_tunic"> Wastewalker Tunic</option>
-            </select>
-
-            <select id="wrists_dd_mult" size="10" class="item-select" multiple>
-                <option value="aged_leather_bindings"> Aged Leather Bindings</option>
-                <option value="amber_bands_of_the_aggressor"> Amber Bands of the Aggressor</option>
-                <option value="armwraps_of_disdain"> Armwraps of Disdain</option>
-                <option value="bands_of_syth"> Bands of Syth</option>
-                <option value="bands_of_the_celestial_archer"> Bands of the Celestial Archer</option>
-                <option value="bindings_of_lighting_reflexes"> Bindings of Lighting Reflexes</option>
-                <option value="black_felsteel_bracers"> Black Felsteel Bracers</option>
-                <option value="bladespire_warbands"> Bladespire Warbands</option>
-                <option value="bracers_of_eradication"> Bracers of Eradication</option>
-                <option value="bracers_of_maliciousness"> Bracers of Maliciousness</option>
-                <option value="bracers_of_the_pathfinder"> Bracers of the Pathfinder</option>
-                <option value="deadly_cuffs"> Deadly Cuffs</option>
-                <option value="demolishers_bracers"> Demolishers Bracers</option>
-                <option value="ebon_netherscale_bracers"> Ebon Netherscale Bracers</option>
-                <option value="felstalker_bracers"> Felstalker Bracers</option>
-                <option value="furious_shackles"> Furious Shackles</option>
-                <option value="hive_defiler_wristguards"> Hive Defiler Wristguards</option>
-                <option value="insidious_bands"> Insidious Bands</option>
-                <option value="marshals_leather_bracers"> Marshals Leather Bracers</option>
-                <option value="marshals_linked_bracers"> Marshals Linked Bracers</option>
-                <option value="marshals_plate_bracers"> Marshals Plate Bracers</option>
-                <option value="marshals_scaled_bracers"> Marshals Scaled Bracers</option>
-                <option value="nightfall_wristguards"> Nightfall Wristguards</option>
-                <option value="nightstalkers_wristguards"> Nightstalkers Wristguards</option>
-                <option value="primalstrike_bracers"> Primalstrike Bracers</option>
-                <option value="shard_bound_bracers"> Shard Bound Bracers</option>
-                <option value="spymistress_wristguards"> Spymistress Wristguards</option>
-                <option value="stalkers_war_bands"> Stalkers War Bands</option>
-                <option value="swiftsteel_bracers"> Swiftsteel Bracers</option>
-                <option value="swiftstrike_bracers"> Swiftstrike Bracers</option>
-                <option value="true_aim_stalker_bands"> True Aim Stalker Bands</option>
-                <option value="vambraces_of_ending"> Vambraces of Ending</option>
-                <option value="veterans_plate_bracers"> Veterans Plate Bracers</option>
-                <option value="vindicators_plate_bracers"> Vindicators Plate Bracers</option>
-                <option value="wraps_of_precise_flight"> Wraps of Precise Flight</option>
-                <option value="wristguards_of_vengeance"> Wristguards of Vengeance</option>
-            </select>
-
-            <p></p>
-
-            <span class="left_select">Hands</span><span class="middle_select">Belt</span><span class="right_select">Legs</span><br>
-            <select id="hands_dd_mult" size="10" class="item-select" multiple>
-                <option value="cobrascale_gloves"> Cobrascale Gloves</option>
-                <option value="deft_handguards"> Deft Handguards</option>
-                <option value="destroyer_gauntlets"> Destroyer Gauntlets</option>
-                <option value="doomplate_gauntlets"> Doomplate Gauntlets</option>
-                <option value="edgemasters_handguards"> Edgemasters Handguards</option>
-                <option value="fel_leather_gloves"> Fel Leather Gloves</option>
-                <option value="felfury_gauntlets"> Felfury Gauntlets</option>
-                <option value="fist_of_mukoa"> Fist of Mukoa</option>
-                <option value="fists_of_the_unrelenting"> Fists of the Unrelenting</option>
-                <option value="flesh_handlers_gauntlets"> Flesh Handlers Gauntlets</option>
-                <option value="gauntlets_of_annihilation"> Gauntlets of Annihilation</option>
-                <option value="gauntlets_of_cruel_intention"> Gauntlets of Cruel Intention</option>
-                <option value="gauntlets_of_martial_perfection"> Gauntlets of Martial Perfection</option>
-                <option value="gauntlets_of_the_dragonslayer"> Gauntlets of the Dragonslayer</option>
-                <option value="gauntlets_of_the_skullsplitter"> Gauntlets of the Skullsplitter</option>
-                <option value="gauntlets_of_the_vanquisher"> Gauntlets of the Vanquisher</option>
-                <option value="gladiators_plate_gauntlets"> Gladiators Plate Gauntlets</option>
-                <option value="gloves_of_dexterous_manipulation"> Gloves of Dexterous Manipulation</option>
-                <option value="gloves_of_enforcement"> Gloves of Enforcement</option>
-                <option value="gloves_of_quickening"> Gloves of Quickening</option>
-                <option value="gloves_of_the_searing_grip"> Gloves of the Searing Grip</option>
-                <option value="gloves_of_the_unbound"> Gloves of the Unbound</option>
-                <option value="grips_of_damnation"> Grips of Damnation</option>
-                <option value="grips_of_deftness"> Grips of Deftness</option>
-                <option value="grips_of_silent_justice"> Grips of Silent Justice</option>
-                <option value="handgrips_of_assassination"> Handgrips of Assassination</option>
-                <option value="high_warlords_plate_gauntlets"> High Warlords Plate Gauntlets</option>
-                <option value="ironblade_gauntlets"> Ironblade Gauntlets</option>
-                <option value="liars_tongue_gloves"> Liars Tongue Gloves</option>
-                <option value="merciless_gladiators_plate_gauntlets"> Merciless Gladiators Plate Gauntlets</option>
-                <option value="ogre_defilers_handguards"> Ogre Defilers Handguards</option>
-                <option value="onslaught_gauntlets"> Onslaught Gauntlets</option>
-                <option value="pillagers_gauntlets"> Pillagers Gauntlets</option>
-                <option value="predatory_gloves"> Predatory Gloves</option>
-                <option value="ragesteel_gloves"> Ragesteel Gloves</option>
-                <option value="vengeful_gladiators_plate_gauntlets"> Vengeful Gladiators Plate Gauntlets</option>
-                <option value="warbringer_gauntlets"> Warbringer Gauntlets</option>
-                <option value="wastewalker_gloves"> Wastewalker Gloves</option>
-                <option value="windstrike_gloves"> Windstrike Gloves</option>
-            </select>
-
-            <select id="belt_dd_mult" size="10" class="item-select" multiple>
-                <option value="belt_of_deep_shadow"> Belt of Deep Shadow</option>
-                <option value="belt_of_never_ending_agony"> Belt of Never Ending Agony</option>
-                <option value="belt_of_one_hundred_deaths"> Belt of One Hundred Deaths</option>
-                <option value="belt_of_seething_fury"> Belt of Seething Fury</option>
-                <option value="belt_of_the_black_eagle"> Belt of the Black Eagle</option>
-                <option value="belt_of_the_raven_lord"> Belt of the Raven Lord</option>
-                <option value="boneweave_gridle"> Boneweave Gridle</option>
-                <option value="deathforge_girdle"> Deathforge Girdle</option>
-                <option value="don_alejandros_money_belt"> Don Alejandros Money Belt</option>
-                <option value="dunewind_sash"> Dunewind Sash</option>
-                <option value="ebon_netherscale_belt"> Ebon Netherscale Belt</option>
-                <option value="evas_strap"> Evas Strap</option>
-                <option value="felstalker_belt"> Felstalker Belt</option>
-                <option value="girdle_of_ferocity"> Girdle of Ferocity</option>
-                <option value="girdle_of_gallantry"> Girdle of Gallantry</option>
-                <option value="girdle_of_siege"> Girdle of Siege</option>
-                <option value="girdle_of_the_deathdealer"> Girdle of the Deathdealer</option>
-                <option value="girdle_of_the_endless_pit"> Girdle of the Endless Pit</option>
-                <option value="girdle_of_the_lightbearer"> Girdle of the Lightbearer</option>
-                <option value="girdle_of_the_mentor"> Girdle of the Mentor</option>
-                <option value="girdle_of_the_prowler"> Girdle of the Prowler</option>
-                <option value="girdle_of_the_tidal_call"> Girdle of the Tidal Call</option>
-                <option value="girdle_of_treachery"> Girdle of Treachery</option>
-                <option value="gronn_stitched_girdle"> Gronn Stitched Girdle</option>
-                <option value="liars_cord"> Liars Cord</option>
-                <option value="marshals_linked_girdle"> Marshals Linked Girdle</option>
-                <option value="marshals_plate_belt"> Marshals Plate Belt</option>
-                <option value="marshals_scaled_belt"> Marshals Scaled Belt</option>
-                <option value="muscle_toning_belt"> Muscle Toning Belt</option>
-                <option value="onslaught_girdle"> Onslaught Girdle</option>
-                <option value="primalstrike_belt"> Primalstrike Belt</option>
-                <option value="red_belt_of_battle"> Red Belt of Battle</option>
-                <option value="rubium_war_girdle"> Rubium War Girdle</option>
-                <option value="rune_engraded_belt"> Rune Engraded Belt</option>
-                <option value="shadow-walkers_cord"> Shadow-walkers Cord</option>
-                <option value="shattraths_champion_belt"> Shattraths Champion Belt</option>
-                <option value="socrethars_girdle"> Socrethars Girdle</option>
-                <option value="terror_pit_girdle"> Terror Pit Girdle</option>
-                <option value="valestalker_girdle"> Valestalker Girdle</option>
-                <option value="veterans_plate_belt"> Veterans Plate Belt</option>
-                <option value="vindicators_plate_belt"> Vindicators Plate Belt</option>
-            </select>
-
-            <select id="legs_dd_mult" size="10" class="item-select" multiple>
-                <option value="bloodlord_legplates"> Bloodlord Legplates</option>
-                <option value="bow-stitched_leggings"> Bow-stitched Leggings</option>
-                <option value="clefthoof_hide_leggings"> Clefthoof Hide Leggings</option>
-                <option value="destroyer_greaves"> Destroyer Greaves</option>
-                <option value="doomplate_legguards"> Doomplate Legguards</option>
-                <option value="elekk_hide_leggings"> Elekk Hide Leggings</option>
-                <option value="fel_leather_leggings"> Fel Leather Leggings</option>
-                <option value="forestwalker_kilt"> Forestwalker Kilt</option>
-                <option value="gladiators_plate_legguards"> Gladiators Plate Legguards</option>
-                <option value="greaves_of_the_bloodwarder"> Greaves of the Bloodwarder</option>
-                <option value="greaves_of_the_iron_guardian"> Greaves of the Iron Guardian</option>
-                <option value="high_warlords_plate_legguards"> High Warlords Plate Legguards</option>
-                <option value="inklings_leggings"> Inklings Leggings</option>
-                <option value="leggings_of_apocalypse"> Leggings of Apocalypse</option>
-                <option value="leggings_of_assassination"> Leggings of Assassination</option>
-                <option value="leggings_of_divine_retribution"> Leggings of Divine Retribution</option>
-                <option value="leggings_of_murderous_intent"> Leggings of Murderous Intent</option>
-                <option value="legguards_of_endless_rage"> Legguards of Endless Rage</option>
-                <option value="legguards_of_the_shattered_hand"> Legguards of the Shattered Hand</option>
-                <option value="legplates_of_carnage"> Legplates of Carnage</option>
-                <option value="maghari_huntsmans_leggings"> Maghari Huntsmans Leggings</option>
-                <option value="maghari_warlords_legplates"> Maghari Warlords Legplates</option>
-                <option value="mennus_scaled_leggings"> Mennus Scaled Leggings</option>
-                <option value="merciless_gladiators_plate_legguards"> Merciless Gladiators Plate Legguards</option>
-                <option value="midnight_legguards"> Midnight Legguards</option>
-                <option value="midrealm_leggings"> Midrealm Leggings</option>
-                <option value="oilcloth_breeches"> Oilcloth Breeches</option>
-                <option value="onslaught_greaves"> Onslaught Greaves</option>
-                <option value="retainers_leggings"> Retainers Leggings</option>
-                <option value="rip_flayer_leggings"> Rip Flayer Leggings</option>
-                <option value="scaled_greaves_of_the_marksman"> Scaled Greaves of the Marksman</option>
-                <option value="shady_dealers_pantaloons"> Shady Dealers Pantaloons</option>
-                <option value="shattrath_leggings"> Shattrath Leggings</option>
-                <option value="skulkers_greaves"> Skulkers Greaves</option>
-                <option value="titanic_leggings"> Titanic Leggings</option>
-                <option value="vanquishers_legplates"> Vanquishers Legplates</option>
-                <option value="vengeful_gladiators_plate_legguards"> Vengeful Gladiators Plate Legguards</option>
-                <option value="void_reaver_greaves"> Void Reaver Greaves</option>
-                <option value="warbringer_greaves"> Warbringer Greaves</option>
-                <option value="wastewalker_leggings"> Wastewalker Leggings</option>
-                <option value="wyrmscale_greaves"> Wyrmscale Greaves</option>
-            </select>
-
-            <p></p>
-
-            <span class="left_select">Boots</span><span class="middle_select">Rings</span><span class="right_select">Trinkets</span><br>
-            <select id="boots_dd_mult" size="10" class="item-select" multiple>
-                <option value="black_featherlight_boots"> Black Featherlight Boots</option>
-                <option value="boots_of_the_shadow_flame"> Boots of the Shadow Flame</option>
-                <option value="boots_of_the_shifting_sands"> Boots of the Shifting Sands</option>
-                <option value="boots_of_the_unjust"> Boots of the Unjust</option>
-                <option value="boots_of_utter_darkness"> Boots of Utter Darkness</option>
-                <option value="chromatic_boots"> Chromatic Boots</option>
-                <option value="clocktocks_jumpers"> Clocktocks Jumpers</option>
-                <option value="cobra_lash_boots"> Cobra Lash Boots</option>
-                <option value="dreadboots_of_the_legion"> Dreadboots of the Legion</option>
-                <option value="eaglecrest_warboots"> Eaglecrest Warboots</option>
-                <option value="edgewalker_longboots"> Edgewalker Longboots</option>
-                <option value="farahlite_studded_boots"> Farahlite Studded Boots</option>
-                <option value="fel_leather_boots"> Fel Leather Boots</option>
-                <option value="felboar_hide_shoes"> Felboar Hide Shoes</option>
-                <option value="feroucious_swift_kickers"> Feroucious Swift Kickers</option>
-                <option value="fiend_slayer_boots"> Fiend Slayer Boots</option>
-                <option value="generals_plate_greaves"> Generals Plate Greaves</option>
-                <option value="generals_scaled_greaves"> Generals Scaled Greaves</option>
-                <option value="ironstriders_of_urgency"> Ironstriders of Urgency</option>
-                <option value="obsidian_clodstompers"> Obsidian Clodstompers</option>
-                <option value="quickstriders_moccasins"> Quickstriders Moccasins</option>
-                <option value="rapscallion_boots"> Rapscallion Boots</option>
-                <option value="shadowmasters_boots"> Shadowmasters Boots</option>
-                <option value="shatari_wrought_greaves"> Shatari Wrought Greaves</option>
-                <option value="softstep_boots_of_tracking"> Softstep Boots of Tracking</option>
-                <option value="star_strider_boots"> Star Strider Boots</option>
-                <option value="the_masters_treads"> The Masters Treads</option>
-                <option value="threads_of_the_den_mother"> Threads of the Den Mother</option>
-                <option value="veterans_plate_greaves"> Veterans Plate Greaves</option>
-                <option value="vindicators_plate_greaves"> Vindicators Plate Greaves</option>
-                <option value="vortex_walking_boots"> Vortex Walking Boots</option>
-                <option value="warboots_of_obliteration"> Warboots of Obliteration</option>
-                <option value="zierhuts_lost_treads"> Zierhuts Lost Treads</option>
-            </select>
-
-            <select id="ring_dd_mult" size="10" class="item-select" multiple>
-                <option value="acrobats_mark_of_the_shatar"> Acrobats Mark of the Shatar</option>
-                <option value="adals_command"> Adals Command</option>
-                <option value="aggressors_mark_of_the_shatar"> Aggressors Mark of the Shatar</option>
-                <option value="ancestral_ring_of_conquest"> Ancestral Ring of Conquest</option>
-                <option value="band_of_anguish"> Band of Anguish</option>
-                <option value="band_of_devastation"> Band of Devastation</option>
-                <option value="band_of_reanimation"> Band of Reanimation</option>
-                <option value="band_of_the_eternal_champion"> Band of the Eternal Champion</option>
-                <option value="band_of_the_exorcist"> Band of the Exorcist</option>
-                <option value="band_of_the_ranger_general"> Band of the Ranger General</option>
-                <option value="band_of_unnatural_forces"> Band of Unnatural Forces</option>
-                <option value="band_of_ursol"> Band of Ursol</option>
-                <option value="garonas_signet_ring"> Garonas Signet Ring</option>
-                <option value="kaylaans_signet"> Kaylaans Signet</option>
-                <option value="master_dragonslayers_ring"> Master Dragonslayers Ring</option>
-                <option value="mithril_band_of_the_unscarred"> Mithril Band of the Unscarred</option>
-                <option value="overseers_signet"> Overseers Signet</option>
-                <option value="protectorate_assassins_ring"> Protectorate Assassins Ring</option>
-                <option value="quick_strike_ring"> Quick Strike Ring</option>
-                <option value="ravenclaw_band"> Ravenclaw Band</option>
-                <option value="reaverss_ring"> Reaverss Ring</option>
-                <option value="ring_of_a_thousand_marks"> Ring of A Thousand Marks</option>
-                <option value="ring_of_arathi_warlords"> Ring of Arathi Warlords</option>
-                <option value="ring_of_deceitful_intent"> Ring of Deceitful Intent</option>
-                <option value="ring_of_lethality"> Ring of Lethality</option>
-                <option value="ring_of_reciprocity"> Ring of Reciprocity</option>
-                <option value="ring_of_the_recalcitrant"> Ring of the Recalcitrant</option>
-                <option value="ring_of_the_shadow_deeps"> Ring of the Shadow Deeps</option>
-                <option value="ring_of_umbral_doom"> Ring of Umbral Doom</option>
-                <option value="shaffars_band_of_brutality"> Shaffars Band of Brutality</option>
-                <option value="shapeshifters_signet"> Shapeshifters Signet</option>
-                <option value="signet_of_primal_wrath"> Signet of Primal Wrath</option>
-                <option value="slayers_mark_of_the_redemption"> Slayers Mark of the Redemption</option>
-                <option value="stormrage_signet_ring"> Stormrage Signet Ring</option>
-                <option value="unstoppable_aggressors_ring"> Unstoppable Aggressors Ring</option>
-                <option value="veterans_band_of_triumph"> Veterans Band of Triumph</option>
-                <option value="vindicators_band_of_triumph"> Vindicators Band of Triumph</option>
-                <option value="violet_signet_of_the_master_assassin"> Violet Signet of the Master Assassin</option>
-                <option value="weathered_band_of_the_swamplord"> Weathered Band of the Swamplord</option>
-            </select>
-
-            <select id="trinket_dd_mult" size="10" class="item-select" multiple>    
-                <option value="abacus_of_violent_odds"> Abacus of Violent Odds</option>
-                <option value="ancient_draenei_war_talisman"> Ancient Draenei War Talisman</option>
-                <option value="ashtongue_talisman_of_valor"> Ashtongue Talisan of Valor</option>
-                <option value="badge_of_the_swarmguard"> Badge of the Swarmguard</option>
-                <option value="berserkers_call"> Berserkers Call</option>
-                <option value="bladefists_breadth"> Bladefists Breadth</option>
-                <option value="bloodlust_brooch"> Bloodlust Brooch</option>
-                <option value="core_of_arkelos"> Core of Arkelos</option>
-                <option value="crystalforged_trinket"> Crystalforged Trinket</option>
-                <option value="darkmoon_card_crusade"> Darkmoon Card Crusade</option>
-                <option value="darkmoon_card_wrath"> Darkmoon Card Wrath</option>
-                <option value="dragonspine_trophy"> Dragonspine Trophy</option>
-                <option value="drake_fang_talisman"> Drake Fang Talisman</option>
-                <option value="empty_mug_of_direbrew"> Empty Mug of Direbrew</option>
-                <option value="fetish_of_the_fallen"> Fetish of the Fallen</option>
-                <option value="figurine_felsteel_boar"> Figurine Felsteel Boar</option>
-                <option value="figurine_nightseye_panther"> Figurine Nightseye Panther</option>
-                <option value="hourglass_of_the_unraveller"> Hourglass of the Unraveller</option>
-                <option value="icon_of_unyielding_courage"> Icon of Unyielding Courage</option>
-                <option value="kiss_of_the_spider"> Kiss of the Spider</option>
-                <option value="madness_of_the_betrayer"> Madness of the Betrayer</option>
-                <option value="mark_of_the_champion"> Mark of the Champion</option>
-                <option value="ogre_maulers_badge"> Ogre Maulers Badge</option>
-                <option value="romulos_poison_vial"> Romulos Poison Vial</option>
-                <option value="slayers_crest"> Slayers Crest</option>
-                <option value="solarians_sapphire"> Solarians Sapphire</option>
-                <option value="terokkar_tablet_of_precision"> Terokkar Tablet of Precision</option>
-                <option value="tsunami_talisman"> Tsunami Talisman</option>
-            </select>
-
-            <p></p>
-
-            <span class="left_select">Ranged</span><span class="middle_select">Weapons</span><span class="right_select">Two-Handed Weapons</span><br>
-            <select id="ranged_dd_mult" size="10" class="item-select" multiple>
-                <option value="ancient_amani_longbow"> Ancient Amani Longbow</option>
-                <option value="arcanite_steam_pistol"> Arcanite Steam Pistol</option>
-                <option value="barrel_blade_longrifle"> Barrel Blade Longrifle</option>
-                <option value="black_bow_of_the_betrayer"> Black Bow of the Betrayer</option>
-                <option value="bristleblitz_striker"> Bristleblitz Striker</option>
-                <option value="crystalline_crossbow"> Crystalline Crossbow</option>
-                <option value="emberhawk_crossbow"> Emberhawk Crossbow</option>
-                <option value="felsteel_whisper_knives"> Felsteel Whisper Knives</option>
-                <option value="gladiators_war_edge"> Gladiators War Edge</option>
-                <option value="hemets_elekk_gun"> Hemets Elekk Gun</option>
-                <option value="larvae_of_the_great_worm"> Larvae of the Great Worm</option>
-                <option value="legionkiller"> Legionkiller</option>
-                <option value="mamas_insurance"> Mamas Insurance</option>
-                <option value="marksmans_bow"> Marksmans Bow</option>
-                <option value="merciless_gladiators_war_edge"> Merciless Gladiators War Edge</option>
-                <option value="nerubian_slavemaker"> Nerubian Slavemaker</option>
-                <option value="serpent_spine_longbow"> Serpent Spine Longbow</option>
-                <option value="serpentshrine_shuriken"> Serpentshrine Shuriken</option>
-                <option value="steelhawk_crossbow"> Steelhawk Crossbow</option>
-                <option value="sunfury_bow_of_the_phoenix"> Sunfury Bow of the Phoenix</option>
-                <option value="telescropic_sharprifle"> Telescropic Sharprifle</option>
-                <option value="tuskbreaker"> Tuskbreaker</option>
-                <option value="twisted_blades_of_zarak"> Twisted Blades of Zarak</option>
-                <option value="vengeful_gladiators_war_edge"> Vengeful Gladiators War Edge</option>
-                <option value="wolfslayer_sniper_rifle"> Wolfslayer Sniper Rifle</option>
-                <option value="wrathfire_hand_cannon"> Wrathfire Hand Cannon</option>
-                <option value="wrathtide_longbow"> Wrathtide Longbow</option>
-                <option value="xavian_stiletto"> Xavian Stiletto</option>
-            </select>
-
-            <select id="weapons_dd_mult" size="10" class="item-select" multiple>
-                <option value="none" disabled> --- SWORDS --- </option>
-                <option value="blade_of_infamy"> Blade of Infamy</option>
-                <option value="blade_of_savagery"> Blade of Savagery</option>
-                <option value="blazefury"> Blazefury</option>
-                <option value="blazeguard"> Blazeguard</option>
-                <option value="blazefury"> Blazefury</option>
-                <option value="blinkstrike"> Blinkstrike</option>
-                <option value="edge_of_the_cosmos"> Edge of the Cosmos</option>
-                <option value="felsteel_longblade"> Felsteel Longblade</option>
-                <option value="gladiators_quickblade"> Gladiators Quickblade</option>
-                <option value="gladiators_slicer"> Gladiators Slicer</option>
-                <option value="gressil_dawn_of_ruin"> Gressil Dawn of Ruin</option>
-                <option value="high_warlords_quickblade"> High Warlords Quickblade</option>
-                <option value="high_warlords_slicer"> High Warlords Slicer</option>
-                <option value="hope_ender"> Hope Ender</option>
-                <option value="kings_defender"> Kings Defender</option>
-                <option value="latros_shifting_sword"> Latros Shifting Sword</option>
-                <option value="merciless_gladiators_quickblade"> Merciless Gladiators Quickblade</option>
-                <option value="merciless_gladiators_slicer"> Merciless Gladiators Slicer</option>
-                <option value="phosphorescent_blade"> Phosphorescent Blade</option>
-                <option value="spiteblade"> Spiteblade</option>
-                <option value="talon_of_azshara"> Talon of Azshara</option>
-                <option value="the_hungering_cold"> The Hungering Cold</option>
-                <option value="the_sun_eater"> The Sun Eater</option>
-                <option value="the_unbreakable_will"> The Unbreakable Will</option>
-                <option value="vengeful_gladiators_quickblade"> Vengeful Gladiators Quickblade</option>
-                <option value="vengeful_gladiators_slicer"> Vengeful Gladiators Slicer</option>
-                <option value="vindicators_brand"> Vindicators Brand</option>
-                <option value="warglaive_of_azzinoth_mh"> Warglaive of Azzinoth Mh</option>
-                <option value="warglaive_of_azzinoth_mh_non_demon"> Warglaive of Azzinoth Mh (non demon)</option>
-                <option value="warglaive_of_azzinoth_oh"> Warglaive of Azzinoth Oh</option>
-                <option value="warglaive_of_azzinoth_oh_non_demon"> Warglaive of Azzinoth Oh (non demon)</option>
-                <option value="warp_slicer"> Warp Slicer</option>
-                <option value="none" disabled> --- AXES --- </option>
-                <option value="black_planar_edge"> Black Planar Edge</option>
-                <option value="bogreaver"> Bogreaver</option>
-                <option value="fel_edged_battleaxe"> Fel Edged Battleaxe</option>
-                <option value="firebrand_battleaxe"> Firebrand Battleaxe</option>
-                <option value="gladiators_cleaver"> Gladiators Cleaver</option>
-                <option value="gladiators_hacker"> Gladiators Hacker</option>
-                <option value="high_warlords_cleaver"> High Warlords Cleaver</option>
-                <option value="high_warlords_hacker"> High Warlords Hacker</option>
-                <option value="merciless_gladiators_cleaver"> Merciless Gladiators Cleaver</option>
-                <option value="netherbane"> Netherbane</option>
-                <option value="rising_tide"> Rising Tide</option>
-                <option value="the_brutalizer"> The Brutalizer</option>
-                <option value="the_decapitator"> The Decapitator</option>
-                <option value="the_harvester_of_souls"> The Harvester of Souls</option>
-                <option value="the_planar_edge"> The Planar Edge</option>
-                <option value="vengeful_gladiators_cleaver"> Vengeful Gladiators Cleaver</option>
-                <option value="vengeful_gladiators_hacker"> Vengeful Gladiators Hacker</option>
-                <option value="warbringer"> Warbringer</option>
-                <option value="wicked_edge_of_the_planes"> Wicked Edge of the Planes</option>
-                <option value="none" disabled> --- DAGGERS --- </option>
-                <option value="blade_of_the_unrequited"> Blade of the Unrequited</option>
-                <option value="boundless_agony"> Boundless Agony</option>
-                <option value="emerald_ripper"> Emerald Ripper</option>
-                <option value="fang_of_vashj"> Fang of Vashj</option>
-                <option value="feltooth_eviscerator"> Feltooth Eviscerator</option>
-                <option value="guile_of_khoraazi"> Guile of Khoraazi</option>
-                <option value="heartrazor"> Heartrazor</option>
-                <option value="infinity_blade"> Infinity Blade</option>
-                <option value="malchazeen"> Malchazeen</option>
-                <option value="messenger_of_fate"> Messenger of Fate</option>
-                <option value="retainers_blade"> Retainers Blade</option>
-                <option value="shard_of_azzinoth"> Shard of Azzinoth</option>
-                <option value="the_night_blade"> The Night Blade</option>
-                <option value="trackers_blade"> Trackers Blade</option>
-                <option value="none" disabled> --- MACES --- </option>
-                <option value="blackout_truncheon"> Blackout Truncheon</option>
-                <option value="bloodskull_destroyer"> Bloodskull Destroyer</option>
-                <option value="dragonmaw"> Dragonmaw</option>
-                <option value="dragonstrike"> Dragonstrike</option>
-                <option value="drakefist_hammer"> Drakefist Hammer</option>
-                <option value="fools_bane"> Fools Bane</option>
-                <option value="rod_of_the_sun_king"> Rod of the Sun King</option>
-                <option value="runic_hammer"> Runic Hammer</option>
-                <option value="swiftsteel_bludgeon"> Swiftsteel Bludgeon</option>
-                <option value="syphon_of_the_nathrezim"> Syphon of the Nathrezim</option>
-                <option value="terokks_nightmace"> Terokks Nightmace</option>
-                <option value="none" disabled> --- FISTS --- </option>
-                <option value="big_bad_wolfs_paw"> Big Bad Wolfs Paw</option>
-                <option value="claw_of_molten_fury"> Claw of Molten Fury</option>
-                <option value="claw_of_the_phoenix"> Claw of the Phoenix</option>
-                <option value="claw_of_the_watcher"> Claw of the Watcher</option>
-                <option value="demonblood_eviscerator"> Demonblood Eviscerator</option>
-                <option value="fist_of_molten_fury"> Fist of Molten Fury</option>
-                <option value="reflex_blades"> Reflex Blades</option>
-                <option value="talon_of_the_phoenix"> Talon of the Phoenix</option>
-                <option value="the_bladefist"> The Bladefist</option>
-            </select>
-            <select id="two_hand_weapons_dd_mult" size="10" class="weapon-select" multiple>
-                <option value="none" disabled> --- TWO_HANDED_SWORDS --- </option>
-                <option value="bonereavers_edge"> Bonereavers Edge</option>
-                <option value="cataclysms_edge"> Cataclysms Edge</option>
-                <option value="despair"> Despair</option>
-                <option value="endbringer"> Endbringer</option>
-                <option value="gladiators_greatsword"> Gladiators Greatsword</option>
-                <option value="illidari-bane_claymore"> Illidari-bane Claymore</option>
-                <option value="illidari-bane_claymore_demons"> Illidari-bane Claymore Demons</option>
-                <option value="khorium_champion"> Khorium Champion</option>
-                <option value="lionheart_blade"> Lionheart Blade</option>
-                <option value="lionheart_champion"> Lionheart Champion</option>
-                <option value="lionheart_executioner"> Lionheart Executioner</option>    
-                <option value="merciless_gladiators_greatsword"> Merciless Gladiators Greatsword</option>
-                <option value="quantum_blade"> Quantum Blade</option>
-                <option value="twinblade_of_the_phoenix"> Twinblade of the Phoenix</option>
-                <option value="vengeful_gladiators_greatsword"> Vengeful Gladiators Greatsword</option>
-                <option value="none" disabled> --- TWO_HANDED_AXES_POLEARM --- </option>
-                <option value="apexis_cleaver"> Apexis Cleaver</option>
-                <option value="axe_of_the_gronn_lords"> Axe of the Gronn Lords</option>
-                <option value="blackened_spear"> Blackened Spear</option>
-                <option value="bloodmoon"> Bloodmoon</option>
-                <option value="crow_wing_reaper"> Crow Wing Reaper</option>
-                <option value="crystalforged_war_axe"> Crystalforged War Axe</option>
-                <option value="devastation"> Devastation</option>
-                <option value="ethereum_nexus_reaver"> Ethereum Nexus Reaver</option>
-                <option value="felsteel_reaper"> Felsteel Reaper</option>
-                <option value="gladiators_decapitator"> Gladiators Decapitator</option>
-                <option value="glaive_of_the_pit"> Glaive of the Pit</option>
-                <option value="gorehowl"> Gorehowl</option>
-                <option value="halberd_of_desolation"> Halberd of Desolation</option>
-                <option value="hellscreams_will"> Hellscreams Will</option>
-                <option value="legacy"> Legacy</option>
-                <option value="lunar_crescent"> Lunar Crescent</option>
-                <option value="merciless_gladiators_decapitator"> Merciless Gladiators Decapitator</option>
-                <option value="mooncleaver"> Mooncleaver</option>
-                <option value="reaver_of_the_infinites"> Reaver of the Infinites</option>
-                <option value="severance"> Severance</option>
-                <option value="singing_crystal_axe"> Singing Crystal Axe</option>
-                <option value="sonic_spear"> Sonic Spear</option>
-                <option value="soul_cleaver"> Soul Cleaver</option>
-                <option value="terokks_quill"> Terokks Quill</option>
-                <option value="trident_of_the_outcast_tribe"> Trident of the Outcast Tribe</option>
-                <option value="none" disabled> --- TWO_HANDED_MACES --- </option>
-                <option value="deep_thunder"> Deep Thunder</option>
-                <option value="might_of_menethil"> Might of Menethil</option>
-                <option value="stormherald"> Stormherald</option>
-                <option value="thunder"> Thunder</option>
-                <option value="torch_of_the_damned"> Torch of the Damned</option>
-                <option value="world_breaker"> World Breaker</option>
-            </select>
-            <!--armor stop4-->
-
-        </div>
         <br>
 
         <p class="select-title">Select mode:</p><br>
         <input type="checkbox" id="normal_mode" checked
-               onclick="unique_checkboxes('normal_mode', ['multiple_mode', 'do_comparison']);
-                        unique_div(['armor_single', 'standard_description_div'],['armor_multiple', 'compare_div', 'multi_description_div'])">
+               onclick="unique_checkboxes('normal_mode', ['do_comparison']);
+                        unique_div(['armor_single', 'standard_description_div'],['compare_div'])">
         <label for="normal_mode"> <b>Standard</b>: Simulate the above selected item configuration. </label><br>
         <div class="description" id="standard_description_div">
             <input type="checkbox" id="suggestion_disclaimer">
@@ -1707,25 +1044,10 @@
         </div>
         <br>
 
-        <input type="checkbox" id="multiple_mode"
-               onclick="unique_checkboxes('multiple_mode', ['normal_mode', 'do_comparison']);
-                        unique_div(['armor_multiple', 'multi_description_div'],['armor_single','standard_description_div', 'compare_div'])">
-        <label for="multiple_mode"><b>Multi-mode</b>: Enable selection of multiple items from the same slot.</label><br>
-        <div class="description" style="display:none" id="multi_description_div">
-            <b>Information:</b> More items selected means that the optimizer will run for a longer time. It will break
-            automatically when it has found the best set <b>OR</b> when the max optimization timer is reached.<br>
-            <label for="max_optimize_time_dd">Max optimization time: (30-180s):</label>
-            <input type="number" id="max_optimize_time_dd" name="quantity" min="30" max="180" value="90"> seconds.<br>
-            <input type="checkbox" id="display_multi_debug">
-            <label for="display_multi_debug">Output debug information from the optimizer (shown at the
-                bottom)</label>
-        </div>
-        <br>
-
         <input type="checkbox" id="do_comparison"
-               onclick="unique_checkboxes('do_comparison', ['multiple_mode', 'normal_mode']);
-                        unique_div(['compare_div', 'armor_single'],['armor_multiple', 'multi_description_div'])">
-        <label for="do_comparison"><b>Comparison</b>: Add a configuration file to compare against</label>
+               onclick="unique_checkboxes('do_comparison', ['normal_mode']);>
+        <label for="do_comparison"><b>Comparison</b>: Add a configuration file to compa
+        re against</label>
         <div class="description" style="display:none" id="compare_div">
             <b>Description:</b> Select an item config and press submit.<br>
             (To generate a config file press "Save config to file" at the top of the page)<br>
@@ -5093,14 +4415,6 @@
     let weapons = ["main_hand_dd", "off_hand_dd", "two_hand_dd"];
     let weapons_input = [];
 
-    let armor_mult = ["helmet_dd_mult", "neck_dd_mult", "shoulder_dd_mult", "back_dd_mult",
-        "chest_dd_mult", "wrists_dd_mult", "hands_dd_mult", "belt_dd_mult", "legs_dd_mult",
-        "boots_dd_mult", "ring_dd_mult", "trinket_dd_mult", "ranged_dd_mult"];
-    let armor_input_mult = [];
-
-    let weapons_mult = ["weapons_dd_mult", "two_hand_weapons_dd_mult"];
-    let weapons_input_mult = [];
-
     let enchants = ["helmet_ench_dd", "shoulder_ench_dd", "back_ench_dd", "chest_ench_dd", "wrist_ench_dd",
         "hands_ench_dd", "legs_ench_dd", "boots_ench_dd", "main_hand_ench_dd", "off_hand_ench_dd", "ring_1_ench_dd", "ring_2_ench_dd"];
     let enchant_prefixes = ["e", "s", "b", "c", "w", "h", "l", "t", "m", "o", "r", "f"];
@@ -5111,7 +4425,7 @@
         "sunder_armor_dd", "heroic_strike_rage_thresh_dd", "hs_rage_thresh_exec_phase_dd", "cleave_rage_thresh_dd", "whirlwind_rage_thresh_dd", "bt_whirlwind_cooldown_thresh_dd",
         "whirlwind_bt_cooldown_thresh_dd", "overpower_rage_thresh_dd", "overpower_bt_cooldown_thresh_dd",
         "overpower_ww_cooldown_thresh_dd", "hamstring_cd_thresh_dd", "initial_rage_dd", "hamstring_rage_thresh_dd", "sunder_armor_rage_thresh_dd",
-        "max_optimize_time_dd", "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
+        "number_of_extra_targets_dd", "extra_target_armor_dd", "extra_target_level_dd",
         "periodic_damage_interval_dd", "periodic_damage_amount_dd", "execute_phase_percentage_dd",
         "re_queue_abilities_dd", "sunder_armor_globals_dd",
         "slam_spam_max_time_dd", "slam_latency_dd", "slam_spam_rage_dd", "slam_rage_thresh_dd", "berserking_haste_dd",
@@ -5225,15 +4539,6 @@
         for (let i = 0; i < weapons.length; i++) {
             file_content += weapons[i] + " " + weapons_input[i] + "\n";
         }
-        let all_dropdowns = armor_mult.concat(weapons_mult);
-        for (let dropdown of all_dropdowns) {
-            let select_menu = document.getElementById(dropdown);
-            for (let i = 0; i < select_menu.length; i++) {
-                let item = select_menu[i];
-                file_content += item.value;
-                file_content += item.selected ? " true\n" : " false\n";
-            }
-        }
         for (let i = 0; i < enchants.length; i++) {
             let dd_string = enchants_input[i].slice(1, enchants_input[i].length);
             file_content += enchants[i] + " " + dd_string + "\n";
@@ -5332,26 +4637,6 @@
             }
         }
 
-        armor_input_mult = [];
-        for (let armor_piece of armor_mult) {
-            let multi_select = document.getElementById(armor_piece);
-            for (let i = 0; i < multi_select.options.length; i++) {
-                if (multi_select.options[i].selected) {
-                    armor_input_mult.push(multi_select.options[i].value);
-                }
-            }
-        }
-
-        weapons_input_mult = [];
-        for (let weapon_id of weapons_mult) {
-            let multi_select = document.getElementById(weapon_id);
-            for (let i = 0; i < multi_select.options.length; i++) {
-                if (multi_select.options[i].selected) {
-                    weapons_input_mult.push(multi_select.options[i].value);
-                }
-            }
-        }
-
         enchants_input = [];
         for (let i = 0; i < enchants.length; i++) {
             let temp = document.getElementById(enchants[i]);
@@ -5431,21 +4716,6 @@
             }
         }
 
-        let mult_armor_vec = new Module.StringList();
-        let mult_weapons_vec = new Module.StringList();
-        if (document.getElementById("multiple_mode").checked) {
-            for (let armor_piece of armor_input_mult) {
-                if (armor_piece !== "none") {
-                    mult_armor_vec.push_back(armor_piece);
-                }
-            }
-            for (let wep of weapons_input_mult) {
-                if (wep !== "none") {
-                    mult_weapons_vec.push_back(wep);
-                }
-            }
-        }
-
         let buff_vec = new Module.StringList();
 
         for (let buff of buffs_input) {
@@ -5520,99 +4790,61 @@
         }
 
         let obj = new Module['Sim_interface']();
+        let wow_input = {
+            race: race_vec,
+            armor: armor_vec,
+            weapons: weapons_vec,
+            buffs: buff_vec,
+            enchants: ench_vec,
+            gems : gem_vec,
+            stat_weights: stat_weight_vec,
+            options: options,
+            float_options_string: float_options_string,
+            float_options_val: float_options_val,
+            talent_string: talent_string,
+            talent_val: talent_val,
+            compare_armor: compare_armor_vec,
+            compare_weapons: compare_weapons_vec,
+        };
 
-        if (document.getElementById("multiple_mode").checked) {
-            let wow_input = {
-                race: race_vec,
-                armor: mult_armor_vec,
-                weapons: mult_weapons_vec,
-                buffs: buff_vec,
-                enchants: ench_vec,
-                gems : gem_vec,
-                options: options,
-                float_options_string: float_options_string,
-                float_options_val: float_options_val,
-                talent_string: talent_string,
-                talent_val: talent_val,
-            };
+        let t0 = performance.now();
+        let result = obj.simulate(wow_input);
+        let t1 = performance.now();
+        console.log("took " + (t1 - t0) + " ms");
 
-            let result = obj.simulate_mult(wow_input);
-            document.getElementById("output1").innerHTML = result['messages'].get(0);
-            document.getElementById("output2").innerHTML = "";
-            if (document.getElementById("display_multi_debug").checked) {
-                document.getElementById("output2").innerHTML = result['messages'].get(1);
-            }
-            document.getElementById("output3").innerHTML = "";
-            document.getElementById("output4").innerHTML = "";
-            document.getElementById("output5").innerHTML = "";
+        obj.delete();
 
+        let mean_dps = [];
+        let std_dps = [];
+        for (let i = 0; i < result['mean_dps'].size(); i++) {
+            mean_dps.push(result['mean_dps'].get(i).toFixed(2));
+            std_dps.push(result['std_dps'].get(i).toFixed(2));
+        }
+
+        let n_sim_status = "";
+        if (mean_dps.length === 1) {
+            let conf_interval = parseFloat(std_dps[0]);
+            n_sim_status += 'DPS: <b>' + mean_dps[0] + ' &plusmn ' + conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
         } else {
-            let wow_input = {
-                race: race_vec,
-                armor: armor_vec,
-                weapons: weapons_vec,
-                buffs: buff_vec,
-                enchants: ench_vec,
-                gems : gem_vec,
-                stat_weights: stat_weight_vec,
-                options: options,
-                float_options_string: float_options_string,
-                float_options_val: float_options_val,
-                talent_string: talent_string,
-                talent_val: talent_val,
-                compare_armor: compare_armor_vec,
-                compare_weapons: compare_weapons_vec,
-                mult_armor: mult_armor_vec,
-            };
-
-            let t0 = performance.now();
-            let result = obj.simulate(wow_input);
-            let t1 = performance.now();
-            console.log("took " + (t1 - t0) + " ms");
-
-            obj.delete();
-
-            let mean_dps = [];
-            let std_dps = [];
-            for (let i = 0; i < result['mean_dps'].size(); i++) {
-                mean_dps.push(result['mean_dps'].get(i).toFixed(2));
-                std_dps.push(result['std_dps'].get(i).toFixed(2));
+            for (let i = 0; i < mean_dps.length; i++) {
+                let j = i + 1;
+                let conf_interval = parseFloat(std_dps[i]);
+                n_sim_status += 'DPS setup' + j + ': <b>' + mean_dps[i] + ' &plusmn ' +
+                    conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
             }
+        }
 
-            let n_sim_status = "";
-            if (mean_dps.length === 1) {
-                let conf_interval = parseFloat(std_dps[0]);
-                n_sim_status += 'DPS: <b>' + mean_dps[0] + ' &plusmn ' + conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
-            } else {
-                for (let i = 0; i < mean_dps.length; i++) {
-                    let j = i + 1;
-                    let conf_interval = parseFloat(std_dps[i]);
-                    n_sim_status += 'DPS setup' + j + ': <b>' + mean_dps[i] + ' &plusmn ' +
-                        conf_interval.toPrecision(3) + '</b> (95% confidence interval)<br>';
-                }
-            }
+        n_sim_status += "Simulations for DPS = <b>" + n_simulations + "</b><br>" +
+            "Simulations for stat weights = <b>" + (total_simulations - n_simulations) +
+            "</b><br>Total simulations: <b>" + total_simulations + "</b><br> ";
+        if (!document.getElementById("debug_on").checked) {
+            n_sim_status += "(Hint: Combat logs can be activated in 'Simulation settings')"
+        }
 
-            n_sim_status += "Simulations for DPS = <b>" + n_simulations + "</b><br>" +
-                "Simulations for stat weights = <b>" + (total_simulations - n_simulations) +
-                "</b><br>Total simulations: <b>" + total_simulations + "</b><br> ";
-            if (!document.getElementById("debug_on").checked) {
-                n_sim_status += "(Hint: Combat logs can be activated in 'Simulation settings')"
-            }
+        document.getElementById("output1").innerHTML = n_sim_status;
 
-            document.getElementById("output1").innerHTML = n_sim_status;
+        document.getElementById("output3").innerHTML = result['messages'].get(0);
 
-            document.getElementById("output3").innerHTML = result['messages'].get(0);
-
-            let stat_weights = [];
-            for (let i = 0; i < result.stat_weights.size(); ++i) {
-                const sws = result.stat_weights.get(i);
-                const sw = sws.split(":");
-                stat_weights.push({
-                    name: sw[0],
-                    mean: parseFloat(sw[1]),
-                    ci95: parseFloat(sw[2]),
-                });
-            }
 
             let string = "<b>Stat weights:</b> <br />";
             if (document.getElementById("do_comparison").checked) {
@@ -5632,487 +4864,498 @@
             }
             document.getElementById("output2").innerHTML = string;
 
-            // Crit cap details:
-            document.getElementById("output4").innerHTML = result['extra_stats'].get(0);
-
-            // DPS histogram details:
-            document.getElementById("output5").innerHTML = result['histogram_details'];
-
-            if (document.getElementById("debug_on").checked) {
-                document.getElementById("combat_debug").style.display = "block";
-                document.getElementById("combat_debug_title").innerHTML = "<b>Combat log from the median fight: </b>";
-            } else {
-                document.getElementById("combat_debug").style.display = "none";
-                document.getElementById("combat_debug_title").innerHTML = "";
-            }
-            document.getElementById("combat_debug").innerHTML = result['extra_stats'].get(1);
-
-            let aura_name = [];
-            let aura_uptimes = [];
-            for (let i = 0; i < result['aura_uptimes'].size(); i++) {
-                let aura_string = result['aura_uptimes'].get(i);
-                let split_string = aura_string.split(" ");
-                aura_name.push(split_string[0]);
-                aura_uptimes.push(parseFloat(split_string[1]));
-            }
-
-            let aura_list = [];
-            for (let j = 0; j < aura_name.length; j++)
-                aura_list.push({'name': aura_name[j], 'duration': aura_uptimes[j]});
-
-            aura_list.sort(function (a, b) {
-                return ((a.duration > b.duration) ? -1 : ((a.duration === b.duration) ? 0 : 1));
+        let stat_weights = [];
+        for (let i = 0; i < result.stat_weights.size(); ++i) {
+            const sws = result.stat_weights.get(i);
+            const sw = sws.split(":");
+            stat_weights.push({
+                name: sw[0],
+                mean: parseFloat(sw[1]),
+                ci95: parseFloat(sw[2]),
             });
-
-            for (let k = 0; k < aura_list.length; k++) {
-                aura_name[k] = aura_list[k].name;
-                aura_uptimes[k] = aura_list[k].duration;
-            }
-
-            let proc_list = [];
-            let proc_name = [];
-            let proc_counter = [];
-            for (let i = 0; i < result['proc_counter'].size(); i++) {
-                let proc_string = result['proc_counter'].get(i);
-                let split_string = proc_string.split(" ");
-                proc_list.push({'name': split_string[0], 'counter': parseFloat(split_string[1])});
-            }
-
-            proc_list.sort(function (a, b) {
-                return ((a.counter > b.counter) ? -1 : ((a.counter === b.counter) ? 0 : 1));
-            });
-
-            for (let k = 0; k < proc_list.length; k++) {
-                proc_name[k] = proc_list[k].name;
-                proc_counter[k] = proc_list[k].counter;
-            }
-
-            let colors = ["#3e95cd", "#8e5ea2", "#FFFF00", "#c45850",
-                "#e8c3b9", "#990099", "#145A32", "#3333cc",
-                "#c45000", "#00FF08", "#FF000A", "#ffffff",
-                "#abc46b", "#f75fff", "#5cffeb", "#beff5b"];
-            let damage_name = [];
-            let damage_vec = [];
-            for (let i = 0; i < result["time_lapse_names"].size(); i++) {
-                damage_name.push(result["time_lapse_names"].get(i));
-                damage_vec.push([]);
-                let damage_source_vec = result["damage_time_lapse"].get(i);
-                if (i === 0) {
-                    for (let j = 0; j < damage_source_vec.size(); j++) {
-                        damage_vec[i].push(damage_source_vec.get(j));
-                    }
-                } else {
-                    for (let j = 0; j < damage_source_vec.size(); j++) {
-                        damage_vec[i].push(damage_source_vec.get(j) + damage_vec[i - 1][j]);
-                    }
-                }
-            }
-
-            let cumulative_vec = [];
-            for (let i = 0; i < result["time_lapse_names"].size(); i++) {
-                cumulative_vec.push([]);
-                cumulative_vec[i][0] = damage_vec[i][0];
-                for (let j = 1; j < damage_vec[i].length; j++) {
-                    cumulative_vec[i].push(cumulative_vec[i][j - 1] + damage_vec[i][j]);
-                }
-            }
-
-            let sources = [];
-            for (let i = 0; i < result["time_lapse_names"].size(); i++) {
-                sources.push(mean_dps[0] * result['dmg_sources'].get(i));
-            }
-
-            let time_stamps = [];
-            time_stamps.push(0);
-            for (let j = 1; j < damage_vec[0].length; j++) {
-                time_stamps.push(time_stamps[j - 1] + .50);
-            }
-
-            let hist_x = [];
-            let hist_y = [];
-            for (let i = 0; i < result['hist_x'].size(); i++) {
-                hist_x.push(result['hist_x'].get(i));
-                hist_y.push(result['hist_y'].get(i));
-            }
-
-            let data_damage_time_lapse = [];
-            for (let i = 0; i < damage_vec.length; i++) {
-                data_damage_time_lapse.push(
-                    {
-                        data: damage_vec[i],
-                        label: damage_name[i],
-                        borderWidth: 10,
-                        borderColor: colors[i],
-                        backgroundColor: colors[i],
-                        pointRadius: 0.1,
-                        fill: "origin"
-                    }
-                )
-            }
-
-            let data_damage_time_lapse_cum = [];
-            for (let i = 0; i < damage_vec.length; i++) {
-                data_damage_time_lapse_cum.push(
-                    {
-                        data: cumulative_vec[i],
-                        label: damage_name[i],
-                        borderWidth: 10,
-                        borderColor: colors[i],
-                        backgroundColor: colors[i],
-                        pointRadius: 0.1,
-                        fill: "origin"
-                    }
-                )
-            }
-
-            let byName = new Map();
-            for (let i = 0; i < result["use_effect_order_string"].size(); i++) {
-                let [ name, start, duration ] = result["use_effect_order_string"].get(i).split(" ");
-                start = parseFloat(start);
-                duration = parseFloat(duration);
-                if (!byName.has(name)) byName.set(name, []);
-                byName.get(name).push([start > 0 ? start : 0, start+duration]); // "floating-bars" w/ [start, end], see https://www.chartjs.org/docs/2.9.4/charts/bar.html#data-structure
-            }
-
-            let use_effect_labels = [];
-            let maxLength = 0;
-            for (let [k, v] of byName.entries()) {
-                use_effect_labels.push(k);
-                if (v.length > maxLength) maxLength = v.length;
-            }
-
-            let use_effect_datasets = [];
-            const use_effect_colors = colors.slice(0, byName.size);
-            for (let i = 0; i < maxLength; ++i) {
-                let ds = { data: [], backgroundColor: use_effect_colors };
-                for (let v of byName.values()) {
-                    ds.data.push(i < v.length ? v[i] : []);
-                }
-                use_effect_datasets.push(ds);
-            }
-
-            Chart.defaults.global.defaultFontFamily = "Arial, Helvetica, sans-serif";
-            Chart.defaults.global.defaultFontStyle = "bold";
-            Chart.defaults.global.defaultFontColor = "black";
-            Chart.defaults.global.defaultFontSize = 36;
-            Chart.defaults.global.title.fontSize = 64;
-            Chart.defaults.global.title.display = true;
-            Chart.defaults.scale.gridLines.color = "rgba(0, 0, 0, 0.5)";
-            Chart.defaults.scale.gridLines.display = false;
-            Chart.defaults.scale.scaleLabel.display = true;
-
-            let total = hist_y.reduce((a, v) => a + v);
-
-            let sum = 0;
-            let colorFunc = function(ctx) {
-                if (ctx.dataIndex === undefined) return;
-                if (ctx.dataset === undefined) return;
-
-                if (ctx.dataIndex === 0) sum = 0;
-
-                let oldSum = sum;
-                sum += ctx.dataset.data[ctx.dataIndex];
-                if (sum < 0.25 * total || oldSum > 0.75 * total) {
-                    return "#3e95cd";
-                }
-                return "#64aad7";
-            };
-
-            line_chart_hist = new Chart(document.getElementById("line-chart-hist"), {
-                type: "bar",
-                data: {
-                    labels: hist_x,
-                    datasets: [{
-                        data: hist_y,
-                        label: "Simulator results",
-                        backgroundColor: colorFunc
-                    }]
-                },
-                options: {
-                    title: {
-                        text: "Damage histogram"
-                    },
-                    scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: true
-                            },
-                            scaleLabel: {
-                                labelString: "Frequency",
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                display: true
-                            },
-                            ticks: {
-                                maxRotation: 0,
-                            },
-                            scaleLabel: {
-                                labelString: "DPS"
-                            }
-                        }]
-                    }
-                }
-            });
-
-            let canvas = document.getElementById("line-chart-hist");
-            canvas.maintainAspectRatio = true;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
-
-            line_chart_fight = new Chart(document.getElementById("line-chart-fight"), {
-                type: "line",
-                data: {
-                    labels: time_stamps,
-                    datasets: data_damage_time_lapse
-                },
-                options: {
-                    bezierCurve: false,
-                    title: {
-                        text: "Fight time lapse (DPS)"
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                labelString: "Average damage"
-                            }
-                        }],
-                        xAxes: [{
-                            ticks: {
-                                maxRotation: 0,
-                            },
-                            scaleLabel: {
-                                labelString: "Time"
-                            }
-                        }]
-                    }
-                }
-            });
-
-            canvas = document.getElementById("line-chart-fight");
-            canvas.maintainAspectRatio = true;
-            canvas.responsive = false;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
-
-            line_chart_fight_cum = new Chart(document.getElementById("line-chart-fight-cumulative"), {
-                type: "line",
-                data: {
-                    labels: time_stamps,
-                    datasets: data_damage_time_lapse_cum
-                },
-                options: {
-                    title: {
-                        text: "Fight time lapse"
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                labelString: "Cumulative damage"
-                            },
-                        }],
-                        xAxes: [{
-                            ticks: {
-                                maxRotation: 0,
-                            },
-                            scaleLabel: {
-                                labelString: "Time"
-                            }
-                        }]
-                    }
-                }
-            });
-
-            canvas = document.getElementById("line-chart-fight-cumulative");
-            canvas.maintainAspectRatio = true;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
-
-            bar_chart_cooldowns = new Chart(document.getElementById("bar-chart-cooldowns"), {
-                type: "horizontalBar",
-                data: {
-                    labels: use_effect_labels,
-                    datasets: use_effect_datasets
-                },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        text: "Use Effect Schedule"
-                    },
-                    tooltips: {
-                        mode: "point",
-                        callbacks: {
-                            label: function(tti, data) {
-                                const d = data.datasets[tti.datasetIndex].data[tti.index];
-                                return d[0] + ".." + d[1];
-                            }
-                        }
-                    },
-                    scales: {
-                        yAxes: [{
-                            stacked: true,
-                            scaleLabel: {
-                                labelString: "Use Effect"
-                            },
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                display: true
-                            },
-                            scaleLabel: {
-                                labelString: "Time"
-                            },
-                            ticks: {
-                                stepSize: 20
-                            }
-                        }]
-                    }
-                }
-            });
-
-            canvas = document.getElementById("bar-chart-cooldowns");
-            canvas.maintainAspectRatio = true;
-            canvas.responsive = false;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
-
-            // Bar chart
-            bar_chart_damage = new Chart(document.getElementById("bar-chart-damage"), {
-                type: "bar",
-                data: {
-                    labels: damage_name,
-                    datasets: [
-                        {
-                            backgroundColor: colors,
-                            data: sources
-                        }
-                    ]
-                },
-                options: {
-                    legend: {display: false},
-                    title: {
-                        text: "DPS from different sources"
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                labelString: "DPS"
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                suggestedMin: 0,
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                display: false,
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                suggestedMin: 0,
-                            }
-                        }]
-                    }
-                }
-            });
-
-            canvas = document.getElementById("bar-chart-damage");
-            canvas.maintainAspectRatio = true;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
-
-            // Bar chart
-            bar_chart_auras = new Chart(document.getElementById("bar-chart-auras"), {
-                type: "bar",
-                data: {
-                    labels: aura_name,
-                    datasets: [
-                        {
-                            backgroundColor: colors,
-                            data: aura_uptimes
-                        }
-                    ]
-                },
-                options: {
-                    legend: {display: false},
-                    title: {
-                        text: "Aura uptime"
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                labelString: "%",
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                suggestedMin: 0,
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                            }
-                        }],
-                    }
-                }
-            });
-
-            canvas = document.getElementById("bar-chart-auras");
-            canvas.maintainAspectRatio = true;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
-
-            // Bar chart
-            bar_chart_proc = new Chart(document.getElementById("bar-chart-proc"), {
-                type: "bar",
-                data: {
-                    labels: proc_name,
-                    datasets: [
-                        {
-                            backgroundColor: colors,
-                            data: proc_counter
-                        }
-                    ]
-                },
-                options: {
-                    legend: {display: false},
-                    title: {
-                        text: "Average # of procs"
-                    },
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: false,
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                            }
-                        }],
-                        xAxes: [{
-                            scaleLabel: {
-                                display: false,
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                            }
-                        }],
-                    }
-                }
-            });
-
-            canvas = document.getElementById("bar-chart-proc");
-            canvas.maintainAspectRatio = true;
-            canvas.responsive = false;
-            canvas.style.height = "450px";
-            canvas.style.width = "675px";
         }
-    }
+        document.getElementById("output2").innerHTML = string;
+
+        // Crit cap details:
+        document.getElementById("output4").innerHTML = result['extra_stats'].get(0);
+
+        // DPS histogram details:
+        document.getElementById("output5").innerHTML = result['histogram_details'];
+
+        if (document.getElementById("debug_on").checked) {
+            document.getElementById("combat_debug").style.display = "block";
+            document.getElementById("combat_debug_title").innerHTML = "<b>Combat log from the median fight: </b>";
+        } else {
+            document.getElementById("combat_debug").style.display = "none";
+            document.getElementById("combat_debug_title").innerHTML = "";
+        }
+        document.getElementById("combat_debug").innerHTML = result['extra_stats'].get(1);
+
+        let aura_name = [];
+        let aura_uptimes = [];
+        for (let i = 0; i < result['aura_uptimes'].size(); i++) {
+            let aura_string = result['aura_uptimes'].get(i);
+            let split_string = aura_string.split(" ");
+            aura_name.push(split_string[0]);
+            aura_uptimes.push(parseFloat(split_string[1]));
+        }
+
+        let aura_list = [];
+        for (let j = 0; j < aura_name.length; j++)
+            aura_list.push({'name': aura_name[j], 'duration': aura_uptimes[j]});
+
+        aura_list.sort(function (a, b) {
+            return ((a.duration > b.duration) ? -1 : ((a.duration === b.duration) ? 0 : 1));
+        });
+
+        for (let k = 0; k < aura_list.length; k++) {
+            aura_name[k] = aura_list[k].name;
+            aura_uptimes[k] = aura_list[k].duration;
+        }
+
+        let proc_list = [];
+        let proc_name = [];
+        let proc_counter = [];
+        for (let i = 0; i < result['proc_counter'].size(); i++) {
+            let proc_string = result['proc_counter'].get(i);
+            let split_string = proc_string.split(" ");
+            proc_list.push({'name': split_string[0], 'counter': parseFloat(split_string[1])});
+        }
+
+        proc_list.sort(function (a, b) {
+            return ((a.counter > b.counter) ? -1 : ((a.counter === b.counter) ? 0 : 1));
+        });
+
+        for (let k = 0; k < proc_list.length; k++) {
+            proc_name[k] = proc_list[k].name;
+            proc_counter[k] = proc_list[k].counter;
+        }
+
+        let colors = ["#3e95cd", "#8e5ea2", "#FFFF00", "#c45850",
+            "#e8c3b9", "#990099", "#145A32", "#3333cc",
+            "#c45000", "#00FF08", "#FF000A", "#ffffff",
+            "#abc46b", "#f75fff", "#5cffeb", "#beff5b"];
+        let damage_name = [];
+        let damage_vec = [];
+        for (let i = 0; i < result["time_lapse_names"].size(); i++) {
+            damage_name.push(result["time_lapse_names"].get(i));
+            damage_vec.push([]);
+            let damage_source_vec = result["damage_time_lapse"].get(i);
+            if (i === 0) {
+                for (let j = 0; j < damage_source_vec.size(); j++) {
+                    damage_vec[i].push(damage_source_vec.get(j));
+                }
+            } else {
+                for (let j = 0; j < damage_source_vec.size(); j++) {
+                    damage_vec[i].push(damage_source_vec.get(j) + damage_vec[i - 1][j]);
+                }
+            }
+        }
+
+        let cumulative_vec = [];
+        for (let i = 0; i < result["time_lapse_names"].size(); i++) {
+            cumulative_vec.push([]);
+            cumulative_vec[i][0] = damage_vec[i][0];
+            for (let j = 1; j < damage_vec[i].length; j++) {
+                cumulative_vec[i].push(cumulative_vec[i][j - 1] + damage_vec[i][j]);
+            }
+        }
+
+        let sources = [];
+        for (let i = 0; i < result["time_lapse_names"].size(); i++) {
+            sources.push(mean_dps[0] * result['dmg_sources'].get(i));
+        }
+
+        let time_stamps = [];
+        time_stamps.push(0);
+        for (let j = 1; j < damage_vec[0].length; j++) {
+            time_stamps.push(time_stamps[j - 1] + .50);
+        }
+
+        let hist_x = [];
+        let hist_y = [];
+        for (let i = 0; i < result['hist_x'].size(); i++) {
+            hist_x.push(result['hist_x'].get(i));
+            hist_y.push(result['hist_y'].get(i));
+        }
+
+        let data_damage_time_lapse = [];
+        for (let i = 0; i < damage_vec.length; i++) {
+            data_damage_time_lapse.push(
+                {
+                    data: damage_vec[i],
+                    label: damage_name[i],
+                    borderWidth: 10,
+                    borderColor: colors[i],
+                    backgroundColor: colors[i],
+                    pointRadius: 0.1,
+                    fill: "origin"
+                }
+            )
+        }
+
+        let data_damage_time_lapse_cum = [];
+        for (let i = 0; i < damage_vec.length; i++) {
+            data_damage_time_lapse_cum.push(
+                {
+                    data: cumulative_vec[i],
+                    label: damage_name[i],
+                    borderWidth: 10,
+                    borderColor: colors[i],
+                    backgroundColor: colors[i],
+                    pointRadius: 0.1,
+                    fill: "origin"
+                }
+            )
+        }
+
+        let byName = new Map();
+        for (let i = 0; i < result["use_effect_order_string"].size(); i++) {
+            let [ name, start, duration ] = result["use_effect_order_string"].get(i).split(" ");
+            start = parseFloat(start);
+            duration = parseFloat(duration);
+            if (!byName.has(name)) byName.set(name, []);
+            byName.get(name).push([start > 0 ? start : 0, start+duration]); // "floating-bars" w/ [start, end], see https://www.chartjs.org/docs/2.9.4/charts/bar.html#data-structure
+        }
+
+        let use_effect_labels = [];
+        let maxLength = 0;
+        for (let [k, v] of byName.entries()) {
+            use_effect_labels.push(k);
+            if (v.length > maxLength) maxLength = v.length;
+        }
+
+        let use_effect_datasets = [];
+        const use_effect_colors = colors.slice(0, byName.size);
+        for (let i = 0; i < maxLength; ++i) {
+            let ds = { data: [], backgroundColor: use_effect_colors };
+            for (let v of byName.values()) {
+                ds.data.push(i < v.length ? v[i] : []);
+            }
+            use_effect_datasets.push(ds);
+        }
+
+        Chart.defaults.global.defaultFontFamily = "Arial, Helvetica, sans-serif";
+        Chart.defaults.global.defaultFontStyle = "bold";
+        Chart.defaults.global.defaultFontColor = "black";
+        Chart.defaults.global.defaultFontSize = 36;
+        Chart.defaults.global.title.fontSize = 64;
+        Chart.defaults.global.title.display = true;
+        Chart.defaults.scale.gridLines.color = "rgba(0, 0, 0, 0.5)";
+        Chart.defaults.scale.gridLines.display = false;
+        Chart.defaults.scale.scaleLabel.display = true;
+
+        let total = hist_y.reduce((a, v) => a + v);
+
+        let sum = 0;
+        let colorFunc = function(ctx) {
+            if (ctx.dataIndex === undefined) return;
+            if (ctx.dataset === undefined) return;
+
+            if (ctx.dataIndex === 0) sum = 0;
+
+            let oldSum = sum;
+            sum += ctx.dataset.data[ctx.dataIndex];
+            if (sum < 0.25 * total || oldSum > 0.75 * total) {
+                return "#3e95cd";
+            }
+            return "#64aad7";
+        };
+
+        line_chart_hist = new Chart(document.getElementById("line-chart-hist"), {
+            type: "bar",
+            data: {
+                labels: hist_x,
+                datasets: [{
+                    data: hist_y,
+                    label: "Simulator results",
+                    backgroundColor: colorFunc
+                }]
+            },
+            options: {
+                title: {
+                    text: "Damage histogram"
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: {
+                            display: true
+                        },
+                        scaleLabel: {
+                            labelString: "Frequency",
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            display: true
+                        },
+                        ticks: {
+                            maxRotation: 0,
+                        },
+                        scaleLabel: {
+                            labelString: "DPS"
+                        }
+                    }]
+                }
+            }
+        });
+
+        let canvas = document.getElementById("line-chart-hist");
+        canvas.maintainAspectRatio = true;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+
+        line_chart_fight = new Chart(document.getElementById("line-chart-fight"), {
+            type: "line",
+            data: {
+                labels: time_stamps,
+                datasets: data_damage_time_lapse
+            },
+            options: {
+                bezierCurve: false,
+                title: {
+                    text: "Fight time lapse (DPS)"
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            labelString: "Average damage"
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            maxRotation: 0,
+                        },
+                        scaleLabel: {
+                            labelString: "Time"
+                        }
+                    }]
+                }
+            }
+        });
+
+        canvas = document.getElementById("line-chart-fight");
+        canvas.maintainAspectRatio = true;
+        canvas.responsive = false;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+
+        line_chart_fight_cum = new Chart(document.getElementById("line-chart-fight-cumulative"), {
+            type: "line",
+            data: {
+                labels: time_stamps,
+                datasets: data_damage_time_lapse_cum
+            },
+            options: {
+                title: {
+                    text: "Fight time lapse"
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            labelString: "Cumulative damage"
+                        },
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            maxRotation: 0,
+                        },
+                        scaleLabel: {
+                            labelString: "Time"
+                        }
+                    }]
+                }
+            }
+        });
+
+        canvas = document.getElementById("line-chart-fight-cumulative");
+        canvas.maintainAspectRatio = true;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+
+        bar_chart_cooldowns = new Chart(document.getElementById("bar-chart-cooldowns"), {
+            type: "horizontalBar",
+            data: {
+                labels: use_effect_labels,
+                datasets: use_effect_datasets
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    text: "Use Effect Schedule"
+                },
+                tooltips: {
+                    mode: "point",
+                    callbacks: {
+                        label: function(tti, data) {
+                            const d = data.datasets[tti.datasetIndex].data[tti.index];
+                            return d[0] + ".." + d[1];
+                        }
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        stacked: true,
+                        scaleLabel: {
+                            labelString: "Use Effect"
+                        },
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            display: true
+                        },
+                        scaleLabel: {
+                            labelString: "Time"
+                        },
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }]
+                }
+            }
+        });
+
+        canvas = document.getElementById("bar-chart-cooldowns");
+        canvas.maintainAspectRatio = true;
+        canvas.responsive = false;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+
+        // Bar chart
+        bar_chart_damage = new Chart(document.getElementById("bar-chart-damage"), {
+            type: "bar",
+            data: {
+                labels: damage_name,
+                datasets: [
+                    {
+                        backgroundColor: colors,
+                        data: sources
+                    }
+                ]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    text: "DPS from different sources"
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            labelString: "DPS"
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: false,
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                        }
+                    }]
+                }
+            }
+        });
+
+        canvas = document.getElementById("bar-chart-damage");
+        canvas.maintainAspectRatio = true;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+
+        // Bar chart
+        bar_chart_auras = new Chart(document.getElementById("bar-chart-auras"), {
+            type: "bar",
+            data: {
+                labels: aura_name,
+                datasets: [
+                    {
+                        backgroundColor: colors,
+                        data: aura_uptimes
+                    }
+                ]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    text: "Aura uptime"
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            labelString: "%",
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMin: 0,
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: false
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }],
+                }
+            }
+        });
+
+        canvas = document.getElementById("bar-chart-auras");
+        canvas.maintainAspectRatio = true;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+
+        // Bar chart
+        bar_chart_proc = new Chart(document.getElementById("bar-chart-proc"), {
+            type: "bar",
+            data: {
+                labels: proc_name,
+                datasets: [
+                    {
+                        backgroundColor: colors,
+                        data: proc_counter
+                    }
+                ]
+            },
+            options: {
+                legend: {display: false},
+                title: {
+                    text: "Average # of procs"
+                },
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: false,
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: false,
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }],
+                }
+            }
+        });
+
+        canvas = document.getElementById("bar-chart-proc");
+        canvas.maintainAspectRatio = true;
+        canvas.responsive = false;
+        canvas.style.height = "450px";
+        canvas.style.width = "675px";
+        }
 </script>
 </body>
 </html>
