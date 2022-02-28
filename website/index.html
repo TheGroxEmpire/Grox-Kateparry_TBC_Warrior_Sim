@@ -4845,25 +4845,6 @@
 
         document.getElementById("output3").innerHTML = result['messages'].get(0);
 
-
-            let string = "<b>Stat weights:</b> <br />";
-            if (document.getElementById("do_comparison").checked) {
-                string = "<b>Stat weights (Setup 1):</b> <br />";
-            }
-            string += "(Accuracy is based on the 'number of simulations per stat weight' value.)<br>";
-            for (const sw of stat_weights) {
-                let mean_stat_value = sw.mean.toFixed(2);
-                let ci95_value = sw.ci95.toFixed(2);
-                string += "+10 " + sw.name + " equate <b>" + mean_stat_value + " &plusmn " + ci95_value + "</b> dps";
-                if (sw.name === "arpen") {
-                    string += " (<b>" + mean_stat_value * 7 + " &plusmn " + ci95_value * 7 + "</b> per 10 item budget)";
-                } else if (sw.name === "ap") {
-                    string += " (<b>" + mean_stat_value * 2 + " &plusmn " + ci95_value * 2 + "</b> per 10 item budget)";
-                }
-                string += ".<br />";
-            }
-            document.getElementById("output2").innerHTML = string;
-
         let stat_weights = [];
         for (let i = 0; i < result.stat_weights.size(); ++i) {
             const sws = result.stat_weights.get(i);
@@ -4873,6 +4854,23 @@
                 mean: parseFloat(sw[1]),
                 ci95: parseFloat(sw[2]),
             });
+        }
+
+        let string = "<b>Stat weights:</b> <br />";
+        if (document.getElementById("do_comparison").checked) {
+            string = "<b>Stat weights (Setup 1):</b> <br />";
+        }
+        string += "(Accuracy is based on the 'number of simulations per stat weight' value.)<br>";
+        for (const sw of stat_weights) {
+            let mean_stat_value = sw.mean.toFixed(2);
+            let ci95_value = sw.ci95.toFixed(2);
+            string += "+10 " + sw.name + " equate <b>" + mean_stat_value + " &plusmn " + ci95_value + "</b> dps";
+            if (sw.name === "arpen") {
+                string += " (<b>" + mean_stat_value * 7 + " &plusmn " + ci95_value * 7 + "</b> per 10 item budget)";
+            } else if (sw.name === "ap") {
+                string += " (<b>" + mean_stat_value * 2 + " &plusmn " + ci95_value * 2 + "</b> per 10 item budget)";
+            }
+            string += ".<br />";
         }
         document.getElementById("output2").innerHTML = string;
 
