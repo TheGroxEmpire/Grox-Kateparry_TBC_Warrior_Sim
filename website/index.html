@@ -4581,6 +4581,9 @@
             }
         }
 
+        if (document.getElementById("two_hand_mode").checked) {
+            file_content += "two_hand_mode" + " " + "two_hand_mode" + "\n";
+        }
         file_content += "race_dd" + " " + race_string + "\n";
 
         let uriContent = "data:application/octet-stream," + encodeURIComponent(file_content);

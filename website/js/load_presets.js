@@ -24,7 +24,7 @@ function selectElement(id, valueToSelect) {
         } else {
             if (id === valueToSelect) {
                 try {
-                    document.getElementById(id).checked = true;
+                    document.getElementById(id).click();
                 } catch (err) {
                     console.log(err);
                 }
