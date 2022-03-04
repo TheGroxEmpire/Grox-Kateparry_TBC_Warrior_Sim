@@ -111,7 +111,7 @@ function load_preraidbis() {
         "fel_leather_gloves", "deathforge_girdle", "midnight_legguards",
         "fel_leather_boots", "band_of_unnatural_forces", "ring_of_arathi_warlords",
         "bloodlust_brooch", "hourglass_of_the_unraveller", "mamas_insurance"];
-    let selected_weapons = ["dragonmaw", "gladiators_slicer", "lionheart_champion"];
+    let selected_weapons = ["dragonmaw_mh", "gladiators_slicer", "lionheart_champion"];
     let selected_enchants = ["ferocity", "greater_vengeance", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+8 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -146,7 +146,7 @@ function load_p1furybis() {
         "gauntlets_of_martial_perfection", "girdle_of_the_endless_pit", "skulkers_greaves",
         "ironstriders_of_urgency", "ring_of_a_thousand_marks", "shapeshifters_signet",
         "bloodlust_brooch", "dragonspine_trophy", "mamas_insurance"];
-    let selected_weapons = ["dragonmaw", "spiteblade"];
+    let selected_weapons = ["dragonmaw_mh", "spiteblade"];
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -203,7 +203,7 @@ function load_p2furybisplate() {
         "destroyer_gauntlets", "belt_of_one_hundred_deaths", "leggings_of_murderous_intent",
         "warboots_of_obliteration", "band_of_the_ranger_general", "ring_of_a_thousand_marks",
         "dragonspine_trophy", "tsunami_talisman", "serpent_spine_longbow"];
-    let selected_weapons = ["dragonstrike", "talon_of_azshara"];
+    let selected_weapons = ["dragonstrike_mh", "talon_of_azshara"];
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+4 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit_+4_str", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -222,7 +222,7 @@ function load_p2furybisleather() {
         "gloves_of_the_searing_grip", "belt_of_one_hundred_deaths", "leggings_of_murderous_intent",
         "warboots_of_obliteration", "band_of_the_ranger_general", "ring_of_reciprocity",
         "dragonspine_trophy", "tsunami_talisman", "serpent_spine_longbow"];
-    let selected_weapons = ["dragonstrike", "merciless_gladiators_slicer"];
+    let selected_weapons = ["dragonstrike_mh", "merciless_gladiators_slicer"];
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+4 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+4 crit_+4_str", "shoulder_gem2_dd","shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -257,7 +257,7 @@ function load_preraidbismult() {
         "fel_leather_gloves", "deathforge_girdle", "midnight_legguards",
         "fel_leather_boots", "band_of_unnatural_forces", "ring_of_arathi_warlords",
         "bloodlust_brooch", "hourglass_of_the_unraveller", "mamas_insurance"];
-    let selected_weapons = ["dragonmaw", "gladiators_slicer", "lionheart_champion"];
+    let selected_weapons = ["dragonmaw_mh", "gladiators_slicer", "lionheart_champion"];
     let selected_enchants = ["ferocity", "greater_vengeance", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+8 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -290,7 +290,7 @@ function load_p1furybismult() {
         "gauntlets_of_martial_perfection", "girdle_of_the_endless_pit", "skulkers_greaves",
         "ironstriders_of_urgency", "ring_of_a_thousand_marks", "shapeshifters_signet",
         "bloodlust_brooch", "dragonspine_trophy", "mamas_insurance"];
-    let selected_weapons = ["dragonmaw", "spiteblade"];
+    let selected_weapons = ["dragonmaw_mh", "spiteblade"];
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+8 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -341,7 +341,7 @@ function load_p2furybisplatemult() {
         "destroyer_gauntlets", "belt_of_one_hundred_deaths", "leggings_of_murderous_intent",
         "warboots_of_obliteration", "band_of_the_ranger_general", "ring_of_a_thousand_marks",
         "dragonspine_trophy", "tsunami_talisman", "serpent_spine_longbow"];
-    let selected_weapons = ["dragonstrike", "talon_of_azshara"];
+    let selected_weapons = ["dragonstrike_mh", "talon_of_azshara"];
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+4 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+8 crit", "+4 crit_+4_str", "shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
@@ -358,7 +358,7 @@ function load_p2furybisleathermult() {
         "gloves_of_the_searing_grip", "belt_of_one_hundred_deaths", "leggings_of_murderous_intent",
         "warboots_of_obliteration", "band_of_the_ranger_general", "ring_of_reciprocity",
         "dragonspine_trophy", "tsunami_talisman", "serpent_spine_longbow"];
-    let selected_weapons = ["dragonstrike", "merciless_gladiators_slicer"];
+    let selected_weapons = ["dragonstrike_mh", "merciless_gladiators_slicer"];
     let selected_enchants = ["ferocity", "naxxramas", "+12 agility", "+6 stats", "+12 strength",
         "+15 strength", "nethercobra", "cats_swiftness", "mongoose", "mongoose", "ring_1", "ring_2"];
     let selected_gems = ["+4 crit", "agi critDmg", "helmet_gem3_dd", "neck_gem1_dd", "neck_gem2_dd", "neck_gem3_dd", "+4 crit_+4_str", "shoulder_gem2_dd","shoulder_gem3_dd", "+4 crit_+4_str", "back_gem2_dd", "back_gem3_dd",
