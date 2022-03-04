@@ -726,7 +726,7 @@ struct Armory
 
                 // Phase 4
                 {"ancient_amani_longbow", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 38.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 126}, Socket::ranged}, 
-                {"tuskbreaker", Attributes{0.0, 0.0}, Special_stats{0.0, 1.141407736, 38.0}, Socket::ranged}, 
+                {"tuskbreaker", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 38.0, 0, 0.01141407736}, Socket::ranged}, 
 
             };
 
