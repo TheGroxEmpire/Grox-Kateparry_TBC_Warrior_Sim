@@ -926,7 +926,8 @@ struct Armory
 
                 // Phase 2
                 // main_hand / one_hand
-                {"dragonstrike", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 184, 343, Weapon_socket::main_hand, Weapon_type::mace, {{"dragonstrike", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
+                {"dragonstrike_mh", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 184, 343, Weapon_socket::one_hand, Weapon_type::mace, {{"dragonstrike_mh", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
+                {"dragonstrike_oh", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.0}, 2.7, 184, 343, Weapon_socket::one_hand, Weapon_type::mace, {{"dragonstrike_oh", Hit_effect::Type::stat_boost, {}, {0, 0, 0, 0, .134}, 0, 10, 0, 2.7 / 60}}}, 
                 {"rod_of_the_sun_king", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 52.0, 0, 0.0}, 2.7, 189, 352, Weapon_socket::one_hand, Weapon_type::mace, {{"rod_of_the_sun_king", Hit_effect::Type::rage_boost, {}, {}, 5, 0, 0, 2.7 / 60}}},
 
                 // Phase 3
