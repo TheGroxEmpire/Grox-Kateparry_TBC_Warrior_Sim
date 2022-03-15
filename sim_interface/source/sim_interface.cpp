@@ -246,6 +246,7 @@ std::string get_character_stat(const Character& char1, const Character& char2)
     out_string += print_cmp_stat("Crit (spellbook):", ss1.critical_strike, ss2.critical_strike);
     out_string += print_cmp_stat("Attack Power: ", ss1.attack_power, ss2.attack_power);
     out_string += print_cmp_stat("Haste factor: ", 1 + ss1.haste, 1 + ss2.haste);
+    out_string += print_cmp_stat("Armor Penetration: ", ss1.gear_armor_pen, ss2.gear_armor_pen);
 
     out_string += "<br><b>Armor:</b><br>";
     for (size_t i = 0; i < char1.armor.size(); i++)
@@ -336,6 +337,7 @@ std::string get_character_stat(const Character& character)
             out_string += print_stat("Two Hand Mace expertise: ", character.total_special_stats.mace_expertise);
         }
     }
+    out_string += print_stat("Armor Penetration: ", character.total_special_stats.gear_armor_pen);
 
     out_string += "<br>";
 
