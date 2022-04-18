@@ -793,7 +793,7 @@ struct Armory
 
                 // Phase 5
                 //{"blackened_naaru_sliver", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.03424223208623969}, Socket::trinket}, 
-                {"shard_of_contempt", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 11.160431198478124}, Socket::trinket, Set::none, {{"shard_of_contempt", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 230}, 0, 20, 45, 0, 0, 1, 0, 1, 1}}}, 
+                {"shard_of_contempt", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 11.160431198478124}, Socket::trinket, Set::none, {{"shard_of_contempt", Hit_effect::Type::stat_boost, {}, {0.0, 0.0, 230}, 0, 20, 45, .1}}}, 
                 {"steely_naaru_sliver", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 13.696892834495879}, Socket::trinket}, 
 
             };
