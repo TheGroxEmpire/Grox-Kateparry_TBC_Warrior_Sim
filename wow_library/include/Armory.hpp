@@ -404,7 +404,8 @@ struct Armory
                 {"harness_of_carnal_instinct", Attributes{52.0, 44.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 196}, Socket::chest}, 
                 {"vicious_hawkstrider_hauberk", Attributes{0.0, 47.0}, Special_stats{0.0, 0.0, 104.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 182}, Socket::chest},
                 {"brutal_gladiators_plate_chestpiece", Attributes{45.0, 0.0}, Special_stats{2.036199095022624, 1.139240506329114, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 84}, Socket::chest}, 
-                {"netherforce_chestplate", Attributes{44.0, 0.0}, Special_stats{1.358695652, 1.141407736, 0.0}, Socket::chest}, 
+                {"netherforce_chestplate", Attributes{44.0, 0.0}, Special_stats{1.358695652, 1.141407736, 0.0}, Socket::chest},
+                {"breastplate_of_ire", Attributes{52.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.032278481012658228}, Socket::chest}, 
             };
 
     std::vector<Armor> wrists_t
@@ -584,6 +585,7 @@ struct Armory
                 // Phase 5
                 {"onslaught_belt", Attributes{43, 0.0}, Special_stats{1.8115942028985508, 0.0, 0.0, 0, 0.016487000634115410, 0, 0, 0, 0, 0, 0, 6.594800253646164}, Socket::belt, Set::onslaught}, 
                 {"guardians_plate_belt", Attributes{40.0, 0.0}, Special_stats{1.809954751131222, 0.0, 0.0, 0, 0.0}, Socket::belt}, 
+                {"girdle_of_seething_rage", Attributes{40.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.018987341772152}, Socket::belt},          
                 {"belt_of_the_silent_path", Attributes{0.0, 34.0}, Special_stats{0.0, 1.458465441, 78.0, 0, 0.0}, Socket::belt},            
             };
 
@@ -649,6 +651,7 @@ struct Armory
                 {"leggings_of_the_immortal_beast", Attributes{44.0, 46.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 189}, Socket::legs}, 
                 {"starstalker_legguards", Attributes{0.0, 57.0}, Special_stats{0.0, 1.2682308180088777, 120.0, 0, 0.0}, Socket::legs}, 
                 {"brutal_gladiators_plate_legguards", Attributes{57.0, 0.0}, Special_stats{2.398190045248869, 1.139240506329114, 0.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 84}, Socket::legs}, 
+                {"trousers_of_the_scryers_retainer", Attributes{0.0, 43.0}, Special_stats{0.0, 1.89873417721519, 104.0, 0, 0.0}, Socket::legs}, 
             };
 
     std::vector<Armor> boots_t
@@ -917,6 +920,7 @@ struct Armory
                 {"dragonscale_encrusted_longblade", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 0.0, 0, 0.01582278481012658, 0, 0, 0, 0, 0, 0, 6.34147578824544}, 1.5, 113, 211, Weapon_socket::one_hand, Weapon_type::sword}, 
                 {"muramasa", Attributes{0.0, 0.0}, Special_stats{0.0, 1.075949367088608, 0.0, 0, 0.02215189873417722}, 2.6, 196, 365, Weapon_socket::one_hand, Weapon_type::sword}, 
                 {"brutal_gladiators_quickblade", Attributes{0.0, 0.0}, Special_stats{0.995475113122172, 0.569620253164557, 38.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 49}, 1.5, 113, 211, Weapon_socket::one_hand, Weapon_type::sword}, 
+                {"quickening_blade_of_the_prince", Attributes{0.0, 0.0}, Special_stats{0.0, 0.0, 38.0, 0.0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 126}, 1.5, 96, 180, Weapon_socket::one_hand, Weapon_type::sword}, 
                 {"brutal_gladiators_slicer", Attributes{0.0, 0.0}, Special_stats{0.995475113122172, 0.569620253164557, 38.0, 0.00, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 49}, 2.6, 224, 337, Weapon_socket::one_hand, Weapon_type::sword},   
            };
 
@@ -993,7 +997,8 @@ struct Armory
                 {"trollbane", Attributes{0.0, 39.0}, Special_stats{0.0, 0.0, 94.0, 0, 0.0}, 3.6, 358, 537, Weapon_socket::two_hand, Weapon_type::axe}, 
             
                 // Phase 5
-                {"shivering_felspine", Attributes{0.0, 52.0}, Special_stats{0.0, 0.0, 120.0, 0, 0.03354430379746835}, 3.5, 393, 590, Weapon_socket::two_hand, Weapon_type::axe}, 
+                {"shivering_felspine", Attributes{0.0, 52.0}, Special_stats{0.0, 0.0, 120.0, 0, 0.03354430379746835}, 3.5, 393, 590, Weapon_socket::two_hand, Weapon_type::axe},
+                {"the_blade_of_harbingers", Attributes{0.0, 52.0}, Special_stats{2.48868778280543, 0.0, 55.0, 0, 0.03354430379746835}, 3.5, 375, 563, Weapon_socket::two_hand, Weapon_type::axe},  
                 {"brutal_gladiators_decapitator", Attributes{0.0, 0.0}, Special_stats{2.192982456140351, 1.20253164556962, 100, 0.0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 98}, 3.6, 404, 606, Weapon_socket::two_hand, Weapon_type::axe},
             };
 
