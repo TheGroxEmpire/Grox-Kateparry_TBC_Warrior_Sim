@@ -292,6 +292,8 @@ struct Armory
                 {"mantle_of_the_golden_forest", Attributes{0.0, 40.0}, Special_stats{0.0, 0.0, 90.0, 0, 0.00, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 154}, Socket::shoulder}, 
                 {"shoulderpads_of_vehemence", Attributes{0.0, 33.0}, Special_stats{0.0, 1.648700063411541, 90.0, 0, 0.019023462270133164}, Socket::shoulder}, 
                 {"brutal_gladiators_plate_shoulders", Attributes{38.0, 0.0}, Special_stats{1.583710407239819, 0.0, 0.0, 0, 0.0}, Socket::shoulder}, 
+                {"shoulderpads_of_the_silvermoon_retainer", Attributes{0.0, 35.0}, Special_stats{0.0, 1.458465441, 62, 0, 0.0}, Socket::shoulder}, 
+                {"shoulderpads_of_the_everlasting_pain", Attributes{30.0, 0.0}, Special_stats{0.0, 0.0, 0, 0, 0.01331642359}, Socket::shoulder}, 
             };
 
     std::vector<Armor> back_t
