@@ -347,6 +347,7 @@ drake_fang_talisman false
 fetish_of_the_fallen false
 figurine_felsteel_boar false
 figurine_nightseye_panther false
+figurine_shadowsong_panther false
 hourglass_of_the_unraveller false
 icon_of_unyielding_courage false
 kiss_of_the_spider false
