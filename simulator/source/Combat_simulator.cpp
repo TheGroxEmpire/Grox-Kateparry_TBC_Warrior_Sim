@@ -1270,7 +1270,7 @@ void Combat_simulator::simulate(const Character& character, const std::function<
 
             if (use_sweeping_strikes_)
             {
-                if (time_keeper_.sweeping_strikes_ready() && time_keeper_.global_ready() && rage >= 30)
+                if (time_keeper_.sweeping_strikes_ready() && time_keeper_.global_ready() && rage >= 30 && number_of_extra_targets_ > 0)
                 {
                     logger_.print("Sweeping strikes!");
                     time_keeper_.global_cast(1500);
